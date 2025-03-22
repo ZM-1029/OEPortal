@@ -1,0 +1,35 @@
+<aside [ngClass]="menuClass">
+  <div #sideBar class="aside-bar d-flex flex-column flex-shrink-0">
+    <a href="/" class="p-3 link-dark text-decoration-none" title="icon-sidebar-only" data-bs-toggle="tooltip"
+      data-bs-placement="right">
+      <svg class="bi" width="40" height="32">
+        <use xlink:href="#bootstrap" />
+      </svg>
+      <span class="visually-hidden">icon-sidebar-only</span>
+    </a>
+    <ul class="nav nav-pills nav-flush flex-column mb-auto text-center pt-4">
+      @for(menuitem of sideBarMenuList; track menuitem){
+        <li>
+          <a href="#" class="nav-link" [routerLink]="menuitem.navigateUrl" routerLinkActive="active">
+            <div class="icon-sidebar">
+              <div class="svg-icon">
+                <mat-icon [svgIcon]="menuitem.iconClass"></mat-icon>
+              </div>
+            </div>
+            <span class="d-block">{{menuitem.name}} </span>
+          </a>
+        </li>
+      }
+      <!-- <li>
+        <a href="#" class="nav-link" routerLink="/admin/roles" routerLinkActive="active">
+          <div class="icon-sidebar">
+            <div class="svg-icon">
+              <mat-icon svgIcon="roles"></mat-icon>
+            </div>
+          </div>
+          <span class="d-block">Role</span>
+        </a>
+      </li> -->
+    </ul>
+  </div>
+</aside>

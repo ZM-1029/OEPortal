@@ -1,0 +1,63 @@
+.card {
+    border: none;
+    border-radius: 10px;
+  }
+  
+  .bg-light {
+    border-radius: 10px;
+  }
+  
+  .bg-white {
+    border-radius: 10px;
+  }
+  
+  p {
+    margin: 0;
+  }
+  
+  .transactions-container {
+    min-width: 900px ;
+    overflow-x: hidden;
+  }
+  
+  .transaction-block{
+    max-width: 350px;
+  }
+  .transaction-block p{
+    margin: 10px 0;
+  }
+
+strong .text-success{
+  background-color: aquamarine;
+}
+.transation-hide-icon i{
+  font-weight: bold;
+  font-size: 18px;
+  margin: 10px 5px;
+  display: inline-block;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+  color: #0D6EFD;
+}
+
+.transactions-container .col-md-3{
+  min-width:300px;
+}
+.purchase-order-Amount{
+  background-color: rgba(127, 255, 212, 0.223);
+  border-radius: 4px;
+  padding: 2px 5px;
+  color: #0bbe41d5;
+}
+.purchase-order-container span{
+font-weight: 500;
+}
+.purchase-order-container .gap-4{
+  gap: 7.5rem !important;
+}
+@media (max-width: 900px) {
+  .transactions-container {
+      width: 100%;
+      overflow-x: auto; 
+      white-space: nowrap; 
+  }
+}

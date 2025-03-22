@@ -1,0 +1,44 @@
+<div mat-dialog-content class="dialog-content">
+    <div class="order-container">
+        <div class="p-2">
+            <mat-icon class="text-danger float-end pb-2" (click)="confirmClose()" svgIcon="cross"></mat-icon>
+            <div class="d-flex justify-content-end my-2">
+            </div>
+            <div class="card p-3 shadow-sm bg-light">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h3 class="mb-0"><i class="bi bi-cart"></i> Purchase Order ID - <span
+                            class="fw-bold">#{{purchaseOrderId}}</span></h3>
+                    <div class="d-flex gap-4">
+                        <span class="d-flex flex-column">Month <strong>{{getMonth(purchaseOrderMonth) }}</strong></span>
+                        <span class="d-flex flex-column">Year <strong>{{getYear(purchaseOrderYear) }}</strong></span>
+                        <span class="d-flex flex-column">Amount <strong
+                                class="text-success">{{purchaseOrderAmount}}</strong></span>
+                        <span class="d-flex flex-column">Remaining Amount
+                            <strong>{{purchaseOrderRemainingAmount}}</strong>
+                        </span>
+
+                    </div>
+                </div>
+
+                <div class="mt-4 p-3 rounded bg-white">
+                    <h4 class="fw-bold">Purchase Order History</h4>
+                    <div class="transactions-container d-flex g-3 py-2">
+                        @for(data of transactions ;track data){
+                        <div class="col-md-4 mx-2">
+                            <div class="p-3 bg-light border rounded transaction-block">
+                                <p class="my-2 d-flex justify-content-between"><strong>Invoice
+                                        No.</strong><span>{{data.invoiceNumber}}</span></p>
+                                <p class="my-2 d-flex justify-content-between">Transaction Amount
+                                    <strong>{{data.transactionAmount}}</strong>
+                                </p>
+                                <p class="my-2 d-flex justify-content-between">Transaction Date <strong>{{
+                                        getDate(data.transactionDate)}}</strong></p>
+                            </div>
+                        </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,110 @@
+<div class="bg-white employee-side-drawer">
+  <div class="bg-light pt-2">
+    <div class="row pt-4">
+      <div class="col-3 image-section text-center d-flex align-items-center">
+        <img
+          src="{{ employeeImgUrl }}"
+          alt="Profile Picture"
+          class="profile-img m-auto"
+        />
+      </div>
+      <div class="col-9 ps-0 text-start">
+        <div class="drawer-content">
+          <h4>
+            {{ employeeRowData?.firstName }} {{ employeeRowData?.lastName }}
+            <span class="status ms-1">
+              @if (employeeRowData?.employeestatus == "Active") {
+                <i class="fa-solid text-success fa-circle"></i
+                >{{ employeeRowData?.employeestatus }}
+              } @else {
+                <i class="fa-solid text-danger fa-circle"></i
+                >{{ employeeRowData?.employeestatus }}
+              }
+            </span>
+          </h4>
+          <p>
+            <strong class="me-1">Employee ID:</strong
+            >{{ employeeRowData?.employeeID }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="drawer-content">
+    <h4 class="col-12">Basic Info</h4>
+    <div class="row">
+      <div class="col-12">
+        <p>
+          <strong><i class="fa-regular fa-envelope"></i> :</strong>
+          {{ employeeRowData?.emailID }}
+        </p>
+      </div>
+      <div class="col-12">
+        <p>
+          <strong><i class="fa-solid fa-phone"></i> :</strong>
+          {{ employeeRowData?.mobile }}
+        </p>
+      </div>
+      <div class="col-12">
+        <p>
+          <strong><i class="bi bi-geo-alt"></i> :</strong>
+          {{ employeeRowData?.locationName }}
+        </p>
+      </div>
+      <div class="col-12">
+        <p>
+          <strong><i class="fa-solid fa-network-wired"></i> :</strong>
+          {{ employeeRowData?.department }}
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="drawer-content">
+    <h4 class="col-12">Employee Info</h4>
+    <div class="row">
+      <div class="col-12">
+        <p><strong>Designation:</strong> {{ employeeRowData?.designation }}</p>
+      </div>
+      <div class="col-12">
+        <p>
+          <strong>Reporting Manager:</strong> {{ employeeRowData?.reportingTo }}
+        </p>
+      </div>
+      <div class="col-12">
+        <p><strong>D.O.J: </strong> {{ employeeRowData?.dateofjoining }}</p>
+      </div>
+      <div class="col-12">
+        <p><strong>Work Location:</strong> {{ employeeRowData?.workLocation }}</p>
+      </div>
+    </div>
+  </div>
+  <div class="drawer-content">
+    <h4 class="col-12">Personal Info</h4>
+    <div class="row">
+      <div class="col-12">
+        <p><strong>nickName:</strong> {{ employeeRowData?.nickName }}</p>
+      </div>
+      <div class="col-12">
+        <p><strong>Age:</strong> {{ employeeRowData?.age }}</p>
+      </div>
+      <div class="col-12">
+        <p><strong>Date Of Birth:</strong> {{ employeeRowData?.dateOfBirth }}</p>
+      </div>
+      <div class="col-12">
+        <p><strong>Gender:</strong> {{ employeeRowData?.gender }}</p>
+      </div>
+      <div class="col-12">
+        <p class="d-block">
+          <strong>Present Address:</strong>
+          <span class="">{{ employeeRowData?.presentAddress }}</span>
+        </p>
+      </div>
+      <div class="col-12">
+        <p>
+          <strong>Personal Email Address:</strong>
+          {{ employeeRowData?.otherEmail }}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

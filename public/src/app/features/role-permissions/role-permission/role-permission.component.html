@@ -1,0 +1,58 @@
+<div class="Permission-container container-fluid">
+  <!-- Roles & Permission Header with Role Selection -->
+  <div class="py-md-4 pb-4 mt-4 me-2 row justify-content-between align-items-center">
+    <div class="col-md-6 col-auto">
+      <h3 class="ms-2">Roles & Permission</h3>
+    </div>
+    <div class="col-md-6 col-auto text-md-end">
+      <mat-form-field class="w-100 furdeco-custom-field" appearance="outline">
+        <mat-label>Select Role</mat-label>
+        <input type="text" matInput [formControl]="roleControl" [matAutocomplete]="autoRole">
+        <mat-autocomplete #autoRole="matAutocomplete" [displayWith]="displayRoleFn"
+          (optionSelected)="onRoleSelected($event)">
+          <mat-option *ngFor="let role of filteredRoles | async" [value]="role">
+            {{ role.name }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <!-- Permissions List -->
+  <div class="row gx-3">
+    <div *ngFor="let menu of menuData; trackBy: trackByMenu"
+      class="submenu-item row mx-0 mb-2 p-3 border rounded shadow-sm">
+      <div class="d-flex align-items-center row mx-0 w-100">
+        <!-- Permission Name -->
+        <span class="submenu-name fs-5 col-md-auto col-12">{{ menu.form }}</span>
+
+        <!-- Checkboxes for Permissions -->
+        <div class="col-md-auto col-12 row ms-md-auto mt-2 mt-md-0">
+          <mat-list-item class="mb-0 d-flex gap-3">
+            <mat-checkbox class="checkbox fs-6 mx-2" (change)="onCheckboxChange($event, menu, 'view')"
+              [checked]="menu.view" [disabled]="menu.disabled">
+              View
+            </mat-checkbox>
+
+            <mat-checkbox class="checkbox fs-6 mx-2" (change)="onCheckboxChange($event, menu, 'edit')"
+              [checked]="menu.edit" [disabled]="menu.disabled">
+              Edit
+            </mat-checkbox>
+
+            <mat-checkbox class="checkbox fs-6 mx-2" (change)="onCheckboxChange($event, menu, 'add')"
+              [checked]="menu.add" [disabled]="menu.disabled">
+              Add
+            </mat-checkbox>
+
+          </mat-list-item>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-md-12 mt-lg-0 mt-3 text-end">
+    <button [disabled]="roleId!==1" class="px-4 btn btn-primary" type="button" (click)="savePermission()">
+      Save Permissions
+    </button>
+  </div>
+</div>

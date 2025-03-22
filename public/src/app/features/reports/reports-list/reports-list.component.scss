@@ -1,0 +1,27 @@
+.dropdown {
+  min-width: 165px;
+}
+.dropdown-container  {
+  position: relative;
+  top: -16px;
+  left: 0;
+}
+
+.report-container{
+  position: relative;
+  top: 0;
+}
+
+.emplooye-dropdown{
+  max-width: 300px;
+  width: 300px;
+}
+.date-range-picker{
+  position: absolute;
+  top: 70px;
+  right: 200px;
+}
+.date-range-picker mat-form-field{
+  width: 300px;
+  max-width: 300px;
+}

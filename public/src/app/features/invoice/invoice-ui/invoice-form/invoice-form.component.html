@@ -1,0 +1,77 @@
+<div class="invoiceForm d-flex  flex-wrap ">
+    <form class="d-flex pe-2" [formGroup]="invoiceForm">
+        <div class="form-field  d-flex ms-0">
+            <mat-label class="d-flex pt-2 justify-content-end me-2">Invoice No.</mat-label>
+            <mat-form-field appearance="outline" class="example-full-width col-8" >
+                <input  matInput placeholder="Enter invoice no." formControlName="invoiceNumber" [value]="invoiceNumber">
+                @if (invoiceForm.controls["invoiceNumber"].hasError("required")) {
+                <mat-error>Invoice Number is required</mat-error>
+                }
+            </mat-form-field>
+        </div>
+        <div class="form-field d-flex ms-4 ">
+            <mat-label class=" d-flex justify-content-end pt-2 me-2 ">Month & Year</mat-label>
+            <mat-form-field appearance="outline" class="example-full-width col-7">
+                <input matInput  [matDatepicker]="dp" placeholder="Month and Year" formControlName="date" />
+                <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+                <mat-datepicker #dp startView="multi-year" (yearSelected)="chosenYearHandler($event)"
+                    (monthSelected)="chosenMonthHandler($event, dp)" panelClass="example-month-picker">
+                </mat-datepicker>
+                @if (invoiceForm.controls["date"].hasError("required")) {
+                <mat-error>Month and Year is required</mat-error>
+                }
+            </mat-form-field>
+        </div>
+        <div class="form-field d-flex ">
+            <mat-label class="col-5 d-flex pt-2 justify-content-end pe-2">Select Customer</mat-label>
+            <mat-form-field appearance="outline" class="example-full-width col-7">
+                <input #input type="text" placeholder="-- Select Customer --" matInput formControlName="customerName"
+                    [matAutocomplete]="auto" (input)="filter()" (focus)="filter()" />
+                <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onSelectCustomer($event)" >
+                    @for( customer of filteredCustomers; track customer){
+                    <mat-option [value]="customer.customerName">
+                        {{ customer.customerName }}
+                    </mat-option>
+                    }
+                </mat-autocomplete>
+                @if (invoiceForm.controls["customerName"].hasError("required")) {
+                <mat-error>Customer Name is required</mat-error>
+                }
+            </mat-form-field>
+        </div>
+    </form>
+    <form class="d-flex " [formGroup]="purchaseOrderForm">
+        <div class="form-field d-flex ">
+            <mat-checkbox  formControlName="po" (click)="getPurchaseOrderList()" class="custom-checkbox mx-2" color="primary">
+                Purchase Order
+              </mat-checkbox>
+            <div class="form-field d-flex row justify-content-start ms-0">
+                @if(this.purchaseOrderForm.get('po')?.value && this.invoiceForm.get('customerId')?.value){
+                <mat-label class="col-5 d-flex pt-2 ps-0 justify-content-end">Select PO</mat-label>
+                <mat-form-field appearance="outline" class="example-full-width col-7 ps-0">
+                    <input type="text" placeholder="Select PO" matInput formControlName="poId"
+                        [matAutocomplete]="auto" />
+                    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onSelectPo($event)">
+                        @for( po of allPO; track po){
+                        <mat-option [value]="po.poid ">
+                            {{ po.poid }}
+                        </mat-option>
+                        }
+                    </mat-autocomplete>
+                </mat-form-field>
+                }
+            </div>
+        </div>
+        <div class="d-block ms-4">
+            <button 
+            [disabled]="isDesableViewBtn && getPurchaseOrderDataLength() > 0"  
+            (click)="viewPurchaseOrder()" 
+            [ngClass]="{'custom-btn': true, 'disabled-btn': isDesableViewBtn}">
+            View
+        </button>        
+        </div>      
+    </form>
+</div>
+@if (this.isVisibalPurchaseOrder ) {
+    <app-purchase-order  [purchaseOrderData]="purchaseOrderFormData"></app-purchase-order>
+}

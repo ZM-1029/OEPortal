@@ -1,0 +1,97 @@
+<div class="m-3">
+  <div class="main-content">
+    <div class="border-bottom bg-light pb-2">
+      <h2 class="formHeading">{{ formHeading }} Salary</h2>
+    </div>
+      <div class="form-container d-flex justify-content-center bg-whight">
+        <form [formGroup]="salaryForm">
+          <div class="form-group row">
+            <mat-label class="outer-mat-lable col-4 pt-2"
+              >Select Customer</mat-label
+            >
+            <mat-form-field appearance="outline" class="col-8">
+              <input #input  type="text" placeholder="Select customer" matInput formControlName="customerName"
+                  [matAutocomplete]="auto" (input)="filter()" (focus)="filter()" />
+              <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onSelectCustomer($event)" >
+                  @for( customer of filteredCustomers; track customer){
+                  <mat-option [value]="customer.customerName">
+                      {{ customer.customerName }}
+                  </mat-option>
+                  }
+              </mat-autocomplete>
+              @if (salaryForm.controls["customerName"].hasError("required")) {
+              <mat-error>Customer Name is required</mat-error>
+              }
+          </mat-form-field>
+          </div>
+          <div class="form-group row">
+            <mat-label class="outer-mat-lable col-4 pt-2 ">Select Currency</mat-label>
+            <mat-form-field appearance="outline" class="col-8">
+              <mat-select formControlName="currencyId">
+                @for (currency of allCurrencies; track currency) {
+                  <mat-option [value]="currency.currencyId">{{
+                    currency.currencyName
+                  }}</mat-option>
+                }
+              </mat-select>
+              @if (salaryForm.controls["currencyId"].hasError("required")) {
+                <mat-error>Currency is required</mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div class="form-group row">
+            <mat-label class="outer-mat-lable col-4 pt-2 ">Employee ID </mat-label>
+            <mat-form-field appearance="outline" class="col-8">
+              <input
+                formControlName="employeeID"
+                matInput
+                placeholder="eg. ZM-0000"
+              />
+              @if (salaryForm.controls["employeeID"].hasError("required")) {
+                <mat-error>Employee is required</mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div class="form-group row">
+            <mat-label class="outer-mat-lable col-4 pt-2 "
+              >Month & Year
+            </mat-label>
+            <mat-form-field appearance="outline" class="col-8">
+              <mat-label>Month and Year</mat-label>
+              <input
+                matInput
+                [matDatepicker]="dp"
+                placeholder="Month and Year"
+                [formControl]="date"
+              />
+              <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+              <mat-datepicker
+                #dp
+                startView="multi-year"
+                (yearSelected)="chosenYearHandler($event)"
+                (monthSelected)="chosenMonthHandler($event, dp)"
+                panelClass="example-month-picker"
+              >
+              </mat-datepicker>
+              @if (salaryForm.controls["dateOfPayment"].hasError("required")) {
+                <mat-error>Date Of Payment is required!</mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div class="form-group row">
+            <mat-label class="outer-mat-lable col-4 pt-2 ">Amount</mat-label>
+            <mat-form-field appearance="outline" class="col-8">
+              <input formControlName="amount" matInput placeholder="Amount" />
+              @if (salaryForm.controls["amount"].hasError("required")) {
+                <mat-error>Amount is required</mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div class="d-flex justify-content-end mb-4 pb-4">
+            <button class="" type="button" (click)="resetForm()">Clear</button>
+            <button class="" (click)="createUpdate()">{{ formHeading }}</button>
+          </div>
+        </form>
+      </div>
+  </div>
+</div>

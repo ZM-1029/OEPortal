@@ -1,0 +1,85 @@
+.row {
+  width: 100%;
+  overflow: hidden;
+}
+
+mat-dialog-content {
+  border-radius: 30px !important;
+}
+
+.dialog-content {
+  text-align: center;
+  border-radius: 30px !important;
+}
+
+.icon {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: rgba(243, 117, 117, 0.295);
+}
+
+.icon span svg {
+  width: 30px;
+  height: 30px;
+  font-weight: 400;
+  color: red;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.message {
+  font-size: 14px;
+  color: #929191;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  width: 100%;
+  padding-right: 10px;
+  height: min-content;
+  overflow: hidden;
+}
+
+button:first-child {
+  color: #64748b;
+}
+
+button {
+  min-width: 80px;
+}
+.mat-mdc-dialog-surface {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 0;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow-y: auto;
+  outline: 0;
+  transform: scale(0.8);
+  transition: transform var(--mat-dialog-transition-duration, 0ms)
+    cubic-bezier(0, 0, 0.2, 1);
+  max-height: inherit;
+  min-height: inherit;
+  min-width: inherit;
+  max-width: inherit;
+  border-radius: 30px !important;
+  box-shadow: var(--mat-dialog-container-elevation-shadow, none);
+  /* border-radius: var(--mdc-dialog-container-shape, var(--mat-sys-corner-extra-large, 4px)); */
+  background-color: var(
+    --mdc-dialog-container-color,
+    var(--mat-sys-surface, white)
+  );
+}

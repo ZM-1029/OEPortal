@@ -1,0 +1,149 @@
+// .success-message {
+//     text-align: center;
+//     padding: 20px;
+//     max-width: 400px;
+//     border-radius: 0;
+//     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+//     animation: fadeIn 0.5s ease-in-out;
+// }
+
+// .icon {
+//     font-size: 50px;
+//     color: #28a745;
+//     margin-bottom: 10px;
+// }
+
+// h2 {
+//     font-size: 24px;
+//     margin-bottom: 10px;
+// }
+
+// p {
+//     font-size: 16px;
+//     margin-bottom: 20px;
+// }
+
+// .close-btn {
+//     position: absolute;
+//     top: 10px;
+//     right: 10px;
+// }
+
+// .icon {
+//     font-size: 60px;
+//     color: #28a745;
+//     margin-bottom: 15px;
+//     animation: float 2s infinite;
+// }
+
+// h2 {
+//     font-size: 26px;
+//     color: #2d2d2d;
+//     margin-bottom: 12px;
+//     font-weight: bold;
+// }
+
+// p {
+//     font-size: 16px;
+//     color: #555555;
+//     margin-bottom: 20px;
+// }
+
+// button {
+//     transition: transform 0.3s ease, background-color 0.3s ease;
+// }
+
+// button:hover {
+//     transform: scale(1.1);
+//     background-color: #1e7e34 !important;
+// }
+
+// .close-btn {
+//     position: absolute;
+//     top: 10px;
+//     right: 10px;
+//     color: #666;
+//     font-size: 20px;
+//     cursor: pointer;
+//     transition: color 0.3s ease, transform 0.3s ease;
+// }
+
+// .close-btn:hover {
+//     color: #333;
+//     transform: rotate(90deg);
+// }
+
+// @keyframes fadeIn {
+//     from {
+//         opacity: 0;
+//         transform: scale(0.8);
+//     }
+//     to {
+//         opacity: 1;
+//         transform: scale(1);
+//     }
+// }
+
+// @keyframes popIn {
+//     0% {
+//         transform: scale(0.9);
+//     }
+//     60% {
+//         transform: scale(1.1);
+//     }
+//     100% {
+//         transform: scale(1);
+//     }
+// }
+
+// @keyframes float {
+//     0% {
+//         transform: translateY(0px);
+//     }
+//     50% {
+//         transform: translateY(-10px);
+//     }
+//     100% {
+//         transform: translateY(0px);
+//     }
+// }
+
+.toast-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  color: #fff;
+  position: relative;
+}
+
+button {
+  border: 0;
+  background-color: transparent;
+  color: #fff;
+  position: fixed;
+  right: 0;
+  top: 0;
+  font-size: 10px;
+}
+
+.mat-icon {
+  -webkit-user-select: none;
+  user-select: none;
+  background-repeat: no-repeat;
+  display: inline-block;
+  fill: currentColor;
+  height: 24px;
+  width: 12px;
+  font-size: 15px;
+  overflow: hidden;
+}
+.cdk-overlay-container .cdk-global-overlay-wrapper {
+  justify-content: end !important;
+  align-items: start;
+}
+
+.custom-toast {
+  position: absolute;
+  right: 0;
+}

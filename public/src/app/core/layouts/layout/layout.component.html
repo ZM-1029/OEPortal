@@ -1,0 +1,13 @@
+<app-sidebar (headerMenu)="headerMenu($event)" [menuClass]="menuClass"></app-sidebar>
+<app-header [headerMenuList]="headerMenuList" (sendMenuClass)="getSideMenuClass($event)"></app-header>
+<main class="wrapper bg-light pt-2">
+  <div class="content container-fluid p-0 pt-2">
+    <div
+      [ngClass]="
+        menuClass == 'openMenu' ? 'container-fit' : 'container-fit-small'
+      "
+    >
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</main>

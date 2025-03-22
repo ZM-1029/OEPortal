@@ -1,0 +1,61 @@
+<header class="position-fixed top-0">
+  <nav class="navbar navbar-expand-lg navbar-light rounded" aria-label="Eleventh navbar example">
+    <div class="container-fluid">
+      <a class="navbar-brand mx-4 " style="width: 8rem">
+        <img src="assets/images/logo.png" width="100%" alt="Logo" />
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample09"
+        aria-controls="navbarsExample09" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarsExample09">
+        <span class="ms-5" (click)="openMenu()">
+          <i class="fa-solid fa-bars"></i></span>
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 d-flex align-items-center px-2">
+          <!-- Notification Icon with Red Dot -->
+          <li class="nav-item position-relative me-3">
+            <a class="nav-link rounded-circle icon-btn">
+              <i class="fa-solid fa-bell"></i>
+              <span class="notification-dot"></span>
+            </a>
+          </li>
+
+          <!-- Settings Dropdown -->
+          <li class="nav-item dropdown me-3">
+            <a class="nav-link rounded-circle icon-btn dropdown-toggle no-arrow" href="#" id="settingsDropdown"
+              role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fa-solid fa-gear"></i>
+            </a>
+
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="settingsDropdown">
+              @for(menu of headerMenuList;track menu){
+                <li><a class="dropdown-item" >{{menu.name}}</a></li> 
+              }
+              <!-- <li><a class="dropdown-item" href="#">Profile Settings</a></li>
+              <li><a class="dropdown-item" href="#">Account</a></li> -->
+              <li><a class="dropdown-item" (click)="logout()" >Logout</a></li>
+            </ul>
+          </li>
+
+
+
+          <!-- Profile Section -->
+          <li class="nav-item d-flex align-items-center me-2">
+            <img src="/assets/images/zoumaCircleLogo.jpg" alt="Profile" class="profile-img" />
+            <div class="ms-2" id="profileSection"
+            role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <span class="text-light fw-bold">{{name}}</span><br />
+              <span class="text-light small">{{roleName}}</span>
+            </div>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileSection">
+              <li><a class="dropdown-item" href="#">Profile Settings</a></li>
+              <li><a class="dropdown-item" href="#">Account</a></li>
+              <li><a class="dropdown-item" (click)="logout()" >Logout</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>

@@ -1,0 +1,44 @@
+.custom-select-all {
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  font-weight: bold;
+}
+::ng-deep .ng-select {
+  min-width: 300px; /* Adjust width as needed */
+}
+
+::ng-deep .ng-select-container {
+  max-height: 40px; /* Control height */
+  overflow-y: auto; /* Enable scrolling */
+  display: flex;
+  flex-wrap: wrap; /* Wrap selected items properly */
+  gap: 5px;
+  padding: 5px;
+  border-radius: 4px;
+}
+
+::ng-deep .ng-select .ng-select-dropdown {
+  max-height: 300px; /* Limit dropdown height */
+  overflow-y: auto; /* Enable scroll if too many items */
+}
+
+::ng-deep .ng-select .ng-select-selected {
+  background-color: #f1f1f1; /* Light background for selected items */
+  border-radius: 4px;
+  padding: 3px 8px;
+}
+
+::ng-deep .ng-select .ng-option {
+  display: flex;
+  align-items: center;
+  padding: 5px;
+}
+
+::ng-deep .ng-select .ng-option:hover {
+  background-color: #e9ecef; /* Light hover effect */
+}
+
+::ng-deep .ng-select .ng-option input[type="checkbox"] {
+  margin-right: 10px; /* Space between checkbox & text */
+}

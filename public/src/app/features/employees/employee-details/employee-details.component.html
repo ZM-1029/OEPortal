@@ -1,0 +1,971 @@
+<div class="main-content mt-3">
+  @defer {
+    <div class="bg-img row">
+      <img src="/assets/images/empDetails_Bg.jpg" width="100%" height="100%" alt="" />
+    </div>
+  }
+  @defer {
+    <div class="container-fluid">
+      <div class="d-flex employee-entery position-relative">
+        <div class="me-2 pe-0 position-relative profile-container-img">
+          <div class="profile mt-3">
+            <div
+              class="row position-absolute justify-content-center profile-img"
+            >
+              <div class="col pe-0">
+                <div class="image-container">
+                  @if (imgUrl) {
+                    <img src="{{ imgUrl }}" alt="img" />
+                  } @else {
+                    <img src="/assets/images/demo.jpg" alt="img" />
+                  }
+                </div>
+              </div>
+            </div>
+            <div class="zm-finance-card rounded bg-white">
+              <div class="row text-center mt-5">
+                <h6 class="mt-2 mb-0">
+                  <span class="text-secondary m-1"
+                    >{{ employeeDetails.employeeID }}-</span
+                  >
+                  <span class=" "
+                    >{{ employeeDetails.firstName }}
+                    {{ employeeDetails.lastName }}</span
+                  >
+                </h6>
+                <label for="" class="mb-2">{{
+                  employeeDetails.designation
+                }}</label>
+                <div class="d-flex justify-content-center align-items-center">
+                  <span
+                    [ngClass]="
+                      employeeDetails.employeestatus == 'Active'
+                        ? 'status-text-success'
+                        : 'status-text-danger'
+                    "
+                    >{{ employeeDetails.employeestatus }}</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="zm-finance-card">
+            <div class="row">
+              <div
+                class="col-3 image-section text-center d-flex align-items-center"
+              >
+                @if (reportingToUrl) {
+                  <img
+                    src="{{ reportingToUrl }}"
+                    alt="Profile Picture"
+                    class="profile-img-2 border"
+                  />
+                } @else {
+                  <img
+                    src="/assets/images/demo.jpg"
+                    alt="Profile Picture"
+                    class="profile-img-2 border"
+                  />
+                }
+              </div>
+              <div class="col-9 d-flex flex-column justify-content-center">
+                <span class="text-bold">Reporting To</span>
+                <label for="" class="text-wrap">{{
+                  employeeDetails.reportingTo
+                }}</label>
+              </div>
+            </div>
+          </div>
+          <div class="zm-finance-card">
+            <div class="row mt-2">
+              <div class="col-5"><label for="">D.O.J</label></div>
+              <div class="col-7">{{ employeeDetails.dateofjoining }}</div>
+            </div>
+            <div class="row mt-2">
+              <div class="col-5"><label for="">Designation</label></div>
+              <div class="col-7">{{ employeeDetails.designation }}</div>
+            </div>
+            <div class="row mt-2">
+              <div class="col-5"><label for="">Department</label></div>
+              <div class="col-7">{{ employeeDetails.department }}</div>
+            </div>
+            <div class="row mt-2">
+              <div class="col-5"><label for="">Work Location</label></div>
+              <div class="col-7">{{ employeeDetails.workLocation }}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="switching-tab">
+          <div class="rounded">
+            <nav>
+              <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                <button
+                  class="nav-link active"
+                  id="nav-profile-tab"
+                  data-bs-toggle="tab"
+                  data-bs-target="#nav-profile"
+                  type="button"
+                  role="tab"
+                  aria-controls="nav-profile"
+                  aria-selected="false"
+                >
+                  Profile
+                </button>
+
+                <button
+                  class="nav-link"
+                  [ngClass]="{ 'show active': activeTab === 'attendance' }"
+                  (click)="setActiveTab('attendance')"
+                  id="nav-attendance-tab"
+                  data-bs-toggle="tab"
+                  data-bs-target="#nav-attendance"
+                  type="button"
+                  role="tab"
+                  aria-controls="nav-attendance"
+                  aria-selected="true"
+                >
+                  Attendance
+                </button>
+
+                <button
+                  class="nav-link"
+                  [ngClass]="{ 'show active': activeTab === 'timeSheet' }"
+                  (click)="setActiveTab('timeSheet')"
+                  id="nav-timeSheet-tab"
+                  data-bs-toggle="tab"
+                  data-bs-target="#nav-timeSheet"
+                  type="button"
+                  role="tab"
+                  aria-controls="nav-timeSheet"
+                  aria-selected="true"
+                >
+                  Timesheet
+                </button>
+
+                <button
+                  class="nav-link"
+                  [ngClass]="{ 'show active': activeTab === 'assets' }"
+                  (click)="setActiveTab('assets')"
+                  id="nav-assets-tab"
+                  data-bs-toggle="tab"
+                  data-bs-target="#nav-assets"
+                  type="button"
+                  role="tab"
+                  aria-controls="nav-assets"
+                  aria-selected="true"
+                >
+                  Assets
+                </button>
+
+                <button
+                  class="nav-link"
+                  [ngClass]="{ 'show active': activeTab === 'invoice' }"
+                  (click)="setActiveTab('invoice')"
+                  id="nav-invoice"
+                  id="nav-invoice-tab"
+                  data-bs-toggle="tab"
+                  data-bs-target="#nav-invoice"
+                  type="button"
+                  role="tab"
+                  aria-controls="nav-invoice"
+                  aria-selected="true"
+                >
+                  Invoice
+                </button>
+
+                <button
+                  class="nav-link"
+                  [ngClass]="{ 'show active': activeTab === 'salary' }"
+                  (click)="setActiveTab('salary')"
+                  id="nav-salary-tab"
+                  data-bs-toggle="tab"
+                  data-bs-target="#nav-salary"
+                  type="button"
+                  role="tab"
+                  aria-controls="nav-salary"
+                  aria-selected="false"
+                >
+                  Salary
+                </button>
+
+                <button
+                  class="nav-link"
+                  [ngClass]="{
+                    'show active': activeTab === 'non-compliance-history',
+                  }"
+                  (click)="setActiveTab('non-compliance-history')"
+                  id="nav-non-compliance-history-tab"
+                  data-bs-toggle="tab"
+                  data-bs-target="#nav-non-compliance-history"
+                  type="button"
+                  role="tab"
+                  aria-controls="nav-non-compliance-history"
+                  aria-selected="false"
+                >
+                  Non-Compliance
+                </button>
+              </div>
+            </nav>
+            <div class="tab-content" id="nav-tabContent">
+              <div
+                class="tab-pane fade show active"
+                [ngClass]="{ 'show active': activeTab === 'profile' }"
+                (click)="setActiveTab('profile')"
+                id="nav-profile"
+                role="tabpanel"
+                aria-labelledby="nav-profile-tab"
+              >
+                <div class="profile-content pb-3">
+                  <div class="zm-finance-card box-1">
+                    <div class="row">
+                      <div class="col-4">
+                        <div class="row">
+                          <div
+                            class="col-2 d-flex justify-content-end align-items-center"
+                          >
+                            <span class="icon"
+                              ><i class="bi bi-geo-alt-fill"></i
+                            ></span>
+                          </div>
+                          <div class="col-10">
+                            <label for="">Location</label>
+                            <span class="d-block">{{
+                              employeeDetails.locationName
+                            }}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-4">
+                        <div class="row">
+                          <div
+                            class="col-2 d-flex justify-content-end align-items-center"
+                          >
+                            <span class="icon"
+                              ><i class="fa-solid fa-network-wired"></i
+                            ></span>
+                          </div>
+                          <div class="col-10">
+                            <label for="">Department</label>
+                            <span class="d-block">{{
+                              employeeDetails.department
+                            }}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-4">
+                        <div class="row">
+                          <div
+                            class="col-2 d-flex justify-content-end align-items-center"
+                          >
+                            <span class="icon"
+                              ><i class="bi bi-crosshair2"></i
+                            ></span>
+                          </div>
+                          <div class="col-10">
+                            <label for="">Shift</label>
+                            <span class="d-block"
+                              >{{ employeeDetails.department }}
+                              {{ employeeDetails.workLocation }}</span
+                            >
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-4">
+                        <div class="row">
+                          <div
+                            class="col-2 d-flex justify-content-end align-items-center"
+                          >
+                            <span class="icon"
+                              ><i class="fa-regular fa-clock"></i
+                            ></span>
+                          </div>
+                          <div class="col-10">
+                            <label for="">Time zone</label>
+                            <span class="d-block">{{
+                              employeeDetails.modifiedTime
+                                | date
+                                  : "MMMM
+                            dd-YYYY hh:mm:ss"
+                            }}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-4">
+                        <div class="row">
+                          <div
+                            class="col-2 d-flex justify-content-end align-items-center"
+                          >
+                            <span class="icon"
+                              ><i class="bi bi-pin-map-fill"></i
+                            ></span>
+                          </div>
+                          <div class="col-10">
+                            <label for="">Seating Location</label>
+                            <span class="d-block">{{
+                              employeeDetails.workLocation
+                            }}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-4">
+                        <div class="row">
+                          <div
+                            class="col-2 d-flex justify-content-end align-items-center"
+                          >
+                            <span class="icon"
+                              ><i class="bi bi-envelope-fill"></i
+                            ></span>
+                          </div>
+                          <div class="col-10">
+                            <label for="">Email ID</label>
+                            <span class="d-block">{{
+                              employeeDetails.emailID
+                            }}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-4">
+                        <div class="row">
+                          <div
+                            class="col-2 d-flex justify-content-end align-items-center"
+                          >
+                            <span class="icon"
+                              ><i class="fa-solid fa-mobile-screen-button"></i
+                            ></span>
+                          </div>
+                          <div class="col-10">
+                            <label for="">Mobile Phone</label>
+                            <span class="d-block">{{
+                              employeeDetails.mobile
+                            }}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-4">
+                        <div class="row">
+                          <div
+                            class="col-2 d-flex justify-content-end align-items-center"
+                          >
+                            <span class="icon"
+                              ><i class="fa-solid fa-phone"></i
+                            ></span>
+                          </div>
+                          <div class="col-10">
+                            <label for="">Work phone</label>
+                            <span class="d-block">{{
+                              employeeDetails.workPhone
+                            }}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="zm-finance-card">
+                    <h5>Basic information</h5>
+                    <div class="row">
+                      <div class="col-6">
+                        <div class="row">
+                          <div
+                            class="col-4 d-flex justify-content-start align-items-center"
+                          >
+                            <label for="">Employee ID</label>
+                          </div>
+                          <div class="col-8">
+                            <span class="d-block">{{
+                              employeeDetails.employeeID
+                            }}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="row">
+                          <div
+                            class="col-4 d-flex justify-content-start align-items-center"
+                          >
+                            <label for="">Nick name</label>
+                          </div>
+                          <div class="col-8">
+                            <span class="d-block">{{
+                              employeeDetails.nickName
+                            }}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-6">
+                        <div class="row">
+                          <div
+                            class="col-4 d-flex justify-content-start align-items-center"
+                          >
+                            <label for="">First Name</label>
+                          </div>
+                          <div class="col-8">
+                            <span class="d-block">{{
+                              employeeDetails.firstName
+                            }}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="row">
+                          <div
+                            class="col-4 d-flex justify-content-start align-items-center"
+                          >
+                            <label for="">Email address</label>
+                          </div>
+                          <div class="col-8">
+                            <span class="d-block">{{
+                              employeeDetails.emailID
+                            }}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-6">
+                        <div class="row">
+                          <div
+                            class="col-4 d-flex justify-content-start align-items-center"
+                          >
+                            <label for="">Last Name</label>
+                          </div>
+                          <div class="col-8">
+                            <span class="d-block">{{
+                              employeeDetails.lastName
+                            }}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="row">
+                          <div
+                            class="col-4 d-flex justify-content-start align-items-center"
+                          >
+                            <label for="">Present Address</label>
+                          </div>
+                          <div class="col-8">
+                            <span class="d-block">{{
+                              employeeDetails.presentAddress
+                            }}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="zm-finance-card">
+                    <h5>Work Information</h5>
+                    <div class="row">
+                      <div class="col-6">
+                        <div class="row">
+                          <div
+                            class="col-4 d-flex justify-content-start align-items-center"
+                          >
+                            <label for="">Department</label>
+                          </div>
+                          <div class="col-8">
+                            <span class="d-block">{{
+                              employeeDetails.department
+                            }}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="row">
+                          <div
+                            class="col-4 d-flex justify-content-start align-items-center"
+                          >
+                            <label for="">Zoho Role</label>
+                          </div>
+                          <div class="col-8">
+                            <span class="d-block">{{
+                              employeeDetails.role
+                            }}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-6">
+                        <div class="row">
+                          <div
+                            class="col-4 d-flex justify-content-start align-items-center"
+                          >
+                            <label for="">Location</label>
+                          </div>
+                          <div class="col-8">
+                            <span class="d-block">{{
+                              employeeDetails.workLocation
+                            }}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="row">
+                          <div
+                            class="col-4 d-flex justify-content-start align-items-center"
+                          >
+                            <label for="">Employment Type</label>
+                          </div>
+                          <div class="col-8">
+                            <span class="d-block">{{
+                              employeeDetails.employeeType
+                            }}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-6">
+                        <div class="row">
+                          <div
+                            class="col-4 d-flex justify-content-start align-items-center"
+                          >
+                            <label for="">Designation</label>
+                          </div>
+                          <div class="col-8">
+                            <span class="d-block">{{
+                              employeeDetails.designation
+                            }}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="row">
+                          <div
+                            class="col-4 d-flex justify-content-start align-items-center"
+                          >
+                            <label for="">Employee Status</label>
+                          </div>
+                          <div class="col-8">
+                            <span class="d-block">{{
+                              employeeDetails.employeestatus
+                            }}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-6">
+                        <div class="row">
+                          <div
+                            class="col-4 d-flex justify-content-start align-items-center"
+                          >
+                            <label for="">Delivery Centre</label>
+                          </div>
+                          <div class="col-8">
+                            <span class="d-block">{{
+                              employeeDetails.delivery_centre
+                            }}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="row">
+                          <div
+                            class="col-4 d-flex justify-content-start align-items-center"
+                          >
+                            <label for="">Billable Type</label>
+                          </div>
+                          <div class="col-8">
+                            <span class="d-block">{{
+                              employeeDetails.billable_Type
+                            }}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-6">
+                        <div class="row">
+                          <div
+                            class="col-4 d-flex justify-content-start align-items-center"
+                          >
+                            <label for="">Probation Status</label>
+                          </div>
+                          <div class="col-8">
+                            <span class="d-block">{{
+                              employeeDetails.probationStatus
+                            }}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="row">
+                          <div
+                            class="col-4 d-flex justify-content-start align-items-center"
+                          >
+                            <label for="">Date of Joining</label>
+                          </div>
+                          <div class="col-8">
+                            <span class="d-block">{{
+                              employeeDetails.dateofjoining
+                            }}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-6">
+                        <div class="row">
+                          <div
+                            class="col-4 d-flex justify-content-start align-items-center"
+                          >
+                            <label for="">Current Experience</label>
+                          </div>
+                          <div class="col-8">
+                            <span class="d-block">{{
+                              employeeDetails.experience
+                            }}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="row">
+                          <div
+                            class="col-4 d-flex justify-content-start align-items-center"
+                          >
+                            <label for="">Total Experience</label>
+                          </div>
+                          <div class="col-8">
+                            <span class="d-block">{{
+                              employeeDetails.totalExperience
+                            }}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="zm-finance-card">
+                    <h5>Hierarchy Information</h5>
+                    <div class="row">
+                      <div class="col-6">
+                        <div class="row">
+                          <div
+                            class="col-4 d-flex justify-content-start align-items-center"
+                          >
+                            <label for="">Reporting Manager</label>
+                          </div>
+                          <div class="col-8">
+                            <span class="d-block">{{
+                              employeeDetails.reportingTo
+                            }}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="zm-finance-card">
+                    <h5>Personal Details</h5>
+                    <div class="row">
+                      <div class="col-6">
+                        <div class="row">
+                          <div
+                            class="col-4 d-flex justify-content-start align-items-center"
+                          >
+                            <label for="">Date of Birth</label>
+                          </div>
+                          <div class="col-8">
+                            <span class="d-block">{{
+                              employeeDetails.dateOfBirth
+                            }}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="row">
+                          <div
+                            class="col-4 d-flex justify-content-start align-items-center"
+                          >
+                            <label for="">Blood Group</label>
+                          </div>
+                          <div class="col-8">
+                            <span class="d-block">{{
+                              employeeDetails.bloodgroup
+                            }}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-6">
+                        <div class="row">
+                          <div
+                            class="col-4 d-flex justify-content-start align-items-center"
+                          >
+                            <label for="">Gender</label>
+                          </div>
+                          <div class="col-8">
+                            <span class="d-block">{{
+                              employeeDetails.gender
+                            }}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="row">
+                          <div
+                            class="col-4 d-flex justify-content-start align-items-center"
+                          >
+                            <label for="">Marital Status</label>
+                          </div>
+                          <div class="col-8">
+                            <span class="d-block">{{
+                              employeeDetails.maritalStatus
+                            }}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="row">
+                          <div
+                            class="col-4 d-flex justify-content-start align-items-center"
+                          >
+                            <label for="">Permanent Address</label>
+                          </div>
+                          <div class="col-8">
+                            <span class="d-block">{{
+                              employeeDetails.permanentAddress
+                            }}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="row">
+                          <div
+                            class="col-4 d-flex justify-content-start align-items-center"
+                          >
+                            <label for="">Personal Email</label>
+                          </div>
+                          <div class="col-8">
+                            <span class="d-block">{{
+                              employeeDetails.otherEmail
+                            }}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="row">
+                          <div
+                            class="col-4 d-flex justify-content-start align-items-center"
+                          >
+                            <label for="">Age</label>
+                          </div>
+                          <div class="col-8">
+                            <span class="d-block">{{
+                              employeeDetails.age
+                            }}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="zm-finance-card">
+                    <h5>Identity Information</h5>
+                    <div class="row">
+                      <div class="col-6">
+                        <div class="row">
+                          <div
+                            class="col-4 d-flex justify-content-start align-items-center"
+                          >
+                            <label for="">UAN</label>
+                          </div>
+                          <div
+                            class="col-8 private"
+                            appHideShowInfo="{{ employeeDetails.uanNumber }}"
+                          ></div>
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="row">
+                          <div
+                            class="col-4 d-flex justify-content-start align-items-center"
+                          >
+                            <label for="">PAN</label>
+                          </div>
+                          <div
+                            class="col-8 private"
+                            appHideShowInfo="{{ employeeDetails.panNumber }}"
+                          ></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-6">
+                        <div class="row">
+                          <div
+                            class="col-4 d-flex justify-content-start align-items-center"
+                          >
+                            <label for="">Aadhaar</label>
+                          </div>
+                          <div
+                            class="col-8 private"
+                            appHideShowInfo="{{
+                              employeeDetails.aadhaarNumber
+                            }}"
+                          ></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="zm-finance-card">
+                    <h5>Contact Details</h5>
+                    <div class="row">
+                      <div class="col-6">
+                        <div class="row">
+                          <div
+                            class="col-4 ps-0 d-flex justify-content-start align-items-center"
+                          >
+                            <label for="">Work Phone Number</label>
+                          </div>
+                          <div class="col-8">
+                            <span class="d-block">{{
+                              employeeDetails.workPhone
+                            }}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="row">
+                          <div
+                            class="col-4 ps-0 d-flex justify-content-start align-items-center"
+                          >
+                            <label for="">Personal Mobile Number</label>
+                          </div>
+                          <div class="col-8">
+                            <span class="d-block">{{
+                              employeeDetails.mobile
+                            }}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="row">
+                          <div
+                            class="col-4 d-flex justify-content-start align-items-center"
+                          >
+                            <label for="">Extension</label>
+                          </div>
+                          <div class="col-8">
+                            <span class="d-block">{{
+                              employeeDetails.experience
+                            }}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="row">
+                          <div
+                            class="col-4 d-flex justify-content-start align-items-center"
+                          >
+                            <label for="">Personal Email Address</label>
+                          </div>
+                          <div class="col-8">
+                            <span class="d-block">{{
+                              employeeDetails.otherEmail
+                            }}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="row">
+                          <div
+                            class="col-4 d-flex justify-content-start align-items-center"
+                          >
+                            <label for="">Seating Location</label>
+                          </div>
+                          <div class="col-8">
+                            <span class="d-block">{{
+                              employeeDetails.locationName
+                            }}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="tab-pane fade"
+                [ngClass]="{ 'show active': activeTab === 'attendance' }"
+                (click)="setActiveTab('attendance')"
+                id="nav-attendance"
+                role="tabpanel"
+                aria-labelledby="nav-attendance-tab"
+              >
+                @if (activeTab === "attendance") {
+                  <app-employee-attendance
+                    [employeeId]="empId"
+                  ></app-employee-attendance>
+                }
+              </div>
+              <div
+                class="tab-pane fade"
+                id="nav-invoice"
+                role="tabpanel"
+                aria-labelledby="nav-invoice-tab"
+              >
+                @if (activeTab === "invoice") {
+                  <app-page-not-found></app-page-not-found>
+                }
+              </div>
+              <div
+                class="tab-pane fade"
+                id="nav-timeSheet"
+                role="tabpanel"
+                aria-labelledby="nav-timeSheet-tab"
+              >
+                @if (activeTab === "timeSheet") {
+                  <app-employee-timesheet
+                    [employeeDataForTimesheet]="employeeDataForTimesheet"
+                  ></app-employee-timesheet>
+                }
+              </div>
+              <div
+                class="tab-pane fade"
+                id="nav-assets"
+                role="tabpanel"
+                aria-labelledby="nav-assets-tab"
+              >
+                @if (activeTab === "assets") {
+                  <app-page-not-found></app-page-not-found>
+                }
+              </div>
+              <div
+                class="tab-pane fade"
+                id="nav-salary"
+                role="tabpanel"
+                aria-labelledby="nav-salary-tab"
+              >
+                @if (activeTab === "salary") {
+                  <app-employee-salary
+                    [employeeId]="empId"
+                  ></app-employee-salary>
+                }
+              </div>
+              <div
+                class="tab-pane fade"
+                id="nav-non-compliance-history"
+                role="tabpanel"
+                aria-labelledby="nav-non-compliance-history-tab"
+              >
+                @if (activeTab === "non-compliance-history") {
+                  <app-non-compliance-history
+                    [employeeId]="empId"
+                  ></app-non-compliance-history>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  } @loading (minimum 2000ms) {
+    <app-loader></app-loader>
+  }
+</div>

@@ -1,0 +1,90 @@
+.table-footer {
+  font-size: 14px;
+  z-index: 1 !important;
+}
+
+.table-footer .row {
+  position: absolute;
+  width: 60%;
+  top: -40px;
+  left: 20px;
+  z-index: 2;
+}
+
+.btn-info-dark {
+  background-color: #2e3b64 !important;
+  outline: #2e3b64 !important;
+  border: #2e3b64;
+  color: white;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #1d2848 !important;
+  }
+}
+
+.dropdown-menu{
+  border: 1px solid #ccc;
+  max-height: 265px;
+  max-width: 220px;
+  overflow-y: auto;
+}
+
+// checkbox style start
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.checkbox-container input[type="checkbox"] {
+  appearance: none;
+  width: 18px ;
+  height: 18px ;
+  border: 2px solid #3b82f6; /* Blue border */
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.checkbox-container input[type="checkbox"]:checked {
+  background-color: #3b82f6;
+  border: none;
+  position: relative;
+}
+
+.checkbox-container input[type="checkbox"]:checked::after {
+  content: "✔";
+  color: white;
+  font-size: 14px;
+  font-weight: 200;
+}
+
+.checkbox-container label {
+  font-size: 16px;
+  color: #333;
+}
+
+// checkbox style end
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+}
+
+.dropdown-item label {
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.cstm_height_btn {
+  height: 40px;
+  background: #2e3b64;
+  color: white;
+  /* background-color: var(--primary-color) !important; */
+}

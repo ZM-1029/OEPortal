@@ -1,0 +1,76 @@
+<div class="auth-box d-flex align-items-center justify-content-center overflow-auto my-lg-0 relative">
+  <div class="container">
+      <div class="row">
+          <div class="col-md-6 col-xl-5 col-12 auth_side_content ">
+
+            <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+              <div>
+                <img src="/assets/images/ZoumaBlackLogo.png" class="mb-5" width="160" alt="">
+                <h5 class="mb-2 fs-lg-26">Sign up</h5>
+                <p class="mb-4 fs-14">Please create your account and <a routerLink="/login">Login</a></p>
+            </div>
+              <!-- Full Name -->
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Full Name</mat-label>
+                <input matInput formControlName="fullName" placeholder="Enter your full name">
+                <mat-error *ngIf="signupForm.controls['fullName'].invalid && signupForm.controls['fullName'].touched">
+                  Full Name is required (Min. 3 characters)
+                </mat-error>
+              </mat-form-field>
+      
+              <!-- Email -->
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Email</mat-label>
+                <input matInput formControlName="email" type="email" placeholder="Enter your email">
+                <mat-error *ngIf="signupForm.controls['email'].invalid && signupForm.controls['email'].touched">
+                  Enter a valid email
+                </mat-error>
+              </mat-form-field>
+      
+              <!-- Password -->
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Password</mat-label>
+                <input matInput formControlName="password" [type]="hidePassword ? 'password' : 'text'">
+                <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword">
+                  <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+                </button>
+                <mat-error *ngIf="signupForm.controls['password'].invalid && signupForm.controls['password'].touched">
+                  Password must be at least 6 characters long
+                </mat-error>
+              </mat-form-field>
+      
+              <!-- Confirm Password -->
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Confirm Password</mat-label>
+                <input matInput formControlName="confirmPassword" [type]="hideConfirmPassword ? 'password' : 'text'">
+                <button mat-icon-button matSuffix type="button" (click)="hideConfirmPassword = !hideConfirmPassword">
+                  <mat-icon>{{ hideConfirmPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+                </button>
+                <mat-error *ngIf="signupForm.controls['confirmPassword'].invalid && signupForm.controls['confirmPassword'].touched">
+                  Confirm your password
+                </mat-error>
+              </mat-form-field>
+      
+              <!-- Submit Button -->
+              <button  class="btn btn-primary text-white full-width"  type="submit" >
+                Sign Up
+              </button>
+              
+            </form>
+
+          </div>
+          <div class="col-md-6 col-xl-6 auth_side_image bg-black d-lg-block d-none">
+              <img class="img-fluid" src="/assets/images/login.jpg" alt="">
+          </div>
+      </div>
+  </div>
+</div>
+<!-- <div class="signup-container">
+    <mat-card>
+      <mat-card-title>Sign Up</mat-card-title>
+      <mat-card-content> -->
+        
+      <!-- </mat-card-content>
+    </mat-card>
+  </div>
+   -->

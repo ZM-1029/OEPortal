@@ -1,0 +1,103 @@
+<div class="purchase-order-form m-3">
+  <div class="border-bottom bg-light pt-2 pb-2">
+    <h2 class="formHeading">{{ formHeading }} Purchase Order</h2>
+  </div>
+  <div class="form-container d-flex justify-content-center">
+    <form [formGroup]="purchaseOrderForm">
+      <div class="form-group row">
+        <mat-label class="outer-mat-lable col-4 pt-2 ">Select Customer</mat-label>
+        <!-- <mat-form-field appearance="outline" class="col-8">
+          <mat-select formControlName="customerId">
+            @for (customer of allCustomers; track customer) {
+            <mat-option [value]="customer.id">{{
+              customer.customerName
+              }}</mat-option>
+            }
+          </mat-select>
+          @if (purchaseOrderForm.controls["customerId"].hasError("required")) {
+          <mat-error>Customer is required</mat-error>
+          }
+        </mat-form-field> -->
+        <mat-form-field appearance="outline" class="col-8">
+          <input #input  type="text" placeholder="Select customer" matInput formControlName="customerName"
+              [matAutocomplete]="auto" (input)="filter()" (focus)="filter()" />
+          <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onSelectCustomer($event)" >
+              @for( customer of filteredCustomers; track customer){
+              <mat-option [value]="customer.customerName">
+                  {{ customer.customerName }}
+              </mat-option>
+              }
+          </mat-autocomplete>
+          @if (purchaseOrderForm.controls["customerName"].hasError("required")) {
+          <mat-error>Customer Name is required</mat-error>
+          }
+      </mat-form-field>
+        
+      </div>
+
+      <div class="form-group row">
+        <mat-label class="outer-mat-lable col-4 pt-2 ">Purchase Order Id</mat-label>
+        <mat-form-field appearance="outline" class="col-8">
+          <input formControlName="poid" matInput placeholder="eg. PO-0000" />
+          @if (purchaseOrderForm.controls["poid"].hasError("required")) {
+          <mat-error>Purchase Order Id is required</mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      <div class="form-group row">
+        <mat-label class="outer-mat-lable col-4 pt-2">Amount</mat-label>
+        <mat-form-field appearance="outline" class="col-8">
+          <input formControlName="amount" matInput placeholder="Amount" />
+          <mat-error>
+            @if(purchaseOrderForm.controls['amount'].errors?.['required']){
+            <span>Amount is required.</span>
+            }
+
+            @if(purchaseOrderForm.controls['amount'].errors?.['pattern']){
+            <span>Only numbers are allowed.</span>
+            }
+          </mat-error>
+
+        </mat-form-field>
+      </div>
+      <div class="form-group row">
+        <mat-label class="outer-mat-lable col-4 pt-2">Select Currency</mat-label>
+        <mat-form-field appearance="outline" class="col-8 py-0">
+          <mat-select class="py-0" formControlName="currencyId">
+            @for (currency of allCurrencies; track currency) {
+            <mat-option [value]="currency.currencyId">{{
+              currency.currencyName
+              }}</mat-option>
+            }
+          </mat-select>
+          @if (purchaseOrderForm.controls["currencyId"].hasError("required")) {
+          <mat-error>Currency is required</mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <div class="form-group row">
+        <mat-label class="outer-mat-lable col-4 pt-2 text-end">Month & Year
+        </mat-label>
+        <mat-form-field appearance="outline" class="col-8">
+          <input matInput [matDatepicker]="dp" placeholder="Month and Year" [formControl]="date" />
+          <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+          <mat-datepicker #dp startView="multi-year" (yearSelected)="chosenYearHandler($event)"
+            (monthSelected)="chosenMonthHandler($event, dp)" panelClass="example-month-picker">
+          </mat-datepicker>
+        </mat-form-field>
+      </div>
+      <div class="form-group row">
+        <mat-label class="outer-mat-lable col-4 pt-2">Description </mat-label>
+        <mat-form-field appearance="outline" class="col-8">
+          <textarea formControlName="description" matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+            cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"></textarea>
+        </mat-form-field>
+      </div>
+      <div class="d-flex justify-content-end mb-4 pb-4">
+        <button class="" type="button" (click)="resetForm()">Clear</button>
+        <button class="" (click)="createUpdate()">{{ formHeading }}</button>
+      </div>
+    </form>
+  </div>
+</div>

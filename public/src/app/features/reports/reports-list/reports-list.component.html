@@ -1,0 +1,54 @@
+<div class="main-content p-2">
+  <app-page-header [HeadingName]="HeadingName">
+  </app-page-header>
+
+  <div [ngClass]="(value === 'timesheet' || value === 'attendance') ? '' : 'd-none'"  class="date-range-picker d-flex">
+    <mat-form-field appearance="outline" class="w-100 p-0">
+      <mat-label>Enter a date range</mat-label>
+      <mat-date-range-input [rangePicker]="picker">
+        <input matStartDate placeholder="Start date" class="w-100" (dateChange)="getStartDate($event)"
+          [value]="startDate" />
+        <input matEndDate placeholder="End date" class="w-100" (dateChange)="getEndDate($event)" [value]="endDate" />
+      </mat-date-range-input>
+      <mat-hint class="ps-0">MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-date-range-picker #picker></mat-date-range-picker>
+    </mat-form-field>
+  </div>
+
+  <div class="d-flex align-items-center justify-content-center">
+    <div class="container-fluid p-0">
+      <div class="dropdown-container d-flex justify-content-between me-2">
+        <div class="dropdown">
+          <select2 class="select2dropdown" [data]="activeReport" [value]="value" (update)="displayReports($event)">
+          </select2>
+        </div>
+        <div class="emplooye-dropdown ms-auto">
+            <div class="employee">
+              <app-multi-select-dropdown [dropdownHeading]="'Employee'" [dataList]="allEmployees"
+                  (selectedOutput)="getReporsByEmployeeId($event)">
+              </app-multi-select-dropdown>
+          </div>
+        </div>
+      </div>
+      <div class="reports">
+        <div class="report-container">
+          @if(value=='attendance'){
+          <app-attendance-non-compliance-history [ncTypeCounts]="ncTypeCounts"
+            [attendanceRowData]="attendanceRowData"></app-attendance-non-compliance-history>
+          }
+          @if(value=='timesheet'){
+          <app-timesheet-non-compliance [ncTypeCounts]="ncTypeCounts"
+            [timesheetRowData]="timesheetRowData"></app-timesheet-non-compliance>
+          }
+          @if(value=='efficiency-report'){
+          <app-efficiency-reports></app-efficiency-reports>
+          }
+          @if(value=='salary-reports'){
+          <app-salary-reports></app-salary-reports>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

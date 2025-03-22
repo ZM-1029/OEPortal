@@ -1,0 +1,84 @@
+<div class="main-content mt-2 p-2">
+  <app-page-header [HeadingName]="HeadingName">
+    <div pageHeaderBtn class="d-flex">
+      <div class="dropdown">
+        <button class="btn btn-info-dark text-white btn-wave dropdown-toggle" type="button" id="dropdownMenuButton1"
+          data-bs-toggle="dropdown" aria-expanded="false">
+          Manage Column
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+          @for (column of allColumns; track column) {
+          <li>
+            @if (
+            column.headerName == "S. No" ||
+            column.field == "employeeID" ||
+            column.field == "firstName"
+            ) {
+            <div class="dropdown-item d-none checkbox-container">
+              <input type="checkbox" [checked]="isColumnDisplayed(column)" (change)="toggleColumn(column)"
+                id="{{ column.field }}" />
+              <label for="{{ column.field }}">{{
+                column.headerName
+                }}</label>
+            </div>
+            } @else {
+            <div class="dropdown-item checkbox-container">
+              <input type="checkbox" [checked]="isColumnDisplayed(column)" (change)="toggleColumn(column)"
+                id="{{ column.field }}" />
+              <label for="{{ column.field }}">{{
+                column.headerName
+                }}</label>
+            </div>
+            }
+          </li>
+          }
+        </ul>
+      </div>
+      <button disabled class="btn btn-primary btn-wave mx-2 text-white text-capitalize" (click)="export($event)">
+        <i class="bi bi-download me-1"></i> Export
+      </button>
+    </div>
+  </app-page-header>
+  @defer {
+  <div class="d-flex align-items-center justify-content-center">
+    <div class="container-fluid p-0">
+      <ag-grid-angular #agGrid style="width: 100%; height: 78vh !important; padding-bottom: 10px"
+        class="ag-theme-alpine" [rowData]="rowData" [columnDefs]="columnDefs" (rowClicked)="onRowClick($event)"
+        [defaultColDef]="defaultColDef" [animateRows]="true" [paginationPageSize]="15" [pagination]="true"
+        [paginationPageSizeSelector]="paginationPageSizeSelector" (gridReady)="onGridReady($event)"
+        (paginationChanged)="onPaginationChanged($event)"></ag-grid-angular>
+
+      <div class="table-footer position-relative">
+        <div class="row g-2">
+          <div class="col-6 col-sm-3 fw-bold">
+            <label>Total Employees:</label>
+            <span class="text-bold ms-1">{{ totalCount }}</span>
+          </div>
+          <div class="col-6 col-sm-3 fw-bold text-success">
+            <label>Active:</label>
+            <span class="text-bold ms-1">{{ activeEmployees }}</span>
+          </div>
+          <div class="col-6 col-sm-3 fw-bold text-danger">
+            <label>Terminated:</label>
+            <span class="text-bold ms-1">{{ terminatedEmployees }}</span>
+          </div>
+          <div class="col-6 col-sm-3 fw-bold text-danger">
+            <label>Resigned:</label>
+            <span class="text-bold ms-1">{{ resignedEmployees }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  } @loading (minimum 1000ms) {
+  <app-loader></app-loader>
+  }
+  @if (isSideDrawerOpen) {
+  <app-side-drawer (sideDrawer)="sideDrawer()" [isSideDrawerOpen]="isSideDrawerOpen">
+    <span class="me-4 pt-2" employeeDetailPage><button class="me-4" mat-button color="primary"
+        (click)="navigateToDetails(employeeId)">
+        <i class="fa-solid fa-arrow-up-right-from-square"></i></button></span>
+    <app-employee-side-drawer></app-employee-side-drawer>
+  </app-side-drawer>
+  }
+</div>

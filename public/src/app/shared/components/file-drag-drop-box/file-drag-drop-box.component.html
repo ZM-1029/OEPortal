@@ -1,0 +1,15 @@
+<div class="container-drag-drop">
+  <ngx-file-drag-drop
+    class=""
+    [accept]="acceptFileType"
+    (formControl)="(fileControl)"
+    (valueChanged)="onValueChange($event)"
+    [multiple]="false"
+  >
+  </ngx-file-drag-drop>
+  <div class="show-count">
+    <span class="rounded-circle bg-light">
+      <h2>{{ count }}</h2>
+    </span>
+  </div>
+</div>

@@ -1,0 +1,61 @@
+<div class="table-container p-2">
+  <div class="row py-2">
+    <div class="col-8 col-lg-6 d-flex">
+      <div class="row pt-2">
+        <div class="col">
+          <mat-form-field appearance="outline" class="col-8">
+            <mat-label>Month and Year</mat-label>
+            <input
+              matInput
+              [matDatepicker]="dp"
+              placeholder="Month and Year"
+              [formControl]="date"
+            />
+            <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+            <mat-datepicker
+              #dp
+              startView="multi-year"
+              (yearSelected)="chosenYearHandler($event)"
+              (monthSelected)="chosenMonthHandler($event, dp)"
+              panelClass="example-month-picker"
+            >
+            </mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+    <div class="col-4 col-lg-6 d-flex align-items-center justify-content-end">
+      <button
+        class="btn btn-primary btn-wave mx-2 me-0 text-white text-capitalize"
+        (click)="export()"
+      >
+        <i class="bi bi-download me-2"></i>Attendance
+      </button>
+    </div>
+  </div>
+  <div class="table-content">
+    @defer {
+      <div class="d-flex align-items-center justify-content-center">
+        <div class="container-fluid p-0">
+          <ag-grid-angular
+            #agGrid
+            style="width: 100%; height: 55vh"
+            class="ag-theme-alpine"
+            [rowData]="rowData"
+            [columnDefs]="columnDefs"
+            [defaultColDef]="defaultColDef"
+            [animateRows]="true"
+            [paginationPageSize]="50"
+            [paginationPageSizeSelector]="paginationPageSizeSelector"
+            [pagination]="true"
+            (gridReady)="onGridReady($event)"
+            (paginationChanged)="onPaginationChanged($event)"
+          ></ag-grid-angular>
+          <div class="table-footer position-relative"></div>
+        </div>
+      </div>
+    } @loading (minimum 1000ms) {
+      <app-loader></app-loader>
+    }
+  </div>
+</div>

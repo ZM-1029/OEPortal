@@ -1,0 +1,71 @@
+.cell-span {
+  background-color: white;
+  vertical-align: middle;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+::ng-deep .cell-span {
+  background-color: #ffffff;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+select {
+  padding: 8px 15px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid rgb(221, 221, 221);
+  background-color: rgb(255, 255, 255);
+  transition:
+    border-color 0.3s,
+    box-shadow 0.3s;
+  width: 200px;
+  color: #212529;
+  margin: 10px 0px;
+}
+
+select::marker {
+  color: #ddd !important;
+  font-size: 20px;
+}
+
+select:focus,
+select:active {
+  border-color: rgb(221, 221, 221);
+  box-shadow: 0 0 2px rgba(0, 123, 255, 0.5);
+}
+
+option:focus,
+option:active {
+  box-shadow: 0 0 5px rgba(159, 159, 160, 0.329);
+}
+
+option {
+  padding: 10px;
+}
+
+.check-btn {
+  background-color: #0d6efd;
+  color: white !important;
+}
+
+.check-btn:hover,
+.check-btn:active,
+.check-btn:focus {
+  color: white;
+  background-color: #0d6efd !important;
+}
+
+.table-container button {
+  font-size: 14px;
+}
+
+.table-container {
+  margin-bottom: 20px;
+  border-radius: 8px;
+  background-color: #fff;
+  max-height: 70vh;
+}

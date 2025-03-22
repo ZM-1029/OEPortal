@@ -1,0 +1,51 @@
+.card {
+    border: none;
+    border-radius: 10px;
+  }
+  
+  .bg-light {
+    border-radius: 10px;
+  }
+  
+  .bg-white {
+    border-radius: 10px;
+  }
+  
+  p {
+    margin: 0;
+  }
+  
+  .transactions-container {
+    min-width: 900px ;
+    overflow-x: hidden;
+  }
+  
+  .transaction-block{
+    max-width: 350px;
+  }
+  .transaction-block p{
+    margin: 10px 0;
+  }
+  @media (max-width: 900px) {
+    .transactions-container {
+        width: 100%;
+        overflow-x: auto; 
+        white-space: nowrap; 
+    }
+}
+.mdc-dialog--open .mat-mdc-dialog-surface, .mdc-dialog--closing .mat-mdc-dialog-surface {
+    overflow: hidden !important;
+    transform: none;
+}
+.dialog-content .order-container{
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+.mat-icon svg {
+  color: green; /* Change to your desired color */
+}
+mat-icon svg {
+  fill: red !important;
+  color: green !important;
+}

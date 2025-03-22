@@ -1,0 +1,127 @@
+ngx-file-drag-drop {
+  min-height: 300px !important;
+  min-width: 400px;
+  background-color: white;
+}
+ngx-file-drag-drop .placeholder {
+  display: inline-block;
+  min-height: 1em;
+  vertical-align: middle;
+  cursor: wait;
+  background-color: transparent !important;
+  opacity: 0.5;
+}
+.drag-drop-box {
+  width: 100%;
+  height: 200px;
+  border: 2px dashed #007bff;
+  border-radius: 10px;
+  background-color: #f1f1f1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.drag-drop-box:hover {
+  background-color: #e9f7fe;
+}
+
+.drag-drop-box p {
+  color: #007bff;
+  font-size: 16px;
+}
+
+button {
+  margin-top: 20px;
+  padding: 10px 15px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+ul {
+  margin-top: 20px;
+  list-style: none;
+  padding-left: 0;
+}
+
+li {
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #333;
+}
+
+// .mat-mdc-standard-chip:not(.mdc-evolution-chip--disabled) {
+//   width: 100%;
+//   background-color: var(--mdc-chip-elevated-container-color, transparent);
+// }
+.mat-mdc-standard-chip.mdc-evolution-chip--selected
+  .mdc-evolution-chip__icon--trailing,
+.mat-mdc-standard-chip.mat-mdc-chip-highlighted
+  .mdc-evolution-chip__icon--trailing {
+  content: "X" !important;
+  font-size: 14px;
+  width: 40px;
+  color: white !important;
+  background-color: #007bff;
+  padding: 2px;
+  border-radius: 12px;
+}
+.mat-mdc-chip-set .mdc-evolution-chip {
+  margin: 4px 0 4px 8px;
+  width: 100%;
+  padding-right: 5px;
+}
+
+.mat-mdc-chip-remove::after {
+  content: "X CCC" !important;
+  display: block;
+  opacity: 0;
+  position: absolute;
+  top: -3px;
+  bottom: -3px;
+  left: 5px;
+  right: 5px;
+  border-radius: 50%;
+  box-sizing: border-box;
+  padding: 12px;
+  margin: -12px;
+  background-clip: content-box;
+}
+
+.container-drag-drop {
+  position: relative;
+}
+
+.show-count {
+  position: absolute;
+  top: 0;
+  z-index: 99;
+  background-color: rgba(178, 204, 209, 0.884);
+  width: 100%;
+  height: 100%;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  border-radius: 15px;
+}
+.show-count span {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.show-count span h2 {
+  font-size: 25px;
+  color: #a3a4a5;
+}

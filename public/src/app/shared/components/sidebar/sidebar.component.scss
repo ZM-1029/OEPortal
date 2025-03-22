@@ -1,0 +1,142 @@
+aside {
+  height: 100%;
+  position: fixed;
+}
+
+.closeMenu .aside-bar {
+  height: 100%;
+  width: 10rem;
+  height: 100% !important;
+}
+
+.aside-bar {
+  height: 100%;
+  background-color: #2e3b64 !important;
+  // background-color: white;
+}
+
+.nav-pills .nav-link {
+  border: none !important;
+  color: white;
+}
+
+.nav-link:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.b-example-divider {
+  flex-shrink: 0;
+  width: 1.5rem;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.1);
+  border: solid rgba(0, 0, 0, 0.15);
+  border-width: 1px 0;
+  box-shadow:
+    inset 0 0.5em 1.5em rgba(0, 0, 0, 0.1),
+    inset 0 0.125em 0.5em rgba(0, 0, 0, 0.15);
+}
+
+.bi {
+  vertical-align: -0.125em;
+  pointer-events: none;
+  fill: currentColor;
+}
+
+.dropdown-toggle {
+  outline: 0;
+}
+
+.nav-flush .nav-link {
+  border-radius: 0;
+}
+
+.openMenu .nav-flush .nav-link {
+  border-radius: 8px;
+}
+
+.btn-toggle {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.5rem;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.65);
+  background-color: transparent;
+  border: 0;
+}
+
+.btn-toggle:hover,
+.btn-toggle:focus {
+  color: rgba(0, 0, 0, 0.85);
+  background-color: #d2f4ea;
+}
+
+.btn-toggle::before {
+  width: 1.25em;
+  line-height: 0;
+  transform-origin: 0.5em 50%;
+}
+
+.btn-toggle[aria-expanded="true"] {
+  color: rgba(0, 0, 0, 0.85);
+}
+
+.btn-toggle[aria-expanded="true"]::before {
+  transform: rotate(90deg);
+}
+
+.btn-toggle-nav a {
+  display: inline-flex;
+  padding: 0.1875rem 0.5rem;
+  margin-top: 0.125rem;
+  margin-left: 1.25rem;
+  text-decoration: none;
+}
+
+.btn-toggle-nav a:hover,
+.btn-toggle-nav a:focus {
+  background-color: #d2f4ea;
+}
+
+.scrollarea {
+  overflow-y: auto;
+}
+
+.fw-semibold {
+  font-weight: 600;
+}
+
+.lh-tight {
+  line-height: 1.25;
+}
+
+// when side menu is open
+.openMenu .aside-bar {
+  width: 15rem;
+  height: 100%;
+  padding: 7px 10px;
+}
+
+.openMenu .aside-bar .nav-link {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+.openMenu {
+  transition: all 0.4s;
+}
+.closeMenu {
+  transition: all 0.4s;
+}
+.openMenu .aside-bar .nav-link span {
+  display: block !important;
+  margin-left: 30px;
+}
+
+
+.icon-sidebar .svg-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+

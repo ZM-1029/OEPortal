@@ -1,0 +1,72 @@
+<div class="form-container bg-light">
+  <button
+    class="btn text-danger float-end"
+    mat-raised-button
+    (click)="closeDialog()"
+  >
+    <i class="bi bi-x"></i>
+  </button>
+  <div class="p-3">
+    <div class="form-content d-flex justify-content-center align-items-center">
+      <form [formGroup]="attendanceForm" class="w-100">
+        <div class="d-flex flex-column gap-3">
+          <h3 class="text-center mb-2">Download Attendance</h3>
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Start date</mat-label>
+            <input matInput [matDatepicker]="picker1" formControlName="startDate" (dateChange)="onDateChange('startDate', $event)">
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>End date</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="endDate" (dateChange)="onDateChange('endDate', $event)">
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Timesheet Required</mat-label>
+            <mat-select formControlName="istimesheetavailable" (selectionChange)="GetDistinctProjects($event)">
+              <mat-option [value]="true">Yes</mat-option>
+              <mat-option [value]="false">No</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          @if(allProjects.length > 0){
+            <app-multi-select-dropdown class="pb-3"  (selectedOutput)="selectedOutput($event)" [dropdownHeading]="dropdownHeading"  [dataList]="allProjects"></app-multi-select-dropdown>
+          }
+          <mat-form-field appearance="outline">
+            <mat-label>Select Format</mat-label>
+            <mat-select formControlName="format">
+              <mat-option value="pdf">Pdf</mat-option>
+              <mat-option value="excel">Excel</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <!-- Comment Input -->
+          <div class="comment">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Comment</mat-label>
+              <textarea
+                formControlName="comment"
+                matInput
+                class="w-100"
+              ></textarea>
+            </mat-form-field>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="d-flex justify-content-center pt-3">
+      <button
+        class="btn btn-primary rounded-pill"
+        mat-raised-button
+        (click)="getAttendanceFormData()"
+      >
+        <i class="bi bi-download pe-2"></i> Download
+      </button>
+    </div>
+  </div>
+</div>

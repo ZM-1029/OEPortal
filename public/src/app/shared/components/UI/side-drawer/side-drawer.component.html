@@ -1,0 +1,21 @@
+<mat-drawer-container [class.d-none]="!isVisible || !isDrawerOpen" (click)="closeDrawerByBody($event)"
+  class="drawer-container">
+  <mat-drawer mode="over" position="end" [opened]="isDrawerOpen" (closed)="closeDrawer()" class="drawer">
+    <div class="position-relative">
+      <div class="drawer-header position-absolute p-2">
+        <ng-content class="px-3" select="[employeeDetailPage]"></ng-content>
+        <span class="icon-container closed-icon " (click)="closeDrawer()">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+            stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+          </svg>
+        </span>
+      </div>
+      <div class="side-drawer-container">
+        <ng-content></ng-content>
+      </div>
+    </div>
+  </mat-drawer>
+  <div></div>
+</mat-drawer-container>

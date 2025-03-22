@@ -1,0 +1,56 @@
+.form-container{
+  height: 100vh;
+  overflow-y: scroll;
+}
+.invoice-form-container {
+ h3{
+  font-size: 18px ;
+  font-weight: 500 ;
+ }
+ 
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+
+  mat-form-field {
+    width: 100%;
+  }
+
+  table {
+    width: 100%;
+    margin-top: 20px;
+  }
+
+  .button-group {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+  }
+}
+
+.file-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.invoiceForm mat-form-field{
+  max-width: 200px;
+}
+.mat-mdc-form-field:not(.mat-form-field-disabled) .mat-mdc-floating-label.mdc-floating-label {
+  cursor: inherit;
+  font-size: 14px;
+}
+app-invoice-create-table{
+  height: 100%;
+}
+
+.table-container{
+  height: 100%;
+  padding-bottom: 7vh;
+}

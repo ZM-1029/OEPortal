@@ -1,0 +1,57 @@
+<div class="table-container bg-white p-2 salary-table">
+    <div class="row py-2">
+        <div class="col-6 col-lg-6 d-flex">
+            <div class="box-1">
+                <form>
+                    <mat-form-field appearance="outline" class="w-100 p-0">
+                        <mat-label>Enter a date range</mat-label>
+                        <mat-date-range-input [rangePicker]="picker">
+                            <input matStartDate placeholder="Start date" class="w-100"
+                                (dateChange)="getStartDate($event)" [value]="startDate" />
+                            <input matEndDate placeholder="End date" class="w-100" (dateChange)="getEndDate($event)"
+                                [value]="endDate" />
+                        </mat-date-range-input>
+                        <mat-hint class="ps-0">MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-date-range-picker #picker></mat-date-range-picker>
+                    </mat-form-field>
+                </form>
+            </div>
+        </div>
+        <div class="col-6 col-lg-6 d-flex justify-content-end">
+            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button (click)="checkActiveTable()" class="nav-link active" id="pills-attendance-tab" data-bs-toggle="pill"
+                        data-bs-target="#pills-attendance" type="button" role="tab" aria-controls="pills-attendance"
+                        aria-selected="true">
+                        Attendance
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button (click)="checkActiveTable()" class="nav-link" id="pills-timesheet-tab" data-bs-toggle="pill"
+                        data-bs-target="#pills-timesheet" type="button" role="tab" aria-controls="pills-timesheet"
+                        aria-selected="false">
+                        Timesheet
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="d-block">
+        <div class="tab-content" id="pills-tabContent">
+            <div  class="tab-pane fade show active" id="pills-attendance" role="tabpanel"
+                aria-labelledby="pills-attendance-tab">
+                <!-- @if(activeTable=='attendance'){ -->
+                    <app-non-compliance-attendance [ncTypeCounts]="ncTypeCounts" [attendanceRowData]="attendanceRowData"></app-non-compliance-attendance>
+                <!-- } -->
+            </div>
+            <div  class="tab-pane fade" id="pills-timesheet" role="tabpanel" aria-labelledby="pills-timesheet-tab">
+                <!-- @if(activeTable=='timesheet'){ -->
+                    <app-non-compliance-timesheet [ncTypeCounts]="ncTypeCounts" [timesheetRowData]="timesheetRowData"></app-non-compliance-timesheet>
+                <!-- } -->
+            </div>
+        </div>
+    </div>
+  
+</div>

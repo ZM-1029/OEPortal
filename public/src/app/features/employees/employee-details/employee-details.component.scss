@@ -1,0 +1,242 @@
+.main-content .tab-content {
+  overflow: hidden !important;
+  height: 100%;
+}
+.icon {
+  border: 1px solid rgb(212, 210, 210);
+  font-size: 14px;
+  border-radius: 8px;
+  color: rgb(107, 122, 146);
+  opacity: 0.5;
+  box-sizing: border-box;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 40px;
+  min-height: 40px;
+}
+
+.profile-container-img {
+  min-width: 335px;
+  max-width: 335px;
+}
+
+.tab-pane {
+  width: 100%;
+}
+
+.switching-tab {
+  width: 100%;
+}
+
+.employee-entery {
+  position: absolute;
+  top: 130px;
+}
+
+.bg-img {
+  width: 100%;
+  height: 12rem;
+  position: fixed;
+  left: 20px;
+}
+
+.bg-img img {
+  width: 100%;
+  height: 12rem;
+  position: fixed;
+  left: inherit;
+}
+
+.profile-img {
+  width: 100%;
+  position: absolute;
+  top: -50px;
+}
+
+.profile-img img {
+  border-radius: 8px;
+}
+
+.profile-content,
+app-employee-salary {
+  border-radius: 8px;
+  max-height: 750px;
+  padding-top: 0;
+  font-size: 14px;
+  overflow-y: scroll;
+  height: 100%;
+}
+.profile-content {
+  max-height: 66vh !important;
+  height: 100%;
+  width: 100%;
+}
+
+.zm-finance-card {
+  padding: 10px 15px;
+  border-radius: 8px;
+  margin: 15px 0;
+  background-color: white;
+  box-shadow: 1px 1px 1px rgba(137, 229, 236, 0.349);
+}
+.box-1 .row .col-4 .row {
+  font-size: 14px;
+  border-bottom: none ;
+  text-align: start ;
+}
+
+
+.box-1 .row .col-4 .row {
+  margin: 10px 0;
+}
+
+.zm-finance-card .row .col-6 .row .col-8 {
+  display: flex;
+}
+
+.zm-finance-card .row .col-6 .row .col-8:hover {
+  border-bottom: 0.5px solid #0088ff91 !important;
+}
+
+.zm-finance-card .row .col-6 .row .col-4 {
+  padding: 0;
+  padding-bottom: 5px;
+  display: flex;
+}
+
+.zm-finance-card .row .col-6 .row {
+  margin: 10px;
+  color: #222222;
+  font-size: 16px;
+  border-bottom: 1px solid rgb(212, 210, 210);
+}
+
+.zm-finance-card .row .col-4 .row .col-6 {
+  padding-left: 0;
+  padding-bottom: 5px;
+  display: flex;
+}
+
+label {
+  color: #666666;
+  font-size: 16px;
+}
+
+.private {
+  display: flex;
+  justify-content: space-between;
+}
+
+.nav-tabs {
+  padding: 15px 10px;
+  margin: 15px 0;
+  border-radius: 8px;
+  background: white;
+  box-shadow: 1px 2px 1px #d8d8d8;
+  --bs-nav-tabs-border-width: var(--bs-border-width);
+  --bs-nav-tabs-border-color: var(--bs-border-color);
+  --bs-nav-tabs-border-radius: var(--bs-border-radius);
+  --bs-nav-tabs-link-active-color: var(--bs-emphasis-color);
+  --bs-nav-tabs-link-active-bg: var(--bs-body-bg);
+  --bs-nav-tabs-link-active-border-color: var(--bs-border-color)
+    var(--bs-border-color) var(--bs-body-bg);
+}
+
+.nav-tabs .nav-item.show .nav-link,
+.nav-tabs .nav-link.active {
+  color: #242424;
+  background-color: var(--bs-nav-tabs-link-active-bg);
+  box-shadow: none;
+  font-weight: 600;
+  border-bottom: 2px solid #0088ff !important;
+}
+
+.nav-tabs .nav-link {
+  margin-bottom: 2px;
+  border: none !important;
+  color: #666666;
+  font-weight: 500;
+  border-top-left-radius: var(--bs-nav-tabs-border-radius);
+  border-top-right-radius: var(--bs-nav-tabs-border-radius);
+}
+
+.image-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.image-container img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 10px;
+}
+
+.employee-entery .col-3 {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-img-2 {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  object-position: top;
+  border-radius: 8px;
+}
+
+a {
+  text-decoration: none;
+}
+
+h5 {
+  font-size: 18px !important;
+  text-transform: capitalize;
+}
+
+.status-text-success {
+  border: 2px solid green;
+  width: 100px;
+  justify-content: center;
+  display: flex;
+  border-radius: 6px;
+  align-items: center;
+  padding: 4px;
+  background-color: green;
+  color: white;
+}
+.status-text-danger {
+  border: 2px solid red;
+  width: 100px;
+  justify-content: center;
+  display: flex;
+  border-radius: 6px;
+  align-items: center;
+  padding: 4px;
+  background-color: red;
+  color: white;
+}
+
+.text-bold {
+  font-weight: 600;
+}
+
+.zm-finance-card h6 {
+  font-size: 14px;
+}
+
+.profile-container-img .zm-finance-card .row .col-7{
+  font-size: 14px;
+}
+
+@media (max-width: 550px) {
+  .profile-content {
+    overflow-x: scroll; 
+  }
+}
+

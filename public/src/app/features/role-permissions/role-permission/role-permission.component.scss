@@ -1,0 +1,75 @@
+.heading-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 7px 16px;
+    background-color: #fff;
+    color: #333;
+    margin-bottom: 15px;
+    border-radius: 4px;
+    span {
+    font-size: 18px;
+    font-weight: 500;
+    }
+    }
+     
+    button[mat-icon-button] {
+    color: #e53935;
+    }
+     
+    ::ng-deep .mat-form-field-outline-start,
+    ::ng-deep .mat-form-field-outline-end,
+    ::ng-deep .mat-form-field-outline-gap {
+    border-color: #333;
+    }
+    ::ng-deep .mat-form-field-wrapper{
+    margin-bottom: -1.25em;
+    }
+    .mat-mdc-form-field {
+    width: auto !important;
+    .mat-mdc-form-field-subscript-wrapper {
+    display: none !important;
+    }
+    }
+     
+    .container {
+    padding: 0px;
+    mat-card{
+    .mat-mdc-card-title{
+    padding: 10px 15px;
+    color: #000;
+    font-size: 18px;
+    font-weight: 500;
+    }
+    mat-divider{
+    margin: 0px !important;
+    }
+    }
+    }
+     
+    .submenu-name {
+    flex: 2;
+    padding-right: 16px;
+    }
+     
+    .checkbox {
+    flex: 1;
+    }
+     
+    mat-card {
+    margin-bottom: 16px;
+    }
+     
+    mat-divider {
+    margin-top: 8px;
+    margin-bottom: 8px;
+    }
+
+.Permission-container{
+    max-height: 900px;
+    overflow-y:scroll  ;
+}
+.container-fluid{
+    height: 100%;
+}
+

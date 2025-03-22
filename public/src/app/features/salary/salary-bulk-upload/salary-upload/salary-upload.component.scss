@@ -1,0 +1,63 @@
+.upload-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.dragZone {
+  max-width: 400px;
+  max-height: 400px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 20px;
+  position: relative;
+}
+
+.upload-btn input {
+  width: 100% !important;
+  height: 100%;
+  background-color: red;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.upload-section h3,
+h2 {
+  font-size: 20px;
+  margin-bottom: 20px;
+  color: rgb(177, 175, 175);
+}
+
+.upload-section .success {
+  font-size: 16px;
+  color: green;
+  margin-bottom: 10px;
+}
+
+.upload-section .note {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #666;
+}
+
+.icon span svg {
+  width: 20px;
+  height: 20px;
+}
+
+.download-section {
+  .download {
+    div {
+      margin-top: 1rem;
+      cursor: pointer;
+    }
+  }
+}
+
+.download a {
+  text-decoration: none;
+}

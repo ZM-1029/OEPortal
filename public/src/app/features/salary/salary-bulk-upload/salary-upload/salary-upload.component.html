@@ -1,0 +1,51 @@
+<div class="upload-section pt-4">
+  @if (isShowDragZone) {
+    <app-file-drag-drop-box
+      (sendFileToSalaryUpload)="reciveFileFromFileDragDrop($event)"
+    ></app-file-drag-drop-box>
+  } @else {
+    <app-file-icon-xls [fileName]="fileName"></app-file-icon-xls>
+  }
+  <div class="dragZone">
+    <div class="upload-btn">
+      <button
+        mat-raised-button
+        class="btn btn-primary rounded-pill"
+        (click)="getBulkSalaryUpload()"
+      >
+        Upload
+      </button>
+      <button
+        mat-raised-button
+        class="btn btn-light rounded-pill ms-2"
+        (click)="cancelFileUpload()"
+      >
+        Cancel
+      </button>
+    </div>
+  </div>
+  <div class="download-section">
+    <div class="download">
+      <div class="icon d-flex justify-content-center align-items-center">
+        <span
+          ><svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="size-6"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"
+            />
+          </svg>
+        </span>
+        <a (click)="handleExportFile()" class="ms-1">Download Sample File</a>
+      </div>
+      <h3 class="mt-2">Supported file formats- .xls, .xlsx,</h3>
+    </div>
+  </div>
+</div>

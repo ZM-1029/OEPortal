@@ -1,0 +1,132 @@
+.drawer-container {
+  position: fixed;
+  top: 50px;
+  right: 0;
+  overflow-x: hidden !important;
+  height: 100%;
+  width: 100%;
+  float: end;
+  background-color: transparent;
+  z-index: 999 !important;
+}
+
+mat-drawer-container {
+  // box-shadow: 10px 10px 10px rgb(151, 141, 141);
+  box-shadow: none;
+}
+.mat-drawer {
+  position: relative;
+  z-index: 4;
+  color: var(--mat-sidenav-container-text-color, var(--mat-sys-on-surface-variant));
+  box-shadow: none;
+  background-color: var(--mat-sidenav-container-background-color, var(--mat-sys-surface));
+  border-top-right-radius: var(--mat-sidenav-container-shape, var(--mat-sys-corner-large));
+  border-bottom-right-radius: var(--mat-sidenav-container-shape, var(--mat-sys-corner-large));
+  width: var(--mat-sidenav-container-width, 360px);
+  display: block;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 3;
+  outline: 0;
+  box-sizing: border-box;
+  overflow-y: auto;
+  transform: translate3d(-100%, 0, 0);
+}
+.drawer {
+  position: absolute;
+  z-index: 999 !important;
+  // width: 100%;
+  width: 32rem;
+  background-color:transparent;
+}
+
+.drawer-header {
+  display: flex;
+  width: 100%;
+  justify-content: end;
+}
+
+.drawer-content {
+  padding: 10px;
+}
+
+.drawer-content h4 {
+  font-size: 16px;
+}
+
+.drawer-content p {
+  font-size: 14px;
+  margin: 5px;
+}
+
+.drawer-content p strong {
+  text-transform: capitalize;
+  font-size: 14px;
+  margin: 5px;
+}
+
+.image-section {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.profile-img {
+  width: 70px;
+  height: 70px;
+  object-fit: cover;
+  object-position: top;
+  border-radius: 50%;
+  margin-bottom: 10px;
+}
+
+.main-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.d-none {
+  display: none;
+}
+
+.status i {
+  font-size: 6px;
+  padding-right: 3px;
+}
+
+.status {
+  font-size: 12px;
+}
+
+.mat-drawer.mat-drawer-end {
+  right: 0;
+  transform: translate3d(100%, 0, 0);
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.col-12 p strong {
+  color: rgb(107, 122, 146);
+  opacity: 0.8;
+  font-weight: 400;
+  font-size: 15px;
+}
+
+.drawer-container .name {
+  color: red !important;
+}
+
+.closed-icon svg{
+  width: 27px;
+  height: 27px;
+  position: relative;
+  top:10px;
+  right: 30px;
+  color: #747373;
+  font-weight: 500;
+}
+

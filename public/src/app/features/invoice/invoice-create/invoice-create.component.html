@@ -1,0 +1,21 @@
+<div class="form-container mt-4 p-3 bg-white mb-5">
+  <div class="invoice-form-container pt-2">
+    <div class="d-flex justify-content-between">
+      <h3>Invoice</h3>
+      <div class="group-btn">
+        <button mat-raised-button class="btn btn-primary text-white ms-auto" (click)="backToInvoiceList()">
+          <i class="bi bi-arrow-bar-left"></i> Back
+        </button>
+      </div>
+    </div>
+    <div class="invoice-container  mt-2">
+      <app-invoice-form (invoiceValidFormData)="invoiceValidFormData($event)" [editedInvoicedata]="editedInvoicedata" [isFormValidate]="isFormValidate" (purchaseOrderData)="purchaseOrderData($event)"
+        (InvoiceformData)="InvoiceformData($event)"></app-invoice-form>
+    </div>
+    <div class="table-container my-2 mb-4">
+      <app-invoice-create-table (formSubmit)="formSubmit($event)" [editedInvoicedata]="editedInvoicedata" (ValidTableData)="ValidTableData($event)"  [invoiceTableData]="invoiceTableData"
+        ></app-invoice-create-table>
+    </div>
+  </div>
+ 
+</div>

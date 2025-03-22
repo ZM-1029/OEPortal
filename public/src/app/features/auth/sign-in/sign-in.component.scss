@@ -1,0 +1,92 @@
+.auth-box {
+    height: 100vh;
+    display: flex;
+    background-color: white;
+    .social-circle {
+    width: 50px !important;
+    height: 50px !important;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    }
+    }
+    
+    .login-separater {
+    span {
+    position: relative;
+    top: 26px;
+    margin-top: -10px;
+    background-color: #fff;
+    padding: 5px;
+    font-size: 13px;
+    color: #949494;
+    z-index: 1;
+    }
+    }
+     
+    .login-bg {
+    background-attachment: fixed;
+    background-size: cover;
+    background-repeat: no-repeat;
+    }
+     
+    /* responsive */
+     
+    @media only screen and (max-width: 991px) {
+    .auth-box {
+    height: 100%;
+    }
+    }
+     
+    // global input changes
+    ::ng-deep .Rememberme_input label {
+    padding: 0 !important;
+    }
+     
+    .mat-mdc-card-content {
+    box-shadow: 1px 1px 14px #0000000e;
+    }
+     
+    .cstm_height_btn {
+    height: 40px;
+    background-color: var(--primary-color) !important;
+    }
+     
+    .auth-box {
+    // background: linear-gradient(180deg, #a0d4a205, #ffffff);
+    background-color: var(--wrapper_bg);
+    }
+    .auth_side_image {
+    height: 100vh;
+    position: absolute;
+    padding: 0;
+    right: 0;
+    top: 0;
+    overflow: hidden;
+    background-color: var(--primary-color);
+    img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    }
+    }
+     
+    .mat-mdc-card {
+    background-color: transparent !important;
+    }
+     
+    body {
+    background-color: var(--wrapper_bg);
+    }
+     
+    ng::deep .mdc-checkbox__background {
+    background-color: var(--primary-color);
+    }
+
+// form css
+.mat-mdc-icon-button .mdc-button__label, .mat-mdc-icon-button .mat-icon {
+    z-index: 1;
+    position: relative;
+    top: -10px;
+} 

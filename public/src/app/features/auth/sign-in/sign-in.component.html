@@ -1,0 +1,59 @@
+<div class="auth-box d-flex align-items-center justify-content-center overflow-auto my-lg-0 relative">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-xl-5 col-12 auth_side_content ">
+
+                <form class="example-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+                    <div>
+                        <img src="/assets/images/ZoumaBlackLogo.png" class="mb-5" width="160" alt="">
+                        <h5 class="mb-2 fs-lg-26">Sign in</h5>
+                        <p class="mb-4 fs-14">Please log in to your account</p>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-12 col-md-12">
+                            <mat-form-field class="w-100 mb-0 furdeco-custom-field" appearance="outline">
+                                <mat-label>Enter Email</mat-label>
+                                <input [formControl]="loginForm.controls['email']" matInput placeholder="Ex. xyz@.com">
+                                <mat-error >
+                                    @if(loginForm.controls['email'].invalid && loginForm.controls['email'].touched){
+                                        Enter a valid email
+                                    }
+                                  </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-12 col-md-12 mt-2">
+                            <mat-form-field class="w-100 mb-0 furdeco-custom-field" appearance="outline">
+                                <mat-label>Enter your password</mat-label>
+                                <input [formControl]="loginForm.controls['password']" matInput 
+                                    [type]="hide ? 'password' : 'text'">
+                                <button type="button" mat-icon-button matSuffix [attr.aria-label]="'Hide password'"
+                                    [attr.aria-pressed]="hide">
+                                    <mat-icon (click)="hide = !hide">{{hide ? 'visibility_off' :
+                                        'visibility'}}</mat-icon>
+                                </button>
+                                <mat-error >
+                                    @if(loginForm.controls['password'].invalid && loginForm.controls['password'].touched){
+                                        Enter a valid password
+                                    }
+                                  </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-12 col-md-12">
+                            <div class="d-grid">
+                                <button class="btn btn-primary text-white"  >Login</button>
+                            </div>
+                        </div>
+                        
+                        
+
+
+                    </div><!--end row-->
+                </form>
+
+            </div>
+            <div class="col-md-6 col-xl-6 auth_side_image bg-black d-lg-block d-none">
+                <img class="img-fluid" src="/assets/images/login.jpg" alt="">
+            </div>
+        </div>
+    </div>
+</div>

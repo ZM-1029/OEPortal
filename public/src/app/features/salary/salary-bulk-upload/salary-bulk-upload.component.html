@@ -1,0 +1,93 @@
+<div class="container-fluid mt-4 bg-white">
+  <div class="header pt-3">
+    <div class="row pt-2">
+      <h1
+        class="col-4 page-title fw-medium fs-18 mb-0 text-capitalize d-flex align-items-center"
+      >
+        Salary {{ fileProcessHeading }}
+      </h1>
+      <div class="col-6">
+        <div class="stepper">
+          <div
+            [ngClass]="fileProcessHeading == 'Upload' ? 'active' : ''"
+            class="step"
+          >
+            <div class="step-circle"></div>
+            <div class="step-label">Upload Your File</div>
+          </div>
+          <div
+            [ngClass]="fileProcessHeading == 'Edit' ? 'active' : ''"
+            class="step"
+          >
+            <div class="step-circle"></div>
+            <div class="step-label">Edit Your File</div>
+          </div>
+          <div
+            [ngClass]="
+              fileProcessHeading == 'Submission Successfully' ? 'active' : ''
+            "
+            class="step"
+          >
+            <div class="step-circle"></div>
+            <div class="step-label">Submission Successfully</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-2 d-flex justify-content-end align-items-center">
+        <button
+          mat-raised-button
+          class="btn btn-info-dark text-white ms-auto"
+          (click)="backToSalaryList()"
+        >
+          <i class="bi bi-arrow-bar-left"></i> Back
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <div class="salary-edit-container">
+    <div class="upload-container d-flex justify-content-between">
+      @if (fileProcessHeading) {
+        @if (fileProcessHeading == "Upload") {
+          <div class="app-salary-upload">
+            <app-salary-upload
+              (SendSalaryList)="reciveSalaryList($event)"
+            ></app-salary-upload>
+          </div>
+        } @else if (fileProcessHeading == "Edit") {
+          <app-salary-bulk-edit
+            (fileSubmissionSuccessfully)="fileSubmissionSuccessfully()"
+            [salaryList]="salaryList"
+          ></app-salary-bulk-edit>
+        } @else if (fileProcessHeading == "Submission Successfully") {
+          <div class="container">
+            <div class="success-message">
+              <div class="success-icon"><span class="p-4">✓</span></div>
+              <div class="message">Your file has been uploaded successfully.</div>
+              <div class="actions">
+                <button
+                  mat-raised-button
+                  (click)="cancel()"
+                  class="btn btn-light rounded-pill ms-2"
+                >
+                  Cancel
+                </button>
+                <button
+                  mat-raised-button
+                  class="btn btn-primary rounded-pill"
+                  (click)="next()"
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          </div>
+        }
+      }
+  
+      <div class="app-upload-instructions">
+        <app-upload-instructions></app-upload-instructions>
+      </div>
+    </div>
+  </div>
+</div>

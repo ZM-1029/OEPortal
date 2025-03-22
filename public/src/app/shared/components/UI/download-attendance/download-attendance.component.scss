@@ -1,0 +1,133 @@
+/* Glass Morphism Effect */
+
+.form-container {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  height: 100%;
+  overflow: hidden;
+}
+
+.form-content{
+  width: 100%;
+}
+
+/* Animated Close Button */
+
+.close-btn {
+  background-color: #ff4444;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin: 8px;
+  transition: transform 0.2s ease;
+}
+
+.close-btn:hover {
+  transform: rotate(90deg);
+}
+
+/* Gradient Text for Title */
+
+h3 {
+  font-family: "Poppins", sans-serif;
+  font-size: 24px;
+  background: linear-gradient(135deg, #0d6efd, #00bfff, #0d6efd);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+/* Custom Date Picker Icon */
+
+mat-datepicker-toggle {
+  color: #0d6efd;
+}
+
+/* Animated Border for Input Fields */
+
+mat-form-field:hover .mat-form-field-outline {
+  border-color: #0d6efd;
+  transition: border-color 0.3s ease;
+}
+
+/* Floating Label Animation for Comment Input */
+
+mat-form-field.mat-form-field-appearance-outline .mat-form-field-outline {
+  position: relative;
+}
+
+mat-form-field.mat-form-field-appearance-outline .mat-form-field-label {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: all 0.3s ease;
+}
+
+mat-form-field.mat-form-field-appearance-outline .mat-form-field-label.float {
+  top: 0;
+  font-size: 12px;
+  color: #0d6efd;
+}
+
+/* Animated Gradient for Download Button */
+
+.download-btn {
+  background: linear-gradient(135deg, #0d6efd, #00bfff);
+  color: white;
+  border: none;
+  border-radius: 24px;
+  padding: 12px 24px;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+  background-size: 200% 200%;
+  animation: gradientShift 3s ease infinite;
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.download-btn:hover {
+  animation: none;
+  background: linear-gradient(135deg, #005bb5, #0099cc);
+}
+
+app-multi-select-dropdown .ng-select .ng-select-container {
+  color: #333;
+  background-color: transparent !important; 
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  min-height: 36px;
+  align-items: center;
+}
+.ng-select.ng-select-focused:not(.ng-select-opened) > .ng-select-container {
+  border-color: #ccc; 
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 0 3px rgba(0, 126, 255, .1); 
+}
+
+.ng-select .ng-select-container {
+  cursor: default;
+  display: flex;
+  outline: none;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
