@@ -1,0 +1,164 @@
+<div class="main-content  m-4">
+    <div class="border-bottom bg-light pb-2">
+      <h2 class="formHeading">{{ formHeading }} Product</h2>
+    </div>
+    <div class="form-container d-flex justify-content-center">
+      <form [formGroup]="productForm">
+        <div class="input-form-container py-3">
+        
+          <div [ngClass]="Id==0 ? 'd-none' : 'd' " class="form-group row">
+            <mat-label  [ngClass]="Id==0 ? 'd-none' : 'd' " class="outer-mat-lable col-4 pt-2 ">Customer ID</mat-label>
+            <mat-form-field  [ngClass]="Id==0 ? 'd-none' : 'd' " appearance="outline" class="col-8">
+              <input formControlName="CustomerId" matInput placeholder="Enter Customer Id" />
+            </mat-form-field>
+          </div>
+     
+
+          <div class="form-group row">
+            <mat-label class="outer-mat-lable col-4 pt-2">Type:</mat-label>
+            <div class="col-8 mb-2">
+              <div class="d-flex align-items-center">
+                <mat-radio-group formControlName="type" class="d-flex">
+                  <mat-radio-button [value]="'Good'">Good</mat-radio-button>
+                  <mat-radio-button [value]="'Service'" class="ms-3">Service</mat-radio-button>
+                </mat-radio-group>
+              </div>
+              @if (
+                productForm.controls["type"].invalid &&
+                (productForm.controls["type"].dirty ||
+                productForm.controls["type"].touched)
+                ) {
+                <mat-error class="text-danger">
+                  @if (
+                  productForm.controls["type"].errors?.["required"]
+                  ) {
+                  <span class="ms-1">Business Type is required!</span>
+                  }
+                </mat-error>
+                }
+            </div>
+          </div>
+
+          <div class="form-group row ">
+            <mat-label class="outer-mat-lable col-4 pt-2 ">Name </mat-label>
+            <mat-form-field appearance="outline" class="col-8">
+              <input formControlName="name" matInput placeholder="Enter Name" />
+              <mat-error class="text-danger">
+                @if (productForm.controls["name"].errors?.["required"]) {
+                <span>Customer Name is required.</span>
+                } @else if (productForm.controls["name"].errors?.["pattern"]) {
+                <span>Only alphabetic characters are allowed.</span>
+                }
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+
+          <div class="form-group row">
+            <mat-label class="outer-mat-lable col-4 pt-2 ">Phone Number</mat-label>
+            <mat-form-field appearance="outline" class="col-8">
+              <input formControlName="PhoneNumber" matInput placeholder="Enter Phone Number" />
+              <mat-error>
+                @if (
+                productForm.controls["PhoneNumber"].errors?.["required"]
+                ) {
+                <span class="ms-1">PhoneNumber is required!</span>
+                } @else if (
+                productForm.controls["PhoneNumber"].errors?.["maxlength"]
+                ) {
+                <span>Maximum length is 10 characters!</span>
+                } @else if (
+                productForm.controls["PhoneNumber"].errors?.["pattern"]
+                ) {
+                <span class="ms-1">Only numbers are allowed.</span>
+                }
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="form-group row">
+            <mat-label class="outer-mat-lable col-4 pt-2 ">Primary Contact </mat-label>
+            <mat-form-field appearance="outline" class="col-8">
+              <input formControlName="PrimaryContact" matInput placeholder="Enter Primary Contact" />
+              <mat-error>
+                @if (
+                productForm.controls["PrimaryContact"].errors?.["required"]
+                ) {
+                <span class="ms-1">PrimaryContact is required!</span>
+                } @else if (
+                productForm.controls["PrimaryContact"].errors?.["pattern"]
+                ) {
+                <span class="ms-1">Only alphabetic characters are allowed.</span>
+                }
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="form-group row">
+            <mat-label class="outer-mat-lable col-4 pt-2 ">Email</mat-label>
+            <mat-form-field appearance="outline" class="col-8">
+              <input formControlName="Email" matInput placeholder="Enter Email Address" />
+              <mat-error>
+                @if (productForm.controls["Email"].errors?.["required"]) {
+                <span class="ms-1">Email is required!</span>
+                } @else if (productForm.controls["Email"].errors?.["email"]) {
+                <span class="ms-1">Invalid email format!</span>
+                }
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="form-group row">
+            <mat-label class="outer-mat-lable col-4 pt-2 ">Address</mat-label>
+            <mat-form-field appearance="outline" class="col-8">
+              <input formControlName="Address" matInput placeholder="Enter Address" />
+            </mat-form-field>
+          </div>
+          <div class="form-group row">
+            <mat-label class="outer-mat-lable col-4 pt-2 ">Postal Code</mat-label>
+            <mat-form-field appearance="outline" class="col-8">
+              <input formControlName="PostalCode" matInput placeholder="Enter Postal Code" />
+              <mat-error>
+                @if (
+                productForm.controls["PostalCode"].errors?.["maxlength"]
+                ) {
+                <span>Maximum length is 10 characters!</span>
+                } @else if (
+                productForm.controls["PostalCode"].errors?.["pattern"]
+                ) {
+                <span>Only numbers are allowed.</span>
+                }
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="form-group row">
+            <mat-label class="outer-mat-lable col-4 pt-2 ">Tax Id</mat-label>
+            <mat-form-field appearance="outline" class="col-8">
+              <input formControlName="Taxid" placeholder="Enter Tax Id" matInput />
+              <mat-error>
+                @if (productForm.controls["Taxid"].errors?.["pattern"]) {
+                <span>Only numbers are allowed.</span>
+                }
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="form-group row">
+            <mat-label class="outer-mat-lable col-4 pt-2 ">Country</mat-label>
+            <mat-form-field appearance="outline" class="col-8">
+              <input formControlName="Country" placeholder="Enter Country" matInput />
+              <mat-error>
+                @if (productForm.controls["Country"].errors?.["pattern"]) {
+                <span>Only alphabetic characters are allowed.</span>
+                }
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="form-btn d-flex align-items-start justify-content-end p-4 ">
+          <button class="btn btn-secondary mx-2" type="button" (click)="resetForm()">
+            Clear
+          </button>
+          <button class="btn btn-primary" (click)="createUpdate()">
+            {{ formHeading }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
