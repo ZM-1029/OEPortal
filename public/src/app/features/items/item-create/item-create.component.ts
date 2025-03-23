@@ -234,28 +234,21 @@ export class ItemCreateComponent {
   // }
   createUpdate() {
     this.submitted = true;
-  
-    // Ensure the form is valid before proceeding
     if (!this.productForm.valid) {
       this.productForm.markAllAsTouched();
       return;
     }
-  
-    // Convert costPrice and salesPrice to numbers
     const costPrice = parseFloat(this.productForm.get('costPrice')?.value);
     const salesPrice = parseFloat(this.productForm.get('salesPrice')?.value);
-  
-    // Prepare the payload as a simple JSON object, including the converted values
     const payload = {
-      ...this.productForm.value,  // Spread all the form values
-      costPrice: isNaN(costPrice) ? 0 : costPrice, // Ensure it's a number
-      salesPrice: isNaN(salesPrice) ? 0 : salesPrice, // Ensure it's a number
-      Id: this.Id || 0, // Include the Id, default to 0 if it's a new record
+      ...this.productForm.value,  
+      costPrice: isNaN(costPrice) ? 0 : costPrice, 
+      salesPrice: isNaN(salesPrice) ? 0 : salesPrice, 
+      Id: this.Id || 0, 
     };
   
-    // Send the payload in the request
+ 
     if (this.Id < 1) {
-      // For adding a new product
       this._itemService.addProduct(payload).subscribe({
         next: (response: any) => {
           if (response.success) {
@@ -273,7 +266,6 @@ export class ItemCreateComponent {
         },
       });
     } else {
-      // For updating an existing product
       this._itemService.updateCustomer(this.Id, payload).subscribe({
         next: (response: any) => {
           if (response.success) {
@@ -293,11 +285,6 @@ export class ItemCreateComponent {
     }
   }
   
-  
-  
-  
-
-
   resetForm() {
     this.submitted = false;
     this.productForm.reset();
@@ -306,8 +293,6 @@ export class ItemCreateComponent {
     this.deleteImage();
   }
   
-
-  // Handles image upload
   uploadCustomerLogo(event: any) {
     this.logoFile = event.target.files[0];
     const reader = new FileReader();
@@ -318,17 +303,15 @@ export class ItemCreateComponent {
     reader.readAsDataURL(this.logoFile);
   }
 
-  // Deletes the current image
   deleteImage() {
     this.customerLogoUrl = null;
     this.logoFile = null;
   }
 
-  // 
 triggerCustomerFileInput() {
   this.fileInput.nativeElement.click(); 
 }
-  // 
+
 
   //  Function to show success messages
   private showSuccessMessage(message: string) {
