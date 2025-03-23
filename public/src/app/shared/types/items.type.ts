@@ -1,12 +1,13 @@
 export interface itemReturnI {
     success: boolean;
     message: string;
-    data: ItemsListI;
+    data: Item;
   }
-  export interface itemDetailsI {
+  export interface productDetailsI {
     success: boolean;
     message: string;
-    item: ItemsListI;
+    data: Item[];
+    errors: any[];
   }
   export interface Item {
     id: number;
@@ -18,6 +19,9 @@ export interface itemReturnI {
     description: string;
     unit: string;
     businessLine: string;
+    unitId?: string;   // Add these properties if they're necessary
+    serviceId?: string;
+    isService?: boolean;
   }
   export interface ItemsListI {
     success: boolean;

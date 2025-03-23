@@ -7,7 +7,7 @@ import {
   customerListI,
   customerI,
 } from "../../shared/types/customer.type";
-import { AllServicesI, AllUnitI, ItemsListI } from 'src/app/shared/types/items.type';
+import { AllServicesI, AllUnitI, ItemsListI, productDetailsI } from 'src/app/shared/types/items.type';
 
 @Injectable({
   providedIn: 'root'
@@ -35,10 +35,16 @@ export class ItemsService {
     );
   }
 
-  getCustomerByCustomerId(id: number | string) {
-    return this.http.get<customerDetailsI>(
-      `${environment.apiUrl}api/Customer/GetCustomerById/${id}`,
-    );
+  // getProductByProductId(id: number | string) {
+  //   return this.http.get<customerDetailsI>(
+  //     `${environment.apiUrl}api/Product/GetProductById/${id}`,
+  //   );
+  // }
+
+  getProductByProductId(id: number | string) {
+    return this.http.get<productDetailsI>(`${environment.apiUrl}api/Product/GetProductById`, {
+      params: { productId: id.toString() }
+    });
   }
 
   updateCustomer(id: number | string, updateCustomer: any) {

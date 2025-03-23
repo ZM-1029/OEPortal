@@ -26,7 +26,7 @@ import { customerDetailsI } from "../../../shared/types/customer.type";
 import { SuccessModalComponent } from "../../../shared/components/UI/success-modal/success-modal.component";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ItemsService } from "../items.service";
-import { Service,Unit } from "src/app/shared/types/items.type";
+import { productDetailsI, Service,Unit } from "src/app/shared/types/items.type";
 import { CdkTextareaAutosize } from "@angular/cdk/text-field";
 
 @Component({
@@ -99,7 +99,7 @@ export class ItemCreateComponent {
     });
   
     // After initializing the form, load data and patch the form
-    // this.clearForm();
+    this.clearForm();
   }
   
 
@@ -113,54 +113,85 @@ export class ItemCreateComponent {
       if (this.Id < 1) {
         // Create mode
         this.formHeading = "Create";
-        this.productForm.reset();
-        this.deleteImage();
       } else {
         // Edit mode: Patch the form with existing data
         this.formHeading = "Update";
-        this.getCustomerDetails(this.Id);
-        this.productForm.controls['CustomerId'].disable();
+        this.getProductDetails(this.Id);
+        // this.productForm.controls['productId'].disable();
         this._changeDetetction.detectChanges();
       }
     }
   }
 
   // get Customer Details
-  getCustomerDetails(id: number) {
+  // getProductDetails(id: number) {
+  //   if (id !== 0) {
+  //     this.Id = id;
+  //     this._itemService
+  //       .getProductByProductId(id)
+  //       .pipe(takeUntil(this._unsubscribeAll$))
+  //       .subscribe((response: productDetailsI) => {
+  //         if (response.success) {
+  //           // Patch the form with the received data
+  //           this.productForm.patchValue({
+  //             Id: response.data.id,
+  //             // CustomerId: response.data.customerId,
+  //             // CustomerName: response.data.customerName,
+  //             // PhoneNumber: response.data.phoneNumber,
+  //             // PrimaryContact: response.data.primaryContact,
+  //             // Email: response.data.email,
+  //             // Logo: response.data.logo,
+  //             // Address: response.data.address,
+  //             // PostalCode: response.data.postalCode,
+  //             // Country: response.data.country,
+  //             // Taxid: response.data.taxid,
+  //             // BusinessType: response.data.businessType,
+  //           });
+            
+  //           // Specifically patch the `isService` control with the correct value (Good or Service)
+  //           this.productForm.patchValue({
+  //             // Patch the form data including 'isService' value from the response
+  //             // isService: response.customer.isService !== undefined ? response.customer.isService : true, // Default to 'true' if undefined
+  //           });
+            
+  //           this._changeDetetction.detectChanges();
+  //         }
+  //       });
+  //   }
+  // }
+
+  getProductDetails(id: number) {
     if (id !== 0) {
       this.Id = id;
       this._itemService
-        .getCustomerByCustomerId(id)
+        .getProductByProductId(id)  
         .pipe(takeUntil(this._unsubscribeAll$))
-        .subscribe((response: customerDetailsI) => {
+        .subscribe((response: productDetailsI) => {
           if (response.success) {
-            // Patch the form with the received data
-            this.productForm.patchValue({
-              Id: response.customer.id,
-              CustomerId: response.customer.customerId,
-              CustomerName: response.customer.customerName,
-              PhoneNumber: response.customer.phoneNumber,
-              PrimaryContact: response.customer.primaryContact,
-              Email: response.customer.email,
-              Logo: response.customer.logo,
-              Address: response.customer.address,
-              PostalCode: response.customer.postalCode,
-              Country: response.customer.country,
-              Taxid: response.customer.taxid,
-              BusinessType: response.customer.businessType,
-            });
-            
-            // Specifically patch the `isService` control with the correct value (Good or Service)
-            this.productForm.patchValue({
-              // Patch the form data including 'isService' value from the response
-              // isService: response.customer.isService !== undefined ? response.customer.isService : true, // Default to 'true' if undefined
-            });
-            
-            this._changeDetetction.detectChanges();
+            if (response.data && response.data.length > 0) {
+              const product = response.data[0];  
+              this.productForm.patchValue({
+                name: product.name,
+                sku: product.sku,
+                hsnCode: product.hsnCode,
+                description: product.description,
+                salesPrice: product.salesPrice,
+                costPrice: product.costPrice,
+                unitId: product.unitId,
+                serviceId: product.serviceId,
+                isService: product.isService, 
+              });
+              this._changeDetetction.detectChanges();
+            } else {
+              console.log('No products found');
+            }
+          } else {
+            console.log('Failed to fetch product details');
           }
         });
     }
   }
+  
 
   // Create Edit Customer
   // createUpdate() {
@@ -290,7 +321,7 @@ export class ItemCreateComponent {
     this.productForm.reset();
     this.productForm.markAsPristine();
     this.productForm.markAsUntouched();
-    this.deleteImage();
+  
   }
   
   uploadCustomerLogo(event: any) {
@@ -303,10 +334,7 @@ export class ItemCreateComponent {
     reader.readAsDataURL(this.logoFile);
   }
 
-  deleteImage() {
-    this.customerLogoUrl = null;
-    this.logoFile = null;
-  }
+
 
 triggerCustomerFileInput() {
   this.fileInput.nativeElement.click(); 
@@ -349,7 +377,7 @@ triggerCustomerFileInput() {
   ngOnDestroy(): void {
     this.resetForm();
     this._unsubscribeAll$.next(
-      this._itemService.getCustomerByCustomerId(this.Id),
+      this._itemService.getProductByProductId(this.Id),
     );
     this._unsubscribeAll$.complete();
   }

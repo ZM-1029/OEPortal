@@ -167,8 +167,9 @@ private _unsubscribeAll$: Subject<any> = new Subject<any>();
   updateProduct(event: any): void {
     if (event.event.target.closest(".edit-icon")) {
       const productId = event.event.target.closest(".edit-icon").getAttribute("data-id");
-      this.isSideDrawerOpen = true;
+      console.log(productId,'productId')
       this.productId = Number(productId);
+      this.isSideDrawerOpen = true;
     }
     if (event.event.target.closest(".delete-icon")) {
       const productId = event.event.target.closest(".delete-icon").getAttribute("data-id");

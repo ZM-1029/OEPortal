@@ -10,10 +10,16 @@
             <mat-label class="outer-mat-lable col-4 pt-2">Type:</mat-label>
             <div class="col-8 mb-2">
               <div class="d-flex align-items-center">
-                <mat-radio-group formControlName="isService">
+                <!-- <mat-radio-group formControlName="isService">
                   <mat-radio-button value="true" [checked]="productForm.get('isService')?.value === true">Good</mat-radio-button>
                   <mat-radio-button value="false" [checked]="productForm.get('isService')?.value === false">Service</mat-radio-button>
+                </mat-radio-group> -->
+
+                <mat-radio-group formControlName="isService">
+                  <mat-radio-button [value]="true" [checked]="productForm.get('isService')?.value === true">Good</mat-radio-button>
+                  <mat-radio-button [value]="false" [checked]="productForm.get('isService')?.value === false">Service</mat-radio-button>
                 </mat-radio-group>
+                
               </div>
               @if (
                 productForm.controls["isService"].invalid &&
