@@ -7,6 +7,7 @@ import {
   customerListI,
   customerI,
 } from "../../shared/types/customer.type";
+import { AllServicesI, AllUnitI, ItemsListI } from 'src/app/shared/types/items.type';
 
 @Injectable({
   providedIn: 'root'
@@ -21,15 +22,15 @@ export class ItemsService {
 
   constructor(private http: HttpClient) {}
 
-  getCustomerList() {
-    return this.http.get<customerListI>(
-      `${environment.apiUrl}api/Customer/GetCustomers`,
+  getProductList() {
+    return this.http.get<ItemsListI>(
+      `${environment.apiUrl}api/Product/GetProductList`,
     );
   }
 
-  createCustomer(customer: any) {
+  addProduct(customer: any) {
     return this.http.post<customerI>(
-      `${environment.apiUrl}api/Customer/AddCustomer`,
+      `${environment.apiUrl}api/Product/AddProduct`,
       customer,
     );
   }
@@ -52,4 +53,15 @@ export class ItemsService {
       `${environment.apiUrl}api/Customer/DeleteCustomer/${id}`,
     );
   }
+
+  UnitList() {
+      return this.http.get<AllUnitI>(
+        `${environment.apiUrl}api/Product/UnitList`,
+      );
+    }
+    getServices() {
+      return this.http.get<AllServicesI>(
+        `${environment.apiUrl}api/Product/GetServices`,
+      );
+    }
 }

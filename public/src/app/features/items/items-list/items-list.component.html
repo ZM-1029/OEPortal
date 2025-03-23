@@ -1,7 +1,7 @@
 <div class="main-content mt-2 p-2">
     <app-page-header [HeadingName]="HeadingName">
       <div class="d-flex" pageHeaderBtn>
-        <button class="btn btn-info-dark btn-wave mx-2 text-white text-capitalize" (click)="addCustomer($event)">
+        <button class="btn btn-info-dark btn-wave mx-2 text-white text-capitalize" (click)="addProduct($event)">
           <i class="fa-solid fa-plus me-2"></i>Create
         </button>
       </div>
@@ -11,13 +11,13 @@
       <div class="container-fluid p-0">
         <ag-grid-angular #agGrid style="width: 100%; height: 78vh !important; padding-bottom: 10px"
           class="ag-theme-alpine" [rowData]="rowData" [columnDefs]="columnDefs" [defaultColDef]="defaultColDef"
-          [animateRows]="true" (cellClicked)="updateCustomer($event)" [paginationPageSize]="15" [pagination]="true"
+          [animateRows]="true" (cellClicked)="updateProduct($event)" [paginationPageSize]="15" [pagination]="true"
           [paginationPageSizeSelector]="paginationPageSizeSelector" (gridReady)="onGridReady($event)"
           (paginationChanged)="onPaginationChanged($event)"></ag-grid-angular>
         <div class="table-footer position-relative">
           <div class="row g-2">
             <div class="col-6 col-sm-3 fw-bold">
-              <label>Total Customers:</label>
+              <label>Total Product:</label>
               <span class="text-bold ms-1">{{ totalCount }}</span>
             </div>
           </div>
@@ -30,7 +30,7 @@
     @if (isSideDrawerOpen) {
     <app-side-drawer (sideDrawer)="sideDrawer()" [isSideDrawerOpen]="isSideDrawerOpen">
       <app-item-create (formClose)="formClose($event)" [isSideDrawerOpen]="isSideDrawerOpen"
-        [Id]="customerId"></app-item-create>
+        [Id]="productId"></app-item-create>
     </app-side-drawer>
     }
   </div>

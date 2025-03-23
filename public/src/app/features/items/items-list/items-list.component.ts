@@ -1,32 +1,18 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  OnDestroy,
-  OnInit,
-  ViewEncapsulation,
-} from "@angular/core";
+import {ChangeDetectionStrategy,ChangeDetectorRef,Component,ViewEncapsulation} from "@angular/core";
 import { AgGridAngular } from "ag-grid-angular";
 import { AllCommunityModule, GridApi, GridReadyEvent, ModuleRegistry } from "ag-grid-community";
-import {
-  customerDetailsI,
-  customerListI,
-  customerI,
-} from "../../../shared/types/customer.type";
 import { CommonModule } from "@angular/common";
 import { PageHeaderComponent } from "../../../shared/components/UI/page-header/page-header.component";
 import { LoaderComponent } from "../../../shared/components/UI/loader/loader.component";
-import { provideIcons } from "@ng-icons/core";
-import { heroUsers } from "@ng-icons/heroicons/outline";
 import { SideDrawerComponent } from "../../../shared/components/UI/side-drawer/side-drawer.component";
 import { MatDialog } from "@angular/material/dialog";
 import { DeleteModalComponent } from "../../../shared/components/UI/delete-modal/delete-modal.component";
 import { Subject } from "rxjs";
-import { ActivatedRoute, Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { SuccessModalComponent } from "src/app/shared/components/UI/success-modal/success-modal.component";
 import { ItemsService } from "../items.service";
 import { ItemCreateComponent } from "../item-create/item-create.component";
+import { Item, ItemsListI } from "src/app/shared/types/items.type";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 @Component({
@@ -47,8 +33,8 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 export class ItemsListComponent {
 columnDefs: any = [
     {
-      headerName: "S. No",
-      valueGetter: "node.rowIndex + 1",
+      headerName: "Name",
+      field: "name",
       sortable: false,
       filter: false,
       pinned: "left",
@@ -69,78 +55,37 @@ columnDefs: any = [
         return { border: "none" };
       },
     },
+   
     {
-      field: "customerName",
-      headerName: "Customer Name",
-      sortable: true,
-      pinned: "left",
-      filter: true,
-      minWidth: 180,
-      cellStyle: () => {
-        return { border: "none" };
-      },
-    },
-    {
-      field: "customerId",
-      headerName: "Customer Id",
+      field: "sku",
+      headerName: "SKU",
       sortable: true,
       filter: true,
       minWidth: 170,
     },
     {
-      field: "phoneNumber",
-      headerName: "Phone Number",
+      field: "TYPE",
+      headerName: "TYPE",
       sortable: true,
       filter: true,
       minWidth: 200,
     },
     {
-      field: "primaryContact",
-      headerName: "Primary Contact",
+      field: "description",
+      headerName: "Description",
       sortable: true,
       filter: true,
       minWidth: 200,
     },
     {
-      field: "email",
-      headerName: "Email",
+      field: "salesPrice",
+      headerName: "RATE",
       sortable: true,
       filter: true,
       minWidth: 270,
     },
-    {
-      field: "address",
-      headerName: "Address",
-      sortable: true,
-      filter: true,
-      minWidth: 240,
-    },
-    {
-      field: "postalCode",
-      headerName: "PostalCode",
-      sortable: true,
-      filter: true,
-      minWidth: 170,
-    },
-    {
-      field: "businessType",
-      headerName: "Business Type",
-      cellRenderer: (params: any) => {
-        return params.value == "1"
-          ? (params.value = "Business")
-          : (params.value = "Individual");
-      },
-      sortable: true,
-      filter: true,
-      minWidth: 170,
-    },
-    {
-      field: "country",
-      headerName: "Country",
-      sortable: true,
-      filter: true,
-      minWidth: 170,
-    },
+    
+   
   ];
 
   defaultColDef = {
@@ -151,17 +96,14 @@ columnDefs: any = [
   };
 
   public totalCount: number = 0;
-  public activeCustomer: number = 0;
-  public terminatedCustomer: number = 0;
-  public resignedCustomer: number = 0;
   public currentPageNumber: number = 1;
   public currentPageSize: number = 15;
-  public customerId: number = 0;
+  public productId: number = 0;
   public isSideDrawerOpen: boolean = false;
   public paginationPageSize = this.currentPageSize;
   public paginationPageSizeSelector: number[] = [15, 25, 50, 100];
   HeadingName: string = "Product";
-  rowData: customerI[]=[];
+  rowData: Item[] = [];
  private gridApi!: GridApi<any>;
 
 private _unsubscribeAll$: Subject<any> = new Subject<any>();
@@ -170,40 +112,35 @@ private _unsubscribeAll$: Subject<any> = new Subject<any>();
     private _itemService: ItemsService,
     private _changeDetectorRef: ChangeDetectorRef,
     private dialog: MatDialog,
-    private _router: Router,
-    private _activatedRoute: ActivatedRoute,
     private _successMessage: MatSnackBar,
   ) {}
 
   ngOnInit(): void {
-    this.pageHeader_customer(this.HeadingName);
+    this.pageHeader_product(this.HeadingName);
   }
 
-  addCustomer(event: Event) {
-    this.customerId = 0;
+  addProduct(event: Event) {
+    this.productId = 0;
     this.isSideDrawerOpen = true;
   }
 
-  pageHeader_customer(customerHeadingName: string) {
-    this.HeadingName = customerHeadingName;
+  pageHeader_product(productHeadingName: string) {
+    this.HeadingName = productHeadingName;
   }
 
-  getCustomerList() {
-    this._itemService
-      .getCustomerList()
-      .subscribe((result: customerListI) => {
-        if (result.success) {
-          this.totalCount = result.totalCount;
-          this.rowData = result.customers;
-          this._changeDetectorRef.detectChanges();
-        } else {
-          this.rowData=[];
-          this.showErrorOverlay('Data is not found')
-          console.log("No customer data returned from API.");
-        }
-      });
+  getProductList() {
+    this._itemService.getProductList().subscribe((result: ItemsListI) => {
+      if (result.success) {
+        this.rowData = result.data;
+        this.totalCount = result.data.length;
+        this._changeDetectorRef.detectChanges();
+      } else {
+        this.rowData = [];
+        this.showErrorOverlay('Data is not found');
+        console.log('No product data returned from API.');
+      }
+    });
   }
-
 
   export(event: Event) {
     alert("export");
@@ -213,8 +150,8 @@ private _unsubscribeAll$: Subject<any> = new Subject<any>();
   formClose(event: any) {
     this.sideDrawer();
     if (event) {
-      this.getCustomerList();
-      this.customerId = 0;
+      this.getProductList();
+      this.productId = 0;
     }
   }
 
@@ -226,41 +163,41 @@ private _unsubscribeAll$: Subject<any> = new Subject<any>();
     }
   }
 
-  // delete customer
-  updateCustomer(event: any): void {
+  // delete product
+  updateProduct(event: any): void {
     if (event.event.target.closest(".edit-icon")) {
-      const customerId = event.event.target.closest(".edit-icon").getAttribute("data-id");
+      const productId = event.event.target.closest(".edit-icon").getAttribute("data-id");
       this.isSideDrawerOpen = true;
-      this.customerId = Number(customerId);
+      this.productId = Number(productId);
     }
     if (event.event.target.closest(".delete-icon")) {
-      const customerId = event.event.target.closest(".delete-icon").getAttribute("data-id");
-      this.openDeleteModal(Number(customerId));
+      const productId = event.event.target.closest(".delete-icon").getAttribute("data-id");
+      this.openDeleteModal(Number(productId));
     }
   }
 
-  openDeleteModal(customerId: number): void {
+  openDeleteModal(productId: number): void {
     const dialogRef = this.dialog.open(DeleteModalComponent, {
       width: "400px",
       height: "175px",
       disableClose: true,
-      data: "Customer",
+      data: "Product",
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result == true) {
         console.log("Delete confirmed");
-        this.deleteRow(customerId);
+        this.deleteRow(productId);
       } else {
         console.log("Delete action canceled");
       }
     });
   }
-
+ // delate Product end
   deleteRow(id: number) {
     this._itemService.deleteCustomerById(id).subscribe({
       next: (response: any) => {
         this.showSuccessMessage(response.message);
-        this.getCustomerList();
+        this.getProductList();
       },
       error: (err) => {
         this.handleError(err);
@@ -268,7 +205,7 @@ private _unsubscribeAll$: Subject<any> = new Subject<any>();
       },
     });
   }
-  // delate Customer end
+ 
 
 
   // pagenation..
@@ -315,7 +252,7 @@ private _unsubscribeAll$: Subject<any> = new Subject<any>();
     onGridReady(params: GridReadyEvent<any>) {
       this.gridApi = params.api;
       this.gridApi.hideOverlay();
-      this.getCustomerList();
+      this.getProductList();
     }
   
     showErrorOverlay(message: string) {
