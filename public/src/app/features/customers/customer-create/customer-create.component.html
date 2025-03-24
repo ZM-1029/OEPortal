@@ -1,9 +1,12 @@
+
 <div class="main-content  m-4">
+  <mat-icon class="close-icon" (click)="closePopup()">close</mat-icon>
   <div class="border-bottom bg-light pb-2">
     <h2 class="formHeading">{{ formHeading }} Customer</h2>
   </div>
   <div class="form-container d-flex justify-content-center">
     <form [formGroup]="customerForm">
+      <input formControlName="Id" hidden/>
       <div class="customer-profile  p-3 d-flex flex-row align-items-center gap-3 rounded">
         <!-- Profile Image -->
         <div class="profile-image position-relative">
@@ -42,7 +45,8 @@
       </div>
 
       <div class="input-form-container py-3">
-        <div class="form-group row ">
+        
+        <div class="form-group col ">
           <mat-label class="outer-mat-lable col-4 pt-2 ">Customer Name </mat-label>
           <mat-form-field appearance="outline" class="col-8">
             <input formControlName="CustomerName" matInput placeholder="Enter Customer Name" />
@@ -58,13 +62,13 @@
 
           </mat-form-field>
         </div>
-        <div [ngClass]="Id==0 ? 'd-none' : 'd' " class="form-group row">
+        <div [ngClass]="Id==0 ? 'd-none' : 'd' " class="form-group col">
           <mat-label  [ngClass]="Id==0 ? 'd-none' : 'd' " class="outer-mat-lable col-4 pt-2 ">Customer ID</mat-label>
           <mat-form-field  [ngClass]="Id==0 ? 'd-none' : 'd' " appearance="outline" class="col-8">
             <input formControlName="CustomerId" matInput placeholder="Enter Customer Id" />
           </mat-form-field>
         </div>
-        <div class="form-group row ">
+        <div class="form-group col ">
           <mat-label class="outer-mat-lable col-4 pt-2 ">Business Type:</mat-label>
           <div class="col-8 mb-2">
             <div class="d-flex align-items-center ">
@@ -139,29 +143,8 @@
             </mat-error>
           </mat-form-field>
         </div>
-        <div class="form-group row">
-          <mat-label class="outer-mat-lable col-4 pt-2 ">Address</mat-label>
-          <mat-form-field appearance="outline" class="col-8">
-            <input formControlName="Address" matInput placeholder="Enter Address" />
-          </mat-form-field>
-        </div>
-        <div class="form-group row">
-          <mat-label class="outer-mat-lable col-4 pt-2 ">Postal Code</mat-label>
-          <mat-form-field appearance="outline" class="col-8">
-            <input formControlName="PostalCode" matInput placeholder="Enter Postal Code" />
-            <mat-error>
-              @if (
-              customerForm.controls["PostalCode"].errors?.["maxlength"]
-              ) {
-              <span>Maximum length is 10 characters!</span>
-              } @else if (
-              customerForm.controls["PostalCode"].errors?.["pattern"]
-              ) {
-              <span>Only numbers are allowed.</span>
-              }
-            </mat-error>
-          </mat-form-field>
-        </div>
+       
+      
         <div class="form-group row">
           <mat-label class="outer-mat-lable col-4 pt-2 ">Tax Id</mat-label>
           <mat-form-field appearance="outline" class="col-8">
@@ -173,17 +156,125 @@
             </mat-error>
           </mat-form-field>
         </div>
-        <div class="form-group row">
-          <mat-label class="outer-mat-lable col-4 pt-2 ">Country</mat-label>
-          <mat-form-field appearance="outline" class="col-8">
-            <input formControlName="Country" placeholder="Enter Country" matInput />
-            <mat-error>
-              @if (customerForm.controls["Country"].errors?.["pattern"]) {
-              <span>Only alphabetic characters are allowed.</span>
-              }
-            </mat-error>
-          </mat-form-field>
+       
+        <div class="billing-shipping-container py-3">
+          <h4 class="mb-3"><b>Billing Address</b></h4>
+        
+          <div class="form-group row">
+            <mat-label class="outer-mat-lable col-4 pt-2">Address</mat-label>
+            <mat-form-field appearance="outline" class="col-8">
+              <input formControlName="billingAttention" matInput placeholder="Enter Attention" />
+              <mat-error *ngIf="customerForm.controls['billingAttention'].hasError('required')">
+                Address is required
+              </mat-error>
+              <mat-error *ngIf="customerForm.controls['billingAttention'].hasError('minlength')">
+                Minimum 3 characters required
+              </mat-error>
+            </mat-form-field>
+          </div>
+        
+        
+         
+        
+          <div class="form-group row">
+            <mat-label class="outer-mat-lable col-4 pt-2">City</mat-label>
+            <mat-form-field appearance="outline" class="col-8">
+              <input formControlName="billingCity" matInput placeholder="Enter City" />
+              <mat-error *ngIf="customerForm.controls['billingCity'].hasError('required')">
+                City is required
+              </mat-error>
+            </mat-form-field>
+          </div>
+        
+          <div class="form-group row">
+            <mat-label class="outer-mat-lable col-4 pt-2">State</mat-label>
+            <mat-form-field appearance="outline" class="col-8">
+              <input formControlName="billingState" matInput placeholder="Enter State" />
+              <mat-error *ngIf="customerForm.controls['billingState'].hasError('required')">
+                State is required
+              </mat-error>
+            </mat-form-field>
+          </div>
+        
+          <div class="form-group row">
+            <mat-label class="outer-mat-lable col-4 pt-2">Postal Code</mat-label>
+            <mat-form-field appearance="outline" class="col-8">
+              <input formControlName="billingPin" matInput placeholder="Enter Postal Code" />
+              <mat-error *ngIf="customerForm.controls['billingPin'].hasError('required')">
+                Postal code is required
+              </mat-error>
+              <mat-error *ngIf="customerForm.controls['billingPin'].hasError('pattern')">
+                Enter a valid 5 or 6-digit postal code
+              </mat-error>
+            </mat-form-field>
+          </div>
+        
+          
+        
+          <h4 class="mt-4 mb-3"><b>Shipping Address</b></h4>
+
+  <div class="form-group row">
+    <mat-label class="outer-mat-lable col-4 pt-2">
+      <input type="checkbox" (change)="copyBillingToShipping($event)" />
+      Same as Billing Address
+    </mat-label>
+  </div>
+
+  <div class="form-group row">
+    <mat-label class="outer-mat-lable col-4 pt-2">Address</mat-label>
+    <mat-form-field appearance="outline" class="col-8">
+      <input formControlName="shippingAttention" matInput placeholder="Enter Attention" />
+      <mat-error *ngIf="customerForm.controls['shippingAttention'].hasError('required')">
+        Address is required
+      </mat-error>
+      <mat-error *ngIf="customerForm.controls['shippingAttention'].hasError('minlength')">
+        Minimum 3 characters required
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+ 
+
+  
+
+  <div class="form-group row">
+    <mat-label class="outer-mat-lable col-4 pt-2">City</mat-label>
+    <mat-form-field appearance="outline" class="col-8">
+      <input formControlName="shippingCity" matInput placeholder="Enter City" />
+      <mat-error *ngIf="customerForm.controls['shippingCity'].hasError('required')">
+        City is required
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="form-group row">
+    <mat-label class="outer-mat-lable col-4 pt-2">State</mat-label>
+    <mat-form-field appearance="outline" class="col-8">
+      <input formControlName="shippingState" matInput placeholder="Enter State" />
+      <mat-error *ngIf="customerForm.controls['shippingState'].hasError('required')">
+        State is required
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="form-group row">
+    <mat-label class="outer-mat-lable col-4 pt-2">Postal Code</mat-label>
+    <mat-form-field appearance="outline" class="col-8">
+      <input formControlName="shippingPin" matInput placeholder="Enter Postal Code" />
+      <mat-error *ngIf="customerForm.controls['shippingPin'].hasError('required')">
+        Postal code is required
+      </mat-error>
+      <mat-error *ngIf="customerForm.controls['shippingPin'].hasError('pattern')">
+        Enter a valid 5 or 6-digit postal code
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+ 
+          
         </div>
+        
+        
       </div>
       <div class="form-btn d-flex align-items-start justify-content-end p-4 ">
         <button class="btn btn-secondary mx-2" type="button" (click)="resetForm()">
