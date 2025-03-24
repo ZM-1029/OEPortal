@@ -1,0 +1,10 @@
+<ng-select
+  [placeholder]="'Select ' + dropdownHeading"
+  [items]="transformedDataList"
+  [searchable]="true"
+  bindLabel="label"  
+  bindValue="value"  
+  [closeOnSelect]="true"
+  [(ngModel)]="selectedData"
+  (change)="updateSelected()">
+</ng-select>

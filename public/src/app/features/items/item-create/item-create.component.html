@@ -56,9 +56,6 @@
             <mat-form-field appearance="outline" class="col-8">
               <input formControlName="sku" matInput placeholder="Enter SKU" />
               <mat-error class="text-danger">
-               @if (productForm.controls["sku"].errors?.["pattern"]) {
-                <span>Only alphabetic characters are allowed.</span>
-                }
               </mat-error>
             </mat-form-field>
           </div>
@@ -93,9 +90,6 @@
             <mat-form-field appearance="outline" class="col-8">
               <input formControlName="hsnCode" matInput placeholder="Enter HSN Code" />
               <mat-error class="text-danger">
-               @if (productForm.controls["hsnCode"].errors?.["pattern"]) {
-                <span>Only alphabetic characters are allowed.</span>
-                }
               </mat-error>
             </mat-form-field>
           </div>

@@ -1,0 +1,71 @@
+<div class=" ">
+    <div class="multi-select-dropdown ">
+        <div class="dropdown px-3 ">
+            @if(yearDropdown.length!=0){
+                <app-single-select-dropdown [dropdownHeading]="'Select Year'" [defaultValue]="selectedValueYear"
+                [dataList]="yearDropdown" (selectedOutput)="selectedYear($event)">
+            </app-single-select-dropdown>
+            }
+        </div>
+        <div class="dropdown mx-3 ">
+            <app-multi-selcet-object-dropdown [dropdownHeading]="'Months'" [defaultValue]="selectedValueMonth" [dataList]="Month"
+                (selectedOutput)="selectedMonth($event)">
+            </app-multi-selcet-object-dropdown>
+        </div>
+        <div class="dropdown-employee mx-3">
+            <app-multi-selcet-object-dropdown [dropdownHeading]="'Customer'" [isCustomerId]="isCustomerId" [dataList]="allCustomers"
+                (selectedOutput)="selectedCustomer($event)">
+            </app-multi-selcet-object-dropdown>
+        </div>
+    </div>
+    <div class="dropdown-manage-column ">
+        <button class="btn btn-info-dark text-white btn-wave dropdown-toggle" type="button" id="dropdownMenuButton1"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            Manage Column
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+            @for (column of allColumns; track column) {
+            <li>
+                @if (
+                column.headerName == "S. No" ||
+                column.field == "employeeID" ||
+                column.field == "firstName"
+                ) {
+                <div class="dropdown-item d-none checkbox-container">
+                    <input type="checkbox" [checked]="isColumnDisplayed(column)" (change)="toggleColumn(column)"
+                        id="{{ column.field }}" />
+                    <label for="{{ column.field }}">{{
+                        column.headerName
+                        }}</label>
+                </div>
+                } @else {
+                <div class="dropdown-item checkbox-container">
+                    <input type="checkbox" [checked]="isColumnDisplayed(column)" (change)="toggleColumn(column)"
+                        id="{{ column.field }}" />
+                    <label for="{{ column.field }}">{{
+                        column.headerName
+                        }}</label>
+                </div>
+                }
+            </li>
+            }
+        </ul>
+    </div>
+<div class="container-fluid py-4">
+    <ag-grid-angular #agGrid style="width: 100%; height: 70vh" class="ag-theme-alpine" [rowData]="rowData"
+    [columnDefs]="columnDefs" [defaultColDef]="defaultColDef" [animateRows]="true" [paginationPageSize]="15"
+    [paginationPageSizeSelector]="paginationPageSizeSelector" [pagination]="true" (gridReady)="onGridReady($event)"
+    (paginationChanged)="onPaginationChanged($event)"></ag-grid-angular>
+    <div class="table-footer position-relative">
+        <div class="row text-danger">
+            @for(summary of reportsCustomersSummary; track summary){
+            <div class="col-auto fw-bold">
+                <label class="summary-item text-bold">
+                    <span class="text-capitalize">{{ summary.key }}</span>: {{ summary.value }}
+                </label>
+            </div>
+            }
+        </div>
+    </div>
+</div>
+</div>

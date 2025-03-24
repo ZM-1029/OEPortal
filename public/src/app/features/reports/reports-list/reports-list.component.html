@@ -2,7 +2,7 @@
   <app-page-header [HeadingName]="HeadingName">
   </app-page-header>
 
-  <div [ngClass]="(value === 'timesheet' || value === 'attendance') ? '' : 'd-none'"  class="date-range-picker d-flex">
+  <div [ngClass]="(activeTable === 'timesheet' || activeTable === 'attendance') ? '' : 'd-none'" class="date-range-picker d-flex">
     <mat-form-field appearance="outline" class="w-100 p-0">
       <mat-label>Enter a date range</mat-label>
       <mat-date-range-input [rangePicker]="picker">
@@ -20,33 +20,42 @@
     <div class="container-fluid p-0">
       <div class="dropdown-container d-flex justify-content-between me-2">
         <div class="dropdown">
-          <select2 class="select2dropdown" [data]="activeReport" [value]="value" (update)="displayReports($event)">
-          </select2>
+          <app-single-select-dropdown [dropdownHeading]="'Active Report'" [defaultValue]="activeTable"
+            [dataList]="activeReport" (selectedOutput)="displayReports($event)">
+          </app-single-select-dropdown>
         </div>
-        <div class="emplooye-dropdown ms-auto">
-            <div class="employee">
-              <app-multi-select-dropdown [dropdownHeading]="'Employee'" [dataList]="allEmployees"
-                  (selectedOutput)="getReporsByEmployeeId($event)">
-              </app-multi-select-dropdown>
+        <div [ngClass]="(activeTable === 'timesheet' || activeTable === 'attendance') ? '' : 'd-none'"
+          class="emplooye-dropdown ms-auto">
+          <div class="employee">
+            <app-multi-select-dropdown [dropdownHeading]="'Employee'" [dataList]="allEmployees"
+              (selectedOutput)="getReporsByEmployeeId($event)">
+            </app-multi-select-dropdown>
           </div>
         </div>
       </div>
       <div class="reports">
         <div class="report-container">
-          @if(value=='attendance'){
-          <app-attendance-non-compliance-history [ncTypeCounts]="ncTypeCounts"
-            [attendanceRowData]="attendanceRowData"></app-attendance-non-compliance-history>
-          }
-          @if(value=='timesheet'){
-          <app-timesheet-non-compliance [ncTypeCounts]="ncTypeCounts"
-            [timesheetRowData]="timesheetRowData"></app-timesheet-non-compliance>
-          }
-          @if(value=='efficiency-report'){
-          <app-efficiency-reports></app-efficiency-reports>
-          }
-          @if(value=='salary-reports'){
-          <app-salary-reports></app-salary-reports>
-          }
+          <ng-container *ngIf="activeTable === 'attendance'">
+            <app-attendance-non-compliance-history 
+              [ncTypeCounts]="ncTypeCounts"
+              [attendanceRowData]="attendanceRowData">
+            </app-attendance-non-compliance-history>
+          </ng-container>
+        
+          <ng-container *ngIf="activeTable === 'timesheet'">
+            <app-timesheet-non-compliance 
+              [ncTypeCounts]="ncTypeCounts"
+              [timesheetRowData]="timesheetRowData">
+            </app-timesheet-non-compliance>
+          </ng-container>
+        
+          <ng-container *ngIf="activeTable === 'efficiency-report-employees'">
+            <app-efficiency-report-employees></app-efficiency-report-employees>
+          </ng-container>
+        
+          <ng-container *ngIf="activeTable === 'efficiency-report-customers'">
+            <app-efficiency-report-customers></app-efficiency-report-customers>
+          </ng-container>
         </div>
       </div>
     </div>

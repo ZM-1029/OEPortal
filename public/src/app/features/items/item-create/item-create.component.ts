@@ -83,9 +83,9 @@ export class ItemCreateComponent {
     this.productForm = this._formBuilder.group({
       isService: [true, Validators.required],  // Default value is 'true' (Good)
       name: ["", [Validators.required, Validators.pattern("^[a-z A-Z]*$")]],
-      sku: ["", [Validators.pattern("^[a-z A-Z]*$")]],
+      sku: ["", ],
       unitId: [""],
-      hsnCode: ["", [Validators.pattern("^[0-9]+(\\.[0-9]{1,2})?$")]],
+      hsnCode: [""],
       description: [""],
       serviceId: [""],
       costPrice: [

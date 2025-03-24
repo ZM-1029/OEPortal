@@ -27,6 +27,7 @@ import { CustomersService } from "../customers.service";
 import { NgClass, NgIf } from "@angular/common";
 import { SuccessModalComponent } from "../../../shared/components/UI/success-modal/success-modal.component";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { MatIconModule } from "@angular/material/icon";
 
 @Component({
   selector: "app-customer-create",
@@ -39,6 +40,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
     MatCheckboxModule,
     NgIf,
     NgClass,
+    MatIconModule
   ],
   templateUrl: "./customer-create.component.html",
   styleUrl: "./customer-create.component.scss",
@@ -67,6 +69,7 @@ export class CustomerCreateComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnInit(): void {
     this.customerForm = this._formBuilder.group({
+      Id:[0],
       CustomerId: [""],
       CustomerName: [
         "",
@@ -78,22 +81,50 @@ export class CustomerCreateComponent implements OnInit, OnChanges, OnDestroy {
       ],
       PrimaryContact: ["", [, Validators.pattern("^[a-z A-Z]*$")]],
       Email: ["", [Validators.required, Validators.email]],
-      Address: [""],
-      PostalCode: [
-        "",
-        [Validators.maxLength(10), Validators.pattern("^[0-9]*$")],
-      ],
+     
+      
       Logo: [""],
       LogoFile: [""],
       Country: ["", [Validators.pattern("^[a-zA-Z]*$")]],
       Taxid: ["", [Validators.pattern("^[0-9]*$")]],
+      billingaddressId:[0],
       BusinessType: ["", Validators.required],
+      billingAttention: ['', [Validators.required, Validators.minLength(3)]],
+     
+
+      billingCity: ['', Validators.required],
+      billingState: ['', Validators.required],
+      billingPin: ['', [Validators.required, Validators.pattern(/^\d{5,6}$/)]],
+      
+      shippingaddressId:[0],
+      shippingAttention: ['', [Validators.required, Validators.minLength(3)]],
+    
+     
+      shippingCity: ['', Validators.required],
+      shippingState: ['', Validators.required],
+      shippingPin: ['', [Validators.required, Validators.pattern(/^\d{5,6}$/)]],
+     
     });
     this.clearForm();
   }
-
+  copyBillingToShipping(event: any) {
+    if (event.target.checked) {
+      this.customerForm.patchValue({
+        shippingAttention: this.customerForm.value.billingAttention,
+        shippingCountry: this.customerForm.value.billingCountry,
+       
+        shippingCity: this.customerForm.value.billingCity,
+        shippingState: this.customerForm.value.billingState,
+        shippingPin: this.customerForm.value.billingPin,
+      
+      });
+    }
+  }
   ngOnChanges(): void {
     
+  }
+  closePopup() {
+    this.formClose.emit();
   }
 
   // clear Form
@@ -119,26 +150,70 @@ export class CustomerCreateComponent implements OnInit, OnChanges, OnDestroy {
       this._customerService
         .getCustomerByCustomerId(id)
         .pipe(takeUntil(this._unsubscribeAll$))
-        .subscribe((response: customerDetailsI) => {
-          if (response.success) {
+        .subscribe((response: any) => {
+          console.log(response,':response')
+         
             this.customerForm.patchValue({
-              Id: response.customer.id,
-              CustomerId: response.customer.customerId,
-              CustomerName: response.customer.customerName,
-              PhoneNumber: response.customer.phoneNumber,
-              PrimaryContact: response.customer.primaryContact,
-              Email: response.customer.email,
-              Logo: response.customer.logo,
-              Address: response.customer.address,
-              PostalCode: response.customer.postalCode,
-              Country: response.customer.country,
-              Taxid: response.customer.taxid,
-              BusinessType: response.customer.businessType,
+              Id: this.Id,
+              CustomerId: response.data.customer.id,
+              CustomerName: response.data.customer.customerName,
+              PhoneNumber: response.data.customer.phoneNumber,
+              PrimaryContact: response.data.customer.primaryContact,
+              Email: response.data.customer.email,
+              Logo: response.data.customer.logo,
+             
+              Taxid: response.data.customer.taxid,
+              BusinessType: response.data.customer.businessType,
             });
+            if(response.data.addresses[0].isBillingAddress)
+            {
+              this.customerForm.patchValue({
+                billingaddressId: response.data.addresses[0].id,
+                billingAttention: response.data.addresses[0].address,
+                
+                billingPin: response.data.addresses[0].postalCode,
+                billingState: response.data.addresses[0].state,
+                billingCity: response.data.addresses[0].city,
+               
+                shippingaddressId: response.data.addresses[1].id,
+                shippingAttention: response.data.addresses[1].address,
+                shippingCity: response.data.addresses[1].city,
+              
+                shippingPin: response.data.addresses[1].postalCode,
+                shippingState: response.data.addresses[1].state,
+              
+               
+               
+                
+              }
+            );
+            }
+            else{
+              this.customerForm.patchValue({
+                billingaddressId: response.data.addresses[1].id,
+                billingAttention: response.data.addresses[1].address,
+                
+                billingPin: response.data.addresses[1].postalCode,
+                billingState: response.data.addresses[1].state,
+                billingCity: response.data.addresses[1].city,
+               
+                shippingaddressId: response.data.addresses[0].id,
+                shippingAttention: response.data.addresses[0].address,
+                shippingCity: response.data.addresses[0].city,
+              
+                shippingPin: response.data.addresses[0].postalCode,
+                shippingState: response.data.addresses[0].state,
+              
+               
+               
+                
+              }
+            );
+            }
             for (let key in this.customerForm.value) {
               if (key == "Logo") {
                 this.customerLogoUrl = this.customerForm.value[key];
-                this._changeDetetction.detectChanges();
+                
               } else if (key == "CustomerName") {
                 this.customerName = this.customerForm.value[key];
               } else if (key == "CustomerId") {
@@ -147,7 +222,7 @@ export class CustomerCreateComponent implements OnInit, OnChanges, OnDestroy {
                 this.customerEmail = this.customerForm.value[key];
               }
             }
-          }
+            this._changeDetetction.detectChanges();
         });
     }
   }
@@ -156,36 +231,61 @@ export class CustomerCreateComponent implements OnInit, OnChanges, OnDestroy {
   createUpdate() {
     this.submitted = true;
     const formData = new FormData();
-    if (!this.customerForm.valid) {
-      this.customerForm.markAllAsTouched();
-      return;
-    }
-    if (this.customerForm.valid) {
-      for (let key in this.customerForm.value) {
-        if (this.customerForm.value.hasOwnProperty(key)) {
-          if (Array.isArray(this.customerForm.value[key])) {
-            this.customerForm.value[key].forEach((item, index) => {
-              formData.append(`${key}[${index}]`, item);
-            });
-          } else {
-            if (key == "LogoFile") {
-              this.customerForm.value[key] = this.logoFile;
-            } else if (this.customerForm.value[key] == undefined || null) {
-              this.customerForm.value[key] = "";
-            }
-            formData.append(key, this.customerForm.value[key]);
-          }
-        }
-      }
+    // if (!this.customerForm.valid) {
+    //   this.customerForm.markAllAsTouched();
+    //   return;
+    // }
+    
       if (this.Id < 1) {
-        formData.append("Id", "0");
-        formData.append("Status", "true");
-        this._customerService.createCustomer(formData).subscribe({
+        var customer={
+      
+          id: 0,
+          customerName: this.customerForm.get("CustomerName")?.value,
+          phoneNumber: this.customerForm.get("PhoneNumber")?.value,
+          primaryContact: this.customerForm.get("PrimaryContact")?.value,
+          email: this.customerForm.get("Email")?.value,
+          logo: this.customerForm.get("Logo")?.value,
+          logoFile: this.logoFile,
+          status: true,
+          country: this.customerForm.get("Country")?.value,
+          taxid: this.customerForm.get("Taxid")?.value,
+          businessType: this.customerForm.get("BusinessType")?.value
+        }
+        var address=[
+          {
+            id: 0,
+            customerId: 0,
+            postalCode: this.customerForm.get("billingPin")?.value,
+            state: this.customerForm.get("billingState")?.value,
+            city: this.customerForm.get("billingCity")?.value,
+            address: this.customerForm.get("billingAttention")?.value,
+            isBillingAddress: true
+          },
+          {
+            id: 0,
+            customerId: 0,
+            postalCode: this.customerForm.get("shippingPin")?.value,
+            state: this.customerForm.get("shippingState")?.value,
+            city: this.customerForm.get("shippingCity")?.value,
+            address: this.customerForm.get("billingAttention")?.value,
+            isBillingAddress: false
+          }
+
+        ]
+        var request={
+          customer:customer,
+          addresses:address
+        }
+       
+        
+      
+        
+        this._customerService.createCustomer(request).subscribe({
           next: (response: any) => {
             if (response.success) {
               console.log("Success:", response);
               this.showSuccessMessage(response.message);
-              this.resetForm();
+              //this.resetForm();
               console.log(1);
               this.formClose.emit(true);
             } else {
@@ -199,9 +299,50 @@ export class CustomerCreateComponent implements OnInit, OnChanges, OnDestroy {
           },
         });
       } else {
-        formData.append("Id", this.Id.toString());
-        formData.append("Status", "true");
-        this._customerService.updateCustomer(this.Id, formData).subscribe({
+
+        var customers={
+      
+          id: this.Id.toString(),
+          customerName: this.customerForm.get("CustomerName")?.value,
+          phoneNumber: this.customerForm.get("PhoneNumber")?.value,
+          primaryContact: this.customerForm.get("PrimaryContact")?.value,
+          email: this.customerForm.get("Email")?.value,
+          logo: this.customerForm.get("Logo")?.value,
+          logoFile: this.logoFile,
+          status: true,
+          country: this.customerForm.get("Country")?.value,
+          taxid: this.customerForm.get("Taxid")?.value,
+          businessType: this.customerForm.get("BusinessType")?.value
+        }
+        var addressss=[
+          {
+            id:  this.customerForm.get("billingaddressId")?.value,
+            customerId: this.Id.toString(),
+            postalCode: this.customerForm.get("billingPin")?.value,
+            state: this.customerForm.get("billingState")?.value,
+            city: this.customerForm.get("billingCity")?.value,
+            address: this.customerForm.get("billingAttention")?.value,
+            isBillingAddress: true
+          },
+          {
+            id: this.customerForm.get("shippingaddressId")?.value,
+            customerId: this.Id.toString(),
+            postalCode: this.customerForm.get("shippingPin")?.value,
+            state: this.customerForm.get("shippingState")?.value,
+            city: this.customerForm.get("shippingCity")?.value,
+            address: this.customerForm.get("billingAttention")?.value,
+            isBillingAddress: false
+          }
+
+        ]
+        var requestupdate={
+          customer:customers,
+          addresses:addressss
+        }
+       
+
+      
+        this._customerService.updateCustomer(this.Id, requestupdate).subscribe({
           next: (response: any) => {
             if (response.success) {
               console.log("Success:", response);
@@ -221,7 +362,7 @@ export class CustomerCreateComponent implements OnInit, OnChanges, OnDestroy {
         });
       }
     }
-  }
+  
 
   // reset form
   // resetForm() {

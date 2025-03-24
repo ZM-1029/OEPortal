@@ -82,7 +82,7 @@ export class CustomersListComponent implements OnInit, OnDestroy {
       },
     },
     {
-      field: "customerId",
+      field: "id",
       headerName: "Customer Id",
       sortable: true,
       filter: true,
@@ -109,20 +109,8 @@ export class CustomersListComponent implements OnInit, OnDestroy {
       filter: true,
       minWidth: 270,
     },
-    {
-      field: "address",
-      headerName: "Address",
-      sortable: true,
-      filter: true,
-      minWidth: 240,
-    },
-    {
-      field: "postalCode",
-      headerName: "PostalCode",
-      sortable: true,
-      filter: true,
-      minWidth: 170,
-    },
+ 
+   
     {
       field: "businessType",
       headerName: "Business Type",
@@ -135,13 +123,7 @@ export class CustomersListComponent implements OnInit, OnDestroy {
       filter: true,
       minWidth: 170,
     },
-    {
-      field: "country",
-      headerName: "Country",
-      sortable: true,
-      filter: true,
-      minWidth: 170,
-    },
+   
   ];
 
   defaultColDef = {
