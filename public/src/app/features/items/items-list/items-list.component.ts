@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy,ChangeDetectorRef,Component,ViewEncapsulation} from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewEncapsulation } from "@angular/core";
 import { AgGridAngular } from "ag-grid-angular";
 import { AllCommunityModule, GridApi, GridReadyEvent, ModuleRegistry } from "ag-grid-community";
 import { CommonModule } from "@angular/common";
@@ -17,21 +17,21 @@ import { Item, ItemsListI } from "src/app/shared/types/items.type";
 ModuleRegistry.registerModules([AllCommunityModule]);
 @Component({
   selector: 'app-items-list',
-    imports: [
-      AgGridAngular,
-      CommonModule,
-      LoaderComponent,
-      PageHeaderComponent,
-      SideDrawerComponent,
-      ItemCreateComponent,
-    ],
+  imports: [
+    AgGridAngular,
+    CommonModule,
+    LoaderComponent,
+    PageHeaderComponent,
+    SideDrawerComponent,
+    ItemCreateComponent,
+  ],
   templateUrl: './items-list.component.html',
   styleUrl: './items-list.component.scss',
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ItemsListComponent {
-columnDefs: any = [
+  columnDefs: any = [
     {
       headerName: "Name",
       field: "name",
@@ -55,7 +55,7 @@ columnDefs: any = [
         return { border: "none" };
       },
     },
-   
+
     {
       field: "sku",
       headerName: "SKU",
@@ -91,7 +91,7 @@ columnDefs: any = [
       filter: true,
       minWidth: 200,
       cellRenderer: (params: any) => {
-        return params.value ? 'Good' : 'Service'; 
+        return params.value ? 'Good' : 'Service';
       },
     },
     {
@@ -108,8 +108,8 @@ columnDefs: any = [
       filter: true,
       minWidth: 270,
     },
-    
-   
+
+
   ];
 
   defaultColDef = {
@@ -128,30 +128,25 @@ columnDefs: any = [
   public paginationPageSizeSelector: number[] = [15, 25, 50, 100];
   HeadingName: string = "Product";
   rowData: Item[] = [];
- private gridApi!: GridApi<any>;
-
-private _unsubscribeAll$: Subject<any> = new Subject<any>();
-
+  private gridApi!: GridApi<any>;
+  private _unsubscribeAll$: Subject<any> = new Subject<any>();
   constructor(
     private _itemService: ItemsService,
     private _changeDetectorRef: ChangeDetectorRef,
     private dialog: MatDialog,
     private _successMessage: MatSnackBar,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.pageHeader_product(this.HeadingName);
   }
-
   addProduct(event: Event) {
     this.productId = 0;
     this.isSideDrawerOpen = true;
   }
-
   pageHeader_product(productHeadingName: string) {
     this.HeadingName = productHeadingName;
   }
-
   getProductList() {
     this._itemService.getProductList().subscribe((result: ItemsListI) => {
       if (result.success) {
@@ -165,12 +160,10 @@ private _unsubscribeAll$: Subject<any> = new Subject<any>();
       }
     });
   }
-
   export(event: Event) {
     alert("export");
   }
 
-  // Form Close
   formClose(event: any) {
     this.sideDrawer();
     if (event) {
@@ -178,20 +171,16 @@ private _unsubscribeAll$: Subject<any> = new Subject<any>();
       this.productId = 0;
     }
   }
-
-  // side Drawer close
   sideDrawer() {
     if (this.isSideDrawerOpen) {
       this.isSideDrawerOpen = false;
       this._changeDetectorRef.detectChanges();
     }
   }
-
-  // delete product
   updateProduct(event: any): void {
     if (event.event.target.closest(".edit-icon")) {
       const productId = event.event.target.closest(".edit-icon").getAttribute("data-id");
-      console.log(productId,'productId')
+      console.log(productId, 'productId')
       this.productId = Number(productId);
       this.isSideDrawerOpen = true;
     }
@@ -200,7 +189,6 @@ private _unsubscribeAll$: Subject<any> = new Subject<any>();
       this.openDeleteModal(Number(productId));
     }
   }
-
   openDeleteModal(productId: number): void {
     const dialogRef = this.dialog.open(DeleteModalComponent, {
       width: "400px",
@@ -211,38 +199,30 @@ private _unsubscribeAll$: Subject<any> = new Subject<any>();
     dialogRef.afterClosed().subscribe((result) => {
       if (result == true) {
         console.log("Delete confirmed");
-        this.deleteRow(productId);
+        // this.deleteRow(productId);
       } else {
         console.log("Delete action canceled");
       }
     });
   }
- // delate Product end
-  deleteRow(id: number) {
-    this._itemService.deleteCustomerById(id).subscribe({
-      next: (response: any) => {
-        this.showSuccessMessage(response.message);
-        this.getProductList();
-      },
-      error: (err) => {
-        this.handleError(err);
-        console.error("Error deleting row:", err);
-      },
-    });
-  }
- 
-
-
-  // pagenation..
+  // deleteRow(id: number) {
+  //   this._itemService.deleteCustomerById(id).subscribe({
+  //     next: (response: any) => {
+  //       this.showSuccessMessage(response.message);
+  //       this.getProductList();
+  //     },
+  //     error: (err) => {
+  //       this.handleError(err);
+  //       console.error("Error deleting row:", err);
+  //     },
+  //   });
+  // }
   onPaginationChanged(params: any) {
     const currentPage = params.api.paginationGetCurrentPage();
     const pageSize = params.api.paginationGetPageSize();
     this.currentPageNumber = currentPage + 1;
     this.currentPageSize = pageSize;
   }
-
-  
-  // for Manage Columns
   allColumns = [...this.columnDefs];
   displayedColumns = [...this.columnDefs];
 
@@ -266,34 +246,29 @@ private _unsubscribeAll$: Subject<any> = new Subject<any>();
   isColumnDisplayed(column: any): boolean {
     return this.displayedColumns.some((col) => col.field === column.field);
   }
+  gridOptions = {
+    noRowsOverlayComponentParams: {
+      noRowsMessageFunc: () => "Data is not found",
+    },
+  };
 
-  // show message in table if api is false.. start
-    gridOptions = {
-      noRowsOverlayComponentParams: {
-        noRowsMessageFunc: () => "Data is not found",
-      },
-    };
-  
-    onGridReady(params: GridReadyEvent<any>) {
-      this.gridApi = params.api;
-      this.gridApi.hideOverlay();
-      this.getProductList();
+  onGridReady(params: GridReadyEvent<any>) {
+    this.gridApi = params.api;
+    this.gridApi.hideOverlay();
+    this.getProductList();
+  }
+  showErrorOverlay(message: string) {
+    if (this.gridApi) {
+      this.gridApi.showNoRowsOverlay();
+      setTimeout(() => {
+        const overlay = document.querySelector(".ag-overlay-no-rows-center");
+        if (overlay) {
+          overlay.innerHTML = `<span style="color: #2e3b64; font-weight: bold;">${message}</span>`;
+        }
+        this._changeDetectorRef.detectChanges();
+      }, 100);
     }
-  
-    showErrorOverlay(message: string) {
-      if (this.gridApi) {
-        this.gridApi.showNoRowsOverlay();
-        setTimeout(() => {
-          const overlay = document.querySelector(".ag-overlay-no-rows-center");
-          if (overlay) {
-            overlay.innerHTML = `<span style="color: #2e3b64; font-weight: bold;">${message}</span>`;
-          }
-          this._changeDetectorRef.detectChanges();
-        }, 100);
-      }
-    }
-  // show message in table if api is false.. end
-
+  }
   renderActionIcons(params: any): string {
     return `
       <div class="action-icons d-flex align-items-center justify-content-around">
@@ -305,9 +280,6 @@ private _unsubscribeAll$: Subject<any> = new Subject<any>();
       </div>
     `;
   }
-
-  
-  //  Function to show success messages
   private showSuccessMessage(message: string) {
     this._successMessage.openFromComponent(SuccessModalComponent, {
       data: { message },
@@ -317,8 +289,6 @@ private _unsubscribeAll$: Subject<any> = new Subject<any>();
       horizontalPosition: "right",
     });
   }
-
-  //  Function to handle API errors
   private handleError(err: any) {
     console.error("Error Status:", err.status);
     console.error("Error Message:", err.error);
