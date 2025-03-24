@@ -22,12 +22,12 @@ import { MatInputModule } from "@angular/material/input";
 import { MatRadioModule } from "@angular/material/radio";
 import { MatSelectModule } from "@angular/material/select";
 import { Subject, takeUntil } from "rxjs";
-import { customerDetailsI } from "../../../shared/types/customer.type";
 import { SuccessModalComponent } from "../../../shared/components/UI/success-modal/success-modal.component";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ItemsService } from "../items.service";
 import { productDetailsI, Service,Unit } from "src/app/shared/types/items.type";
 import { CdkTextareaAutosize } from "@angular/cdk/text-field";
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @Component({
   selector: 'app-item-create',
@@ -38,7 +38,7 @@ import { CdkTextareaAutosize } from "@angular/cdk/text-field";
     MatSelectModule,
     MatRadioModule,
     MatCheckboxModule,
-  
+    MatSlideToggleModule
   ],
   templateUrl: './item-create.component.html',
   styleUrl: './item-create.component.scss'
@@ -88,6 +88,7 @@ export class ItemCreateComponent {
       hsnCode: [""],
       description: [""],
       serviceId: [""],
+      isActive: [false], 
       costPrice: [
         "",
         [Validators.required, Validators.pattern("^[0-9]+(\\.[0-9]{1,2})?$")],
@@ -123,42 +124,7 @@ export class ItemCreateComponent {
     }
   }
 
-  // get Customer Details
-  // getProductDetails(id: number) {
-  //   if (id !== 0) {
-  //     this.Id = id;
-  //     this._itemService
-  //       .getProductByProductId(id)
-  //       .pipe(takeUntil(this._unsubscribeAll$))
-  //       .subscribe((response: productDetailsI) => {
-  //         if (response.success) {
-  //           // Patch the form with the received data
-  //           this.productForm.patchValue({
-  //             Id: response.data.id,
-  //             // CustomerId: response.data.customerId,
-  //             // CustomerName: response.data.customerName,
-  //             // PhoneNumber: response.data.phoneNumber,
-  //             // PrimaryContact: response.data.primaryContact,
-  //             // Email: response.data.email,
-  //             // Logo: response.data.logo,
-  //             // Address: response.data.address,
-  //             // PostalCode: response.data.postalCode,
-  //             // Country: response.data.country,
-  //             // Taxid: response.data.taxid,
-  //             // BusinessType: response.data.businessType,
-  //           });
-            
-  //           // Specifically patch the `isService` control with the correct value (Good or Service)
-  //           this.productForm.patchValue({
-  //             // Patch the form data including 'isService' value from the response
-  //             // isService: response.customer.isService !== undefined ? response.customer.isService : true, // Default to 'true' if undefined
-  //           });
-            
-  //           this._changeDetetction.detectChanges();
-  //         }
-  //       });
-  //   }
-  // }
+
 
   getProductDetails(id: number) {
     if (id !== 0) {
@@ -180,6 +146,7 @@ export class ItemCreateComponent {
                 unitId: product.unitId,
                 serviceId: product.serviceId,
                 isService: product.isService, 
+                isActive:product.isActive
               });
               this._changeDetetction.detectChanges();
             } else {
@@ -193,76 +160,7 @@ export class ItemCreateComponent {
   }
   
 
-  // Create Edit Customer
-  // createUpdate() {
-  //   this.submitted = true;
-  //   const formData = new FormData();
-  //   if (!this.productForm.valid) {
-  //     this.productForm.markAllAsTouched();
-  //     return;
-  //   }
-  //   if (this.productForm.valid) {
-  //     for (let key in this.productForm.value) {
-  //       if (this.productForm.value.hasOwnProperty(key)) {
-  //         if (Array.isArray(this.productForm.value[key])) {
-  //           this.productForm.value[key].forEach((item, index) => {
-  //             formData.append(`${key}[${index}]`, item);
-  //           });
-  //         } else {
-  //           if (key == "LogoFile") {
-  //             this.productForm.value[key] = this.logoFile;
-  //           } else if (this.productForm.value[key] == undefined || null) {
-  //             this.productForm.value[key] = "";
-  //           }
-  //           formData.append(key, this.productForm.value[key]);
-  //         }
-  //       }
-  //     }
-  //     if (this.Id < 1) {
-  //       formData.append("Id", "0");
-  //       formData.append("isService", "true");
-  //       this._itemService.addProduct(formData).subscribe({
-  //         next: (response: any) => {
-  //           if (response.success) {
-  //             console.log("Success:", response);
-  //             this.showSuccessMessage(response.message);
-  //             this.resetForm();
-  //             console.log(1);
-  //             this.formClose.emit(true);
-  //           } else {
-  //             this.showSuccessMessage(response.message);
-  //           }
-  //         },
-  //         error: (err) => {
-  //           this.handleError(err);
-  //           console.error("Error Status:", err.status);
-  //           console.error("Error Message:", err.error);
-  //         },
-  //       });
-  //     } else {
-  //       formData.append("Id", this.Id.toString());
-  //       formData.append("Status", "true");
-  //       this._itemService.updateCustomer(this.Id, formData).subscribe({
-  //         next: (response: any) => {
-  //           if (response.success) {
-  //             console.log("Success:", response);
-  //             this.showSuccessMessage(response.message);
-  //             this.resetForm();
-  //             console.log(1);
-  //             this.formClose.emit(true);
-  //           } else {
-  //             this.showSuccessMessage(response.message);
-  //           }
-  //         },
-  //         error: (err) => {
-  //           this.handleError(err);
-  //           console.error("Error Status:", err.status);
-  //           console.error("Error Message:", err.error);
-  //         },
-  //       });
-  //     }
-  //   }
-  // }
+
   createUpdate() {
     this.submitted = true;
     if (!this.productForm.valid) {
@@ -297,7 +195,7 @@ export class ItemCreateComponent {
         },
       });
     } else {
-      this._itemService.updateCustomer(this.Id, payload).subscribe({
+      this._itemService.updateProduct(payload).subscribe({
         next: (response: any) => {
           if (response.success) {
             this.showSuccessMessage(response.message);
@@ -367,7 +265,6 @@ triggerCustomerFileInput() {
     private loadDropdownData(): void {
     this._itemService.UnitList().subscribe((response) => {
       if (response.success) this.Units = response.data;
-      console.log(this.Units)
     });
     this._itemService.getServices().subscribe((res) => {
       if (res.success) this.Services = res.data;

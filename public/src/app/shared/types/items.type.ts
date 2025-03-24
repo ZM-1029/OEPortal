@@ -22,6 +22,7 @@ export interface itemReturnI {
     unitId?: string;   // Add these properties if they're necessary
     serviceId?: string;
     isService?: boolean;
+    isActive?:boolean;
   }
   export interface ItemsListI {
     success: boolean;

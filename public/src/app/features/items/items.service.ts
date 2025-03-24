@@ -7,7 +7,7 @@ import {
   customerListI,
   customerI,
 } from "../../shared/types/customer.type";
-import { AllServicesI, AllUnitI, ItemsListI, productDetailsI } from 'src/app/shared/types/items.type';
+import { AllServicesI, AllUnitI, Item, ItemsListI, productDetailsI } from 'src/app/shared/types/items.type';
 
 @Injectable({
   providedIn: 'root'
@@ -47,12 +47,13 @@ export class ItemsService {
     });
   }
 
-  updateCustomer(id: number | string, updateCustomer: any) {
-    return this.http.post<customerI>(
-      `${environment.apiUrl}api/Customer/EditCustomer/${id}`,
-      updateCustomer,
+  updateProduct(updateProduct: any) {
+    return this.http.patch<Item>(
+      `${environment.apiUrl}api/Product/EditProduct`,
+      updateProduct
     );
   }
+  
 
   deleteCustomerById(id: number) {
     return this.http.delete<customerDetailsI>(
