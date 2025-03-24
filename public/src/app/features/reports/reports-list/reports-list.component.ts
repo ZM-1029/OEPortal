@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from "@angular/core";
 import { AttendanceNonComplianceHistoryComponent } from "./reports-tables/attendance-non-compliance-history/attendance-non-compliance-history.component";
 import { CommonModule, DatePipe, NgClass } from "@angular/common";
-import { Select2, Select2Data } from "ng-select2-component";
 import { ncTypeCountsI, nonComplianceHistoryI, nonComplianceI } from "src/app/shared/types/nonCompliance.type";
 import { FormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";
@@ -13,11 +12,11 @@ import { EmployeesService } from "../../employees/employees.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { TimesheetNonComplianceComponent } from "./reports-tables/timesheet-non-compliance/timesheet-non-compliance.component";
 import { ReportsService } from "../reports.service";
-import { employeesDropdownI } from "src/app/shared/types/reports.type";
-import { MultiSelectDropdownComponent } from "src/app/shared/components/UI/multi-select-dropdown/multi-select-dropdown.component";
 import { EfficiencyReportEmployeesComponent } from "./reports-tables/efficiency-report-employees/efficiency-report-employees.component";
 import { EfficiencyReportCustomersComponent } from "./reports-tables/efficiency-report-customers/efficiency-report-customers.component";
-
+import { SingleSelectDropdownComponent } from "src/app/shared/components/UI/single-select-dropdown/single-select-dropdown.component";
+import { MultiSelectDropdownComponent } from "src/app/shared/components/UI/multi-select-dropdown/multi-select-dropdown.component";
+import { employeesDropdownI } from "src/app/shared/types/reports.type";
 
 @Component({
   selector: "app-reports-list",
@@ -33,7 +32,7 @@ import { EfficiencyReportCustomersComponent } from "./reports-tables/efficiency-
     AttendanceNonComplianceHistoryComponent,
     EfficiencyReportEmployeesComponent,
     EfficiencyReportCustomersComponent,
-    Select2, NgClass, MultiSelectDropdownComponent
+     NgClass, MultiSelectDropdownComponent,SingleSelectDropdownComponent
   ],
   templateUrl: "./reports-list.component.html",
   styleUrl: "./reports-list.component.scss",
@@ -41,7 +40,7 @@ import { EfficiencyReportCustomersComponent } from "./reports-tables/efficiency-
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReportsListComponent implements OnInit {
-  value = 'attendance';
+  activeTable = 'attendance';
   getDateForm!: FormGroup;
   startDate: string = "";
   endDate: string = "";
@@ -51,7 +50,15 @@ export class ReportsListComponent implements OnInit {
   ncTypeCounts: ncTypeCountsI | any;
   employeeId: any = '0'
   allEmployees: any[] = [];
+ 
   dropdownHeading: string = "Select Project"
+  activeReport = [
+    { value: 'attendance', label: 'Attendance' },
+    { value: 'timesheet', label: 'Timesheet' },
+    { value: 'efficiency-report-employees', label: 'Efficiency Reports Employees' },
+    { value: 'efficiency-report-customers', label: 'Efficiency Reports Customers' },
+  ];
+
   constructor(private _employeeService: EmployeesService, private _successMessage: MatSnackBar,
     private _changeDetectorRef: ChangeDetectorRef, private reportsService: ReportsService
   ) { }
@@ -61,38 +68,15 @@ export class ReportsListComponent implements OnInit {
     this.GetEmployeesForDropdown();
   }
 
-
-  // dropdown selected Output
-  selectedOutput(event: Array<string>) {
-    console.log(event, 'EmployeeTimesheetComponent');
-    // const selectedProject = event;
-    //   console.log("Selected Project:", selectedProject);
-    //   if(selectedProject.length==0){
-    //     this.selectedProject=1
-    //   }else{
-    //     for(const project of selectedProject){
-    //       if(typeof(project)=='number'){
-    //         this.selectedProject=1;
-    //       }else{
-    //         console.log(project, typeof(project),"type");
-    //         this.selectedProject = selectedProject;
-    //       }
-    //     }
-    //   }
-    //   this.getTimesheetByEmail();
-  }
-  // dropdown selected Output
-
-
   GetEmployeesForDropdown() {
     this.reportsService.GetEmployeesForDropdown().subscribe({
       next: (response) => {
         this.allEmployees = response.data.map((obj: employeesDropdownI) => ({
-          id: obj.employeeID,  // Correctly map employeeID
+          id: obj.employeeID,  
           name: `(${obj.employeeID}) - ${obj.firstName} ${obj.lastName}`, 
         }));
 
-        this._changeDetectorRef.detectChanges(); // Trigger UI update
+        this._changeDetectorRef.detectChanges();
         console.log("Employees Loaded:", this.allEmployees);
       },
       error: (err) => {
@@ -172,45 +156,17 @@ export class ReportsListComponent implements OnInit {
   formatDate(date: Date): string {
     return date.toISOString().split("T")[0]; 
   }
-
   // date piker end
 
-  // select 2 start
-  activeReport: Select2Data = [
-    {
-      value: 'attendance',
-      label: 'Attendance',
-    },
-    {
-      value: 'timesheet',
-      label: 'Timesheet',
-    },
-    {
-      value: 'efficiency-report-employees',
-      label: 'Efficiency Reports Employees',
-    },
-    {
-      value: 'efficiency-report-customers',
-      label: 'Efficiency Reports Customers',
-    },
-  ];
-
-  employeDropdown: Select2Data = this.allEmployees;
- // select 2 end
-
-  displayReports(event: any) {
-    console.log(event.value);
-    this.GetNCHistoryLogs();
-    if (event.value == 'attendance') {
-      this.value = 'attendance'
-    } else if (event.value == 'timesheet') {
-      this.value = 'timesheet'
-    } else if (event.value == 'efficiency-report-employees') {
-      this.value = 'efficiency-report-employees'
-    } else {
-      this.value = 'efficiency-report-customers'
-    }
+ 
+  
+ displayReports(event: string) {
+  if (event) {
+    this.activeTable = event; 
+    console.log('Selected Report:', this.activeTable);
+    this._changeDetectorRef.detectChanges();
   }
+}
 
 //  multi-select-dropdown start
 getReporsByEmployeeId(event: any) {

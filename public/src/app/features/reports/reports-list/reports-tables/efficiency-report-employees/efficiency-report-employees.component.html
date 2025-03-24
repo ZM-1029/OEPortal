@@ -1,15 +1,21 @@
-<div class="container-fluid p-0">
-    <div class="multi-select-dropdown ">
-        <div class="dropdown mx-3 ">
-            <app-multi-select-dropdown [dropdownHeading]="'Months'" [dataList]="Month"
-                (selectedOutput)="selectedMonth($event)">
-            </app-multi-select-dropdown>
+<div class="position-relative ">
+    <div class="multi-select-dropdown d-flex justify-content-between">
+        <div class="dropdown px-3 ">
+            @if(yearDropdown.length!=0){
+                <app-single-select-dropdown [dropdownHeading]="'Select Year'" [defaultValue]="selectedValueYear"
+                [dataList]="yearDropdown" (selectedOutput)="selectedYear($event)">
+            </app-single-select-dropdown>
+            }
         </div>
-        <div class="dropdown mx-3 ">
-            <select2 class="select2dropdown" [data]="yearDropdown" [value]="selectedValueYear" (update)="selectedYear($event)">
-            </select2>
+        <div class="dropdown px-3 " >
+           @if(selectedValueMonth!=undefined){
+            <app-multi-selcet-object-dropdown [dropdownHeading]="'Months'" [defaultValue]="selectedValueMonth"  [dataList]="Month"
+            (selectedOutput)="selectedMonth($event)">
+        </app-multi-selcet-object-dropdown>
+           }
         </div>
-        <div class="dropdown mx-3">
+
+        <div class="dropdown-employee px-3">
             <app-multi-select-dropdown [dropdownHeading]="'Employee'" [dataList]="allEmployees"
                 (selectedOutput)="selectedEmployee($event)">
             </app-multi-select-dropdown>
@@ -48,10 +54,22 @@
             }
         </ul>
     </div>
-
+    <div class="container-fluid p-0 py-4">
         <ag-grid-angular #agGrid style="width: 100%; height: 70vh" class="ag-theme-alpine" [rowData]="rowData"
-        [columnDefs]="columnDefs" [defaultColDef]="defaultColDef" [animateRows]="true" [paginationPageSize]="15"
-        [paginationPageSizeSelector]="paginationPageSizeSelector" [pagination]="true" (gridReady)="onGridReady($event)"
-        (paginationChanged)="onPaginationChanged($event)"></ag-grid-angular>
-    
+            [columnDefs]="columnDefs" [defaultColDef]="defaultColDef" [animateRows]="true" [paginationPageSize]="15"
+            [paginationPageSizeSelector]="paginationPageSizeSelector" [pagination]="true"
+            (gridReady)="onGridReady($event)" (paginationChanged)="onPaginationChanged($event)"></ag-grid-angular>
+        <div class="table-footer position-relative">
+            <div class="row text-danger">
+                @for(summary of reportsEmployeesummary; track summary){
+                <div class="col-auto fw-bold">
+                    <label class="summary-item text-bold">
+                        <span class="text-capitalize">{{ summary.key }}</span>: {{ summary.value }}
+                    </label>
+                </div>
+                }
+            </div>
+        </div>
+
+    </div>
 </div>

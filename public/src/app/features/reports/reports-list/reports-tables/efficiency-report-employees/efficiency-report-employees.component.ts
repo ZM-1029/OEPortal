@@ -5,12 +5,15 @@ import { AgGridAngular } from 'ag-grid-angular';
 import { Select2, Select2Data } from "ng-select2-component";
 import { ModuleRegistry, AllCommunityModule, GridApi, GridReadyEvent } from 'ag-grid-community';
 import { MultiSelectDropdownComponent } from 'src/app/shared/components/UI/multi-select-dropdown/multi-select-dropdown.component';
-import { getEmployeeProfitDetailListI, employeesDropdownI, efficiencyReportsEmployeeDetailI } from 'src/app/shared/types/reports.type';
+import { employeesDropdownI, efficiencyReportsEmployeeDetailI } from 'src/app/shared/types/reports.type';
 import { ReportsService } from '../../../reports.service';
+import { SingleSelectDropdownComponent } from 'src/app/shared/components/UI/single-select-dropdown/single-select-dropdown.component';
+import { MultiSelcetObjectDropdownComponent } from 'src/app/shared/components/UI/multi-selcet-object-dropdown/multi-selcet-object-dropdown.component';
+
 ModuleRegistry.registerModules([AllCommunityModule]);
 @Component({
   selector: 'app-efficiency-report-employees',
-  imports: [AgGridAngular,MultiSelectDropdownComponent,Select2],
+  imports: [AgGridAngular, MultiSelectDropdownComponent,SingleSelectDropdownComponent,MultiSelcetObjectDropdownComponent],
   templateUrl: './efficiency-report-employees.component.html',
   styleUrl: './efficiency-report-employees.component.scss'
 })
@@ -23,25 +26,27 @@ export class EfficiencyReportEmployeesComponent {
   public paginationPageSizeSelector: number[] = [15, 25, 50, 100];
   getDateForm!: FormGroup;
   private gridApi!: GridApi<any>;
-  employeeId:any='0';
-  selectedValueMonth:any;
-  selectedValueYear:any='2025';
- dropdownHeading: string = "Month"
- Year: { value: string; label: string }[] = [];
- allEmployees: { id: string; name: string }[] = [];
-  Month:{ id: string; name: string }[]=[
+  employeeId: any = '1';
+  selectedValueMonth: any;
+  selectedValueYear: any = '2025';
+  dropdownHeading: string = "Month";
+  yearDropdown: any[] = [];
+  reportsEmployeesummary: any[] = [];
+  Year: { value: string; label: string }[] = [];
+  allEmployees: { id: string; name: string }[] = [];
+  Month: { id: string; name: string }[] = [
     { id: '1', name: 'January' },
-  { id: '2', name: 'February' },
-  { id: '3', name: 'March' },
-  { id: '4', name: 'April' },
-  { id: '5', name: 'May' },
-  { id: '6', name: 'June' },
-  { id: '7', name: 'July' },
-  { id: '8', name: 'August' },
-  { id: '9', name: 'September' },
-  { id: '10', name: 'October' },
-  { id: '11', name: 'November' },
-  { id: '12', name: 'December' }
+    { id: '2', name: 'February' },
+    { id: '3', name: 'March' },
+    { id: '4', name: 'April' },
+    { id: '5', name: 'May' },
+    { id: '6', name: 'June' },
+    { id: '7', name: 'July' },
+    { id: '8', name: 'August' },
+    { id: '9', name: 'September' },
+    { id: '10', name: 'October' },
+    { id: '11', name: 'November' },
+    { id: '12', name: 'December' }
   ]
   columnDefs: any = [
     {
@@ -78,8 +83,8 @@ export class EfficiencyReportEmployeesComponent {
       minWidth: 170,
     },
     {
-      field: "profitFactor",
-      headerName: "Profit Factor",
+      field: "profitratio",
+      headerName: "Profit Ratio",
       sortable: true,
       filter: true,
       minWidth: 170,
@@ -98,7 +103,7 @@ export class EfficiencyReportEmployeesComponent {
       filter: true,
       minWidth: 240,
     },
-    
+
   ];
 
   defaultColDef = {
@@ -110,22 +115,21 @@ export class EfficiencyReportEmployeesComponent {
 
   constructor(
     private _changeDetectorRef: ChangeDetectorRef,
-    private reportsService:ReportsService,
+    private reportsService: ReportsService,
     private _successMessage: MatSnackBar
   ) { }
 
   ngOnInit(): void {
     this._changeDetectorRef.detectChanges();
-    this.selectedValueMonth = new Date().getMonth(); 
-    const currentYear = new Date().getFullYear(); 
-    this.generateYears(2000, currentYear);
-    this.yearDropdown = this.Year;
+    this.selectedValueMonth = new Date().getMonth()+1;
+    const currentYear = new Date().getFullYear();
+    this.generateYears(2021, currentYear);
+    this._changeDetectorRef.detectChanges();
     this.GetEmployeesForDropdown();
   }
-  yearDropdown: Select2Data =this.Year
 
   ngOnChanges() {
-    
+
   }
 
   ngAfterViewInit() {
@@ -133,37 +137,28 @@ export class EfficiencyReportEmployeesComponent {
   }
 
   generateYears(startYear: number, endYear: number) {
-    this.Year = [];
     for (let year = startYear; year <= endYear; year++) {
-      this.Year.push({ value: year.toString(), label: year.toString() });
+      this.yearDropdown.push({ value: year.toString(), label: year.toString() });
     }
-    console.log(this.Year); // Debugging output
+    this.yearDropdown.reverse();
+    console.log("Generated Years:", this.yearDropdown);
+    this._changeDetectorRef.detectChanges();
   }
 
-   // dropdown selected Output
-  
+  // dropdown selected Output
+
   selectedYear(event: any) {
-    console.log(event.value);
-    // this.GetNCHistoryLogs();
-    // if (event.value == 'attendance') {
-    //   this.value = 'attendance'
-    // } else if (event.value == 'timesheet') {
-    //   this.value = 'timesheet'
-    // } else if (event.value == 'efficiency-report-employees') {
-    //   this.value = 'efficiency-report-employees'
-    // } else {
-    //   this.value = 'efficiency-report-customers'
-    // }
-    this.selectedValueYear=event.value
+    console.log(event);
+    this.selectedValueYear = event
     this.getEfficiencyReportsEmployee();
   }
-  selectedEmployee(event:any){
-    this.employeeId=event
+  selectedEmployee(event: any) {
+    this.employeeId = event
     this.getEfficiencyReportsEmployee();
   }
-  selectedMonth(event:any){
-    this.selectedValueMonth=event;
-    this.GetEmployeesForDropdown();
+  selectedMonth(event: any) {
+    this.selectedValueMonth = event;
+    this.getEfficiencyReportsEmployee();
   }
   // dropdown selected Output
 
@@ -171,55 +166,39 @@ export class EfficiencyReportEmployeesComponent {
     this.reportsService.GetEmployeesForDropdown().subscribe({
       next: (response) => {
         this.allEmployees = response.data.map((obj: employeesDropdownI) => ({
-          id: obj.employeeID,  // Correctly map employeeID
-          name: `(${obj.employeeID}) - ${obj.firstName} ${obj.lastName}`, // Full name format
+          id: obj.employeeID,
+          name: `(${obj.employeeID}) - ${obj.firstName} ${obj.lastName}`,
         }));
-  
-        this._changeDetectorRef.detectChanges(); // Trigger UI update
-        console.log("Employees Loaded:", this.allEmployees);
+
+        this._changeDetectorRef.detectChanges();
       },
       error: (err) => {
         console.error("Error fetching employees:", err);
       }
     });
   }
-  
-   
+
+
   getEfficiencyReportsEmployee() {
-    this.reportsService.getEfficiencyReportsEmployee(this.employeeId,this.selectedValueMonth,this.selectedValueYear).subscribe(
+    this.reportsService.getEfficiencyReportsEmployee(this.employeeId, this.selectedValueMonth, this.selectedValueYear).subscribe(
       {
-        next:((response)=>{
-          if(response.success){
-            this.rowData=response.details
+        next: ((response) => {
+          if (response.success) {
+            this.reportsEmployeesummary = Object.entries(response.summary).map(([key, value]) => ({
+              key, value
+            }));
+            this.rowData = response.details;
             this._changeDetectorRef.detectChanges();
-          }else{
+          } else {
             this.handleError(response.message)
           }
         }),
-        error:((err)=>{
+        error: ((err) => {
           this.handleError(err.error.message)
         })
       }
     )
   }
-
-  objectKeys(obj: any): string[] {
-    if (!obj || typeof obj !== 'object') return [];
-    return Object.keys(obj);
-  }
-
-  getLabel(type: string): string {
-   const labels: { [key: string]: string } = {
-      "1": "Short Login Hour",
-      "2": "Late Checkin",
-      "3": "Early Checkout",
-      "4": "Forget Checkin",
-      "5": "Forget Checkout",
-      "1004": "Absent"
-    }; 
-    return labels[type] ;
-  }
-
 
   gridOptions = {
     noRowsOverlayComponentParams: {
@@ -245,7 +224,7 @@ export class EfficiencyReportEmployeesComponent {
     this.gridApi = params.api;
     this.gridApi.hideOverlay();
     this.getEfficiencyReportsEmployee();
-    if(this.rowData.length==0){
+    if (this.rowData.length == 0) {
       this.showErrorOverlay("Data is not found")
     }
   }
@@ -258,34 +237,34 @@ export class EfficiencyReportEmployeesComponent {
     this.currentPageSize = pageSize;
   }
 
-    // for Manage Columns start
-    allColumns = [...this.columnDefs];
-    displayedColumns = [...this.columnDefs];
-  
-    toggleColumn(column: any) {
-      const columnIndex = this.displayedColumns.findIndex(
+  // for Manage Columns start
+  allColumns = [...this.columnDefs];
+  displayedColumns = [...this.columnDefs];
+
+  toggleColumn(column: any) {
+    const columnIndex = this.displayedColumns.findIndex(
+      (col) => col.field === column.field,
+    );
+    if (columnIndex >= 0) {
+      this.displayedColumns.splice(columnIndex, 1);
+    } else {
+      const colToAdd = this.allColumns.find(
         (col) => col.field === column.field,
       );
-      if (columnIndex >= 0) {
-        this.displayedColumns.splice(columnIndex, 1);
-      } else {
-        const colToAdd = this.allColumns.find(
-          (col) => col.field === column.field,
-        );
-        if (colToAdd) {
-          this.displayedColumns.push(colToAdd);
-        }
+      if (colToAdd) {
+        this.displayedColumns.push(colToAdd);
       }
-      this.columnDefs = [...this.displayedColumns];
     }
-  
-    isColumnDisplayed(column: any): boolean {
-      return this.displayedColumns.some((col) => col.field === column.field);
-    }
-  
-    // for Manage Columns end
+    this.columnDefs = [...this.displayedColumns];
+  }
 
-     //  Function to handle API errors
+  isColumnDisplayed(column: any): boolean {
+    return this.displayedColumns.some((col) => col.field === column.field);
+  }
+
+  // for Manage Columns end
+
+  //  Function to handle API errors
   private handleError(err: any) {
     this._successMessage.open(err, "Close", {
       duration: 4000,

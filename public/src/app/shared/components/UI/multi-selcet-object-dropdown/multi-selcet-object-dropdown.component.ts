@@ -1,21 +1,24 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { NgOptionTemplateDirective, NgSelectComponent, NgSelectModule } from '@ng-select/ng-select';
+import { NgSelectModule, NgOptionTemplateDirective, NgSelectComponent } from '@ng-select/ng-select';
+
 @Component({
-  selector: 'app-multi-select-dropdown',
+  selector: 'app-multi-selcet-object-dropdown',
   imports: [CommonModule, NgSelectModule,
-    NgOptionTemplateDirective,
-    NgSelectComponent, FormsModule],
-  templateUrl: './multi-select-dropdown.component.html',
-  styleUrl: './multi-select-dropdown.component.scss',
+      NgOptionTemplateDirective,
+      NgSelectComponent, FormsModule],
+  templateUrl: './multi-selcet-object-dropdown.component.html',
+  styleUrl: './multi-selcet-object-dropdown.component.scss'
 })
-export class MultiSelectDropdownComponent implements OnInit, OnChanges {
-  @Input() dataList: any = [];
+export class MultiSelcetObjectDropdownComponent {
+ @Input() dataList: any = [];
   @Input() dropdownHeading: string = '';
+  @Input() defaultValue: any;
+  @Input() isCustomerId: boolean = false;
   @Output() selectedOutput: EventEmitter<any> = new EventEmitter<any>();
   transformedDataList: { id: string; name: string }[] = [];
-  selectedData: any[] = [];
+  selectedData: any;
   allSelected: boolean = false;
   iscloseDropdown: boolean = false;
   stringArray: string = '';
@@ -23,8 +26,10 @@ export class MultiSelectDropdownComponent implements OnInit, OnChanges {
   constructor() { }
 
   ngOnInit() {
-    this.allSelected=true;
-    
+    if (this.defaultValue) {
+      this.selectedData = this.defaultValue;
+      this.selectedOutput.emit(this.selectedData);
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -45,20 +50,19 @@ export class MultiSelectDropdownComponent implements OnInit, OnChanges {
   }
 
   toggleSelectAll() {
-    // this.allSelected=!this.allSelected;
     if (this.allSelected) {
       if (this.stringArray === 'string') {
         this.selectedData = this.transformedDataList.map(item => item.id);
       }
       if (this.stringArray === 'object') {
-        this.selectedData = this.transformedDataList.map(item => item.name);
+        this.selectedData = this.transformedDataList.map(item => item.id);
       }
     } else {
       this.selectedData = [];
     }
     this.updateAllSelected();
   }
-  
+
 
   updateAllSelected() {
     if (JSON.stringify(this.previousSelectedData) === JSON.stringify(this.selectedData)) {
@@ -66,24 +70,21 @@ export class MultiSelectDropdownComponent implements OnInit, OnChanges {
     }
     this.previousSelectedData = [...this.selectedData];
     this.allSelected = this.selectedData.length === this.transformedDataList.length;
-    const extractedData: string[] = [];
+  
     if (this.allSelected) {
       this.selectedOutput.emit(1);
-    }else if(this.selectedData.length !== 0 && this.stringArray == 'string' && !this.allSelected){
-      this.selectedOutput.emit(this.selectedData);
-    }else if(this.selectedData.length !== 0 && this.stringArray == 'object' && !this.allSelected){
-      for (const data of this.selectedData) {
-        const match = data.match(/\((.*?)\)/);
-        if (match) {
-          extractedData.push(match[1]);
-        }
-      }
-      this.selectedOutput.emit(extractedData);
-    }else{
+    } else if (this.selectedData.length !== 0) {
+      console.log(this.selectedData,"updateAllSelected");
+      
+      this.selectedOutput.emit(this.selectedData); // ✅ Emit IDs directly
+    } else {
       this.selectedOutput.emit(1);
     }
   }
+  
 
 }
+
+
 
 
