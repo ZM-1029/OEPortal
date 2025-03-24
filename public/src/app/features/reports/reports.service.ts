@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { EmployeesForDropdownI, getEmployeeProfitDetailI } from 'src/app/shared/types/reports.type';
+import { EmployeesForDropdownI, getEfficiencyReportsEmployeeI, getEmployeeProfitDetailI } from 'src/app/shared/types/reports.type';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -19,6 +19,12 @@ export class ReportsService {
   getEmployeeProfitDetail() {
       return this.http.get<getEmployeeProfitDetailI>(
         `${environment.apiUrl}api/EmployeeDashboard/GetEmployeeProfitDetails`,
+      );
+    }
+
+    getEfficiencyReportsEmployee(employeeId:any,month:any,year:any) {
+      return this.http.get<getEfficiencyReportsEmployeeI>(
+        `${environment.apiUrl}api/EmployeeDashboard/GetEmployeeProfitDetailsfromSalary?employeeIds=${employeeId}&months=${month}&year=${year}`,
       );
     }
   

@@ -23,7 +23,7 @@
           <select2 class="select2dropdown" [data]="activeReport" [value]="value" (update)="displayReports($event)">
           </select2>
         </div>
-        <div class="emplooye-dropdown ms-auto">
+        <div [ngClass]="(value === 'timesheet' || value === 'attendance') ? '' : 'd-none'" class="emplooye-dropdown ms-auto">
             <div class="employee">
               <app-multi-select-dropdown [dropdownHeading]="'Employee'" [dataList]="allEmployees"
                   (selectedOutput)="getReporsByEmployeeId($event)">
@@ -41,12 +41,13 @@
           <app-timesheet-non-compliance [ncTypeCounts]="ncTypeCounts"
             [timesheetRowData]="timesheetRowData"></app-timesheet-non-compliance>
           }
-          @if(value=='efficiency-report'){
-          <app-efficiency-reports></app-efficiency-reports>
+          @if(value=='efficiency-report-employees'){
+          <app-efficiency-report-employees></app-efficiency-report-employees>
           }
-          @if(value=='salary-reports'){
-          <app-salary-reports></app-salary-reports>
+          @if(value=='efficiency-report-customers'){
+          <app-efficiency-report-customers></app-efficiency-report-customers>
           }
+          
         </div>
       </div>
     </div>

@@ -14,9 +14,9 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { TimesheetNonComplianceComponent } from "./reports-tables/timesheet-non-compliance/timesheet-non-compliance.component";
 import { ReportsService } from "../reports.service";
 import { employeesDropdownI } from "src/app/shared/types/reports.type";
-import { EfficiencyReportsComponent } from "./reports-tables/efficiency-reports/efficiency-reports.component";
-import { SalaryReportsComponent } from "./reports-tables/salary-reports/salary-reports.component";
 import { MultiSelectDropdownComponent } from "src/app/shared/components/UI/multi-select-dropdown/multi-select-dropdown.component";
+import { EfficiencyReportEmployeesComponent } from "./reports-tables/efficiency-report-employees/efficiency-report-employees.component";
+import { EfficiencyReportCustomersComponent } from "./reports-tables/efficiency-report-customers/efficiency-report-customers.component";
 
 
 @Component({
@@ -31,7 +31,8 @@ import { MultiSelectDropdownComponent } from "src/app/shared/components/UI/multi
     ReactiveFormsModule,
     TimesheetNonComplianceComponent,
     AttendanceNonComplianceHistoryComponent,
-    EfficiencyReportsComponent, SalaryReportsComponent,
+    EfficiencyReportEmployeesComponent,
+    EfficiencyReportCustomersComponent,
     Select2, NgClass, MultiSelectDropdownComponent
   ],
   templateUrl: "./reports-list.component.html",
@@ -88,7 +89,7 @@ export class ReportsListComponent implements OnInit {
       next: (response) => {
         this.allEmployees = response.data.map((obj: employeesDropdownI) => ({
           id: obj.employeeID,  // Correctly map employeeID
-          name: `(${obj.employeeID}) - ${obj.firstName} ${obj.lastName}`, // Full name format
+          name: `(${obj.employeeID}) - ${obj.firstName} ${obj.lastName}`, 
         }));
 
         this._changeDetectorRef.detectChanges(); // Trigger UI update
@@ -134,13 +135,6 @@ export class ReportsListComponent implements OnInit {
       });
   }
 
-  // multiselect dropdown...start
-
-  itemList = [];
-  selectedItems = [];
-  settings = {};
-
-  // multiselect dropdown...end
 
   pageHeader_employee(employeeHeadingName: string) {
     this.HeadingName = employeeHeadingName;
@@ -176,7 +170,7 @@ export class ReportsListComponent implements OnInit {
   }
 
   formatDate(date: Date): string {
-    return date.toISOString().split("T")[0]; // Format as YYYY-MM-DD
+    return date.toISOString().split("T")[0]; 
   }
 
   // date piker end
@@ -192,16 +186,17 @@ export class ReportsListComponent implements OnInit {
       label: 'Timesheet',
     },
     {
-      value: 'efficiency-report',
-      label: 'Efficiency Reports',
+      value: 'efficiency-report-employees',
+      label: 'Efficiency Reports Employees',
     },
     {
-      value: 'salary-reports',
-      label: 'salary reports',
+      value: 'efficiency-report-customers',
+      label: 'Efficiency Reports Customers',
     },
   ];
 
-  emplooyeDropdown: Select2Data = this.allEmployees;
+  employeDropdown: Select2Data = this.allEmployees;
+ // select 2 end
 
   displayReports(event: any) {
     console.log(event.value);
@@ -210,10 +205,10 @@ export class ReportsListComponent implements OnInit {
       this.value = 'attendance'
     } else if (event.value == 'timesheet') {
       this.value = 'timesheet'
-    } else if (event.value == 'efficiency-report') {
-      this.value = 'efficiency-report'
+    } else if (event.value == 'efficiency-report-employees') {
+      this.value = 'efficiency-report-employees'
     } else {
-      this.value = 'salary-reports'
+      this.value = 'efficiency-report-customers'
     }
   }
 

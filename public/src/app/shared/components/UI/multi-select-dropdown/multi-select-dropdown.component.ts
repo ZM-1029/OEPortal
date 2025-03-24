@@ -18,6 +18,7 @@ export class MultiSelectDropdownComponent implements OnInit, OnChanges {
   selectedData: any[] = [];
   allSelected: boolean = false;
   iscloseDropdown: boolean = false;
+  selectedString:string=''
   stringArray: string = '';
   private previousSelectedData: any[] = [];
   constructor() { }
@@ -43,19 +44,39 @@ export class MultiSelectDropdownComponent implements OnInit, OnChanges {
     }
   }
 
+  // toggleSelectAll() {
+  //   if (this.allSelected) {
+  //     if (this.stringArray =='string') {
+  //       this.selectedData = this.transformedDataList.map(item => item.id);
+  //     }
+  //     if (this.stringArray == 'object') {
+  //       this.selectedData = this.transformedDataList.map(item => item.name);
+  //     }
+  //     this.selectedData = ['All ' + this.dropdownHeading];
+  //   } else {
+  //     this.selectedData = [];
+  //   }
+  //     this.updateAllSelected();
+  // }
+
   toggleSelectAll() {
+    console.log(this.selectedData,"toggleSelectAll");
+    
     if (this.allSelected) {
-      if (this.stringArray = 'string') {
+      this.selectedString="all"
+      // this.selectedData = ['All ' + this.dropdownHeading];
+      if (this.stringArray === 'string') {
         this.selectedData = this.transformedDataList.map(item => item.id);
       }
-      if (this.stringArray = 'object') {
+      if (this.stringArray === 'object') {
         this.selectedData = this.transformedDataList.map(item => item.name);
       }
     } else {
       this.selectedData = [];
     }
+    // this.updateAllSelected();
   }
-
+  
 
   updateAllSelected() {
     if (JSON.stringify(this.previousSelectedData) === JSON.stringify(this.selectedData)) {
@@ -63,25 +84,14 @@ export class MultiSelectDropdownComponent implements OnInit, OnChanges {
     }
     this.previousSelectedData = [...this.selectedData];
     this.allSelected = this.selectedData.length === this.transformedDataList.length;
-
-    if (this.allSelected) {
-      this.selectedOutput.emit(1);
-    }
-
-    if (this.stringArray == 'string' && !this.allSelected) {
-      this.selectedOutput.emit(1);
-    }
-
-    if (this.selectedData.length !== 0 && this.stringArray == 'string' && !this.allSelected) {
-      this.selectedOutput.emit(this.selectedData);
-    }
-
     const extractedData: string[] = [];
-    if (this.stringArray == 'object' && !this.allSelected) {
+    if (this.allSelected) {
+      
       this.selectedOutput.emit(1);
-    }
-
-    if (this.selectedData.length !== 0 && this.stringArray == 'object' && !this.allSelected) {
+    }else if(this.selectedData.length !== 0 && this.stringArray == 'string' && !this.allSelected){
+      this.selectedOutput.emit(this.selectedData);
+    }else if(this.selectedData.length !== 0 && this.stringArray == 'object' && !this.allSelected){
+      // this.selectedOutput.emit(this.selectedData);
       for (const data of this.selectedData) {
         const match = data.match(/\((.*?)\)/);
         if (match) {
@@ -89,9 +99,10 @@ export class MultiSelectDropdownComponent implements OnInit, OnChanges {
         }
       }
       this.selectedOutput.emit(extractedData);
+    }else{
+      this.selectedOutput.emit(1);
     }
   }
-
 
 }
 
