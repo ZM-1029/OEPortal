@@ -19,6 +19,7 @@ import { HideShowInfoDirective } from "../../../shared/directive/hide-show-info.
 import { EmployeeSalaryComponent } from "../employee-salary/employee-salary.component";
 import { EmployeeTimesheetComponent } from "../employee-timesheet/employee-timesheet.component";
 import { NonComplianceHistoryComponent } from "../non-compliance-history/non-compliance-history.component";
+import { EmployeeInvoiceComponent } from "../employee-invoice/employee-invoice.component";
 
 @Component({
   selector: "app-employee-details",
@@ -32,6 +33,7 @@ import { NonComplianceHistoryComponent } from "../non-compliance-history/non-com
     EmployeeTimesheetComponent,
     NonComplianceHistoryComponent,
     NgClass,
+    EmployeeInvoiceComponent
   ],
   templateUrl: "./employee-details.component.html",
   styleUrl: "./employee-details.component.scss",

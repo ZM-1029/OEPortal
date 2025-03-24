@@ -1,0 +1,31 @@
+.dialog-content {
+    min-width: 350px;
+  }
+  
+  .full-width {
+    width: 100%;
+  }
+  
+  .dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+  
+  .btn-primary {
+    background-color: #3f51b5; // Material primary color
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+  
+  .btn-primary:disabled {
+    background-color: gray;
+  }
+  
+  .btn-light {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+  

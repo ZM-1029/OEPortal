@@ -4,7 +4,6 @@ import { MatFormFieldControl, MatFormFieldModule } from '@angular/material/form-
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
-import { RoleService } from '../role.service';
 import { AsyncPipe, NgFor, NgIf } from '@angular/common';
 import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { map, Observable, startWith } from 'rxjs';
@@ -14,6 +13,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SuccessModalComponent } from 'src/app/shared/components/UI/success-modal/success-modal.component';
+import { RolePermissionService } from '../role-permission.service';
 
 interface Role {
   id: number;
@@ -27,6 +27,20 @@ interface Menu {
   add: boolean;
 }
 
+interface RolePermission {
+  id: number;
+  formId: number;
+  form: string;
+  view: boolean;
+  add: boolean;
+  edit: boolean;
+}
+
+interface RolePermissionResponse {
+  success: boolean;
+  message: string;
+  data: RolePermission[];
+}
 @Component({
   selector: 'app-role-permission',
   standalone: true,
@@ -49,7 +63,6 @@ interface Menu {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RolePermissionComponent implements OnInit {
-
   // Searchable Dropdown - Start
   roleControl = new FormControl<string | Role>('');
   rolesList: Role[] = [];
@@ -61,19 +74,18 @@ export class RolePermissionComponent implements OnInit {
   public formStates: { formId: number; view: boolean; add: boolean; edit: boolean; roleId: number }[] = [];
   private selectedRoleId?: number;
   selectedRole: number = 0;
-  roleId:number=0;
+  roleId: number = 0;
+  private permissions: RolePermission[] = [];
   menuChackbox: Menu[] = [
     { form: 'Dashboard', view: false, edit: false, add: false },
     { form: 'Users', view: false, edit: false, add: false },
     { form: 'Reports', view: false, edit: false, add: false }
   ];
 
-  constructor(private roleService: RoleService, private _changeDetectorRef: ChangeDetectorRef,private _successMessage: MatSnackBar,) { }
+  constructor(private rolePermissionService: RolePermissionService, private _changeDetectorRef: ChangeDetectorRef, private _successMessage: MatSnackBar,) { }
 
   ngOnInit(): void {
-    this.roleId = Number(localStorage.getItem('role')) ;
-    console.log(this.roleId,"tttt");
-    
+    this.roleId = Number(localStorage.getItem('role'));
     this.getRoles();
     if (this.roleId) {
       this.fetchRolePermissions(this.roleId);
@@ -82,7 +94,7 @@ export class RolePermissionComponent implements OnInit {
 
   // Fetch Roles List
   getRoles() {
-    this.roleService.getActiveRoles().subscribe((response: any) => {
+    this.rolePermissionService.getActiveRoles().subscribe((response: any) => {
       if (response.success) {
         this.rolesList = response.data;
         console.log(this.rolesList, "Role List");
@@ -116,41 +128,25 @@ export class RolePermissionComponent implements OnInit {
     const selectedRole = event.option.value;
     this.selectedRole = selectedRole.id
     console.log('Selected Role ID:', this.selectedRole);
-    // this.fetchRolePermissions(selectedRole.id);
+    this.fetchRolePermissions(selectedRole.id);
   }
-  // Searchable Dropdown - End
-
-  // fetchRolePermissions(roleId: any) {
-  //   this.roleService.getPermissionsByRoleId(roleId).subscribe((response: any) => {
-  //     if (response.success && response.data !== null) {
-  //       this.menuData = response.data.map((item: any) => ({
-  //         ...item,
-  //         view: !!item.view,  
-  //         add: !!item.add,
-  //         edit: !!item.edit
-  //       }));
-  //       console.log(this.menuData, "Menu Data");
-  //       this._changeDetectorRef.detectChanges();
-  //     }
-  //   });
-  // }
 
   fetchRolePermissions(roleId: any) {
     if (roleId == 1) {
-      this.roleService.getPermissionsByRoleId(roleId).subscribe((response: any) => {
+      this.rolePermissionService.getPermissionsByRoleId(roleId).subscribe((response: any) => {
         if (response.success && response.data !== null) {
           this.menuData = response.data.map((item: any) => ({
             ...item,
-            view: false,  
+            view: false,
             add: false,
             edit: false
           }));
-          console.log(this.menuData, "Menu Data with all checkboxes unchecked");
+          this.permissions = response.data
           this._changeDetectorRef.detectChanges();
         }
       });
     } else {
-      this.roleService.getPermissionsByRoleId(roleId).subscribe((response: any) => {
+      this.rolePermissionService.getPermissionsByRoleId(roleId).subscribe((response: any) => {
         if (response.success && response.data !== null) {
           this.menuData = response.data.map((item: any) => ({
             ...item,
@@ -178,7 +174,6 @@ export class RolePermissionComponent implements OnInit {
     console.log(`${permissionType} permission changed for ${menu.form}:`, menu[permissionType]);
   }
 
-
   savePermission() {
     const updatedPermissions = this.menuData.map(menu => ({
       roleId: Number(this.selectedRole),
@@ -190,26 +185,26 @@ export class RolePermissionComponent implements OnInit {
     }));
 
     if (this.selectedRole > 1) {
-      this.roleService.addPermission(this.selectedRole, updatedPermissions).subscribe(
+      this.rolePermissionService.addPermission(this.selectedRole, updatedPermissions).subscribe(
         {
           next: ((response: any) => {
             if (response.success) {
-              // alert(response.message);
-              console.log(response.message);
+              this.showSuccessMessage(response.message);
             } else {
-              console.log(response.message);
+              this.handleError(response.message)
             }
           }), error: ((err) => {
-            console.log(err);
+            console.log(err.error);
+            this.handleError(err.error.message)
           })
 
         }
       )
     }
-    console.log('Updated Permissions:', updatedPermissions);
   }
 
- //  Function to show success messages
+
+  //  Function to show success messages
   private showSuccessMessage(message: string) {
     this._successMessage.openFromComponent(SuccessModalComponent, {
       data: { message },
@@ -222,9 +217,7 @@ export class RolePermissionComponent implements OnInit {
 
   //  Function to handle API errors
   private handleError(err: any) {
-    console.error("Error Status:", err.status);
-    console.error("Error Message:", err.error);
-    this._successMessage.open(err.error.message, "Close", {
+    this._successMessage.open(err, "Close", {
       duration: 4000,
       panelClass: ["error-toast"],
       verticalPosition: "top",

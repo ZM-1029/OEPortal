@@ -50,7 +50,6 @@
           <mat-label class="outer-mat-lable col-4 pt-2 ">Customer Name </mat-label>
           <mat-form-field appearance="outline" class="col-8">
             <input formControlName="CustomerName" matInput placeholder="Enter Customer Name" />
-
             <mat-error class="text-danger">
               @if (customerForm.controls["CustomerName"].errors?.["required"]) {
               <span>Customer Name is required.</span>
@@ -58,8 +57,6 @@
               <span>Only alphabetic characters are allowed.</span>
               }
             </mat-error>
-
-
           </mat-form-field>
         </div>
         <div [ngClass]="Id==0 ? 'd-none' : 'd' " class="form-group col">

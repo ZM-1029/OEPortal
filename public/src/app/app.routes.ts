@@ -83,10 +83,24 @@ export const routes: Routes = [
           ),
       },
       {
-        path: "roles",
+        path: "permissions",
         loadComponent: () =>
           import("./features/role-permissions/role-permission/role-permission.component").then(
             (m) => m.RolePermissionComponent,
+          ),
+      },
+      {
+        path: "roles",
+        loadComponent: () =>
+          import("./features/roles/role-list/role-list.component").then(
+            (m) => m.RoleListComponent,
+          ),
+      },
+      {
+        path: "user",
+        loadChildren: () =>
+          import("./features/users/user.router").then(
+            (m) => m.User_ROUTES,
           ),
       },
       {

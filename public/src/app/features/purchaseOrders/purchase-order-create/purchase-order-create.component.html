@@ -6,18 +6,6 @@
     <form [formGroup]="purchaseOrderForm">
       <div class="form-group row">
         <mat-label class="outer-mat-lable col-4 pt-2 ">Select Customer</mat-label>
-        <!-- <mat-form-field appearance="outline" class="col-8">
-          <mat-select formControlName="customerId">
-            @for (customer of allCustomers; track customer) {
-            <mat-option [value]="customer.id">{{
-              customer.customerName
-              }}</mat-option>
-            }
-          </mat-select>
-          @if (purchaseOrderForm.controls["customerId"].hasError("required")) {
-          <mat-error>Customer is required</mat-error>
-          }
-        </mat-form-field> -->
         <mat-form-field appearance="outline" class="col-8">
           <input #input  type="text" placeholder="Select customer" matInput formControlName="customerName"
               [matAutocomplete]="auto" (input)="filter()" (focus)="filter()" />
@@ -32,7 +20,6 @@
           <mat-error>Customer Name is required</mat-error>
           }
       </mat-form-field>
-        
       </div>
 
       <div class="form-group row">

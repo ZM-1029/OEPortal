@@ -7,11 +7,14 @@
             </app-single-select-dropdown>
             }
         </div>
-        <div class="dropdown mx-3 ">
-            <app-multi-selcet-object-dropdown [dropdownHeading]="'Months'" [defaultValue]="selectedValueMonth" [dataList]="Month"
-                (selectedOutput)="selectedMonth($event)">
-            </app-multi-selcet-object-dropdown>
-        </div>
+        <div class="dropdown px-3">
+            <app-month-multi-select-dropdown 
+              [dropdownHeading]="'Months'" 
+              [defaultValue]="selectedValueMonth"  
+              [dataList]="Month"
+              (selectedOutput)="selectedMonth($event)">
+            </app-month-multi-select-dropdown>
+          </div>
         <div class="dropdown-employee mx-3">
             <app-multi-selcet-object-dropdown [dropdownHeading]="'Customer'" [isCustomerId]="isCustomerId" [dataList]="allCustomers"
                 (selectedOutput)="selectedCustomer($event)">

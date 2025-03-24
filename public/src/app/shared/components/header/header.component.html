@@ -22,23 +22,21 @@
           </li>
 
           <!-- Settings Dropdown -->
-          <li class="nav-item dropdown me-3">
-            <a class="nav-link rounded-circle icon-btn dropdown-toggle no-arrow" href="#" id="settingsDropdown"
-              role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="fa-solid fa-gear"></i>
-            </a>
-
-            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="settingsDropdown">
-              @for(menu of headerMenuList;track menu){
-                <li><a class="dropdown-item" >{{menu.name}}</a></li> 
-              }
-              <!-- <li><a class="dropdown-item" href="#">Profile Settings</a></li>
-              <li><a class="dropdown-item" href="#">Account</a></li> -->
-              <li><a class="dropdown-item" (click)="logout()" >Logout</a></li>
-            </ul>
-          </li>
-
-
+           @if(roleId==1){
+            <li class="nav-item dropdown me-3">
+              <a class="nav-link rounded-circle icon-btn dropdown-toggle no-arrow" href="#" id="settingsDropdown"
+                role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa-solid fa-gear"></i>
+              </a>
+  
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="settingsDropdown">
+                @for(menu of headerMenuList;track menu){
+                  <li><a class="dropdown-item" [routerLink]="menu.navigateUrl" >{{menu.name}}</a></li> 
+                }
+              </ul>
+            </li>
+           }
+          
 
           <!-- Profile Section -->
           <li class="nav-item d-flex align-items-center me-2">
@@ -49,8 +47,8 @@
               <span class="text-light small">{{roleName}}</span>
             </div>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileSection">
-              <li><a class="dropdown-item" href="#">Profile Settings</a></li>
-              <li><a class="dropdown-item" href="#">Account</a></li>
+              <!-- <li><a class="dropdown-item" href="#">Profile Settings</a></li>
+              <li><a class="dropdown-item" href="#">Account</a></li> -->
               <li><a class="dropdown-item" (click)="logout()" >Logout</a></li>
             </ul>
           </li>

@@ -9,11 +9,12 @@ import { employeesDropdownI, efficiencyReportsEmployeeDetailI } from 'src/app/sh
 import { ReportsService } from '../../../reports.service';
 import { SingleSelectDropdownComponent } from 'src/app/shared/components/UI/single-select-dropdown/single-select-dropdown.component';
 import { MultiSelcetObjectDropdownComponent } from 'src/app/shared/components/UI/multi-selcet-object-dropdown/multi-selcet-object-dropdown.component';
+import { MonthMultiSelectDropdownComponent } from 'src/app/shared/components/UI/month-multi-select-dropdown/month-multi-select-dropdown.component';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 @Component({
   selector: 'app-efficiency-report-employees',
-  imports: [AgGridAngular, MultiSelectDropdownComponent,SingleSelectDropdownComponent,MultiSelcetObjectDropdownComponent],
+  imports: [AgGridAngular, MultiSelectDropdownComponent,SingleSelectDropdownComponent,MonthMultiSelectDropdownComponent],
   templateUrl: './efficiency-report-employees.component.html',
   styleUrl: './efficiency-report-employees.component.scss'
 })
@@ -141,7 +142,6 @@ export class EfficiencyReportEmployeesComponent {
       this.yearDropdown.push({ value: year.toString(), label: year.toString() });
     }
     this.yearDropdown.reverse();
-    console.log("Generated Years:", this.yearDropdown);
     this._changeDetectorRef.detectChanges();
   }
 

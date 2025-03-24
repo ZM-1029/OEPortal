@@ -7,14 +7,14 @@
             </app-single-select-dropdown>
             }
         </div>
-        <div class="dropdown px-3 " >
-           @if(selectedValueMonth!=undefined){
-            <app-multi-selcet-object-dropdown [dropdownHeading]="'Months'" [defaultValue]="selectedValueMonth"  [dataList]="Month"
-            (selectedOutput)="selectedMonth($event)">
-        </app-multi-selcet-object-dropdown>
-           }
-        </div>
-
+        <div class="dropdown px-3">
+            <app-month-multi-select-dropdown 
+              [dropdownHeading]="'Months'" 
+              [defaultValue]="selectedValueMonth"  
+              [dataList]="Month"
+              (selectedOutput)="selectedMonth($event)">
+            </app-month-multi-select-dropdown>
+          </div>
         <div class="dropdown-employee px-3">
             <app-multi-select-dropdown [dropdownHeading]="'Employee'" [dataList]="allEmployees"
                 (selectedOutput)="selectedEmployee($event)">

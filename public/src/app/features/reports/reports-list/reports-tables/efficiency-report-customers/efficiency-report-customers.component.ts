@@ -3,16 +3,16 @@ import { FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AgGridAngular } from 'ag-grid-angular';
 import { ModuleRegistry, AllCommunityModule, GridApi, GridReadyEvent } from 'ag-grid-community';
-import { MultiSelectDropdownComponent } from 'src/app/shared/components/UI/multi-select-dropdown/multi-select-dropdown.component';
 import { efficiencyReportsCustomerDetailsI} from 'src/app/shared/types/reports.type';
 import { ReportsService } from '../../../reports.service';
 import { SingleSelectDropdownComponent } from 'src/app/shared/components/UI/single-select-dropdown/single-select-dropdown.component';
 import { MultiSelcetObjectDropdownComponent } from 'src/app/shared/components/UI/multi-selcet-object-dropdown/multi-selcet-object-dropdown.component';
+import { MonthMultiSelectDropdownComponent } from 'src/app/shared/components/UI/month-multi-select-dropdown/month-multi-select-dropdown.component';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 @Component({
   selector: 'app-efficiency-report-customers',
-  imports: [AgGridAngular, SingleSelectDropdownComponent, MultiSelcetObjectDropdownComponent],
+  imports: [AgGridAngular, SingleSelectDropdownComponent, MultiSelcetObjectDropdownComponent,MonthMultiSelectDropdownComponent],
   templateUrl: './efficiency-report-customers.component.html',
   styleUrl: './efficiency-report-customers.component.scss'
 })
@@ -25,7 +25,7 @@ export class EfficiencyReportCustomersComponent {
   public paginationPageSizeSelector: number[] = [15, 25, 50, 100];
   getDateForm!: FormGroup;
   private gridApi!: GridApi<any>;
-  CustomerId: any = '0';
+  CustomerId: any = '1';
   selectedValueMonth: any;
   selectedValueYear: any = '2025';
   dropdownHeading: string = "Month";

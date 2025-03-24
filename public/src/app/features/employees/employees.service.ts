@@ -7,6 +7,7 @@ import {
   employeeSalariesI,
   employeeTimesheetI,
   employeeTimesheetsI,
+  employeeInvoiceResponseI,
 } from "../../shared/types/employees.type";
 import { HttpClient } from "@angular/common/http";
 import { BehaviorSubject, Subject } from "rxjs";
@@ -34,6 +35,12 @@ export class EmployeesService {
   employeeGetById(employeeId: number | string) {
     return this.http.get<employeeDetailsI>(
       `${environment.apiUrl}api/EmployeeDashboard/GetEmployeeById/${employeeId}`,
+    );
+  }
+
+  getEmployeeInvoiceById(employeeId: number | string) {
+    return this.http.get<employeeInvoiceResponseI>(
+      `${environment.apiUrl}api/EmployeeDashboard/GetEmployeeInvoices?employeeId=${employeeId}`,
     );
   }
 
