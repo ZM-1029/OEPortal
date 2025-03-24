@@ -89,6 +89,13 @@ export const routes: Routes = [
             (m) => m.RolePermissionComponent,
           ),
       },
+      {
+        path: "items",
+        loadChildren: () =>
+          import("./features/items/items.routes").then(
+            (m) => m.ITEMS_ROUTES,
+          ),
+      },
     ],
   },
 ];

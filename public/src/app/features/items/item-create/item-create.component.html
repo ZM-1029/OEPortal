@@ -1,0 +1,150 @@
+<div class="main-content  m-4">
+    <div class="border-bottom bg-light pb-2">
+      <h2 class="formHeading">{{ formHeading }} Product</h2>
+    </div>
+    <div class="form-container d-flex justify-content-center">
+      <form [formGroup]="productForm">
+        <div class="input-form-container py-3">
+      
+          <div class="form-group row">
+            <mat-label class="outer-mat-lable col-4 pt-2">Type:</mat-label>
+            <div class="col-8 mb-2">
+              <div class="d-flex align-items-center">
+                <!-- <mat-radio-group formControlName="isService">
+                  <mat-radio-button value="true" [checked]="productForm.get('isService')?.value === true">Good</mat-radio-button>
+                  <mat-radio-button value="false" [checked]="productForm.get('isService')?.value === false">Service</mat-radio-button>
+                </mat-radio-group> -->
+
+                <mat-radio-group formControlName="isService">
+                  <mat-radio-button [value]="true" [checked]="productForm.get('isService')?.value === true">Good</mat-radio-button>
+                  <mat-radio-button [value]="false" [checked]="productForm.get('isService')?.value === false">Service</mat-radio-button>
+                </mat-radio-group>
+                
+              </div>
+              @if (
+                productForm.controls["isService"].invalid &&
+                (productForm.controls["isService"].dirty ||
+                productForm.controls["isService"].touched)
+                ) {
+                <mat-error class="text-danger">
+                  @if (
+                  productForm.controls["isService"].errors?.["required"]
+                  ) {
+                  <span class="ms-1">Type is required!</span>
+                  }
+                </mat-error>
+                }
+            </div>
+          </div>
+
+          <div class="form-group row ">
+            <mat-label class="outer-mat-lable col-4 pt-2 ">Name </mat-label>
+            <mat-form-field appearance="outline" class="col-8">
+              <input formControlName="name" matInput placeholder="Enter Name" />
+              <mat-error class="text-danger">
+                @if (productForm.controls["name"].errors?.["required"]) {
+                <span>Name is required.</span>
+                } @else if (productForm.controls["name"].errors?.["pattern"]) {
+                <span>Only alphabetic characters are allowed.</span>
+                }
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="form-group row ">
+            <mat-label class="outer-mat-lable col-4 pt-2 ">SKU </mat-label>
+            <mat-form-field appearance="outline" class="col-8">
+              <input formControlName="sku" matInput placeholder="Enter SKU" />
+              <mat-error class="text-danger">
+               @if (productForm.controls["sku"].errors?.["pattern"]) {
+                <span>Only alphabetic characters are allowed.</span>
+                }
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="form-group row">
+            <mat-label class="outer-mat-lable col-4 pt-2">Unit</mat-label>
+            <mat-form-field appearance="outline" class="col-8 py-0">
+              <mat-select class="py-0" formControlName="unitId">
+                @for (unit of Units; track unit) {
+                <mat-option [value]="unit.id">{{
+                  unit.name
+                  }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div class="form-group row">
+            <mat-label class="outer-mat-lable col-4 pt-2">Service</mat-label>
+            <mat-form-field appearance="outline" class="col-8 py-0">
+              <mat-select class="py-0" formControlName="serviceId">
+                @for (service of Services; track service) {
+                <mat-option [value]="service.id">{{
+                  service.name
+                  }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+          
+          <div class="form-group row ">
+            <mat-label class="outer-mat-lable col-4 pt-2 ">HSN Code </mat-label>
+            <mat-form-field appearance="outline" class="col-8">
+              <input formControlName="hsnCode" matInput placeholder="Enter HSN Code" />
+              <mat-error class="text-danger">
+               @if (productForm.controls["hsnCode"].errors?.["pattern"]) {
+                <span>Only alphabetic characters are allowed.</span>
+                }
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="form-group row">
+            <mat-label class="outer-mat-lable col-4 pt-2">Description </mat-label>
+            <mat-form-field appearance="outline" class="col-8">
+              <textarea formControlName="description" matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+                cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"></textarea>
+            </mat-form-field>
+          </div>
+
+          <h4>Sales Information</h4>
+          <div class="form-group row ">
+            <mat-label class="outer-mat-lable col-4 pt-2 ">Selling Price </mat-label>
+            <mat-form-field appearance="outline" class="col-8">
+              <input formControlName="salesPrice" matInput placeholder="Enter Selling Price" />
+              <mat-error class="text-danger">
+                @if (productForm.controls["salesPrice"].errors?.["required"]) {
+                  <span>Selling Price is required.</span>
+                  } @else if (productForm.controls["salesPrice"].errors?.["pattern"]) {
+                <span>Only numbers are allowed.</span>
+                }
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <h4>Purchase Information</h4>
+          <div class="form-group row ">
+            <mat-label class="outer-mat-lable col-4 pt-2 ">Cost Price </mat-label>
+            <mat-form-field appearance="outline" class="col-8">
+              <input formControlName="costPrice" matInput placeholder="Enter Cost Price" />
+              <mat-error class="text-danger">
+                @if (productForm.controls["costPrice"].errors?.["required"]) {
+                  <span>Cost Price is required.</span>
+                  } @else if (productForm.controls["costPrice"].errors?.["pattern"]) {
+                <span>Only numbers are allowed.</span>
+                }
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+        </div>
+        <div class="form-btn d-flex align-items-start justify-content-end p-4 ">
+          <button class="btn btn-secondary mx-2" type="button" (click)="resetForm()">
+            Clear
+          </button>
+          <button class="btn btn-primary" (click)="createUpdate()">
+            {{ formHeading }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
