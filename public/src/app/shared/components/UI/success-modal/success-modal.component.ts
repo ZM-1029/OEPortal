@@ -18,6 +18,7 @@ import {
   imports: [MatSnackBarModule, MatIconModule],
   templateUrl: "./success-modal.component.html",
   styleUrl: "./success-modal.component.scss",
+  standalone:true
 })
 export class SuccessModalComponent implements OnInit, OnChanges {
   constructor(

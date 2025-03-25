@@ -56,6 +56,20 @@ export const routes: Routes = [
           ),
       },
       {
+        path: "country",
+        loadChildren: () =>
+          import("./features/country/country.routes").then(
+            (m) => m.COUNTRY_ROUTES,
+          ),
+      },
+      {
+        path: "bussiness",
+        loadChildren: () =>
+          import("./features/bussiness/bussiness.routing").then(
+            (m) => m.BUSSINESS_ROUTES,
+          ),
+      },
+      {
         path: "salary",
         loadChildren: () =>
           import("./features/salary/salary.routes").then((m) => m.SALARY_ROUTS),
