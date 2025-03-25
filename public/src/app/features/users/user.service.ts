@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class UserService {
-constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {}
 
   getUserList() {
     return this.http.get<userListResponseI>(
@@ -15,5 +15,16 @@ constructor(private http: HttpClient) {}
     );
   }
 
+createUser(userData:any) {
+    return this.http.post(
+      `${environment.apiUrl}AddUser`,userData
+    );
+  }
+
+updateUser(userData:any) {
+    return this.http.post(
+      `${environment.apiUrl}UpdateUser`,userData
+    );
+  }
   // GetUserList
 }

@@ -1,67 +1,104 @@
-<div class="user-form-container m-3">
-  <div class="border-bottom bg-light pt-2 pb-2">
-    <h2 class="formHeading">{{ formHeading }} User</h2>
+<div class="main-content  m-4">
+  <div class="border-bottom bg-light pb-2">
+      <h2 class="formHeading">{{ formHeading }} User</h2>
   </div>
   <div class="form-container d-flex justify-content-center">
-    <form [formGroup]="userForm">
-      <div class="form-group row">
-        <mat-label class="col-4 pt-2">Name</mat-label>
-        <mat-form-field appearance="outline" class="col-8">
-          <input matInput formControlName="name" placeholder="Enter Name" />
-          <mat-error *ngIf="userForm.controls['name'].hasError('required')">
-            Name is required
-          </mat-error>
-        </mat-form-field>
-      </div>
+      <form [formGroup]="userForm">
+          <div class="input-form-container py-3">
+              <!-- User Name -->
+              <div class="form-group row ">
+                  <mat-label class="outer-mat-lable col-4 pt-2 ">User Name </mat-label>
+                  <mat-form-field appearance="outline" class="col-8">
+                      <input formControlName="name" matInput placeholder="Enter User Name" />
+                      <mat-error>
+                          @if (userForm.controls["name"].errors?.["required"]) {
+                          <span>User Name is required.</span>
+                          } @else if (userForm.controls["name"].errors?.["pattern"]) {
+                          <span>Only alphabetic characters are allowed.</span>
+                          }
+                      </mat-error>
+                  </mat-form-field>
+              </div>
 
-      <div class="form-group row">
-        <mat-label class="col-4 pt-2">Email</mat-label>
-        <mat-form-field appearance="outline" class="col-8">
-          <input matInput formControlName="email" placeholder="Enter Email" type="email" />
-          <mat-error *ngIf="userForm.controls['email'].hasError('required')">
-            Email is required
-          </mat-error>
-          <mat-error *ngIf="userForm.controls['email'].hasError('email')">
-            Enter a valid email
-          </mat-error>
-        </mat-form-field>
-      </div>
+              <!-- email -->
+              <div class="form-group row">
+                  <mat-label class="outer-mat-lable col-4 pt-2 ">email</mat-label>
+                  <mat-form-field appearance="outline" class="col-8">
+                      <input formControlName="email" matInput placeholder="Enter email Address" />
+                      <mat-error>
+                          @if (userForm.controls["email"].errors?.["required"]) {
+                          <span class="ms-1">email is required!</span>
+                          } @else if (userForm.controls["email"].errors?.["email"]) {
+                          <span class="ms-1">Invalid email format!</span>
+                          }
+                      </mat-error>
+                  </mat-form-field>
+              </div>
+          <!-- Password Field -->
+              <div class="form-group row">
+                  <mat-label class="outer-mat-lable col-4 pt-2">Password</mat-label>
+                  <mat-form-field appearance="outline" class="col-8">
+                      <input formControlName="password" matInput [type]="hide ? 'password' : 'text'"
+                          placeholder="Enter your password" />
+                      <button type="button" mat-icon-button matSuffix (click)="hide = !hide"
+                          [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                          <mat-icon>{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
+                      </button>
+                      <mat-error>
+                          @if (userForm.controls["password"].errors?.["required"]) {
+                          <span class="ms-1">Password is required!</span>
+                          } @else if (userForm.controls["password"].errors?.["minlength"]) {
+                          <span class="ms-1">Minimum 6 characters required!</span>
+                          }
+                      </mat-error>
+                  </mat-form-field>
+              </div>
 
-      <div class="form-group row">
-        <mat-label class="col-4 pt-2">Password</mat-label>
-        <mat-form-field appearance="outline" class="col-8">
-          <input matInput formControlName="password" placeholder="Enter Password" type="password" />
-          <mat-error *ngIf="userForm.controls['password'].hasError('required')">
-            Password is required
-          </mat-error>
-        </mat-form-field>
-      </div>
+              <!-- Role Selection -->
+              <div class="form-group row">
+                  <mat-label class="outer-mat-lable col-4 pt-2">Select Role</mat-label>
+                  <mat-form-field class="col-8" appearance="outline">
+                      <!-- <mat-label>Select Role</mat-label> -->
+                      <input type="text" matInput [formControl]="roleControl" [matAutocomplete]="autoRole">
+                      <mat-autocomplete #autoRole="matAutocomplete" [displayWith]="displayRoleFn"
+                        (optionSelected)="onRoleSelected($event)">
+                        <mat-option *ngFor="let role of filteredRoles | async" [value]="role">
+                          {{ role.name }}
+                        </mat-option>
+                      </mat-autocomplete>
+                      <mat-error>
+                          @if (userForm.controls["roleId"].errors?.["required"]) {
+                          <span class="ms-1">Role selection is required!</span>
+                          }
+                      </mat-error>
+                    </mat-form-field>
+                  <!-- <mat-form-field appearance="outline" class="col-8">
+                      <input type="text" matInput [formControl]="roleControl" [matAutocomplete]="auto"
+                          placeholder="Search and select role" />
+                      <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectRole($event)">
+                         
+                          <mat-option *ngFor="let role of filteredRoles" [value]="role.id">
+                              {{ role.name }}
+                          </mat-option>
+                      </mat-autocomplete>
+                      <mat-error>
+                          @if (userForm.controls["roleId"].errors?.["required"]) {
+                          <span class="ms-1">Role selection is required!</span>
+                          }
+                      </mat-error>
+                  </mat-form-field> -->
+              </div>
+          </div>
 
-      <div class="form-group row">
-        <mat-label class="col-4 pt-2">Role</mat-label>
-        <mat-form-field appearance="outline" class="col-8">
-          <mat-select formControlName="roleId" placeholder="Select Role">
-            <mat-option *ngFor="let role of roles" [value]="role.id">
-              {{ role.name }}
-            </mat-option>
-          </mat-select>
-          <mat-error *ngIf="userForm.controls['roleId'].hasError('required')">
-            Role is required
-          </mat-error>
-        </mat-form-field>
-      </div>
-
-      <div class="form-group row">
-        <mat-label class="col-4 pt-2">Active</mat-label>
-        <mat-form-field appearance="outline" class="col-8">
-          <mat-slide-toggle formControlName="isActive">Active</mat-slide-toggle>
-        </mat-form-field>
-      </div>
-
-      <div class="d-flex justify-content-end mb-4 pb-4">
-        <button class="btn btn-secondary mx-2" type="button" (click)="resetForm()">Clear</button>
-        <button class="btn btn-primary" (click)="createUpdate()">{{ formHeading }}</button>
-      </div>
-    </form>
+          <!-- Buttons -->
+          <div class="form-btn d-flex align-items-start justify-content-end p-4 ">
+              <button class="btn btn-secondary mx-2" type="button" (click)="resetForm()">
+                  Clear
+              </button>
+              <button class="btn btn-primary" (click)="createUpdate()">
+                  {{ formHeading }}
+              </button>
+          </div>
+      </form>
   </div>
 </div>

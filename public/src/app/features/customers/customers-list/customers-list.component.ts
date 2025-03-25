@@ -97,7 +97,7 @@ private _unsubscribeAll$: Subject<any> = new Subject<any>();
       cellStyle: () => {
         return { border: "none" };
       },
-      hide: !this.customerAccess?.edit,  // ❌ This does not work dynamically
+      hide: !this.customerAccess?.edit, 
       cellRendererParams: {
         disabled: !this.customerAccess?.edit,
       },
@@ -184,6 +184,12 @@ private _unsubscribeAll$: Subject<any> = new Subject<any>();
             for(const customerAccess of response.data){
               if(customerAccess.form=='Customers'){
                 this.customerAccess=customerAccess
+                if(this.customerAccess.view){
+                  this.getCustomerList();
+                }else{
+                  this.rowData=[];
+                  this.showErrorOverlay("You have not permission")
+                }
                 this._changeDetectorRef.detectChanges();
               }
             }
@@ -196,6 +202,8 @@ private _unsubscribeAll$: Subject<any> = new Subject<any>();
       }
     )
   }
+
+  
 
 
   addCustomer(event: Event) {
@@ -335,12 +343,7 @@ private _unsubscribeAll$: Subject<any> = new Subject<any>();
       this.getPermissionToAccessPage(Number(localStorage.getItem('role')))
       this.gridApi = params.api;
       this.gridApi.hideOverlay();
-      if(this.customerAccess.view){
-        this.getCustomerList();
-      }else{
-        this.rowData=[];
-        this.showErrorOverlay("You have not permission")
-      }
+      
     }
   
     showErrorOverlay(message: string) {
