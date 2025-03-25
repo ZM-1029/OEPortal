@@ -81,22 +81,34 @@ export class EfficiencyReportEmployeesComponent {
       headerName: "Salary",
       sortable: true,
       filter: true,
-      minWidth: 100,
-    },
+      minWidth: 170,
+      valueGetter: (params: any) => params.data.salary === 0 ? "-" : params.data.salary, 
+      cellStyle: (params: any) => {
+        return params.value === "-" ? { color: "red", fontWeight: "bold" } : {};
+      }
+    }, 
     {
       field: "billedAmount",
       headerName: "Billed Amount",
       sortable: true,
       filter: true,
       minWidth: 170,
-    },
+      valueGetter: (params: any) => params.data.billedAmount === 0 ? "-" : params.data.billedAmount, 
+      cellStyle: (params: any) => {
+        return params.value === "-" ? { color: "red", fontWeight: "bold" } : {};
+      }
+    }, 
     {
       field: "profitratio",
-      headerName: "Profit Ratio",
+      headerName: "Profit ratio",
       sortable: true,
       filter: true,
       minWidth: 170,
-    },
+      valueGetter: (params: any) => params.data.profitratio === 0 ? "-" : params.data.profitratio, 
+      cellStyle: (params: any) => {
+        return params.value === "-" ? { color: "red", fontWeight: "bold" } : {};
+      }
+    }, 
     {
       headerName: "Month/Year",
       field: "monthYear",

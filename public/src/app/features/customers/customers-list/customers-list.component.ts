@@ -65,9 +65,9 @@ export class CustomersListComponent implements OnInit, OnDestroy {
     id: 0,
     formId: 0,
     form: '',
-    view: true,
-    add: true,
-    edit: true
+    view: false,
+    add: false,
+    edit: false
   }; 
   
  private gridApi!: GridApi<any>;
@@ -96,10 +96,6 @@ private _unsubscribeAll$: Subject<any> = new Subject<any>();
       filter: false,
       cellStyle: () => {
         return { border: "none" };
-      },
-      hide: !this.customerAccess?.edit, 
-      cellRendererParams: {
-        disabled: !this.customerAccess?.edit,
       },
     },
     {
@@ -176,33 +172,37 @@ private _unsubscribeAll$: Subject<any> = new Subject<any>();
     
   }
 
-  getPermissionToAccessPage(roleId:any){
-    this.rolePermissionService.getPermissionsByRoleId(roleId).subscribe(
-      {
-        next:((response)=>{
-          if(response.success){
-            for(const customerAccess of response.data){
-              if(customerAccess.form=='Customers'){
-                this.customerAccess=customerAccess
-                if(this.customerAccess.view){
-                  this.getCustomerList();
-                }else{
-                  this.rowData=[];
-                  this.showErrorOverlay("You have not permission")
-                }
-                this._changeDetectorRef.detectChanges();
-              }
-            }
-          }else{
-            this.handleError("")
-          }
-        }),error:((err)=>{
-          this.handleError("")
-        })
-      }
-    )
-  }
 
+  getPermissionToAccessPage(roleId: any) {
+    this.rolePermissionService.getPermissionsByRoleId(roleId).subscribe({
+      next: (response) => {
+        if (response.success) {
+          for (const customerAccess of response.data) {
+            if (customerAccess.form === "Customers") {
+              this.customerAccess = customerAccess;
+              if (this.customerAccess.view) {
+                this.getCustomerList();
+              } else {
+                this.rowData = [];
+                this.showErrorOverlay("You have not permission");
+              }
+              // Hide "Actions" column if `edit` is false
+              if (this.gridApi) {
+                this.gridApi.setColumnsVisible(["actions"], this.customerAccess.edit);
+              }
+  
+              this._changeDetectorRef.detectChanges();
+            }
+          }
+        } else {
+          this.handleError("please try again leter");
+        }
+      },
+      error: (err) => {
+        this.handleError("please try again leter");
+      },
+    });
+  }
   
 
 
@@ -343,7 +343,6 @@ private _unsubscribeAll$: Subject<any> = new Subject<any>();
       this.getPermissionToAccessPage(Number(localStorage.getItem('role')))
       this.gridApi = params.api;
       this.gridApi.hideOverlay();
-      
     }
   
     showErrorOverlay(message: string) {

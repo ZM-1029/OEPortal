@@ -38,6 +38,12 @@ export class EmployeesService {
     );
   }
 
+  employeeAssetsGetById(employeeId: number | string) {
+    return this.http.get(
+      `${environment.apiUrl2}api/AssetTransactionHistory/AssignedAssetListByEmployee/${employeeId}`,
+    );
+  }
+
   getEmployeeInvoiceById(employeeId: number | string) {
     return this.http.get<employeeInvoiceResponseI>(
       `${environment.apiUrl}api/EmployeeDashboard/GetEmployeeInvoices?employeeId=${employeeId}`,

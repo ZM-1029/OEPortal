@@ -75,7 +75,6 @@ export class ReportsListComponent implements OnInit {
           id: obj.employeeID,  
           name: `(${obj.employeeID}) - ${obj.firstName} ${obj.lastName}`, 
         }));
-
         this._changeDetectorRef.detectChanges();
         console.log("Employees Loaded:", this.allEmployees);
       },

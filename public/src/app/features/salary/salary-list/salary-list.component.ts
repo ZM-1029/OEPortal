@@ -21,6 +21,8 @@ import { SalaryCreateComponent } from "../salary-create/salary-create.component"
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { SuccessModalComponent } from "src/app/shared/components/UI/success-modal/success-modal.component";
 import { LoaderComponent } from "src/app/shared/components/UI/loader/loader.component";
+import { rolePermissionListI } from "src/app/shared/types/roles.type";
+import { RolePermissionService } from "../../role-permissions/role-permission.service";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 @Component({
@@ -37,7 +39,7 @@ ModuleRegistry.registerModules([AllCommunityModule]);
   templateUrl: "./salary-list.component.html",
   styleUrl: "./salary-list.component.scss",
 })
-export class SalaryListComponent implements OnInit, AfterViewInit{
+export class SalaryListComponent implements OnInit, AfterViewInit {
   public totalCount: number = 0;
   public activeCustomer: number = 0;
   public terminatedCustomer: number = 0;
@@ -50,7 +52,16 @@ export class SalaryListComponent implements OnInit, AfterViewInit{
   formHeading: string = "";
   salaryRowId!: number;
   HeadingName: string = "Salary";
-  rowData: any;
+  rowData: any[] = [];
+  salaryAccess: rolePermissionListI = {
+    id: 0,
+    formId: 0,
+    form: '',
+    view: false,
+    add: false,
+    edit: false
+  };
+
   private gridApi!: GridApi<any>;
 
   columnDefs: any = [
@@ -145,14 +156,47 @@ export class SalaryListComponent implements OnInit, AfterViewInit{
     private _changeDetectorRef: ChangeDetectorRef,
     private dialog: MatDialog,
     private _successMessage: MatSnackBar,
+    private rolePermissionService:RolePermissionService
   ) { }
- 
+
   ngOnInit(): void {
     this.pageHeader_customer(this.HeadingName);
   }
 
   ngAfterViewInit(): void {
     this._changeDetectorRef.detectChanges();
+  }
+
+
+
+  getPermissionToAccessPage(roleId: any) {
+    this.rolePermissionService.getPermissionsByRoleId(roleId).subscribe({
+      next: (response) => {
+        if (response.success) {
+          for (const salaryAccess of response.data) {
+            if (salaryAccess.form === "Salary") {
+              this.salaryAccess = salaryAccess;
+              if (this.salaryAccess.view) {
+                this.getSalaryList();
+              } else {
+                this.rowData = [];
+                this.showErrorOverlay("You have not permission");
+              }
+              // Hide "Actions" column if `edit` is false
+              if (this.gridApi) {
+                this.gridApi.setColumnsVisible(["actions"], this.salaryAccess.edit);
+              }
+              this._changeDetectorRef.detectChanges();
+            }
+          }
+        } else {
+          this.handleError("please try again leter");
+        }
+      },
+      error: (err) => {
+        this.handleError("please try again leter");
+      },
+    });
   }
 
   getSalaryList() {
@@ -165,17 +209,17 @@ export class SalaryListComponent implements OnInit, AfterViewInit{
           } else {
             console.log("No salar data returned from API.");
             this.showErrorOverlay('Data is not Found');
-            this.rowData=[];
+            this.rowData = [];
           }
         }, error: (err) => {
           this.showErrorOverlay('Data is not Found');
-          this.rowData=[];
+          this.rowData = [];
           console.error("Error Status:", err.status);
           console.error("Error Message:", err.error);
           let errorMessage = "An error occurred while fetching data.";
           if (err.status === 404 && err.error.message) {
             errorMessage = err.error.message;
-           
+
           }
           // this.handleError(err.error.message);
         },
@@ -192,8 +236,7 @@ export class SalaryListComponent implements OnInit, AfterViewInit{
   onGridReady(params: GridReadyEvent<any>) {
     this.gridApi = params.api;
     this.gridApi.hideOverlay();
-    this.getSalaryList();
-    // if(this.rowData.l)
+    this.getPermissionToAccessPage(Number(localStorage.getItem('role')));
   }
 
   showErrorOverlay(message: string) {
@@ -256,7 +299,7 @@ export class SalaryListComponent implements OnInit, AfterViewInit{
       this.formHeading = "Update";
       this.salaryRowId = Number(salaryRowId);
     }
-  
+
     if (event.event.target.closest(".delete-icon")) {
       const salaryRowId = event.event.target.closest(".delete-icon").getAttribute("data-id");
       this.openDeleteModal(Number(salaryRowId));

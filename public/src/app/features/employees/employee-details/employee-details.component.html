@@ -933,7 +933,7 @@
                 aria-labelledby="nav-assets-tab"
               >
                 @if (activeTab === "assets") {
-                  <app-page-not-found></app-page-not-found>
+                  <app-employee-assets [employeeId]="empId"></app-employee-assets>
                 }
               </div>
               <div

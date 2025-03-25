@@ -18,6 +18,10 @@ import { LoaderComponent } from "src/app/shared/components/UI/loader/loader.comp
 import { AllCommunityModule, GridApi, GridReadyEvent, ModuleRegistry } from "ag-grid-community";
 import { invoiceListI } from "src/app/shared/types/invoice.type";
 import { InvoiceService } from "../invoice.service";
+import { rolePermissionListI } from "src/app/shared/types/roles.type";
+import { RolePermissionService } from "../../role-permissions/role-permission.service";
+
+
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 @Component({
@@ -32,7 +36,7 @@ ModuleRegistry.registerModules([AllCommunityModule]);
   templateUrl: "./invoice-list.component.html",
   styleUrl: "./invoice-list.component.scss",
 })
-export class InvoiceListComponent implements OnInit,AfterViewInit {
+export class InvoiceListComponent implements OnInit, AfterViewInit {
   private gridApi!: GridApi<any>;
   public totalCount: number = 0;
   public activeCustomer: number = 0;
@@ -46,7 +50,16 @@ export class InvoiceListComponent implements OnInit,AfterViewInit {
   formHeading: string = "";
   salaryRowId!: number;
   HeadingName: string = "Invoice";
-  rowData: invoiceListI[]=[];
+  rowData: invoiceListI[] = [];
+  InvoiceAccess: rolePermissionListI = {
+    id: 0,
+    formId: 0,
+    form: '',
+    view: false,
+    add: false,
+    edit: false
+  };
+
 
   columnDefs: any = [
     {
@@ -117,7 +130,8 @@ export class InvoiceListComponent implements OnInit,AfterViewInit {
     private _changeDetectorRef: ChangeDetectorRef,
     private dialog: MatDialog,
     private _successMessage: MatSnackBar,
-    private _router: Router
+    private _router: Router,
+    private rolePermissionService:RolePermissionService
   ) { }
 
 
@@ -134,6 +148,39 @@ export class InvoiceListComponent implements OnInit,AfterViewInit {
     this.HeadingName = customerHeadingName;
   }
 
+  getPermissionToAccessPage(roleId: any) {
+    this.rolePermissionService.getPermissionsByRoleId(roleId).subscribe({
+      next: (response) => {
+        if (response.success) {
+          for (const InvoiceAccess of response.data) {
+            if (InvoiceAccess.form === "Invoice") {
+              this.InvoiceAccess = InvoiceAccess;
+              if (this.InvoiceAccess.view) {
+                this.getInvoiceList();
+              } else {
+                this.rowData = [];
+                this.showErrorOverlay("You have not permission");
+              }
+              // Hide "Actions" column if `edit` is false
+              if (this.gridApi) {
+                this.gridApi.setColumnsVisible(["actions"], this.InvoiceAccess.edit);
+              }
+  
+              this._changeDetectorRef.detectChanges();
+            }
+          }
+        } else {
+          this.handleError("please try again leter");
+        }
+      },
+      error: (err) => {
+        this.handleError("please try again leter");
+      },
+    });
+  }
+  
+
+
   getInvoiceList() {
     this.invoiceService.getInvoiceList().subscribe(
       {
@@ -149,7 +196,7 @@ export class InvoiceListComponent implements OnInit,AfterViewInit {
         error: ((error) => {
           console.log(error);
           this.showErrorOverlay("Data is not found");
-            this.rowData = [];
+          this.rowData = [];
         })
       }
     )
@@ -219,12 +266,12 @@ export class InvoiceListComponent implements OnInit,AfterViewInit {
       next: (response: any) => {
         this.showSuccessMessage(response.message);
         this.getInvoiceList();
-        if ( this.rowData.length == 0) {
+        if (this.rowData.length == 0) {
           setTimeout(() => {
             if (this.gridApi) {
               this.showErrorOverlay("Data is not found");
             }
-          }); 
+          });
         }
         this._changeDetectorRef.detectChanges();
       },
@@ -269,19 +316,19 @@ export class InvoiceListComponent implements OnInit,AfterViewInit {
     },
   };
 
- 
+
   onGridReady(params: GridReadyEvent<any>) {
     this.gridApi = params.api;
-    this.getInvoiceList();
+    this.getPermissionToAccessPage(Number(localStorage.getItem('role')));
     if (this.rowData.length == 0) {
       setTimeout(() => {
         if (this.gridApi) {
           this.showErrorOverlay("Data is not found");
         }
-      }); 
+      });
     }
   }
-  
+
 
   showErrorOverlay(message: string) {
     if (this.gridApi) {

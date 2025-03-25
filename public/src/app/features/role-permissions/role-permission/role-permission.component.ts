@@ -127,7 +127,6 @@ export class RolePermissionComponent implements OnInit {
   onRoleSelected(event: MatAutocompleteSelectedEvent) {
     const selectedRole = event.option.value;
     this.selectedRole = selectedRole.id
-    console.log('Selected Role ID:', this.selectedRole);
     this.fetchRolePermissions(selectedRole.id);
   }
 
@@ -155,7 +154,6 @@ export class RolePermissionComponent implements OnInit {
             edit: !!item.edit,
             disabled: true
           }));
-          console.log(this.menuData, "Menu Data");
           this._changeDetectorRef.detectChanges();
         }
       });

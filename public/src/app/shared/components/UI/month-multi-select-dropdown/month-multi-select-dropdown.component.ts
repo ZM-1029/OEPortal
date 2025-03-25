@@ -20,16 +20,20 @@ export class MonthMultiSelectDropdownComponent {
   transformedDataList: { id: string; name: string }[] = [];
   selectedData: string[] = [];
   allSelected: boolean = false;
-  iscloseDropdown: boolean = false; // Prevents closing on select
+  iscloseDropdown: boolean = false; 
 
   constructor() {}
 
   ngOnInit() {
     if (this.defaultValue) {
-      this.selectedData = Array.isArray(this.defaultValue) ? [...this.defaultValue] : [this.defaultValue];
+      console.log(this.defaultValue,"defaultValue");
+      this.selectedData = Array.isArray(this.defaultValue)
+        ? [...this.defaultValue]
+        : [this.defaultValue.toString()]; 
       this.selectedOutput.emit(this.selectedData);
     }
   }
+  
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['dataList'] && this.dataList) {

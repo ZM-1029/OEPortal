@@ -40,7 +40,6 @@ form {
   border-radius: var(--zf-form-input-border-radius);
   transition:
     border-color 0.15s ease-in-out,
-    // box-shadow 0.15s ease-in-out;
 }
 
 .customer-info{
@@ -283,4 +282,10 @@ mat-select:focus {
 
 .delete-icon {
   cursor: pointer;
+}
+
+.mat-mdc-icon-button .mdc-button__label, .mat-mdc-icon-button .mat-icon {
+  z-index: 1;
+  position: relative;
+  top: -11px;
 }
