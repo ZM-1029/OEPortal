@@ -64,7 +64,14 @@ export class EfficiencyReportEmployeesComponent {
     },
     {
       field: "employeeID",
-      headerName: "Salary",
+      headerName: "Employee Id",
+      sortable: true,
+      filter: true,
+      minWidth: 100,
+    },
+    {
+      field: "employeeName",
+      headerName: "Employee Name",
       sortable: true,
       filter: true,
       minWidth: 100,
@@ -91,20 +98,13 @@ export class EfficiencyReportEmployeesComponent {
       minWidth: 170,
     },
     {
-      field: "month",
-      headerName: "Month",
+      headerName: "Month/Year",
+      field: "monthYear",
       sortable: true,
       filter: true,
-      minWidth: 120,
-    },
-    {
-      field: "year",
-      headerName: "Year",
-      sortable: true,
-      filter: true,
-      minWidth: 240,
-    },
-
+      minWidth: 150,
+      valueGetter: (params: { data: { month: any; year: any; }; }) => `${params.data.month}/${params.data.year}`
+    }
   ];
 
   defaultColDef = {
