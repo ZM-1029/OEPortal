@@ -1,10 +1,17 @@
-import { Component } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ViewEncapsulation,
+} from "@angular/core";
+import { RouterModule } from "@angular/router";
 
 @Component({
   selector: 'app-sales',
-  imports: [],
+  imports: [RouterModule],
   templateUrl: './sales.component.html',
-  styleUrl: './sales.component.scss'
+  styleUrl: './sales.component.scss',
+  encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SalesComponent {
 

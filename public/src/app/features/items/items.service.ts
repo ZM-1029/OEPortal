@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { BehaviorSubject } from "rxjs";
 import { environment } from "../../../environments/environment";
+import {
+  customerI,
+} from "../../shared/types/customer.type";
 import { AllServicesI, AllUnitI, Item, ItemsListI, productDetailsI } from 'src/app/shared/types/items.type';
 
 @Injectable({

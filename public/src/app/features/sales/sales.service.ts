@@ -3,6 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { BehaviorSubject } from "rxjs";
 import { environment } from "../../../environments/environment";
 import { AllServicesI, AllUnitI, Item, ItemsListI, productDetailsI } from 'src/app/shared/types/items.type';
+import { QuotationListI } from 'src/app/shared/types/sales.type';
 
 @Injectable({
   providedIn: 'root'
@@ -15,9 +16,9 @@ export class SalesService {
     this.productRow.next(event);
   }
   constructor(private http: HttpClient) { }
-  getProductList() {
-    return this.http.get<ItemsListI>(
-      `${environment.apiUrl}api/Product/GetProductList`,
+  getQuotationList() {
+    return this.http.get<QuotationListI>(
+      `${environment.apiUrl}api/Quotation/GetAllQuotations`,
     );
   }
 
