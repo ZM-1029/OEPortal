@@ -7,7 +7,7 @@ import { AllServicesI, AllUnitI, Item, ItemsListI, productDetailsI } from 'src/a
 @Injectable({
   providedIn: 'root'
 })
-export class ItemsService {
+export class SalesService {
   private productRow = new BehaviorSubject<any>(null);
   productRowData$ = this.productRow.asObservable();
 
@@ -38,11 +38,6 @@ export class ItemsService {
       updateProduct
     );
   }
-  // deleteCustomerById(id: number) {
-  //   return this.http.delete<customerDetailsI>(
-  //     `${environment.apiUrl}api/Customer/DeleteCustomer/${id}`,
-  //   );
-  // }
 
   UnitList() {
     return this.http.get<AllUnitI>(
