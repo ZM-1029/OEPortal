@@ -3,7 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { BehaviorSubject } from "rxjs";
 import { environment } from "../../../environments/environment";
 import { AllServicesI, AllUnitI, Item, ItemsListI, productDetailsI } from 'src/app/shared/types/items.type';
-import { QuotationListI } from 'src/app/shared/types/sales.type';
+import { AllCustomersI, CountryI, PaymentTermsI, QuotationListI, QuotationNumberI } from 'src/app/shared/types/sales.type';
 
 @Injectable({
   providedIn: 'root'
@@ -40,14 +40,25 @@ export class SalesService {
     );
   }
 
-  UnitList() {
-    return this.http.get<AllUnitI>(
-      `${environment.apiUrl}api/Product/UnitList`,
+  CustomerList() {
+    return this.http.get<AllCustomersI>(
+      `${environment.apiUrl}api/Customer/GetActiveCustomer`,
     );
   }
-  getServices() {
-    return this.http.get<AllServicesI>(
-      `${environment.apiUrl}api/Product/GetServices`,
+  getQuotationNumber() {
+    return this.http.get<QuotationNumberI>(
+      `${environment.apiUrl}api/Quotation/RandomQuotationNumberGenerator`,
     );
   }
+  getPaymentTerms() {
+    return this.http.get<PaymentTermsI>(
+      `${environment.apiUrl}api/Product/GetPaymentTerms`,
+    );
+  }
+  getCountry() {
+    return this.http.get<CountryI>(
+      `${environment.apiUrl}api/Product/GetCountry`,
+    );
+  }
+  
 }

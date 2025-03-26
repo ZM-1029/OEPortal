@@ -25,26 +25,42 @@ export interface itemReturnI {
     data: Quotation[];
     errors: any[];
   }
-  export interface Unit {
+  export interface Customer {
     id: number;
     name: string;
   }
-  export interface AllUnitI {
+  export interface AllCustomersI {
     success: boolean;
     message: string;
-    data: Unit[];
+    data: Customer[];
     errors: any[];
   }
-  export interface Service {
+  export interface QuotationNumberI {
+    success: boolean;
+    message: string;
+    data: string;
+    errors: string[];
+  }
+  export interface PaymentTerm {
+    id: number;
+    termName: string;
+  }
+  export interface PaymentTermsI {
+    success: boolean;
+    message: string;
+    data: PaymentTerm[];  
+    errors: string[];
+  }
+  export interface Country {
     id: number;
     name: string;
-    description: string;
   }
-  export interface AllServicesI {
+  
+  export interface CountryI {
     success: boolean;
     message: string;
-    data: Service[];
-    errors: any[];
+    data: Country[];  // Array of Country objects
+    errors: string[];  // Array of error messages (if any)
   }
   
   

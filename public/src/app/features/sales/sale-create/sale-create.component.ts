@@ -12,6 +12,12 @@ import { productDetailsI, Service, Unit } from "src/app/shared/types/items.type"
 import { CdkTextareaAutosize } from "@angular/cdk/text-field";
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { SalesService } from "../sales.service";
+import { Country, Customer, PaymentTerm, PaymentTermsI } from "src/app/shared/types/sales.type";
+
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core'; // For native date adapter
+import { MatIconModule } from '@angular/material/icon'; // For calendar icon
+
 
 @Component({
   selector: 'app-sale-create',
@@ -21,7 +27,10 @@ import { SalesService } from "../sales.service";
     MatSelectModule,
     MatRadioModule,
     MatCheckboxModule,
-    MatSlideToggleModule],
+    MatSlideToggleModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatIconModule],
   
   templateUrl: './sale-create.component.html',
   styleUrl: './sale-create.component.scss'
@@ -41,8 +50,10 @@ export class SaleCreateComponent {
   }
   public productForm!: FormGroup;
   public submitted = false;
-  Units: Unit[] = [];
-  Services: Service[] = [];
+  Customers: Customer[] = [];
+  QuotationNo: string = '';
+  PaymentTerms:PaymentTerm[]=[];
+  Countries:Country[]=[];
   public customerEmail: string = '';
   public formHeading: string = "Create";
   public customerId: string = '';
@@ -60,22 +71,16 @@ export class SaleCreateComponent {
 
   ngOnInit(): void {
     this.productForm = this._formBuilder.group({
-      isService: [true, Validators.required],
       name: ["", [Validators.required, Validators.pattern("^[a-z A-Z]*$")]],
-      sku: ["",],
-      unitId: [""],
-      hsnCode: [""],
-      description: [""],
-      serviceId: [""],
-      isActive: [false],
-      costPrice: [
-        "",
-        [Validators.required, Validators.pattern("^[0-9]+(\\.[0-9]{1,2})?$")],
-      ],
-      salesPrice: [
-        "",
-        [Validators.required, Validators.pattern("^[0-9]+(\\.[0-9]{1,2})?$")],
-      ],
+      quotationNumber: ["",],
+      customerId: [""],
+      salesOrderDate: [new Date()],
+      expectedShipmentDate:[''],
+      paymentTermId: [""],
+      deliveryMethod: [""],
+      salesPerson: [''],
+      countryId: [""],
+      
     });
     this.clearForm();
   }
@@ -201,11 +206,18 @@ export class SaleCreateComponent {
     });
   }
   private loadDropdownData(): void {
-    this._salesService.UnitList().subscribe((response) => {
-      if (response.success) this.Units = response.data;
+    this._salesService.CustomerList().subscribe((response) => {
+      if (response.success) this.Customers = response.data;
     });
-    this._salesService.getServices().subscribe((res) => {
-      if (res.success) this.Services = res.data;
+    this._salesService.getQuotationNumber().subscribe((res) => {
+      if (res.success) this.QuotationNo = res.data;
+      this.productForm.controls['quotationNumber'].setValue(this.QuotationNo);
+    });
+    this._salesService.getPaymentTerms().subscribe((res) => {
+      if (res.success) this.PaymentTerms = res.data;
+    });
+    this._salesService.getCountry().subscribe((res) => {
+      if (res.success) this.Countries = res.data;
     });
   }
   ngOnDestroy(): void {
