@@ -110,6 +110,13 @@ export const routes: Routes = [
             (m) => m.ITEMS_ROUTES,
           ),
       },
+      {
+        path: "sales-orders",
+        loadChildren: () =>
+          import("./features/sales/sales.routes").then(
+            (m) => m.SALES_ROUTES,
+          ),
+      },
     ],
   },
 ];
