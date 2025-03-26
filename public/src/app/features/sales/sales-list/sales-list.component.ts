@@ -13,6 +13,7 @@ import { SuccessModalComponent } from "src/app/shared/components/UI/success-moda
 import { SaleCreateComponent } from '../sale-create/sale-create.component';
 import { SalesService } from '../sales.service';
 import { Quotation, QuotationListI } from "src/app/shared/types/sales.type";
+import moment from 'moment';
 ModuleRegistry.registerModules([AllCommunityModule]);
 @Component({
   selector: 'app-sales-list',
@@ -59,6 +60,10 @@ columnDefs: any = [
       sortable: true,
       filter: true,
       minWidth: 170,
+      valueFormatter: (params:any) => {
+        const formattedDate = moment(params.value).format('DD/MM/YYYY');
+        return formattedDate;
+      },
     },
     {
       field: "total",
