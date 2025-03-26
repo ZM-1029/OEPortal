@@ -30,16 +30,20 @@
           <!-- Terms & Conditions -->
           <div class="form-group row">
             <mat-label class="outer-mat-label col-4 pt-2">T & C</mat-label>
-            <mat-form-field appearance="outline" class="col-8">
-              <textarea formControlName="Terms" matInput placeholder="Enter Terms & Conditions"></textarea>
-              <mat-error *ngIf="businessForm.controls['Terms'].errors?.['required']">
+            <div class="col-8">
+              <quill-editor formControlName="Terms"  [modules]="editorModules"
+              theme="snow"></quill-editor>
+
+          
+              <mat-error *ngIf="businessForm.controls['Terms'].errors?.['required']&&businessForm.controls['Terms'].touched">
                 Terms & Conditions are required.
               </mat-error>
               <mat-error *ngIf="businessForm.controls['Terms'].errors?.['minlength']">
                 Minimum 10 characters required.
               </mat-error>
-            </mat-form-field>
+            </div>
           </div>
+          
   
        
         </div>

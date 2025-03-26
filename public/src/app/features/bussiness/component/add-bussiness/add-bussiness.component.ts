@@ -1,5 +1,5 @@
 import { Component, EventEmitter, inject, Input, Output, signal } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {  FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
@@ -12,6 +12,7 @@ import { BussinessService } from '../../bussiness.service';
 import { ActivatedRoute } from '@angular/router';
 import { SuccessModalComponent } from 'src/app/shared/components/UI/success-modal/success-modal.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { QuillModule } from 'ngx-quill';
 
 @Component({
   selector: 'app-add-bussiness',
@@ -23,14 +24,15 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     MatSlideToggleModule,
     MatButtonModule,
     MatIconModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    QuillModule
   ],
   templateUrl: './add-bussiness.component.html',
   styleUrl: './add-bussiness.component.scss'
 })
 export class AddBussinessComponent {
   businessForm!: FormGroup;
- 
+  
   countries: { value: string, label: string }[] = []; // Mock data
   @Input() Id: number = 0;
   @Input() isSideDrawerOpen: boolean = false; 
@@ -47,6 +49,7 @@ export class AddBussinessComponent {
       });
     }})
   }
+  
  private showSuccessMessage(message: string) {
       this._successMessage.openFromComponent(SuccessModalComponent, {
         data: { message },
@@ -56,7 +59,9 @@ export class AddBussinessComponent {
         horizontalPosition: "right",
       });
     }
-  ngOnInit(): void {
+   
+ async ngOnInit() {
+  
     this.activate.paramMap.subscribe(params => {
       this.serviceid = Number(params.get('id'));
       
@@ -71,14 +76,27 @@ export class AddBussinessComponent {
 
     this.patchValue()
   }
+  editorModules = {
+    toolbar: [
+      [{ font: [] }, { size: [] }],
+      ["bold", "italic", "underline", "strike"],
+      [{ color: [] }, { background: [] }], // 🎨 Add Text & Background Colors
+      [{ script: "sub" }, { script: "super" }],
+      [{ header: 1 }, { header: 2 }, "blockquote", "code-block"],
+      [{ list: "ordered" }, { list: "bullet" }],
+      [{ align: [] }],
+      ["link", "image", "video"]
+    ]
+  };
   patchValue()
   {
     debugger
     this.apiservice.GetCountryTermsConditionById(this.Id).subscribe({next:(data:any)=>{
       this.businessForm.patchValue({
-        Country:data.countryId,
+        
         Terms:data.data.termsAndConditions
       })
+      this.businessForm.get('Country')?.setValue(data.data.countryId.toString());
     }})
   }
 

@@ -15,7 +15,7 @@ import { getMenuMasterListI } from "../../types/sidebar.type";
 
 @Component({
   selector: "app-header",
-  imports: [MatIconModule],
+  imports: [MatIconModule,RouterLink],
   templateUrl: "./header.component.html",
   styleUrl: "./header.component.scss",
 })
