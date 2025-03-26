@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, Output, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, inject, Input, Output, signal } from '@angular/core';
 import {  FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -32,13 +32,13 @@ import { QuillModule } from 'ngx-quill';
 })
 export class AddBussinessComponent {
   businessForm!: FormGroup;
-  
+  heading:string="Add"
   countries: { value: string, label: string }[] = []; // Mock data
   @Input() Id: number = 0;
   @Input() isSideDrawerOpen: boolean = false; 
   serviceid:number=0
  @Output() formClose: EventEmitter<boolean> = new EventEmitter<boolean>();
-  constructor(private fb: FormBuilder,private apiservice:BussinessService,private activate:ActivatedRoute,private _successMessage:MatSnackBar) {
+  constructor(private fb: FormBuilder,private apiservice:BussinessService,private activate:ActivatedRoute,private _successMessage:MatSnackBar,private cdr:ChangeDetectorRef) {
     this.apiservice.getAllCountry().subscribe({next:(data:any)=>{
       this.countries = [{ value: '0', label: 'Select a country' }];  // Add the default option
       data.data.forEach((country:any) => {
@@ -59,7 +59,11 @@ export class AddBussinessComponent {
         horizontalPosition: "right",
       });
     }
-   
+    reset(){
+      debugger
+      this.businessForm.reset()
+      this.businessForm.get('Country')?.setValue('0');
+    }
  async ngOnInit() {
   
     this.activate.paramMap.subscribe(params => {
@@ -73,8 +77,12 @@ export class AddBussinessComponent {
       Terms: ['', [Validators.required, Validators.minLength(10)]],
    
     });
-
-    this.patchValue()
+if(this.Id>0)
+{
+  this.heading="Update"
+  this.patchValue()
+}
+    
   }
   editorModules = {
     toolbar: [
@@ -99,8 +107,33 @@ export class AddBussinessComponent {
       this.businessForm.get('Country')?.setValue(data.data.countryId.toString());
     }})
   }
+  closePopup() {
+    this.formClose.emit();
+  }
+  iscountryfail:boolean=false;
+  checkCountry(event:any)
+  {
+    if(Number(this.businessForm.value.Country)>0)
+    {
+      this.iscountryfail=false
 
+    }
+    else{
+      this.iscountryfail=true
+    }
+  }
   submitForm() {
+    debugger
+    if(Number(this.businessForm.value.Country)>0)
+      {
+        this.iscountryfail=false
+  
+      }
+      else{
+        this.iscountryfail=true
+        this.cdr.detectChanges()
+        return
+      }
     if (this.businessForm.valid) {
       console.log('Form Data:', this.businessForm.value);
       if(this.Id<=0)

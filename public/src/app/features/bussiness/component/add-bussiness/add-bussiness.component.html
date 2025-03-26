@@ -1,36 +1,37 @@
 <div class="main-content m-4">
     
-  
+  <mat-icon class="close-icon" style="float:right" (click)="closePopup()">close</mat-icon>
     <div class="border-bottom bg-light pb-2">
-      <h2 class="formHeading">Business Form</h2>
+      <h2 class="formHeading">{{heading}} Term and condition</h2>
     </div>
   
-    <div class="form-container d-flex justify-content-center">
+    <div class="form-container d-flex ">
       <form [formGroup]="businessForm" (ngSubmit)="submitForm()">
         <div class="input-form-container py-3">
           <!-- Business Dropdown -->
          
   
           <!-- Country Dropdown -->
-          <div class="form-group row">
-            <mat-label class="outer-mat-label col-4 pt-2">Country</mat-label>
+          <div class="form-group ">
+            <mat-label class="outer-mat-label col-4 px-1 pt-2">Country</mat-label>
             <mat-form-field appearance="outline" class="col-8">
-              <mat-select formControlName="Country">
+              <mat-select formControlName="Country" (selectionChange)="checkCountry($event)">
              
                 <mat-option *ngFor="let country of countries" [value]="country.value">
                   {{ country.label }}
                 </mat-option>
               </mat-select>
-              <mat-error *ngIf="businessForm.controls['Country'].errors?.['required']">
+              <div *ngIf="iscountryfail" style="color: red; font-size: 12px;">
                 Country is required.
-              </mat-error>
+              </div>
             </mat-form-field>
           </div>
   
           <!-- Terms & Conditions -->
-          <div class="form-group row">
-            <mat-label class="outer-mat-label col-4 pt-2">T & C</mat-label>
+          <div class="form-group row d-flex" style="justify-content: left;">
+            <mat-label class="outer-mat-label col-1 pt-2">T & C</mat-label>
             <div class="col-8">
+              
               <quill-editor formControlName="Terms"  [modules]="editorModules"
               theme="snow"></quill-editor>
 
@@ -50,7 +51,7 @@
   
         <!-- Form Buttons -->
         <div class="form-btn d-flex align-items-start justify-content-end p-4">
-          <button class="btn btn-secondary mx-2" type="reset">Clear</button>
+          <button class="btn btn-secondary mx-2" (click)="reset()">Clear</button>
           <button class="btn btn-primary" type="submit">Save</button>
         </div>
       </form>
