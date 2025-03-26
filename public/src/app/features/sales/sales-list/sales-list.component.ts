@@ -158,7 +158,7 @@ columnDefs: any = [
       const quotationId = event.event.target.closest(".edit-icon").getAttribute("data-id");
       console.log(quotationId, 'quotationId')
       this.quotationId = Number(quotationId);
-      this.isSideDrawerOpen = true;
+      // this.isSideDrawerOpen = true;
     }
     if (event.event.target.closest(".delete-icon")) {
       const quotationId = event.event.target.closest(".delete-icon").getAttribute("data-id");
