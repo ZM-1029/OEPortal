@@ -1,0 +1,55 @@
+<div class="main-content m-4">
+    
+  
+    <div class="border-bottom bg-light pb-2">
+      <h2 class="formHeading">Business Form</h2>
+    </div>
+  
+    <div class="form-container d-flex justify-content-center">
+      <form [formGroup]="businessForm" (ngSubmit)="submitForm()">
+        <div class="input-form-container py-3">
+          <!-- Business Dropdown -->
+         
+  
+          <!-- Country Dropdown -->
+          <div class="form-group row">
+            <mat-label class="outer-mat-label col-4 pt-2">Country</mat-label>
+            <mat-form-field appearance="outline" class="col-8">
+              <mat-select formControlName="Country">
+             
+                <mat-option *ngFor="let country of countries" [value]="country.value">
+                  {{ country.label }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="businessForm.controls['Country'].errors?.['required']">
+                Country is required.
+              </mat-error>
+            </mat-form-field>
+          </div>
+  
+          <!-- Terms & Conditions -->
+          <div class="form-group row">
+            <mat-label class="outer-mat-label col-4 pt-2">T & C</mat-label>
+            <mat-form-field appearance="outline" class="col-8">
+              <textarea formControlName="Terms" matInput placeholder="Enter Terms & Conditions"></textarea>
+              <mat-error *ngIf="businessForm.controls['Terms'].errors?.['required']">
+                Terms & Conditions are required.
+              </mat-error>
+              <mat-error *ngIf="businessForm.controls['Terms'].errors?.['minlength']">
+                Minimum 10 characters required.
+              </mat-error>
+            </mat-form-field>
+          </div>
+  
+       
+        </div>
+  
+        <!-- Form Buttons -->
+        <div class="form-btn d-flex align-items-start justify-content-end p-4">
+          <button class="btn btn-secondary mx-2" type="reset">Clear</button>
+          <button class="btn btn-primary" type="submit">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  
