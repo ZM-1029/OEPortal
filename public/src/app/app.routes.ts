@@ -68,6 +68,14 @@ export const routes: Routes = [
           import("./features/bussiness/bussiness.routing").then(
             (m) => m.BUSSINESS_ROUTES,
           ),
+      }
+      ,
+      {
+        path: "company",
+        loadChildren: () =>
+          import("./features/company/company.routing").then(
+            (m) => m.COMPANY_ROUTES,
+          ),
       },
       {
         path: "salary",
