@@ -133,6 +133,56 @@
           </mat-form-field>
         </div>
         <h4>Item Table</h4>
+
+
+        <div class="form-group row">
+          <mat-label class="outer-mat-lable col-4 pt-2">Item Table</mat-label>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Item Details</th>
+                  <th>Quantity</th>
+                  <th>Rate</th>
+                  <th>Discount</th>
+                  <th>Tax</th>
+                  <th>Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (item of items; track item.id; let i = $index) {
+                <tr>
+                  <td>{{ item.productId }}</td>
+                  <td>
+                    <input [(ngModel)]="item.quantity" type="number" class="form-control" (input)="calculateAmount(i)" />
+                  </td>
+                  <td>
+                    <input [(ngModel)]="item.rate" type="number" class="form-control" (input)="calculateAmount(i)" />
+                  </td>
+                  <td>
+                    <input [(ngModel)]="item.discount" type="number" class="form-control" (input)="calculateAmount(i)" />
+                    <select [(ngModel)]="item.discountType" class="form-control">
+                      <option value="rupee">₹</option>
+                      <option value="%">%</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select [(ngModel)]="item.taxId" class="form-control">
+                      <option value="0">No Tax</option>
+                      <option value="1">GST</option>
+                    </select>
+                  </td>
+                  <td>
+                    <input [(ngModel)]="item.subTotal" type="number" class="form-control" readonly />
+                  </td>
+                </tr>
+              }
+              </tbody>
+            </table>
+            <button type="button" class="btn btn-success" (click)="addRow()">Add Row</button>
+          </div>
+        </div>
+
        
       </div>
       <div class="form-btn d-flex align-items-start justify-content-end p-4 ">

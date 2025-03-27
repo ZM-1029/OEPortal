@@ -17,11 +17,12 @@ import { Branch, Company, Country, Customer, PaymentTerm, PaymentTermsI } from "
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core'; // For native date adapter
 import { MatIconModule } from '@angular/material/icon'; // For calendar icon
-
+import { FormsModule } from '@angular/forms'; 
 
 @Component({
   selector: 'app-sale-create',
   imports: [   ReactiveFormsModule,
+    FormsModule,
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
@@ -230,6 +231,45 @@ export class SaleCreateComponent {
     this._salesService.getBranchDetailByCompanyId(selectedCompanyId).subscribe((res) => {
       if (res.success) this.Branches = res.data;
     });
+  }
+
+  items = [
+    {
+      id: 0,
+      productId: 0,
+      quantity: 1,
+      rate: 0,
+      discount: 0,
+      discountType: 'rupee',
+      taxId: 0,
+      subTotal: 0
+    }
+  ];
+  addRow() {
+    const newRow = {
+      id: this.items.length,
+      productId: 0,
+      quantity: 1,
+      rate: 0,
+      discount: 0,
+      discountType: 'rupee', // Default discount type
+      taxId: 0,
+      subTotal: 0
+    };
+    this.items.push(newRow);
+  }
+  calculateAmount(index: number) {
+    const item = this.items[index];
+
+    let discountAmount = 0;
+    if (item.discountType === 'rupee') {
+      discountAmount = item.discount;
+    } else if (item.discountType === '%') {
+      discountAmount = (item.rate * item.discount) / 100;
+    }
+
+    const subTotal = (item.quantity * item.rate) - discountAmount;
+    item.subTotal = parseFloat(subTotal.toFixed(3)); // Keeping precision to 3 decimal places
   }
   ngOnDestroy(): void {
     this.resetForm();
