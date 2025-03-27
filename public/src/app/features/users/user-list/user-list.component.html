@@ -66,9 +66,7 @@
     }
     @if (isSideDrawerOpen) {
     <app-side-drawer (sideDrawer)="sideDrawer()" [isSideDrawerOpen]="isSideDrawerOpen">
-      <app-user-create></app-user-create>
-      <!-- <app-customer-create (formClose)="formClose($event)" [isSideDrawerOpen]="isSideDrawerOpen"
-        [Id]="customerId"></app-customer-create> -->
+      <app-user-create (formClose)="formClose($event)" [isSideDrawerOpen]="isSideDrawerOpen" [Id]="userId"></app-user-create>
     </app-side-drawer>
     }
   </div>

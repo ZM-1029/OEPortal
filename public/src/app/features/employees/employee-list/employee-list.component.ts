@@ -202,8 +202,6 @@ export class EmployeeListComponent implements OnInit, OnChanges {
             }
           ),
           error: (err) => {
-            console.error("Error Status:", err.status);
-            console.error("Error Message:", err.error);
             let errorMessage = "An error occurred while fetching data.";
             if (err.status === 404 && err.error.message) {
               errorMessage = err.error.message;

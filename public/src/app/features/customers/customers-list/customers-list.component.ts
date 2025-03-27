@@ -48,7 +48,6 @@ ModuleRegistry.registerModules([AllCommunityModule]);
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CustomersListComponent implements OnInit, OnDestroy {
-  
   public totalCount: number = 0;
   public activeCustomer: number = 0;
   public terminatedCustomer: number = 0;
@@ -60,7 +59,7 @@ export class CustomersListComponent implements OnInit, OnDestroy {
   public paginationPageSize = this.currentPageSize;
   public paginationPageSizeSelector: number[] = [15, 25, 50, 100];
   HeadingName: string = "customers";
-  rowData: customerI[]=[];
+  rowData: customerI[] = [];
   customerAccess: rolePermissionListI = {
     id: 0,
     formId: 0,
@@ -68,11 +67,11 @@ export class CustomersListComponent implements OnInit, OnDestroy {
     view: false,
     add: false,
     edit: false
-  }; 
-  
- private gridApi!: GridApi<any>;
+  };
 
-private _unsubscribeAll$: Subject<any> = new Subject<any>();
+  private gridApi!: GridApi<any>;
+
+  private _unsubscribeAll$: Subject<any> = new Subject<any>();
 
   columnDefs: any = [
     {
@@ -149,7 +148,7 @@ private _unsubscribeAll$: Subject<any> = new Subject<any>();
       filter: true,
       minWidth: 170,
     },
-   
+
   ];
 
   defaultColDef = {
@@ -164,12 +163,12 @@ private _unsubscribeAll$: Subject<any> = new Subject<any>();
     private _changeDetectorRef: ChangeDetectorRef,
     private dialog: MatDialog,
     private _successMessage: MatSnackBar,
-    private rolePermissionService:RolePermissionService
-  ) {}
+    private rolePermissionService: RolePermissionService
+  ) { }
 
   ngOnInit(): void {
     this.pageHeader_customer(this.HeadingName);
-    
+
   }
 
 
@@ -190,7 +189,7 @@ private _unsubscribeAll$: Subject<any> = new Subject<any>();
               if (this.gridApi) {
                 this.gridApi.setColumnsVisible(["actions"], this.customerAccess.edit);
               }
-  
+
               this._changeDetectorRef.detectChanges();
             }
           }
@@ -203,7 +202,7 @@ private _unsubscribeAll$: Subject<any> = new Subject<any>();
       },
     });
   }
-  
+
 
 
   addCustomer(event: Event) {
@@ -224,7 +223,7 @@ private _unsubscribeAll$: Subject<any> = new Subject<any>();
           this.rowData = result.customers;
           this._changeDetectorRef.detectChanges();
         } else {
-          this.rowData=[];
+          this.rowData = [];
           this.showErrorOverlay('Data is not found')
           console.log("No customer data returned from API.");
         }
@@ -306,7 +305,7 @@ private _unsubscribeAll$: Subject<any> = new Subject<any>();
     this.currentPageSize = pageSize;
   }
 
-  
+
   // for Manage Columns
   allColumns = [...this.columnDefs];
   displayedColumns = [...this.columnDefs];
@@ -333,30 +332,31 @@ private _unsubscribeAll$: Subject<any> = new Subject<any>();
   }
 
   // show message in table if api is false.. start
-    gridOptions = {
-      noRowsOverlayComponentParams: {
-        noRowsMessageFunc: () => "Data is not found",
-      },
-    };
-  
-    onGridReady(params: GridReadyEvent<any>) {
-      this.getPermissionToAccessPage(Number(localStorage.getItem('role')))
-      this.gridApi = params.api;
-      this.gridApi.hideOverlay();
+  gridOptions = {
+    noRowsOverlayComponentParams: {
+      noRowsMessageFunc: () => "Data is not found",
+    },
+  };
+
+  onGridReady(params: GridReadyEvent<any>) {
+    this.getPermissionToAccessPage(Number(localStorage.getItem('role')))
+    this.gridApi = params.api;
+    this.gridApi.hideOverlay();
+  }
+
+  showErrorOverlay(message: string) {
+    if (this.gridApi) {
+      this.gridApi.showNoRowsOverlay();
+      setTimeout(() => {
+        const overlay = document.querySelector(".ag-overlay-no-rows-center");
+        if (overlay) {
+          overlay.innerHTML = `<span style="color: #2e3b64; font-weight: bold;">${message}</span>`;
+        }
+        this._changeDetectorRef.detectChanges();
+      }, 100);
     }
-  
-    showErrorOverlay(message: string) {
-      if (this.gridApi) {
-        this.gridApi.showNoRowsOverlay();
-        setTimeout(() => {
-          const overlay = document.querySelector(".ag-overlay-no-rows-center");
-          if (overlay) {
-            overlay.innerHTML = `<span style="color: #2e3b64; font-weight: bold;">${message}</span>`;
-          }
-          this._changeDetectorRef.detectChanges();
-        }, 100);
-      }
-    }
+  }
+
   // show message in table if api is false.. end
 
   renderActionIcons(params: any): string {
@@ -376,7 +376,7 @@ private _unsubscribeAll$: Subject<any> = new Subject<any>();
     `;
   }
 
-  
+
   //  Function to show success messages
   private showSuccessMessage(message: string) {
     this._successMessage.openFromComponent(SuccessModalComponent, {

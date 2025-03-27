@@ -71,8 +71,9 @@ export class UserCreateComponent implements OnInit, OnDestroy  {
       roleId: [""]
     });
     this.getRoles();
-    console.log(this.Id,"jjjj");
-    
+    if(this.Id!==0){
+      this.getUserDetails(this.Id)
+    }
   }
   displayFn(user: any): string {
     return user && user.name ? user.name : '';
@@ -105,18 +106,18 @@ export class UserCreateComponent implements OnInit, OnDestroy  {
   }
 
   getUserDetails(id: number) {
-    // if (id !== 0) {
-    //   this.Id = id;
-    //   this._userService
-    //     .getUserByUserId(id)
-    //     .pipe(takeUntil(this._unsubscribeAll$))
-    //     .subscribe((response: userDetailsI) => {
-    //       if (response.success) {
-    //         this.userForm.patchValue(response.user);
-    //         this._changeDetection.detectChanges();
-    //       }
-    //     });
-    // }
+    if (id !== 0) {
+      this.Id = id;
+      this._userService
+        .getUserById(id)
+        .subscribe((response: any) => {
+          if (response.success) {
+            this.userForm.patchValue(response.data);
+            this.roleControl.patchValue(response.data.roleName)
+            this._changeDetectorRef.detectChanges();
+          }
+        });
+    }
   }
 
   createUpdate() {

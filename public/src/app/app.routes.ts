@@ -62,7 +62,7 @@ export const routes: Routes = [
           ),
       },
       {
-        path: "bussiness",
+        path: "business",
         loadChildren: () =>
           import("./features/bussiness/bussiness.routing").then(
             (m) => m.BUSSINESS_ROUTES,

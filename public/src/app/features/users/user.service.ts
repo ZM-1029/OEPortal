@@ -14,6 +14,13 @@ export class UserService {
       `${environment.apiUrl}GetUserList`,
     );
   }
+ 
+  
+  getUserById(userId:any) {
+    return this.http.get(
+      `${environment.apiUrl}GetUserById/${userId}`,
+    );
+  }
 
 createUser(userData:any) {
     return this.http.post(

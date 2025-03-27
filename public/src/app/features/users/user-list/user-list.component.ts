@@ -5,7 +5,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AgGridAngular } from 'ag-grid-angular';
 import { ModuleRegistry, AllCommunityModule, GridApi, GridReadyEvent } from 'ag-grid-community';
-import { Subject } from 'rxjs';
 import { DeleteModalComponent } from 'src/app/shared/components/UI/delete-modal/delete-modal.component';
 import { LoaderComponent } from 'src/app/shared/components/UI/loader/loader.component';
 import { PageHeaderComponent } from 'src/app/shared/components/UI/page-header/page-header.component';
@@ -18,18 +17,18 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 @Component({
   selector: 'app-user-list',
   imports: [AgGridAngular,
-      CommonModule,
-      LoaderComponent,
-      PageHeaderComponent,
-      SideDrawerComponent,
-      UserCreateComponent],
+    CommonModule,
+    LoaderComponent,
+    PageHeaderComponent,
+    SideDrawerComponent,
+    UserCreateComponent],
   templateUrl: './user-list.component.html',
   styleUrl: './user-list.component.scss',
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UserListComponent implements OnInit, OnDestroy  {
- columnDefs: any = [
+export class UserListComponent implements OnInit {
+  columnDefs: any = [
     {
       headerName: "S. No",
       valueGetter: "node.rowIndex + 1",
@@ -81,7 +80,7 @@ export class UserListComponent implements OnInit, OnDestroy  {
       filter: true,
       minWidth: 270,
     },
-   
+
   ];
 
   defaultColDef = {
@@ -97,15 +96,13 @@ export class UserListComponent implements OnInit, OnDestroy  {
   public resignedCustomer: number = 0;
   public currentPageNumber: number = 1;
   public currentPageSize: number = 15;
-  public customerId: number = 0;
+  public userId: number = 0;
   public isSideDrawerOpen: boolean = false;
   public paginationPageSize = this.currentPageSize;
   public paginationPageSizeSelector: number[] = [15, 25, 50, 100];
   HeadingName: string = "User";
-  rowData: any[]=[];
- private gridApi!: GridApi<any>;
-
-private _unsubscribeAll$: Subject<any> = new Subject<any>();
+  rowData: any[] = [];
+  private gridApi!: GridApi<any>;
 
   constructor(
     private _customerService: CustomersService,
@@ -115,15 +112,15 @@ private _unsubscribeAll$: Subject<any> = new Subject<any>();
     private _router: Router,
     private _activatedRoute: ActivatedRoute,
     private _successMessage: MatSnackBar,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.pageHeader_customer(this.HeadingName);
-    
+
   }
 
   addCustomer(event: Event) {
-    this.customerId = 0;
+    this.userId = 0;
     this.isSideDrawerOpen = true;
   }
 
@@ -136,26 +133,26 @@ private _unsubscribeAll$: Subject<any> = new Subject<any>();
       .getUserList()
       .subscribe(
         {
-          next:((response)=>{
-            this.rowData=response;
+          next: ((response) => {
+            this.rowData = response;
             this._changeDetectorRef.detectChanges();
-          }),error:((err)=>{
-            this.rowData=[];
+          }), error: ((err) => {
+            this.rowData = [];
             this.showErrorOverlay('Data is not found')
           })
         }
-      //   (result: customerListI) => {
-      //   if (result.success) {
-      //     this.totalCount = result.totalCount;
-      //     this.rowData = result.customers;
-      //     this._changeDetectorRef.detectChanges();
-      //   } else {
-      //     this.rowData=[];
-      //     this.showErrorOverlay('Data is not found')
-      //     console.log("No customer data returned from API.");
-      //   }
-      // }
-    );
+        //   (result: customerListI) => {
+        //   if (result.success) {
+        //     this.totalCount = result.totalCount;
+        //     this.rowData = result.customers;
+        //     this._changeDetectorRef.detectChanges();
+        //   } else {
+        //     this.rowData=[];
+        //     this.showErrorOverlay('Data is not found')
+        //     console.log("No customer data returned from API.");
+        //   }
+        // }
+      );
   }
 
 
@@ -168,7 +165,7 @@ private _unsubscribeAll$: Subject<any> = new Subject<any>();
     this.sideDrawer();
     if (event) {
       this.getUserList();
-      this.customerId = 0;
+      this.userId = 0;
     }
   }
 
@@ -183,17 +180,17 @@ private _unsubscribeAll$: Subject<any> = new Subject<any>();
   // delete customer
   updateCustomer(event: any): void {
     if (event.event.target.closest(".edit-icon")) {
-      const customerId = event.event.target.closest(".edit-icon").getAttribute("data-id");
+      const userId = event.event.target.closest(".edit-icon").getAttribute("data-id");
       this.isSideDrawerOpen = true;
-      this.customerId = Number(customerId);
+      this.userId = Number(userId);
     }
     if (event.event.target.closest(".delete-icon")) {
-      const customerId = event.event.target.closest(".delete-icon").getAttribute("data-id");
-      this.openDeleteModal(Number(customerId));
+      const userId = event.event.target.closest(".delete-icon").getAttribute("data-id");
+      this.openDeleteModal(Number(userId));
     }
   }
 
-  openDeleteModal(customerId: number): void {
+  openDeleteModal(userId: number): void {
     const dialogRef = this.dialog.open(DeleteModalComponent, {
       width: "400px",
       height: "175px",
@@ -203,7 +200,7 @@ private _unsubscribeAll$: Subject<any> = new Subject<any>();
     dialogRef.afterClosed().subscribe((result) => {
       if (result == true) {
         console.log("Delete confirmed");
-        this.deleteRow(customerId);
+        this.deleteRow(userId);
       } else {
         console.log("Delete action canceled");
       }
@@ -233,7 +230,7 @@ private _unsubscribeAll$: Subject<any> = new Subject<any>();
     this.currentPageSize = pageSize;
   }
 
-  
+
   // for Manage Columns
   allColumns = [...this.columnDefs];
   displayedColumns = [...this.columnDefs];
@@ -260,30 +257,30 @@ private _unsubscribeAll$: Subject<any> = new Subject<any>();
   }
 
   // show message in table if api is false.. start
-    gridOptions = {
-      noRowsOverlayComponentParams: {
-        noRowsMessageFunc: () => "Data is not found",
-      },
-    };
-  
-    onGridReady(params: GridReadyEvent<any>) {
-      this.gridApi = params.api;
-      this.gridApi.hideOverlay();
-      this.getUserList();
+  gridOptions = {
+    noRowsOverlayComponentParams: {
+      noRowsMessageFunc: () => "Data is not found",
+    },
+  };
+
+  onGridReady(params: GridReadyEvent<any>) {
+    this.gridApi = params.api;
+    this.gridApi.hideOverlay();
+    this.getUserList();
+  }
+
+  showErrorOverlay(message: string) {
+    if (this.gridApi) {
+      this.gridApi.showNoRowsOverlay();
+      setTimeout(() => {
+        const overlay = document.querySelector(".ag-overlay-no-rows-center");
+        if (overlay) {
+          overlay.innerHTML = `<span style="color: #2e3b64; font-weight: bold;">${message}</span>`;
+        }
+        this._changeDetectorRef.detectChanges();
+      }, 100);
     }
-  
-    showErrorOverlay(message: string) {
-      if (this.gridApi) {
-        this.gridApi.showNoRowsOverlay();
-        setTimeout(() => {
-          const overlay = document.querySelector(".ag-overlay-no-rows-center");
-          if (overlay) {
-            overlay.innerHTML = `<span style="color: #2e3b64; font-weight: bold;">${message}</span>`;
-          }
-          this._changeDetectorRef.detectChanges();
-        }, 100);
-      }
-    }
+  }
   // show message in table if api is false.. end
 
   renderActionIcons(params: any): string {
@@ -298,7 +295,7 @@ private _unsubscribeAll$: Subject<any> = new Subject<any>();
     `;
   }
 
-  
+
   //  Function to show success messages
   private showSuccessMessage(message: string) {
     this._successMessage.openFromComponent(SuccessModalComponent, {
@@ -320,8 +317,5 @@ private _unsubscribeAll$: Subject<any> = new Subject<any>();
     });
   }
 
-  ngOnDestroy(): void {
-    this._unsubscribeAll$.next(this._customerService);
-    this._unsubscribeAll$.complete();
-  }
+
 }
