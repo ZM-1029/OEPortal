@@ -1,0 +1,55 @@
+<div class="main-content m-4">
+    <!-- Close Icon -->
+   
+  
+    <div class="border-bottom bg-light pb-2">
+      <h2 class="formHeading">{{ formHeading }} Taxes</h2>
+    </div>
+    
+    <div class="form-container d-flex justify-content-center">
+      <form [formGroup]="countryForm">
+        <div class="input-form-container py-3">
+        
+         
+          <div class="form-group row">
+            <mat-label class="outer-mat-label col-4 pt-2">Taxes</mat-label>
+            <div class="col-8">
+              <div formArrayName="Taxes">
+                <div *ngFor="let tax of taxes.controls; let i = index" [formGroupName]="i" class="d-flex align-items-center mb-2">
+                  <mat-form-field appearance="outline" class="me-2" >
+                    <input formControlName="TaxName" matInput placeholder="Tax Name (e.g., VAT)" />
+                    <mat-error *ngIf="tax.get('TaxName')?.hasError('required') && tax.get('TaxName')?.touched">Tax Name is required</mat-error>
+                    <mat-error *ngIf="tax.get('TaxName')?.hasError('pattern') && tax.get('TaxName')?.touched">Tax Name can only contain letters and spaces</mat-error>
+                  </mat-form-field>
+                  
+                  <mat-form-field appearance="outline">
+                    <input formControlName="TaxRate" matInput type="number" placeholder="Rate (%)" />
+                    <mat-error *ngIf="tax.get('TaxRate')?.hasError('required') && tax.get('TaxRate')?.touched">Tax Rate is required</mat-error>
+                    <mat-error *ngIf="tax.get('TaxRate')?.hasError('min') && tax.get('TaxRate')?.touched">Tax Rate must be at least 0%</mat-error>
+                    <mat-error *ngIf="tax.get('TaxRate')?.hasError('max') && tax.get('TaxRate')?.touched">Tax Rate cannot exceed 100%</mat-error>
+                  </mat-form-field>
+                  <button mat-icon-button color="warn" (click)="removeTax(i)">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+              </div>
+              <button mat-button color="primary" (click)="addTax()">+ Add Tax</button>
+            </div>
+          </div>
+        </div>
+       
+  
+        <div style="display: flex; align-items: center;">
+          <mat-label class="outer-mat-label col-4 p-2">Is Fixed</mat-label>
+          <mat-slide-toggle formControlName="IsActive">Active</mat-slide-toggle>
+        </div>
+       
+        <!-- Form Buttons -->
+        <div class="form-btn d-flex align-items-start justify-content-end p-4">
+          <button class="btn btn-secondary mx-2" type="button" (click)="resetForm()">Clear</button>
+          <button class="btn btn-primary" type="submit" (click)="createUpdate()">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  
