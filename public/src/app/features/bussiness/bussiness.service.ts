@@ -1,3 +1,4 @@
+
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -29,7 +30,7 @@ export class BussinessService {
     return this.http.post<any>(this.apiurl+"api/Product/AddCountryTermsCondition",data)
   }
   UpdateCountryTermsCondition(data:any):Observable<any>{
-    return this.http.put<any>(this.apiurl+"api/Product/UpdateCountryTermsCondition",data)
+    return this.http.put<any>(this.apiurl+"api/Product/UpdateCountryTermsCondition?id="+data.id,data)
   }
 
   GetCountryTermsConditionById(data:any):Observable<any>{

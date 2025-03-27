@@ -38,12 +38,12 @@ import { ActivatedRoute } from "@angular/router";
 })
 export class CountrytaxesComponent {
   columnDefs: any = [
-    { headerName: "S. No", valueGetter: "node.rowIndex + 1", pinned: "left", minWidth: 80, maxWidth: 80 },
-    { headerName: "Actions", field: "actions", cellRenderer: (params: any) => this.renderActionIcons(params), minWidth: 100, maxWidth: 100, pinned: "right" },
-    { field: "country", headerName: "Country Name", sortable: true, filter: true, minWidth: 180 },
-    { field: "tax", headerName: "Tax", sortable: true, filter: true, minWidth: 180 },
-    { field: "value", headerName: "Value", sortable: true, filter: true, minWidth: 180 },
-    { field: "id", sortable: true, filter: true, minWidth: 180 },
+    { headerName: "S. No", valueGetter: "node.rowIndex + 1", pinned: "left" },
+    { headerName: "Actions", field: "actions", cellRenderer: (params: any) => this.renderActionIcons(params),  pinned: "right" },
+    { field: "country", headerName: "Country Name", sortable: true, filter: true, },
+    { field: "tax", headerName: "Tax", sortable: true, filter: true,  },
+    { field: "value", headerName: "Value", sortable: true, filter: true,  },
+    { field: "id", sortable: true, filter: true,  },
    
   ];
 

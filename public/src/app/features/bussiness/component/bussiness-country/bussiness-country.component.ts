@@ -36,7 +36,11 @@ export class BussinessCountryComponent {
   columnDefs: ColDef[] = [
   
     { field: 'country', headerName: 'Country', sortable: true, filter: true },
-    { field: 'termCondition', headerName: 'termCondition', sortable: true, filter: true },
+    { field: 'termCondition', headerName: 'termCondition', sortable: true, filter: true,
+      cellRenderer: (params: any) => {
+        return params.value ? `<span>${params.value}</span>` : '';
+      }
+     },
    
     {
       headerName: 'Actions',
