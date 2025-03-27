@@ -19,6 +19,32 @@
           </mat-form-field>
         </div>
         <div class="form-group row">
+          <mat-label class="outer-mat-lable col-4 pt-2">Company</mat-label>
+          <mat-form-field appearance="outline" class="col-8 py-0">
+            <mat-select class="py-0" formControlName="customerId" (selectionChange)="onCompanySelect($event)">
+              <mat-option value="" disabled selected>Select a Company Name</mat-option>
+              @for (company of Companies; track company) {
+              <mat-option [value]="company.countryId">{{
+                company.name
+                }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="form-group row">
+          <mat-label class="outer-mat-lable col-4 pt-2">Branch</mat-label>
+          <mat-form-field appearance="outline" class="col-8 py-0">
+            <mat-select class="py-0" formControlName="customerId">
+              <mat-option value="" disabled selected>Select a Branch Name</mat-option>
+              @for (branch of Branches; track branch) {
+              <mat-option [value]="branch.id">{{
+                branch.name
+                }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="form-group row">
           <mat-label class="outer-mat-lable col-4 pt-2">Country</mat-label>
           <mat-form-field appearance="outline" class="col-8 py-0">
             <mat-select class="py-0" formControlName="countryId">

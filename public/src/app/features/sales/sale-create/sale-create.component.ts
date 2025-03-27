@@ -12,7 +12,7 @@ import { productDetailsI, Service, Unit } from "src/app/shared/types/items.type"
 import { CdkTextareaAutosize } from "@angular/cdk/text-field";
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { SalesService } from "../sales.service";
-import { Country, Customer, PaymentTerm, PaymentTermsI } from "src/app/shared/types/sales.type";
+import { Branch, Company, Country, Customer, PaymentTerm, PaymentTermsI } from "src/app/shared/types/sales.type";
 
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core'; // For native date adapter
@@ -54,6 +54,8 @@ export class SaleCreateComponent {
   QuotationNo: string = '';
   PaymentTerms:PaymentTerm[]=[];
   Countries:Country[]=[];
+  Companies:Company[]=[];
+  Branches:Branch[]=[];
   public customerEmail: string = '';
   public formHeading: string = "Create";
   public customerId: string = '';
@@ -218,6 +220,15 @@ export class SaleCreateComponent {
     });
     this._salesService.getCountry().subscribe((res) => {
       if (res.success) this.Countries = res.data;
+    });
+    this._salesService.getCompany().subscribe((res) => {
+      if (res.success) this.Companies = res.data;
+    });
+  }
+  onCompanySelect(event: any) {
+    const selectedCompanyId = event.value;
+    this._salesService.getBranchDetailByCompanyId(selectedCompanyId).subscribe((res) => {
+      if (res.success) this.Branches = res.data;
     });
   }
   ngOnDestroy(): void {
