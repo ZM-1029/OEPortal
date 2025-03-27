@@ -175,6 +175,9 @@
                   <td>
                     <input [(ngModel)]="item.subTotal" type="number" class="form-control" readonly />
                   </td>
+                  <button (click)="deleteRow(i)" class="delete-btn">
+                    <mat-icon>delete</mat-icon>
+                  </button>
                 </tr>
               }
               </tbody>

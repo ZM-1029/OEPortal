@@ -271,6 +271,9 @@ export class SaleCreateComponent {
     const subTotal = (item.quantity * item.rate) - discountAmount;
     item.subTotal = parseFloat(subTotal.toFixed(3)); // Keeping precision to 3 decimal places
   }
+  deleteRow(index: number): void {
+    this.items.splice(index, 1);
+  }
   ngOnDestroy(): void {
     this.resetForm();
     this._unsubscribeAll$.next(
