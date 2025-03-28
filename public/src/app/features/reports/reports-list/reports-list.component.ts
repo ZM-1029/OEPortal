@@ -1,11 +1,11 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, OnInit, Output } from "@angular/core";
 import { AttendanceNonComplianceHistoryComponent } from "./reports-tables/attendance-non-compliance-history/attendance-non-compliance-history.component";
 import { CommonModule, DatePipe, NgClass } from "@angular/common";
 import { ncTypeCountsI, nonComplianceHistoryI, nonComplianceI } from "src/app/shared/types/nonCompliance.type";
 import { FormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";
 import { MatDatepickerInputEvent, MatDatepickerModule } from "@angular/material/datepicker";
-import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatFormFieldControl, MatFormFieldModule } from "@angular/material/form-field";
 import { PageHeaderComponent } from "src/app/shared/components/UI/page-header/page-header.component";
 import { provideNativeDateAdapter } from "@angular/material/core";
 import { EmployeesService } from "../../employees/employees.service";
@@ -17,17 +17,21 @@ import { EfficiencyReportCustomersComponent } from "./reports-tables/efficiency-
 import { SingleSelectDropdownComponent } from "src/app/shared/components/UI/single-select-dropdown/single-select-dropdown.component";
 import { MultiSelectDropdownComponent } from "src/app/shared/components/UI/multi-select-dropdown/multi-select-dropdown.component";
 import { employeesDropdownI } from "src/app/shared/types/reports.type";
+import { MatInputModule } from "@angular/material/input";
 
 @Component({
   selector: "app-reports-list",
   imports: [
+    MatFormFieldModule,
+    MatInputModule,
+    MatDatepickerModule,
+    MatFormFieldModule,
+    ReactiveFormsModule,
     CommonModule,
     FormsModule,
     PageHeaderComponent,
     MatButtonModule,
-    MatFormFieldModule,
-    MatDatepickerModule,
-    ReactiveFormsModule,
+    
     TimesheetNonComplianceComponent,
     AttendanceNonComplianceHistoryComponent,
     EfficiencyReportEmployeesComponent,
@@ -40,6 +44,7 @@ import { employeesDropdownI } from "src/app/shared/types/reports.type";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReportsListComponent implements OnInit {
+  @Output() dateRangeSelected = new EventEmitter<{ startDate: string; endDate: string }>();
   activeTable = 'attendance';
   getDateForm!: FormGroup;
   startDate: string = "";
@@ -67,6 +72,8 @@ export class ReportsListComponent implements OnInit {
     this.setDefaultDates();
     this.pageHeader_employee(this.HeadingName);
     this.GetEmployeesForDropdown();
+    // this.setDefaultDates();
+    this._changeDetectorRef.detectChanges();
   }
 
   GetEmployeesForDropdown() {
@@ -135,7 +142,6 @@ export class ReportsListComponent implements OnInit {
     const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
     this.startDate = this.formatDate(firstDay);
     this.endDate = this.formatDate(lastDay);
-
     this.GetNCHistoryLogs();
   }
 
@@ -154,6 +160,7 @@ export class ReportsListComponent implements OnInit {
   }
 
   checkAndFetchAttendance() {
+    
     if (this.startDate && this.endDate) {
       this.GetNCHistoryLogs();
     }

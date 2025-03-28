@@ -47,7 +47,7 @@ export class CountryListComponent implements OnInit, OnDestroy {
     { headerName: "S. No", valueGetter: "node.rowIndex + 1", pinned: "left" },
     { headerName: "Actions", field: "actions", cellRenderer: (params: any) => this.renderActionIcons(params), pinned: "right" },
     { field: "name", headerName: "Country Name", sortable: true, filter: true },
-    { field: "id", headerName: "Country id", sortable: true, filter: true },
+    // { field: "id", headerName: "Country id", sortable: true, filter: true },
    
   ];
 

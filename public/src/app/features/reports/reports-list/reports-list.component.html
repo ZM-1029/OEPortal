@@ -3,17 +3,24 @@
   </app-page-header>
 
   <div [ngClass]="(activeTable === 'timesheet' || activeTable === 'attendance') ? '' : 'd-none'" class="date-range-picker d-flex">
-    <mat-form-field appearance="outline" class="w-100 p-0">
-      <mat-label>Enter a date range</mat-label>
-      <mat-date-range-input [rangePicker]="picker">
-        <input matStartDate placeholder="Start date" class="w-100" (dateChange)="getStartDate($event)"
-          [value]="startDate" />
-        <input matEndDate placeholder="End date" class="w-100" (dateChange)="getEndDate($event)" [value]="endDate" />
-      </mat-date-range-input>
-      <mat-hint class="ps-0">MM/DD/YYYY – MM/DD/YYYY</mat-hint>
-      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-date-range-picker #picker></mat-date-range-picker>
-    </mat-form-field>
+    <div [ngClass]="isActiveDropDownShow? '' : 'd-none'" class="d-flex gap-3">
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Start Date</mat-label>
+        <input matInput [matDatepicker]="startPicker" placeholder="Select start date"
+               (dateChange)="getStartDate($event)" [value]="startDate">
+        <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
+        <mat-datepicker #startPicker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>End Date</mat-label>
+        <input matInput [matDatepicker]="endPicker" placeholder="Select end date"
+               (dateChange)="getEndDate($event)" [value]="endDate">
+        <mat-datepicker-toggle matIconSuffix [for]="endPicker"></mat-datepicker-toggle>
+        <mat-datepicker #endPicker></mat-datepicker>
+      </mat-form-field>
+    </div>
+
   </div>
 
   <div class="d-flex align-items-center justify-content-center">
