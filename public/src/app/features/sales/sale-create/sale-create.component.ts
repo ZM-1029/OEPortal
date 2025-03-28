@@ -87,9 +87,11 @@ export class SaleCreateComponent {
     });
     this.clearForm();
   }
+
   ngOnChanges(): void {
     this.loadDropdownData();
   }
+  
   clearForm() {
     if (this.isSideDrawerOpen) {
       if (this.Id < 1) {
