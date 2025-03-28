@@ -1,0 +1,201 @@
+<div class="main-content  m-4">
+  <div class="border-bottom bg-light pb-2">
+    <h2 class="formHeading">{{ formHeading }} Quotation</h2>
+  </div>
+  <div class="form-container d-flex justify-content-center">
+    <form [formGroup]="productForm">
+      <div class="input-form-container py-3">
+        <div class="form-group row">
+          <mat-label class="outer-mat-lable col-4 pt-2">Customer Name</mat-label>
+          <mat-form-field appearance="outline" class="col-8 py-0">
+            <mat-select class="py-0" formControlName="customerId">
+              <mat-option value="" disabled selected>Select a Customer Name</mat-option>
+              @for (customer of Customers; track customer) {
+              <mat-option [value]="customer.id">{{
+                customer.name
+                }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="form-group row">
+          <mat-label class="outer-mat-lable col-4 pt-2">Company</mat-label>
+          <mat-form-field appearance="outline" class="col-8 py-0">
+            <mat-select class="py-0" formControlName="customerId" (selectionChange)="onCompanySelect($event)">
+              <mat-option value="" disabled selected>Select a Company Name</mat-option>
+              @for (company of Companies; track company) {
+              <mat-option [value]="company.countryId">{{
+                company.name
+                }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="form-group row">
+          <mat-label class="outer-mat-lable col-4 pt-2">Branch</mat-label>
+          <mat-form-field appearance="outline" class="col-8 py-0">
+            <mat-select class="py-0" formControlName="customerId">
+              <mat-option value="" disabled selected>Select a Branch Name</mat-option>
+              @for (branch of Branches; track branch) {
+              <mat-option [value]="branch.id">{{
+                branch.name
+                }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="form-group row">
+          <mat-label class="outer-mat-lable col-4 pt-2">Country</mat-label>
+          <mat-form-field appearance="outline" class="col-8 py-0">
+            <mat-select class="py-0" formControlName="countryId">
+              <mat-option value="" disabled selected>Select Country</mat-option>
+              @for (country of Countries; track country) {
+              <mat-option [value]="country.id">{{
+                country.name
+                }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="form-group row ">
+          <mat-label class="outer-mat-lable col-4 pt-2 ">Quotation Number </mat-label>
+          <mat-form-field appearance="outline" class="col-8">
+            <input formControlName="quotationNumber" matInput placeholder="Enter Quotation Number" />
+            <mat-error class="text-danger">
+              @if (productForm.controls["quotationNumber"].errors?.["required"]) {
+              <span>Name is required.</span>
+              } @else if (productForm.controls["quotationNumber"].errors?.["pattern"]) {
+              <span>Only alphabetic characters are allowed.</span>
+              }
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="form-group row ">
+          <mat-label class="outer-mat-lable col-4 pt-2 ">Reference </mat-label>
+          <mat-form-field appearance="outline" class="col-8">
+            <input formControlName="name" matInput placeholder="Enter Reference" />
+            <mat-error class="text-danger">
+              @if (productForm.controls["name"].errors?.["required"]) {
+              <span>Name is required.</span>
+              } @else if (productForm.controls["name"].errors?.["pattern"]) {
+              <span>Only alphabetic characters are allowed.</span>
+              }
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="form-group row">
+          <mat-label class="outer-mat-lable col-4 pt-2">Sales Order Date</mat-label>
+          <mat-form-field appearance="outline" class="col-8">
+            <input matInput [matDatepicker]="picker" formControlName="salesOrderDate"
+              placeholder="Enter Sales Order Date" />
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+
+          </mat-form-field>
+        </div>
+        <div class="form-group row">
+          <mat-label class="outer-mat-lable col-4 pt-2">Expected Shipment Date</mat-label>
+          <mat-form-field appearance="outline" class="col-8">
+            <input matInput [matDatepicker]="pickerShipment" formControlName="expectedShipmentDate"
+              placeholder="Enter Expected Shipment Date" />
+            <mat-datepicker-toggle matSuffix [for]="pickerShipment"></mat-datepicker-toggle>
+            <mat-datepicker #pickerShipment></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class="form-group row">
+          <mat-label class="outer-mat-lable col-4 pt-2">Payment Terms</mat-label>
+          <mat-form-field appearance="outline" class="col-8 py-0">
+            <mat-select class="py-0" formControlName="paymentTermId">
+              <mat-option value="" disabled selected>Select Payment Terms</mat-option>
+              @for (payment of PaymentTerms; track payment) {
+              <mat-option [value]="payment.id">{{
+                payment.termName
+                }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="form-group row ">
+          <mat-label class="outer-mat-lable col-4 pt-2 ">Delivery Method </mat-label>
+          <mat-form-field appearance="outline" class="col-8">
+            <input formControlName="deliveryMethod" matInput placeholder="Enter Delivery Method" />
+            <mat-error class="text-danger">
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-group row ">
+          <mat-label class="outer-mat-lable col-4 pt-2 ">Sales person </mat-label>
+          <mat-form-field appearance="outline" class="col-8">
+            <input formControlName="salesPerson" matInput placeholder="Enter Sales person" />
+            <mat-error class="text-danger">
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <h4>Item Table</h4>
+
+
+        <div class="form-group row">
+          <mat-label class="outer-mat-lable col-4 pt-2">Item Table</mat-label>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Item Details</th>
+                  <th>Quantity</th>
+                  <th>Rate</th>
+                  <th>Discount</th>
+                  <th>Tax</th>
+                  <th>Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (item of items; track item.id; let i = $index) {
+                <tr>
+                  <td>{{ item.productId }}</td>
+                  <td>
+                    <input [(ngModel)]="item.quantity" type="number" class="form-control" (input)="calculateAmount(i)" />
+                  </td>
+                  <td>
+                    <input [(ngModel)]="item.rate" type="number" class="form-control" (input)="calculateAmount(i)" />
+                  </td>
+                  <td>
+                    <input [(ngModel)]="item.discount" type="number" class="form-control" (input)="calculateAmount(i)" />
+                    <select [(ngModel)]="item.discountType" class="form-control">
+                      <option value="rupee">₹</option>
+                      <option value="%">%</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select [(ngModel)]="item.taxId" class="form-control">
+                      <option value="0">No Tax</option>
+                      <option value="1">GST</option>
+                    </select>
+                  </td>
+                  <td>
+                    <input [(ngModel)]="item.subTotal" type="number" class="form-control" readonly />
+                  </td>
+                  <button (click)="deleteRow(i)" class="delete-btn">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </tr>
+              }
+              </tbody>
+            </table>
+            <button type="button" class="btn btn-success" (click)="addRow()">Add Row</button>
+          </div>
+        </div>
+
+       
+      </div>
+      <div class="form-btn d-flex align-items-start justify-content-end p-4 ">
+        <button class="btn btn-secondary mx-2" type="button" (click)="resetForm()">
+          Clear
+        </button>
+        <button class="btn btn-primary" (click)="createUpdate()">
+          {{ formHeading }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
