@@ -5,138 +5,147 @@
   <div class="form-container d-flex justify-content-center">
     <form [formGroup]="productForm">
       <div class="input-form-container py-3">
-        <div class="form-group row">
-          <mat-label class="outer-mat-lable col-4 pt-2">Customer Name</mat-label>
-          <mat-form-field appearance="outline" class="col-8 py-0">
-            <mat-select class="py-0" formControlName="customerId">
-              <mat-option value="" disabled selected>Select a Customer Name</mat-option>
-              @for (customer of Customers; track customer) {
-              <mat-option [value]="customer.id">{{
-                customer.name
-                }}</mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div class="form-group row">
-          <mat-label class="outer-mat-lable col-4 pt-2">Company</mat-label>
-          <mat-form-field appearance="outline" class="col-8 py-0">
-            <mat-select class="py-0" formControlName="customerId" (selectionChange)="onCompanySelect($event)">
-              <mat-option value="" disabled selected>Select a Company Name</mat-option>
-              @for (company of Companies; track company) {
-              <mat-option [value]="company.countryId">{{
-                company.name
-                }}</mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div class="form-group row">
-          <mat-label class="outer-mat-lable col-4 pt-2">Branch</mat-label>
-          <mat-form-field appearance="outline" class="col-8 py-0">
-            <mat-select class="py-0" formControlName="customerId">
-              <mat-option value="" disabled selected>Select a Branch Name</mat-option>
-              @for (branch of Branches; track branch) {
-              <mat-option [value]="branch.id">{{
-                branch.name
-                }}</mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div class="form-group row">
-          <mat-label class="outer-mat-lable col-4 pt-2">Country</mat-label>
-          <mat-form-field appearance="outline" class="col-8 py-0">
-            <mat-select class="py-0" formControlName="countryId">
-              <mat-option value="" disabled selected>Select Country</mat-option>
-              @for (country of Countries; track country) {
-              <mat-option [value]="country.id">{{
-                country.name
-                }}</mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div class="form-group row ">
-          <mat-label class="outer-mat-lable col-4 pt-2 ">Quotation Number </mat-label>
-          <mat-form-field appearance="outline" class="col-8">
-            <input formControlName="quotationNumber" matInput placeholder="Enter Quotation Number" />
-            <mat-error class="text-danger">
-              @if (productForm.controls["quotationNumber"].errors?.["required"]) {
-              <span>Name is required.</span>
-              } @else if (productForm.controls["quotationNumber"].errors?.["pattern"]) {
-              <span>Only alphabetic characters are allowed.</span>
-              }
-            </mat-error>
-          </mat-form-field>
-        </div>
-        <div class="form-group row ">
-          <mat-label class="outer-mat-lable col-4 pt-2 ">Reference </mat-label>
-          <mat-form-field appearance="outline" class="col-8">
-            <input formControlName="name" matInput placeholder="Enter Reference" />
-            <mat-error class="text-danger">
-              @if (productForm.controls["name"].errors?.["required"]) {
-              <span>Name is required.</span>
-              } @else if (productForm.controls["name"].errors?.["pattern"]) {
-              <span>Only alphabetic characters are allowed.</span>
-              }
-            </mat-error>
-          </mat-form-field>
-        </div>
-        <div class="form-group row">
-          <mat-label class="outer-mat-lable col-4 pt-2">Sales Order Date</mat-label>
-          <mat-form-field appearance="outline" class="col-8">
-            <input matInput [matDatepicker]="picker" formControlName="salesOrderDate"
-              placeholder="Enter Sales Order Date" />
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
 
-          </mat-form-field>
-        </div>
-        <div class="form-group row">
-          <mat-label class="outer-mat-lable col-4 pt-2">Expected Shipment Date</mat-label>
-          <mat-form-field appearance="outline" class="col-8">
-            <input matInput [matDatepicker]="pickerShipment" formControlName="expectedShipmentDate"
-              placeholder="Enter Expected Shipment Date" />
-            <mat-datepicker-toggle matSuffix [for]="pickerShipment"></mat-datepicker-toggle>
-            <mat-datepicker #pickerShipment></mat-datepicker>
-          </mat-form-field>
-        </div>
-        <div class="form-group row">
-          <mat-label class="outer-mat-lable col-4 pt-2">Payment Terms</mat-label>
-          <mat-form-field appearance="outline" class="col-8 py-0">
-            <mat-select class="py-0" formControlName="paymentTermId">
-              <mat-option value="" disabled selected>Select Payment Terms</mat-option>
-              @for (payment of PaymentTerms; track payment) {
-              <mat-option [value]="payment.id">{{
-                payment.termName
-                }}</mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div class="form-group row ">
-          <mat-label class="outer-mat-lable col-4 pt-2 ">Delivery Method </mat-label>
-          <mat-form-field appearance="outline" class="col-8">
-            <input formControlName="deliveryMethod" matInput placeholder="Enter Delivery Method" />
-            <mat-error class="text-danger">
-            </mat-error>
-          </mat-form-field>
+        <div class="d-flex justify-content-center">
+          <div class="salary-form1 mx-2">
+            <div class="form-group row">
+              <mat-label class="outer-mat-lable col-4 pt-2">Customer Name</mat-label>
+              <mat-form-field appearance="outline" class="col-8 py-0">
+                <mat-select class="py-0" formControlName="customerId">
+                  <mat-option value="" disabled selected>Select a Customer Name</mat-option>
+                  @for (customer of Customers; track customer) {
+                  <mat-option [value]="customer.id">{{
+                    customer.name
+                    }}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="form-group row">
+              <mat-label class="outer-mat-lable col-4 pt-2">Company</mat-label>
+              <mat-form-field appearance="outline" class="col-8 py-0">
+                <mat-select class="py-0" formControlName="customerId" (selectionChange)="onCompanySelect($event)">
+                  <mat-option value="" disabled selected>Select a Company Name</mat-option>
+                  @for (company of Companies; track company) {
+                  <mat-option [value]="company.countryId">{{
+                    company.name
+                    }}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="form-group row">
+              <mat-label class="outer-mat-lable col-4 pt-2">Branch</mat-label>
+              <mat-form-field appearance="outline" class="col-8 py-0">
+                <mat-select class="py-0" formControlName="customerId">
+                  <mat-option value="" disabled selected>Select a Branch Name</mat-option>
+                  @for (branch of Branches; track branch) {
+                  <mat-option [value]="branch.id">{{
+                    branch.name
+                    }}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="form-group row">
+              <mat-label class="outer-mat-lable col-4 pt-2">Country</mat-label>
+              <mat-form-field appearance="outline" class="col-8 py-0">
+                <mat-select class="py-0" formControlName="countryId">
+                  <mat-option value="" disabled selected>Select Country</mat-option>
+                  @for (country of Countries; track country) {
+                  <mat-option [value]="country.id">{{
+                    country.name
+                    }}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="form-group row ">
+              <mat-label class="outer-mat-lable col-4 pt-2 ">Quotation Number </mat-label>
+              <mat-form-field appearance="outline" class="col-8">
+                <input formControlName="quotationNumber" matInput placeholder="Enter Quotation Number" />
+                <mat-error class="text-danger">
+                  @if (productForm.controls["quotationNumber"].errors?.["required"]) {
+                  <span>Name is required.</span>
+                  } @else if (productForm.controls["quotationNumber"].errors?.["pattern"]) {
+                  <span>Only alphabetic characters are allowed.</span>
+                  }
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+          </div>
+          <div class="salary-form2 mx-2">
+
+            <div class="form-group row ">
+              <mat-label class="outer-mat-lable col-4 pt-2 ">Reference </mat-label>
+              <mat-form-field appearance="outline" class="col-8">
+                <input formControlName="name" matInput placeholder="Enter Reference" />
+                <mat-error class="text-danger">
+                  @if (productForm.controls["name"].errors?.["required"]) {
+                  <span>Name is required.</span>
+                  } @else if (productForm.controls["name"].errors?.["pattern"]) {
+                  <span>Only alphabetic characters are allowed.</span>
+                  }
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="form-group row">
+              <mat-label class="outer-mat-lable col-4 pt-2">Sales Order Date</mat-label>
+              <mat-form-field appearance="outline" class="col-8">
+                <input matInput [matDatepicker]="picker" formControlName="salesOrderDate"
+                  placeholder="Enter Sales Order Date" />
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+
+              </mat-form-field>
+            </div>
+            <div class="form-group row">
+              <mat-label class="outer-mat-lable col-4 pt-2">Expected Shipment Date</mat-label>
+              <mat-form-field appearance="outline" class="col-8">
+                <input matInput [matDatepicker]="pickerShipment" formControlName="expectedShipmentDate"
+                  placeholder="Enter Expected Shipment Date" />
+                <mat-datepicker-toggle matSuffix [for]="pickerShipment"></mat-datepicker-toggle>
+                <mat-datepicker #pickerShipment></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div class="form-group row">
+              <mat-label class="outer-mat-lable col-4 pt-2">Payment Terms</mat-label>
+              <mat-form-field appearance="outline" class="col-8 py-0">
+                <mat-select class="py-0" formControlName="paymentTermId">
+                  <mat-option value="" disabled selected>Select Payment Terms</mat-option>
+                  @for (payment of PaymentTerms; track payment) {
+                  <mat-option [value]="payment.id">{{
+                    payment.termName
+                    }}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="form-group row ">
+              <mat-label class="outer-mat-lable col-4 pt-2 ">Delivery Method </mat-label>
+              <mat-form-field appearance="outline" class="col-8">
+                <input formControlName="deliveryMethod" matInput placeholder="Enter Delivery Method" />
+                <mat-error class="text-danger">
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="form-group row ">
+              <mat-label class="outer-mat-lable col-4 pt-2 ">Sales person </mat-label>
+              <mat-form-field appearance="outline" class="col-8">
+                <input formControlName="salesPerson" matInput placeholder="Enter Sales person" />
+                <mat-error class="text-danger">
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
         </div>
 
-        <div class="form-group row ">
-          <mat-label class="outer-mat-lable col-4 pt-2 ">Sales person </mat-label>
-          <mat-form-field appearance="outline" class="col-8">
-            <input formControlName="salesPerson" matInput placeholder="Enter Sales person" />
-            <mat-error class="text-danger">
-            </mat-error>
-          </mat-form-field>
-        </div>
         <h4>Item Table</h4>
 
         <div class="form-group row pe-3">
-          <!-- <mat-label class="outer-mat-lable col-4 pt-2">Item Table</mat-label> -->
-          <div class="table-container">
+          <div class="table-container py-4">
             <table>
               <thead>
                 <tr>
@@ -184,6 +193,43 @@
               </tbody>
             </table>
             <button type="button" class="btn btn-success my-2" (click)="addRow()">Add Row</button>
+            <div class="summary-container ">
+              <div class="summary-row">
+                <span class="summary-title">Sub Total</span>
+                <span class="summary-value">0.000</span>
+              </div>
+  
+              <div class="summary-row">
+                <span class="summary-title">Shipping Charges</span>
+                <div class="input-group">
+                  <input type="text" placeholder="0.00" class="adjustment-label">
+                  <i class="fa fa-question-circle tooltip" title="Shipping charges apply."></i>
+                </div>
+                <!-- <span class="summary-value">0.000</span> -->
+                <!-- <input type="text" placeholder="0.00" class="adjustment-label"> -->
+              </div>
+  
+              <span class="apply-tax">Apply Tax on Shipping Charge</span>
+  
+              <div class="summary-row">
+                <div class="adjustment-container">
+                  <input class="adjustment-label">
+                  <input type="text" placeholder="0.00" class="adjustment-label">
+                  <i class="fa fa-question-circle tooltip" title="Adjustments for discount or surcharge."></i>
+                </div>
+                <span class="summary-value">0.000</span>
+              </div>
+  
+              <div class="summary-row">
+                <span class="summary-title">Round Off</span>
+                <span class="summary-value">0.000</span>
+              </div>
+  
+              <div class="summary-row total-row">
+                <span>Total (₹)</span>
+                <span class="summary-value fw-bold">0.000</span>
+              </div>
+            </div>
           </div>
         </div>
 
