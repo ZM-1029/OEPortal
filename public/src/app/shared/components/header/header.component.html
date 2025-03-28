@@ -30,7 +30,8 @@
 
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="settingsDropdown">
               @for(menu of headerMenuList;track menu){
-                <li><a class="dropdown-item" >{{menu.name}}</a></li> 
+                <li><a class="dropdown-item" [routerLink]="[menu.navigateUrl]" >{{ menu.name }}</a></li>
+
               }
               <!-- <li><a class="dropdown-item" href="#">Profile Settings</a></li>
               <li><a class="dropdown-item" href="#">Account</a></li> -->

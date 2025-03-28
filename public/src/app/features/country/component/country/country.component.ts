@@ -44,10 +44,10 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 export class CountryListComponent implements OnInit, OnDestroy {
 
   columnDefs: any = [
-    { headerName: "S. No", valueGetter: "node.rowIndex + 1", pinned: "left", minWidth: 80, maxWidth: 80 },
-    { headerName: "Actions", field: "actions", cellRenderer: (params: any) => this.renderActionIcons(params), minWidth: 100, maxWidth: 100, pinned: "right" },
-    { field: "name", headerName: "Country Name", sortable: true, filter: true, minWidth: 180 },
-    { field: "id", headerName: "Country id", sortable: true, filter: true, minWidth: 180 },
+    { headerName: "S. No", valueGetter: "node.rowIndex + 1", pinned: "left" },
+    { headerName: "Actions", field: "actions", cellRenderer: (params: any) => this.renderActionIcons(params), pinned: "right" },
+    { field: "name", headerName: "Country Name", sortable: true, filter: true },
+    { field: "id", headerName: "Country id", sortable: true, filter: true },
    
   ];
 
@@ -119,9 +119,7 @@ export class CountryListComponent implements OnInit, OnDestroy {
     return `
       <div class="action-icons d-flex align-items-center justify-content-around">
         <span class="icon-container text-primary edit-icon" data-id="${params.data.id}" style="display: block; width: 20px; height: 20px; cursor:pointer">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-            <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
-          </svg>
+           <i style="cursor:pointer; font-size:1.2rem" class="fa-solid fa-eye"></i>
         </span>
       
       </div>

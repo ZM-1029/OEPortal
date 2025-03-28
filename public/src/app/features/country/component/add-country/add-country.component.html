@@ -1,6 +1,6 @@
 <div class="main-content m-4">
     <!-- Close Icon -->
-   
+    <mat-icon class="close-icon" style="float:right" (click)="closePopup()">close</mat-icon>
   
     <div class="border-bottom bg-light pb-2">
       <h2 class="formHeading">{{ formHeading }} Taxes</h2>
@@ -15,7 +15,7 @@
             <mat-label class="outer-mat-label col-4 pt-2">Taxes</mat-label>
             <div class="col-8">
               <div formArrayName="Taxes">
-                <div *ngFor="let tax of taxes.controls; let i = index" [formGroupName]="i" class="d-flex align-items-center mb-2">
+                <div *ngFor="let tax of taxes.controls; let i = index" [formGroupName]="i" >
                   <mat-form-field appearance="outline" class="me-2" >
                     <input formControlName="TaxName" matInput placeholder="Tax Name (e.g., VAT)" />
                     <mat-error *ngIf="tax.get('TaxName')?.hasError('required') && tax.get('TaxName')?.touched">Tax Name is required</mat-error>
@@ -33,12 +33,12 @@
                   </button>
                 </div>
               </div>
-              <button mat-button color="primary" (click)="addTax()">+ Add Tax</button>
+              
             </div>
           </div>
         </div>
+       <div style="display: flex; align-items: center; width: 80%;"> <button  class="btn btn-primary" (click)="addTax()">+ Add More Tax</button></div>
        
-  
         <div style="display: flex; align-items: center;">
           <mat-label class="outer-mat-label col-4 p-2">Is Fixed</mat-label>
           <mat-slide-toggle formControlName="IsActive">Active</mat-slide-toggle>

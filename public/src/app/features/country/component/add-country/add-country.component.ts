@@ -120,51 +120,52 @@ patchvalue(id:number)
   createUpdate() {
     if (this.countryForm.valid) {
       console.log(this.countryForm.value)
-    } else {
-      this.countryForm.markAllAsTouched(); // Highlight errors
-    }
-   
-    var count=0;
-    var count1=0;
-    debugger
-    this.countryForm.get("Taxes")?.value.forEach((element:any,index:any) => {
-      var para=
-      {
-        countryId: this.countryId,
-        isFixed: this.countryForm.get("IsActive")?.value,
-        name: element.TaxName,
-        value: element.TaxRate,
-        
-      }
-      count1++
-      if(index==0&&this.Id>0)
-      {
-        Object.assign(para, { id: this.Id });
-        this.apiservice.UpdateCountryTaxes(para).subscribe(data=>{
-          count++
-          if(count==count1)
-            {
-              this.showSuccessMessage("Tax Added/Updated successfully");
-           this.formClose.emit(true)
-            }
+      var count=0;
+      var count1=0;
+      debugger
+      this.countryForm.get("Taxes")?.value.forEach((element:any,index:any) => {
+        var para=
+        {
+          countryId: this.countryId,
+          isFixed: this.countryForm.get("IsActive")?.value,
+          name: element.TaxName,
+          value: element.TaxRate,
           
-        })
-      }
-      else{
-        this.apiservice.AddCountryTaxes(para).subscribe(data=>{
-          
+        }
+        count1++
+        if(index==0&&this.Id>0)
+        {
+          Object.assign(para, { id: this.Id });
+          this.apiservice.UpdateCountryTaxes(para).subscribe(data=>{
             count++
             if(count==count1)
               {
                 this.showSuccessMessage("Tax Added/Updated successfully");
              this.formClose.emit(true)
               }
-        })
-      }
-    
+            
+          })
+        }
+        else{
+          this.apiservice.AddCountryTaxes(para).subscribe(data=>{
+            
+              count++
+              if(count==count1)
+                {
+                  this.showSuccessMessage("Tax Added/Updated successfully");
+               this.formClose.emit(true)
+                }
+          })
+        }
       
-    });
-
+        
+      });
+  
+    } else {
+      this.countryForm.markAllAsTouched(); // Highlight errors
+    }
+   
+   
     
    
     

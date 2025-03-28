@@ -1,5 +1,5 @@
-import { Component, EventEmitter, inject, Input, Output, signal } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ChangeDetectorRef, Component, EventEmitter, inject, Input, Output, signal } from '@angular/core';
+import {  FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
@@ -12,6 +12,7 @@ import { BussinessService } from '../../bussiness.service';
 import { ActivatedRoute } from '@angular/router';
 import { SuccessModalComponent } from 'src/app/shared/components/UI/success-modal/success-modal.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { QuillModule } from 'ngx-quill';
 
 @Component({
   selector: 'app-add-bussiness',
@@ -23,20 +24,21 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     MatSlideToggleModule,
     MatButtonModule,
     MatIconModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    QuillModule
   ],
   templateUrl: './add-bussiness.component.html',
   styleUrl: './add-bussiness.component.scss'
 })
 export class AddBussinessComponent {
   businessForm!: FormGroup;
- 
+  heading:string="Add"
   countries: { value: string, label: string }[] = []; // Mock data
   @Input() Id: number = 0;
   @Input() isSideDrawerOpen: boolean = false; 
   serviceid:number=0
  @Output() formClose: EventEmitter<boolean> = new EventEmitter<boolean>();
-  constructor(private fb: FormBuilder,private apiservice:BussinessService,private activate:ActivatedRoute,private _successMessage:MatSnackBar) {
+  constructor(private fb: FormBuilder,private apiservice:BussinessService,private activate:ActivatedRoute,private _successMessage:MatSnackBar,private cdr:ChangeDetectorRef) {
     this.apiservice.getAllCountry().subscribe({next:(data:any)=>{
       this.countries = [{ value: '0', label: 'Select a country' }];  // Add the default option
       data.data.forEach((country:any) => {
@@ -47,6 +49,7 @@ export class AddBussinessComponent {
       });
     }})
   }
+  
  private showSuccessMessage(message: string) {
       this._successMessage.openFromComponent(SuccessModalComponent, {
         data: { message },
@@ -56,7 +59,13 @@ export class AddBussinessComponent {
         horizontalPosition: "right",
       });
     }
-  ngOnInit(): void {
+    reset(){
+      debugger
+      this.businessForm.reset()
+      this.businessForm.get('Country')?.setValue('0');
+    }
+ async ngOnInit() {
+  
     this.activate.paramMap.subscribe(params => {
       this.serviceid = Number(params.get('id'));
       
@@ -68,21 +77,63 @@ export class AddBussinessComponent {
       Terms: ['', [Validators.required, Validators.minLength(10)]],
    
     });
-
-    this.patchValue()
+if(this.Id>0)
+{
+  this.heading="Update"
+  this.patchValue()
+}
+    
   }
+  editorModules = {
+    toolbar: [
+      [{ font: [] }, { size: [] }],
+      ["bold", "italic", "underline", "strike"],
+      [{ color: [] }, { background: [] }], // 🎨 Add Text & Background Colors
+      [{ script: "sub" }, { script: "super" }],
+      [{ header: 1 }, { header: 2 }, "blockquote", "code-block"],
+      [{ list: "ordered" }, { list: "bullet" }],
+      [{ align: [] }],
+      ["link", "image", "video"]
+    ]
+  };
   patchValue()
   {
     debugger
     this.apiservice.GetCountryTermsConditionById(this.Id).subscribe({next:(data:any)=>{
       this.businessForm.patchValue({
-        Country:data.countryId,
+        
         Terms:data.data.termsAndConditions
       })
+      this.businessForm.get('Country')?.setValue(data.data.countryId.toString());
     }})
   }
+  closePopup() {
+    this.formClose.emit();
+  }
+  iscountryfail:boolean=false;
+  checkCountry(event:any)
+  {
+    if(Number(this.businessForm.value.Country)>0)
+    {
+      this.iscountryfail=false
 
+    }
+    else{
+      this.iscountryfail=true
+    }
+  }
   submitForm() {
+    debugger
+    if(Number(this.businessForm.value.Country)>0)
+      {
+        this.iscountryfail=false
+  
+      }
+      else{
+        this.iscountryfail=true
+        this.cdr.detectChanges()
+        return
+      }
     if (this.businessForm.valid) {
       console.log('Form Data:', this.businessForm.value);
       if(this.Id<=0)
