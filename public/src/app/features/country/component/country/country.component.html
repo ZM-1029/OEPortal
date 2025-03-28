@@ -1,0 +1,35 @@
+<div class="main-content mt-2 p-2">
+    <app-page-header [HeadingName]="'Countries'">
+      <div class="d-flex" pageHeaderBtn>
+        
+      </div>
+    </app-page-header>
+  
+    <div class="d-flex align-items-center justify-content-center">
+      <div class="container-fluid p-0">
+        <ag-grid-angular
+          #agGrid
+          style="width: 100%; height: 78vh;"
+          class="ag-theme-alpine"
+          [rowData]="rowData"
+          [columnDefs]="columnDefs"
+          [defaultColDef]="defaultColDef"
+          [animateRows]="true"
+          (cellClicked)="updateCountry($event)"
+          [pagination]="true"
+          (gridReady)="onGridReady($event)">
+        </ag-grid-angular>
+      </div>
+    </div>
+  
+    @if (isSideDrawerOpen) {
+        <app-side-drawer (sideDrawer)="sideDrawer()" [isSideDrawerOpen]="isSideDrawerOpen">
+          <app-add-country (formClose)="formClose($event)" [isSideDrawerOpen]="isSideDrawerOpen"
+            [Id]="countryId"></app-add-country>
+        </app-side-drawer>
+        }
+      
+      
+      
+  </div>
+  

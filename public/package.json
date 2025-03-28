@@ -46,6 +46,7 @@
     "moment": "^2.30.1",
     "ng-select2-component": "^17.1.1",
     "ngx-file-drag-drop": "^11.0.0",
+    "ngx-quill": "^27.0.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0",
