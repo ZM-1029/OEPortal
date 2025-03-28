@@ -135,7 +135,7 @@
         <h4>Item Table</h4>
 
         <div class="form-group row pe-3">
-          <mat-label class="outer-mat-lable col-4 pt-2">Item Table</mat-label>
+          <!-- <mat-label class="outer-mat-lable col-4 pt-2">Item Table</mat-label> -->
           <div class="table-container">
             <table>
               <thead>
@@ -159,16 +159,16 @@
                   <td>
                     <input [(ngModel)]="item.rate" type="number" class="form-control" (input)="calculateAmount(i)" />
                   </td>
-                  <td>
-                    <input [(ngModel)]="item.discount" type="number" class="form-control"
+                  <td class="d-flex ">
+                    <input [(ngModel)]="item.discount" type="number" class="form-control mx-2"
                       (input)="calculateAmount(i)" />
-                    <select [(ngModel)]="item.discountType" class="form-control">
-                      <option value="rupee">₹</option>
-                      <option value="%">%</option>
+                    <select [(ngModel)]="item.discountType" class="form-control" style="width: 30px;">
+                      <option class="px-2" value="rupee">₹</option>
+                      <option class="px-2" value="%">%</option>
                     </select>
                   </td>
                   <td>
-                    <select [(ngModel)]="item.taxId" class="form-control">
+                    <select [(ngModel)]="item.taxId" class="form-control" style="width: 200px;">
                       <option value="0">No Tax</option>
                       <option value="1">GST</option>
                     </select>
