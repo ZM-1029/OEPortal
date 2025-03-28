@@ -36,7 +36,7 @@ export class EmployeeAssetsComponent implements OnInit, AfterViewInit {
       },
     },
     {
-      assetName: "assetName",
+      field: "assetName",
       headerName: "Asset Name",
       sortable: true,
       filter: true,
@@ -51,7 +51,7 @@ export class EmployeeAssetsComponent implements OnInit, AfterViewInit {
     },
     {
       field: "checkOutDate",
-      headerName: "check OutDate",
+      headerName: "Assigned Date",
       sortable: true,
       filter: true,
       minWidth: 100,
