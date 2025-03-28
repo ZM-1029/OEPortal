@@ -19,6 +19,32 @@
           </mat-form-field>
         </div>
         <div class="form-group row">
+          <mat-label class="outer-mat-lable col-4 pt-2">Company</mat-label>
+          <mat-form-field appearance="outline" class="col-8 py-0">
+            <mat-select class="py-0" formControlName="customerId" (selectionChange)="onCompanySelect($event)">
+              <mat-option value="" disabled selected>Select a Company Name</mat-option>
+              @for (company of Companies; track company) {
+              <mat-option [value]="company.countryId">{{
+                company.name
+                }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="form-group row">
+          <mat-label class="outer-mat-lable col-4 pt-2">Branch</mat-label>
+          <mat-form-field appearance="outline" class="col-8 py-0">
+            <mat-select class="py-0" formControlName="customerId">
+              <mat-option value="" disabled selected>Select a Branch Name</mat-option>
+              @for (branch of Branches; track branch) {
+              <mat-option [value]="branch.id">{{
+                branch.name
+                }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="form-group row">
           <mat-label class="outer-mat-lable col-4 pt-2">Country</mat-label>
           <mat-form-field appearance="outline" class="col-8 py-0">
             <mat-select class="py-0" formControlName="countryId">
@@ -107,7 +133,61 @@
           </mat-form-field>
         </div>
         <h4>Item Table</h4>
-       
+
+        <div class="form-group row pe-3">
+          <!-- <mat-label class="outer-mat-lable col-4 pt-2">Item Table</mat-label> -->
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Item Details</th>
+                  <th>Quantity</th>
+                  <th>Rate</th>
+                  <th>Discount</th>
+                  <th>Tax</th>
+                  <th>Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (item of items; track item.id; let i = $index) {
+                <tr>
+                  <td>{{ item.productId }}</td>
+                  <td>
+                    <input [(ngModel)]="item.quantity" type="number" class="form-control"
+                      (input)="calculateAmount(i)" />
+                  </td>
+                  <td>
+                    <input [(ngModel)]="item.rate" type="number" class="form-control" (input)="calculateAmount(i)" />
+                  </td>
+                  <td class="d-flex ">
+                    <input [(ngModel)]="item.discount" type="number" class="form-control mx-2"
+                      (input)="calculateAmount(i)" />
+                    <select [(ngModel)]="item.discountType" class="form-control" style="width: 30px;">
+                      <option class="px-2" value="rupee">₹</option>
+                      <option class="px-2" value="%">%</option>
+                    </select>
+                  </td>
+                  <td>
+                    <select [(ngModel)]="item.taxId" class="form-control" style="width: 200px;">
+                      <option value="0">No Tax</option>
+                      <option value="1">GST</option>
+                    </select>
+                  </td>
+                  <td>
+                    <input [(ngModel)]="item.subTotal" type="number" class="form-control" readonly />
+                  </td>
+                  <button (click)="deleteRow(i)" class="btn delete-btn">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </tr>
+                }
+              </tbody>
+            </table>
+            <button type="button" class="btn btn-success my-2" (click)="addRow()">Add Row</button>
+          </div>
+        </div>
+
+
       </div>
       <div class="form-btn d-flex align-items-start justify-content-end p-4 ">
         <button class="btn btn-secondary mx-2" type="button" (click)="resetForm()">

@@ -12,16 +12,17 @@ import { productDetailsI, Service, Unit } from "src/app/shared/types/items.type"
 import { CdkTextareaAutosize } from "@angular/cdk/text-field";
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { SalesService } from "../sales.service";
-import { Country, Customer, PaymentTerm, PaymentTermsI } from "src/app/shared/types/sales.type";
+import { Branch, Company, Country, Customer, PaymentTerm, PaymentTermsI } from "src/app/shared/types/sales.type";
 
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core'; // For native date adapter
 import { MatIconModule } from '@angular/material/icon'; // For calendar icon
-
+import { FormsModule } from '@angular/forms'; 
 
 @Component({
   selector: 'app-sale-create',
   imports: [   ReactiveFormsModule,
+    FormsModule,
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
@@ -54,6 +55,8 @@ export class SaleCreateComponent {
   QuotationNo: string = '';
   PaymentTerms:PaymentTerm[]=[];
   Countries:Country[]=[];
+  Companies:Company[]=[];
+  Branches:Branch[]=[];
   public customerEmail: string = '';
   public formHeading: string = "Create";
   public customerId: string = '';
@@ -84,9 +87,11 @@ export class SaleCreateComponent {
     });
     this.clearForm();
   }
+
   ngOnChanges(): void {
     this.loadDropdownData();
   }
+  
   clearForm() {
     if (this.isSideDrawerOpen) {
       if (this.Id < 1) {
@@ -219,6 +224,57 @@ export class SaleCreateComponent {
     this._salesService.getCountry().subscribe((res) => {
       if (res.success) this.Countries = res.data;
     });
+    this._salesService.getCompany().subscribe((res) => {
+      if (res.success) this.Companies = res.data;
+    });
+  }
+  onCompanySelect(event: any) {
+    const selectedCompanyId = event.value;
+    this._salesService.getBranchDetailByCompanyId(selectedCompanyId).subscribe((res) => {
+      if (res.success) this.Branches = res.data;
+    });
+  }
+
+  items = [
+    {
+      id: 0,
+      productId: 0,
+      quantity: 1,
+      rate: 0,
+      discount: 0,
+      discountType: 'rupee',
+      taxId: 0,
+      subTotal: 0
+    }
+  ];
+  addRow() {
+    const newRow = {
+      id: this.items.length,
+      productId: 0,
+      quantity: 1,
+      rate: 0,
+      discount: 0,
+      discountType: 'rupee', // Default discount type
+      taxId: 0,
+      subTotal: 0
+    };
+    this.items.push(newRow);
+  }
+  calculateAmount(index: number) {
+    const item = this.items[index];
+
+    let discountAmount = 0;
+    if (item.discountType === 'rupee') {
+      discountAmount = item.discount;
+    } else if (item.discountType === '%') {
+      discountAmount = (item.rate * item.discount) / 100;
+    }
+
+    const subTotal = (item.quantity * item.rate) - discountAmount;
+    item.subTotal = parseFloat(subTotal.toFixed(3)); // Keeping precision to 3 decimal places
+  }
+  deleteRow(index: number): void {
+    this.items.splice(index, 1);
   }
   ngOnDestroy(): void {
     this.resetForm();

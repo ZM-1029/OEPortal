@@ -23,6 +23,7 @@
   
   form {
     width: 100%;
+    height: 77vh;
   }
   
   .form-control {
@@ -62,9 +63,10 @@
     display: flex !important;
   }
   .input-form-container{
-    max-height: 56vh;
+    max-height: 66vh;
     width: 100%;
     min-width:430px;
+    padding-right:10px ;
     overflow-y: scroll;
     overflow-x: hidden;
   }
@@ -285,5 +287,46 @@
     cursor: pointer;
   }
 
-  
-  
+
+
+  /* Table container with scroll */
+.table-container {
+  max-height: 400px; /* Adjust the max height as needed */
+  overflow-y: auto;
+  border: 1px solid #ddd; /* Optional: To add a border around the scroll area */
+  border-radius: 4px; /* Optional: Add rounded corners */
+  margin-top: 20px; /* Space between the table and other content */
+}
+
+/* General Table Styling */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 12px;
+  text-align: left;
+  border: 1px solid #ddd;
+  font-size: 14px;
+}
+
+th {
+  background-color: #f1f1f1;
+  font-weight: 600;
+}
+
+tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+/* Styling for Input Fields */
+input[type="number"], select {
+  width: 100%;
+  padding: 8px;
+  margin: 5px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+

@@ -59,8 +59,37 @@ export interface itemReturnI {
   export interface CountryI {
     success: boolean;
     message: string;
-    data: Country[];  // Array of Country objects
-    errors: string[];  // Array of error messages (if any)
+    data: Country[];  
+    errors: string[];  
+  }
+  export interface Company {
+    id: number;
+    name: string;
+    countryId: number;
+    headquater: string;
+    isActive: boolean;
+  }
+  
+  export interface CompanyListI {
+    success: boolean;
+    message: string;
+    data: Company[];
+  }
+
+  export interface Branch {
+    id: number;
+    companyId: number;
+    name: string;
+    phoneNumber: string;
+    state: string;
+    city: string;
+    address: string;
+  }
+  
+  export interface BranchListI {
+    success: boolean;
+    message: string;
+    data: Branch[];
   }
   
   

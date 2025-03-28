@@ -3,7 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { BehaviorSubject } from "rxjs";
 import { environment } from "../../../environments/environment";
 import { AllServicesI, AllUnitI, Item, ItemsListI, productDetailsI } from 'src/app/shared/types/items.type';
-import { AllCustomersI, CountryI, PaymentTermsI, QuotationListI, QuotationNumberI } from 'src/app/shared/types/sales.type';
+import { AllCustomersI, BranchListI, CompanyListI, CountryI, PaymentTermsI, QuotationListI, QuotationNumberI } from 'src/app/shared/types/sales.type';
 
 @Injectable({
   providedIn: 'root'
@@ -59,6 +59,14 @@ export class SalesService {
     return this.http.get<CountryI>(
       `${environment.apiUrl}api/Product/GetCountry`,
     );
+  }
+  getCompany() {
+    return this.http.get<CompanyListI>(
+      `${environment.apiUrl}api/CompanyProfile/GetAll`,
+    );
+  }
+  getBranchDetailByCompanyId(id: number | string) {
+    return this.http.get<BranchListI>(`${environment.apiUrl}api/CompanyProfile/GetBranchDetailByCompanyId/${id}`);
   }
   
 }
