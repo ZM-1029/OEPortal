@@ -22,6 +22,8 @@ import { Router } from "@angular/router";
 import { MatButtonModule } from "@angular/material/button";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { SuccessModalComponent } from "src/app/shared/components/UI/success-modal/success-modal.component";
+import { rolePermissionListI } from "src/app/shared/types/roles.type";
+import { RolePermissionService } from "../../role-permissions/role-permission.service";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 @Component({
@@ -53,6 +55,16 @@ export class EmployeeListComponent implements OnInit, OnChanges {
   private gridApi!: GridApi<any>;
   rowData: employeeType[] | undefined;
   HeadingName: string = "employees";
+
+  employeeAccess: rolePermissionListI = {
+      id: 0,
+      formId: 0,
+      form: '',
+      view: false,
+      add: false,
+      edit: false
+    };
+  
 
   columnDefs: any = [
     {
@@ -159,12 +171,13 @@ export class EmployeeListComponent implements OnInit, OnChanges {
     private _changeDetectorRef: ChangeDetectorRef,
     private _router: Router,
     private _successMessage: MatSnackBar,
+    private rolePermissionService:RolePermissionService
   ) { }
 
   
   ngOnInit(): void {
     this.pageHeader_employee(this.HeadingName);
-    this.getEmployeesList();
+    // this.getEmployeesList();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -174,6 +187,38 @@ export class EmployeeListComponent implements OnInit, OnChanges {
   pageHeader_employee(employeeHeadingName: string) {
     this.HeadingName = employeeHeadingName;
   }
+
+  getPermissionToAccessPage(roleId: any) {
+    this.rolePermissionService.getPermissionsByRoleId(roleId).subscribe({
+      next: (response) => {
+        if (response.success) {
+          for (const employeeAccess of response.data) {
+            if (employeeAccess.form === "Employees") {
+              this.employeeAccess = employeeAccess;
+              if (this.employeeAccess.view) {
+                this.getEmployeesList();
+              } else {
+                this.rowData = [];
+                this.showErrorOverlay("You have not permission");
+              }
+              // Hide "Actions" column if `edit` is false
+              if (this.gridApi) {
+                this.gridApi.setColumnsVisible(["actions"], this.employeeAccess.edit);
+              }
+
+              this._changeDetectorRef.detectChanges();
+            }
+          }
+        } else {
+          this.handleError("please try again leter");
+        }
+      },
+      error: (err) => {
+        this.handleError("please try again leter");
+      },
+    });
+  }
+
 
   getEmployeesList() {
     this._employeeService
@@ -224,6 +269,7 @@ export class EmployeeListComponent implements OnInit, OnChanges {
   onGridReady(params: GridReadyEvent<any>) {
     this.gridApi = params.api;
     this.gridApi.hideOverlay();
+    this.getPermissionToAccessPage(Number(localStorage.getItem('role')))
   }
 
   showErrorOverlay(message: string) {
@@ -232,7 +278,7 @@ export class EmployeeListComponent implements OnInit, OnChanges {
       setTimeout(() => {
         const overlay = document.querySelector(".ag-overlay-no-rows-center");
         if (overlay) {
-          overlay.innerHTML = `<span style="color: red; font-weight: bold;">${message}</span>`;
+          overlay.innerHTML = `<span style="color:  #2e3b64; font-weight: bold;">${message}</span>`;
         }
         this._changeDetectorRef.detectChanges();
       }, 100);

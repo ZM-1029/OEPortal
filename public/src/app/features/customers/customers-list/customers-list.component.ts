@@ -339,7 +339,7 @@ export class CustomersListComponent implements OnInit, OnDestroy {
   };
 
   onGridReady(params: GridReadyEvent<any>) {
-    this.getPermissionToAccessPage(Number(localStorage.getItem('role')))
+    this.getPermissionToAccessPage(Number(localStorage.getItem('role')));
     this.gridApi = params.api;
     this.gridApi.hideOverlay();
   }

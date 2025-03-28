@@ -1,5 +1,5 @@
 <div class="container-fluid p-0">
-  <div class="dropdown-manage-column">
+  <div [ngClass]="reportAccess.view==true? '' : 'd-none'" class="dropdown-manage-column">
     <button
       class="btn btn-info-dark text-white btn-wave dropdown-toggle"
       type="button"

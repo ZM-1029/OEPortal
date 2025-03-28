@@ -138,13 +138,9 @@ export class BussinessLineComponent {
   }
 
 
-  updateBussiness(event: any): void {
-    debugger
-   
+  updateBussiness(event: any): void {   
       this.bussinesid = Number(event.data.id);
-      this._route.navigate(["/admin/bussiness", this.bussinesid]);
-
-    
+      this._route.navigate(["/admin/business", this.bussinesid]);
   }
 
   openDeleteModal(bussinesid: number): void {

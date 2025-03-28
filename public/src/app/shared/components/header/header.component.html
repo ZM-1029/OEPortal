@@ -32,13 +32,10 @@
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="settingsDropdown">
               @for(menu of headerMenuList;track menu){
                 <li><a class="dropdown-item" [routerLink]="[menu.navigateUrl]" >{{ menu.name }}</a></li>
-
               }
             </ul>
           </li>
           }
-
-
           <!-- Profile Section -->
           <li class="nav-item d-flex align-items-center me-2">
             <img src="/assets/images/zoumaCircleLogo.jpg" alt="Profile" class="profile-img" />
@@ -48,9 +45,9 @@
             </div>
             <ul class="dropdown-menu dropdown-menu-end py-0 bg-white" aria-labelledby="profileSection">
               <div class="profile-info text-center p-3 shadow rounded ">
-                <h6 class="fw-bold mb-0">{{ name }}</h6>
+                <h6 class=" mb-1">{{ name }}</h6>
                 <p class="text-muted small mb-1">{{ email }}</p>
-                <span class="badge bg-secondary">{{ roleName }}</span>
+                <span class="my-2">{{ roleName }}</span>
                 <div class="mt-2 d-flex justify-content-between">
                   <button class="btn btn-danger btn-sm w-100" (click)="logout()">Logout</button>
                 </div>

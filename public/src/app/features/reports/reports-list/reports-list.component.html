@@ -18,13 +18,13 @@
 
   <div class="d-flex align-items-center justify-content-center">
     <div class="container-fluid p-0">
-      <div class="dropdown-container d-flex justify-content-between me-2">
+      <div [ngClass]="isActiveDropDownShow? '' : 'd-none'"  class="dropdown-container d-flex justify-content-between me-2">
         <div class="dropdown">
           <app-single-select-dropdown [dropdownHeading]="'Active Report'" [defaultValue]="activeTable"
             [dataList]="activeReport" (selectedOutput)="displayReports($event)">
           </app-single-select-dropdown>
         </div>
-        <div [ngClass]="(activeTable === 'timesheet' || activeTable === 'attendance') ? '' : 'd-none'"
+        <div  [ngClass]="(activeTable === 'timesheet' || activeTable === 'attendance') ? '' : 'd-none'"
           class="emplooye-dropdown ms-auto">
           <div class="employee">
             <app-multi-select-dropdown [dropdownHeading]="'Employee'" [dataList]="allEmployees"
@@ -36,7 +36,7 @@
       <div class="reports">
         <div class="report-container">
           <ng-container *ngIf="activeTable === 'attendance'">
-            <app-attendance-non-compliance-history 
+            <app-attendance-non-compliance-history (isActiveReportsDropDownShow)="isActiveReportsDropDownShow($event)"
               [ncTypeCounts]="ncTypeCounts"
               [attendanceRowData]="attendanceRowData">
             </app-attendance-non-compliance-history>

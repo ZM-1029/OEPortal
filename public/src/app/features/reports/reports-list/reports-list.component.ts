@@ -50,6 +50,7 @@ export class ReportsListComponent implements OnInit {
   ncTypeCounts: ncTypeCountsI | any;
   employeeId: any = '0'
   allEmployees: any[] = [];
+  isActiveDropDownShow:boolean=false;
 
   dropdownHeading: string = "Select Project"
   activeReport = [
@@ -84,6 +85,12 @@ export class ReportsListComponent implements OnInit {
     });
   }
 
+  // Output Emiter From Attendance start
+  isActiveReportsDropDownShow(event:boolean){
+    this.isActiveDropDownShow=event;
+  }
+  // Output Emiter From Attendance end
+  
 
   GetNCHistoryLogs() {
     this._employeeService

@@ -1,90 +1,89 @@
 <div class="main-content  m-4">
-  <div class="border-bottom bg-light pb-2">
-      <h2 class="formHeading">{{ formHeading }} User</h2>
-  </div>
-  <div class="form-container d-flex justify-content-center">
-      <form [formGroup]="userForm">
-          <div class="input-form-container py-3">
-              <!-- User Name -->
-              <div class="form-group row ">
-                  <mat-label class="outer-mat-lable col-4 pt-2 ">User Name </mat-label>
-                  <mat-form-field appearance="outline" class="col-8">
-                      <input formControlName="name" matInput placeholder="Enter User Name" />
-                      <mat-error>
-                          @if (userForm.controls["name"].errors?.["required"]) {
-                          <span>User Name is required.</span>
-                          } @else if (userForm.controls["name"].errors?.["pattern"]) {
-                          <span>Only alphabetic characters are allowed.</span>
-                          }
-                      </mat-error>
-                  </mat-form-field>
-              </div>
-
-              <!-- email -->
-              <div class="form-group row">
-                  <mat-label class="outer-mat-lable col-4 pt-2 ">email</mat-label>
-                  <mat-form-field appearance="outline" class="col-8">
-                      <input formControlName="email" matInput placeholder="Enter email Address" />
-                      <mat-error>
-                          @if (userForm.controls["email"].errors?.["required"]) {
-                          <span class="ms-1">email is required!</span>
-                          } @else if (userForm.controls["email"].errors?.["email"]) {
-                          <span class="ms-1">Invalid email format!</span>
-                          }
-                      </mat-error>
-                  </mat-form-field>
-              </div>
-          <!-- Password Field -->
-              <div class="form-group row">
-                  <mat-label class="outer-mat-lable col-4 pt-2">Password</mat-label>
-                  <mat-form-field appearance="outline" class="col-8">
-                      <input formControlName="password" matInput [type]="hide ? 'password' : 'text'"
-                          placeholder="Enter your password" />
-                      <button type="button" mat-icon-button matSuffix (click)="hide = !hide"
-                          [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
-                          <mat-icon>{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
-                      </button>
-                      <mat-error>
-                          @if (userForm.controls["password"].errors?.["required"]) {
-                          <span class="ms-1">Password is required!</span>
-                          } @else if (userForm.controls["password"].errors?.["minlength"]) {
-                          <span class="ms-1">Minimum 6 characters required!</span>
-                          }
-                      </mat-error>
-                  </mat-form-field>
-              </div>
-
-              <!-- Role Selection -->
-              <div class="form-group row">
-                  <mat-label class="outer-mat-lable col-4 pt-2">Select Role</mat-label>
-                  <mat-form-field class="col-8" appearance="outline">
-                      <!-- <mat-label>Select Role</mat-label> -->
-                      <input type="text" matInput [formControl]="roleControl" [matAutocomplete]="autoRole">
-                      <mat-autocomplete #autoRole="matAutocomplete" [displayWith]="displayRoleFn"
-                        (optionSelected)="onRoleSelected($event)">
-                        <mat-option *ngFor="let role of filteredRoles | async" [value]="role">
-                          {{ role.name }}
-                        </mat-option>
-                      </mat-autocomplete>
-                      <mat-error>
-                          @if (userForm.controls["roleId"].errors?.["required"]) {
-                          <span class="ms-1">Role selection is required!</span>
-                          }
-                      </mat-error>
+    <div class="border-bottom bg-light pb-2">
+        <h2 class="formHeading">{{ formHeading }} User</h2>
+    </div>
+    <div class="form-container d-flex justify-content-center">
+        <form [formGroup]="userForm">
+            <div class=" py-3">
+                <!-- User Name -->
+                <div class="form-group row ">
+                    <mat-label class="outer-mat-lable col-4 pt-2 ">User Name </mat-label>
+                    <mat-form-field appearance="outline" class="col-8">
+                        <input formControlName="name" matInput placeholder="Enter User Name" />
+                        <mat-error>
+                            @if (userForm.controls["name"].errors?.["required"]) {
+                            <span>User Name is required.</span>
+                            } @else if (userForm.controls["name"].errors?.["pattern"]) {
+                            <span>Only alphabetic characters are allowed.</span>
+                            }
+                        </mat-error>
                     </mat-form-field>
-          
-              </div>
-          </div>
+                </div>
 
-          <!-- Buttons -->
-          <div class="form-btn d-flex align-items-start justify-content-end p-4 ">
-              <button class="btn btn-secondary mx-2" type="button" (click)="resetForm()">
-                  Clear
-              </button>
-              <button class="btn btn-primary" (click)="createUpdate()">
-                  {{ formHeading }}
-              </button>
-          </div>
-      </form>
-  </div>
+                <!-- email -->
+                <div class="form-group row">
+                    <mat-label class="outer-mat-lable col-4 pt-2 ">email</mat-label>
+                    <mat-form-field appearance="outline" class="col-8">
+                        <input formControlName="email" matInput placeholder="Enter email Address" />
+                        <mat-error>
+                            @if (userForm.controls["email"].errors?.["required"]) {
+                            <span class="ms-1">email is required!</span>
+                            } @else if (userForm.controls["email"].errors?.["email"]) {
+                            <span class="ms-1">Invalid email format!</span>
+                            }
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <!-- Password Field -->
+                <div class="form-group row">
+                    <mat-label class="outer-mat-lable col-4 pt-2">Password</mat-label>
+                    <mat-form-field appearance="outline" class="col-8">
+                        <input formControlName="password" matInput [type]="hide ? 'password' : 'text'"
+                            placeholder="Enter your password" />
+                        <button type="button" mat-icon-button matSuffix (click)="hide = !hide"
+                            [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                            <mat-icon>{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
+                        </button>
+                        <mat-error>
+                            @if (userForm.controls["password"].errors?.["required"]) {
+                            <span class="ms-1">Password is required!</span>
+                            } @else if (userForm.controls["password"].errors?.["minlength"]) {
+                            <span class="ms-1">Minimum 6 characters required!</span>
+                            }
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <!-- Role Selection -->
+            
+                <div class="form-group row">
+                    <mat-label class="outer-mat-lable col-4 pt-2 ">Select Role</mat-label>
+                    <mat-form-field appearance="outline" class="col-8">
+                        <input #input type="text" placeholder="Select role" matInput formControlName="roleName"
+                            [matAutocomplete]="auto" (input)="filter()" (focus)="filter()" />
+                        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onRoleSelected($event)">
+                            @for( role of filteredRoles; track role){
+                            <mat-option [value]="role.name">
+                                {{ role.name }}
+                            </mat-option>
+                            }
+                        </mat-autocomplete>
+                        @if (userForm.controls["roleName"].hasError("required")) {
+                        <mat-error>Customer Name is required</mat-error>
+                        }
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="form-btn d-flex align-items-start justify-content-end p-4 ">
+                <button class="btn btn-secondary mx-2" type="button" (click)="resetForm()">
+                    Clear
+                </button>
+                <button class="btn btn-primary" (click)="createUpdate()">
+                    {{ formHeading }}
+                </button>
+            </div>
+        </form>
+    </div>
 </div>

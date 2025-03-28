@@ -90,7 +90,6 @@ export class BussinessCountryComponent {
   }
 
   ngOnInit(): void {
-    debugger
     this.activate.paramMap.subscribe(params => {
       this.serviceid = Number(params.get('id'));
       this.getbussiness(this.serviceid);

@@ -1,32 +1,45 @@
+import { NgClass } from "@angular/common";
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  EventEmitter,
   Input,
   OnChanges,
   OnInit,
+  Output,
   ViewChild,
+  ViewEncapsulation,
 } from "@angular/core";
 import { FormGroup } from "@angular/forms";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { AgGridAngular } from "ag-grid-angular";
 import { ModuleRegistry, AllCommunityModule, GridReadyEvent, GridApi } from "ag-grid-community";
+import { RolePermissionService } from "src/app/features/role-permissions/role-permission.service";
+import { RolePermissionComponent } from "src/app/features/role-permissions/role-permission/role-permission.component";
+import { SuccessModalComponent } from "src/app/shared/components/UI/success-modal/success-modal.component";
 import { ncTypeCountsI, nonComplianceI } from "src/app/shared/types/nonCompliance.type";
+import { rolePermissionListI } from "src/app/shared/types/roles.type";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 @Component({
   selector: "app-attendance-non-compliance-history",
   imports: [
-    AgGridAngular
+    AgGridAngular,
+    NgClass
   ],
   templateUrl: "./attendance-non-compliance-history.component.html",
   styleUrl: "./attendance-non-compliance-history.component.scss",
- 
+  encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AttendanceNonComplianceHistoryComponent implements OnInit,OnChanges,AfterViewInit {
+export class AttendanceNonComplianceHistoryComponent implements OnInit, OnChanges, AfterViewInit {
   @Input() attendanceRowData: nonComplianceI[] = [];
-  @Input() ncTypeCounts: ncTypeCountsI|any;
+  @Input() ncTypeCounts: ncTypeCountsI | any;
   @ViewChild(AgGridAngular) agGrid!: AgGridAngular;
-  attendanceNcTypeCounts: ncTypeCountsI|any;
+  @Output() isActiveReportsDropDownShow = new EventEmitter<boolean>();
+  attendanceNcTypeCounts: ncTypeCountsI | any;
   rowData: nonComplianceI[] = [];
   public currentPageNumber: number = 1;
   public currentPageSize: number = 15;
@@ -34,6 +47,16 @@ export class AttendanceNonComplianceHistoryComponent implements OnInit,OnChanges
   public paginationPageSizeSelector: number[] = [15, 25, 50, 100];
   getDateForm!: FormGroup;
   private gridApi!: GridApi<any>;
+
+  reportAccess: rolePermissionListI = {
+    id: 0,
+    formId: 0,
+    form: '',
+    view: false,
+    add: false,
+    edit: false
+  };
+
 
   columnDefs: any = [
     {
@@ -86,7 +109,7 @@ export class AttendanceNonComplianceHistoryComponent implements OnInit,OnChanges
         return { border: "none" };
       },
     },
-   
+
     {
       field: "shiftStartTime",
       headerName: "Shift Start Time",
@@ -207,6 +230,8 @@ export class AttendanceNonComplianceHistoryComponent implements OnInit,OnChanges
 
   constructor(
     private _changeDetectorRef: ChangeDetectorRef,
+    private _successMessage: MatSnackBar,
+    private rolePermissionService: RolePermissionService
   ) { }
 
   ngOnInit(): void {
@@ -216,12 +241,10 @@ export class AttendanceNonComplianceHistoryComponent implements OnInit,OnChanges
   }
 
   ngOnChanges() {
-    if (this.agGrid && this.attendanceRowData.length!==0) {
-      this.attendanceNcTypeCounts = this.ncTypeCounts && typeof this.ncTypeCounts === 'object' ? this.ncTypeCounts : {};
-      this.rowData=this.attendanceRowData;
-      this._changeDetectorRef.detectChanges();
+    if (this.agGrid && this.attendanceRowData.length !== 0) {
+      this.getPermissionToAccessPage(Number(localStorage.getItem('role')));
     } else {
-      this.rowData=[];
+      this.rowData = [];
       this.attendanceNcTypeCounts = {};
       this.showErrorOverlay("Data is not found");
     }
@@ -231,14 +254,50 @@ export class AttendanceNonComplianceHistoryComponent implements OnInit,OnChanges
     this._changeDetectorRef.detectChanges();
   }
 
-   
+  getPermissionToAccessPage(roleId: any) {
+    this.rolePermissionService.getPermissionsByRoleId(roleId).subscribe({
+      next: (response) => {
+        if (response.success) {
+          for (const reportAccess of response.data) {
+            if (reportAccess.form === "Reports") {
+              this.reportAccess = reportAccess;
+              if (this.reportAccess.view) {
+                // this.getAttendanceNonCompliance();
+                this.attendanceNcTypeCounts = this.ncTypeCounts && typeof this.ncTypeCounts === 'object' ? this.ncTypeCounts : {};
+                this.rowData = this.attendanceRowData;
+                this._changeDetectorRef.detectChanges();
+                this.isActiveReportsDropDownShow.emit(true);
+              } else {
+                this.isActiveReportsDropDownShow.emit(false);
+                this.rowData = [];
+                this.showErrorOverlay("You have not permission");
+              }
+              // Hide "Actions" column if `edit` is false
+              if (this.gridApi) {
+                this.gridApi.setColumnsVisible(["actions"], this.reportAccess.edit);
+              }
+
+              this._changeDetectorRef.detectChanges();
+            }
+          }
+        } else {
+          this.handleError("please try again leter");
+        }
+      },
+      error: (err) => {
+        this.handleError("please try again leter");
+      },
+    });
+  }
+
+
   getAttendanceNonCompliance() {
     if (this.attendanceRowData.length !== 0) {
       this.rowData = this.attendanceRowData;
       this._changeDetectorRef.detectChanges();
     } else {
       this.attendanceNcTypeCounts = this.ncTypeCounts && typeof this.ncTypeCounts === 'object' ? this.ncTypeCounts : {};
-      this.rowData=[];
+      this.rowData = [];
       this.showErrorOverlay("Data is not found")
     }
   }
@@ -249,15 +308,15 @@ export class AttendanceNonComplianceHistoryComponent implements OnInit,OnChanges
   }
 
   getLabel(type: string): string {
-   const labels: { [key: string]: string } = {
+    const labels: { [key: string]: string } = {
       "1": "Short Login Hour",
       "2": "Late Checkin",
       "3": "Early Checkout",
       "4": "Forget Checkin",
       "5": "Forget Checkout",
       "1004": "Absent"
-    }; 
-    return labels[type] ;
+    };
+    return labels[type];
   }
 
 
@@ -284,7 +343,7 @@ export class AttendanceNonComplianceHistoryComponent implements OnInit,OnChanges
   onGridReady(params: GridReadyEvent<any>) {
     this.gridApi = params.api;
     this.gridApi.hideOverlay();
-    this.getAttendanceNonCompliance()
+    this.getPermissionToAccessPage(Number(localStorage.getItem('role')));
   }
 
   // Pagination start
@@ -295,30 +354,51 @@ export class AttendanceNonComplianceHistoryComponent implements OnInit,OnChanges
     this.currentPageSize = pageSize;
   }
 
-    // for Manage Columns start
-    allColumns = [...this.columnDefs];
-    displayedColumns = [...this.columnDefs];
-  
-    toggleColumn(column: any) {
-      const columnIndex = this.displayedColumns.findIndex(
+  // for Manage Columns start
+  allColumns = [...this.columnDefs];
+  displayedColumns = [...this.columnDefs];
+
+  toggleColumn(column: any) {
+    const columnIndex = this.displayedColumns.findIndex(
+      (col) => col.field === column.field,
+    );
+    if (columnIndex >= 0) {
+      this.displayedColumns.splice(columnIndex, 1);
+    } else {
+      const colToAdd = this.allColumns.find(
         (col) => col.field === column.field,
       );
-      if (columnIndex >= 0) {
-        this.displayedColumns.splice(columnIndex, 1);
-      } else {
-        const colToAdd = this.allColumns.find(
-          (col) => col.field === column.field,
-        );
-        if (colToAdd) {
-          this.displayedColumns.push(colToAdd);
-        }
+      if (colToAdd) {
+        this.displayedColumns.push(colToAdd);
       }
-      this.columnDefs = [...this.displayedColumns];
     }
-  
-    isColumnDisplayed(column: any): boolean {
-      return this.displayedColumns.some((col) => col.field === column.field);
-    }
-  
-    // for Manage Columns end
+    this.columnDefs = [...this.displayedColumns];
+  }
+
+  isColumnDisplayed(column: any): boolean {
+    return this.displayedColumns.some((col) => col.field === column.field);
+  }
+
+  // for Manage Columns end
+
+  //  Function to show success messages
+  private showSuccessMessage(message: string) {
+    this._successMessage.openFromComponent(SuccessModalComponent, {
+      data: { message },
+      duration: 4000,
+      panelClass: ["custom-toast"],
+      verticalPosition: "top",
+      horizontalPosition: "right",
+    });
+  }
+
+  //  Function to handle API errors
+  private handleError(err: any) {
+    this._successMessage.open(err, "Close", {
+      duration: 4000,
+      panelClass: ["error-toast"],
+      verticalPosition: "top",
+      horizontalPosition: "right",
+    });
+  }
 }

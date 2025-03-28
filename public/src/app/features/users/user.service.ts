@@ -29,7 +29,7 @@ createUser(userData:any) {
   }
 
 updateUser(userData:any) {
-    return this.http.post(
+    return this.http.patch(
       `${environment.apiUrl}UpdateUser`,userData
     );
   }
