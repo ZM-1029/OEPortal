@@ -160,14 +160,13 @@
               <tbody>
                 @for (item of items; track item.id; let i = $index) {
                 <tr>
-                  <td>{{ item.productId }}
-
+                  <td>
                     <mat-form-field appearance="outline" class="col-8 py-0">
-                      <mat-select class="py-0" formControlName="customerId">
+                      <mat-select class="py-0" [(ngModel)]="item.productId" [ngModelOptions]="{standalone: true}" (selectionChange)="onProductSelect($event)">
                         <mat-option value="" disabled selected>Select Product</mat-option>
-                        @for (customer of Customers; track customer) {
-                        <mat-option [value]="customer.id">{{
-                          customer.name
+                        @for (product of Products; track product) {
+                        <mat-option [value]="product.id">{{
+                          product.name
                           }}</mat-option>
                         }
                       </mat-select>

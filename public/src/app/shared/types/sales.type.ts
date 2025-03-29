@@ -105,6 +105,49 @@ export interface itemReturnI {
     data: Tax[];
     errors: any[];
   }
+  export interface Product {
+    id: number;
+    name: string;
+    sku: string;
+    hsnCode: string;
+    isService: boolean;
+    salesPrice: number;
+    costPrice: number;
+    description: string;
+    unit: string;
+    businessLine: string;
+    isActive: boolean;
+  }
+  
+  export interface ProductListI {
+    success: boolean;
+    message: string;
+    data: Product[];
+    errors: any[];
+  }
+
+  export interface selectedProduct {
+    id: number;
+    name: string;
+    isService: boolean;
+    sku: string;
+    hsnCode: string;
+    salesPrice: number;
+    costPrice: number;
+    description: string;
+    unit: string;
+    unitId: number;
+    serviceName: string;
+    serviceId: number;
+    isActive: boolean;
+  }
+  
+  export interface selectedProductI {
+    success: boolean;
+    message: string;
+    data: selectedProduct[];
+    errors: any[];
+  }
   
   
   
