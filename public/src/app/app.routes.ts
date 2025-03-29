@@ -77,6 +77,21 @@ export const routes: Routes = [
             (m) => m.COMPANY_ROUTES,
           ),
       },
+      
+      {
+        path: "branch",
+        loadChildren: () =>
+          import("./features/branch/branch.routing").then(
+            (m) => m.BRANCH_ROUTES,
+          ),
+      },
+      {
+        path: "bank",
+        loadChildren: () =>
+          import("./features/companybank/bank.routing").then(
+            (m) => m.BANK_ROUTES,
+          ),
+      },
       {
         path: "salary",
         loadChildren: () =>

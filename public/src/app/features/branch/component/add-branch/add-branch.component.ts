@@ -1,3 +1,4 @@
+
 import { ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -12,12 +13,13 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { ReactiveFormsModule } from '@angular/forms';
+import { BranchService } from '../../branch.service';
+import { OnlyNumbersDirective } from 'src/app/shared/directive/only-numbers.directive';
 
-import { CompanyService } from '../../company.service';
 
 
 @Component({
-  selector: 'app-add-company',
+  selector: 'app-add-branch',
   imports: [
     CommonModule,
     MatFormFieldModule,
@@ -27,22 +29,22 @@ import { CompanyService } from '../../company.service';
     MatButtonModule,
     MatIconModule,
     ReactiveFormsModule,
-    
+    OnlyNumbersDirective
   ],
-  templateUrl: './add-company.component.html',
-  styleUrl: './add-company.component.scss'
+  templateUrl: './add-branch.component.html',
+  styleUrl: './add-branch.component.scss'
 })
-export class AddCompanyComponent {
- companyForm!: FormGroup;
+export class AddBranchComponent {
+companyForm!: FormGroup;
   heading:string="Add"
   countries: { value: string, label: string }[] = []; // Mock data
   @Input() Id: number = 0;
   @Input() isSideDrawerOpen: boolean = false; 
  
  @Output() formClose: EventEmitter<boolean> = new EventEmitter<boolean>();
-  constructor(private fb: FormBuilder,private companyservice:CompanyService,private apiservice:BussinessService,private activate:ActivatedRoute,private _successMessage:MatSnackBar,private cdr:ChangeDetectorRef) {
-    this.apiservice.getAllCountry().subscribe({next:(data:any)=>{
-      this.countries = [{ value: '0', label: 'Select a country' }];  // Add the default option
+  constructor(private fb: FormBuilder,private companyservice:BranchService,private apiservice:BussinessService,private activate:ActivatedRoute,private _successMessage:MatSnackBar,private cdr:ChangeDetectorRef) {
+    this.companyservice.getAllCompany().subscribe({next:(data:any)=>{
+      this.countries = [{ value: '0', label: 'Select a Company' }];  // Add the default option
       data.data.forEach((country:any) => {
         this.countries.push({
           value: country.id.toString(),  // Make sure the id is a string to bind with value
@@ -64,17 +66,23 @@ export class AddCompanyComponent {
     reset(){
       debugger
       this.companyForm.reset()
-      this.companyForm.get('Country')?.setValue('0');
+      this.companyForm.get('companyId')?.setValue('0');
     }
  async ngOnInit() {
   
    
     this.companyForm = this.fb.group({
      
-      Country: ['0', Validators.required],
-      headquater: ['', [Validators.required]],
+      companyId: ['0', Validators.required],
+      State: ['', [Validators.required]],
+      City: ['', [Validators.required]],
+      phoneNumber: ['', [Validators.required]],
       name: ['', [Validators.required]],
-      IsActive:['']
+      Address: ['', [Validators.required]],
+      gstno: ['', [Validators.required]],
+      pincode: ['', [Validators.required]],
+      IsActive:[""]
+      
    
     });
 if(this.Id>0)
@@ -88,14 +96,19 @@ if(this.Id>0)
   patchValue()
   {
     debugger
-    this.companyservice.getCompanyProfileById(this.Id).subscribe({next:(data:any)=>{
+    this.companyservice.getCompanyBranchId(this.Id).subscribe({next:(data:any)=>{
       this.companyForm.patchValue({
-        headquater:data.data.headquater,
+        companyId:data.data.companyId,
         name:data.data.name,
-        Terms:data.data.termsAndConditions,
+        State:data.data.state,
+        City:data.data.city,
+        phoneNumber:data.data.phoneNumber,
+        Address:data.data.address,
+        gstno:data.data.gstno,
+        pincode:data.data.pincode,
         IsActive:data.data.isActive
       })
-      this.companyForm.get('Country')?.setValue(data.data.countryId.toString());
+      this.companyForm.get('companyId')?.setValue(data.data.companyId.toString());
     }})
   }
   closePopup() {
@@ -104,7 +117,7 @@ if(this.Id>0)
   iscountryfail:boolean=false;
   checkCountry(event:any)
   {
-    if(Number(this.companyForm.value.Country)>0)
+    if(Number(this.companyForm.value.companyId)>0)
     {
       this.iscountryfail=false
 
@@ -115,7 +128,7 @@ if(this.Id>0)
   }
   submitForm() {
     debugger
-    if(Number(this.companyForm.value.Country)>0)
+    if(Number(this.companyForm.value.companyId)>0)
       {
         this.iscountryfail=false
   
@@ -132,13 +145,17 @@ if(this.Id>0)
           debugger
            var request={
               id: 0,
-              countryId: this.companyForm.value.Country,
+              companyId: this.companyForm.value.companyId,
               name: this.companyForm.get("name")?.value,
-              headquater: this.companyForm.get("headquater")?.value,
-              IsActive: this.companyForm.get("IsActive")?.value
-            
+              phoneNumber: this.companyForm.get("phoneNumber")?.value,
+              state: this.companyForm.get("State")?.value,
+              city: this.companyForm.get("City")?.value,
+              address: this.companyForm.get("Address")?.value ,
+              gstno: this.companyForm.get("gstno")?.value,
+              pincode: this.companyForm.get("pincode")?.value,
+              IsActive:this.companyForm.value.IsActive=="0"?false:true             
            }
-           this.companyservice.addCompanyProfile(request).subscribe({next:(data:any)=>{
+           this.companyservice.addCompanyBranch(request).subscribe({next:(data:any)=>{
                if(data.success)
                {
                 this.showSuccessMessage(data.message)
@@ -150,13 +167,18 @@ if(this.Id>0)
           debugger;
           var request={  
             id: this.Id,   
-              countryId: this.companyForm.value.Country,
-              name: this.companyForm.get("name")?.value,
-              headquater: this.companyForm.get("headquater")?.value,
-              IsActive: this.companyForm.get("IsActive")?.value
+            companyId: this.companyForm.value.companyId,
+            name: this.companyForm.get("name")?.value,
+            phoneNumber: this.companyForm.get("phoneNumber")?.value,
+            state: this.companyForm.get("State")?.value,
+            city: this.companyForm.get("City")?.value,
+            address: this.companyForm.get("Address")?.value,
+            gstno: this.companyForm.get("gstno")?.value,
+            pincode: this.companyForm.get("pincode")?.value ,
+            IsActive:this.companyForm.value.IsActive=="0"?false:true   
           
          }
-         this.companyservice.updateCompanyProfile(request).subscribe({next:(data:any)=>{
+         this.companyservice.updateCompanyBranch(request).subscribe({next:(data:any)=>{
              if(data.success)
              {
               this.showSuccessMessage(data.message)

@@ -30,5 +30,29 @@ export class CompanyService {
    {
      return this._httpclient.put<any>(this.apiurl+"api/CompanyProfile/Update/"+data.id,data)
    }
+   GetAllBranches():Observable<any>
+   {
+     return this._httpclient.get<any>(this.apiurl+"api/CompanyProfile/GetAllBranches")
+   }
+
+
+   getCompanyBranchId(id:any):Observable<any>
+   {
+     return this._httpclient.get<any>(this.apiurl+"api/CompanyProfile/GetBranchById/"+id)
+   }
+
+   addCompanyBranch(data:any):Observable<any>
+   {
+     return this._httpclient.post<any>(this.apiurl+"api/CompanyProfile/AddBranch",data)
+   }
+   updateCompanyBranch(data:any):Observable<any>
+   {
+     return this._httpclient.put<any>(this.apiurl+"api/CompanyProfile/UpdateBranch/"+data.id,data)
+   }
+
+   
+
+
+ 
    
 }
