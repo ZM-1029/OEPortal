@@ -115,3 +115,9 @@
     border: #2e3b64;
   }
   
+ .salary-list app-side-drawer .drawer{
+    position: absolute;
+    z-index: 999 !important;
+    width: 90rem !important;
+    background-color:transparent;
+  }

@@ -1,11 +1,11 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, OnInit, Output } from "@angular/core";
 import { AttendanceNonComplianceHistoryComponent } from "./reports-tables/attendance-non-compliance-history/attendance-non-compliance-history.component";
 import { CommonModule, DatePipe, NgClass } from "@angular/common";
 import { ncTypeCountsI, nonComplianceHistoryI, nonComplianceI } from "src/app/shared/types/nonCompliance.type";
 import { FormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";
 import { MatDatepickerInputEvent, MatDatepickerModule } from "@angular/material/datepicker";
-import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatFormFieldControl, MatFormFieldModule } from "@angular/material/form-field";
 import { PageHeaderComponent } from "src/app/shared/components/UI/page-header/page-header.component";
 import { provideNativeDateAdapter } from "@angular/material/core";
 import { EmployeesService } from "../../employees/employees.service";
@@ -17,22 +17,26 @@ import { EfficiencyReportCustomersComponent } from "./reports-tables/efficiency-
 import { SingleSelectDropdownComponent } from "src/app/shared/components/UI/single-select-dropdown/single-select-dropdown.component";
 import { MultiSelectDropdownComponent } from "src/app/shared/components/UI/multi-select-dropdown/multi-select-dropdown.component";
 import { employeesDropdownI } from "src/app/shared/types/reports.type";
+import { MatInputModule } from "@angular/material/input";
 
 @Component({
   selector: "app-reports-list",
   imports: [
+    MatFormFieldModule,
+    MatInputModule,
+    MatDatepickerModule,
+    MatFormFieldModule,
+    ReactiveFormsModule,
     CommonModule,
     FormsModule,
     PageHeaderComponent,
     MatButtonModule,
-    MatFormFieldModule,
-    MatDatepickerModule,
-    ReactiveFormsModule,
+    
     TimesheetNonComplianceComponent,
     AttendanceNonComplianceHistoryComponent,
     EfficiencyReportEmployeesComponent,
     EfficiencyReportCustomersComponent,
-     NgClass, MultiSelectDropdownComponent,SingleSelectDropdownComponent
+    NgClass, MultiSelectDropdownComponent, SingleSelectDropdownComponent
   ],
   templateUrl: "./reports-list.component.html",
   styleUrl: "./reports-list.component.scss",
@@ -40,6 +44,7 @@ import { employeesDropdownI } from "src/app/shared/types/reports.type";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReportsListComponent implements OnInit {
+  @Output() dateRangeSelected = new EventEmitter<{ startDate: string; endDate: string }>();
   activeTable = 'attendance';
   getDateForm!: FormGroup;
   startDate: string = "";
@@ -50,7 +55,8 @@ export class ReportsListComponent implements OnInit {
   ncTypeCounts: ncTypeCountsI | any;
   employeeId: any = '0'
   allEmployees: any[] = [];
- 
+  isActiveDropDownShow:boolean=false;
+
   dropdownHeading: string = "Select Project"
   activeReport = [
     { value: 'attendance', label: 'Attendance' },
@@ -66,16 +72,17 @@ export class ReportsListComponent implements OnInit {
     this.setDefaultDates();
     this.pageHeader_employee(this.HeadingName);
     this.GetEmployeesForDropdown();
+    // this.setDefaultDates();
+    this._changeDetectorRef.detectChanges();
   }
 
   GetEmployeesForDropdown() {
     this.reportsService.GetEmployeesForDropdown().subscribe({
       next: (response) => {
         this.allEmployees = response.data.map((obj: employeesDropdownI) => ({
-          id: obj.employeeID,  
-          name: `(${obj.employeeID}) - ${obj.firstName} ${obj.lastName}`, 
+          id: obj.employeeID,
+          name: `(${obj.employeeID}) - ${obj.firstName} ${obj.lastName}`,
         }));
-
         this._changeDetectorRef.detectChanges();
         console.log("Employees Loaded:", this.allEmployees);
       },
@@ -85,6 +92,12 @@ export class ReportsListComponent implements OnInit {
     });
   }
 
+  // Output Emiter From Attendance start
+  isActiveReportsDropDownShow(event:boolean){
+    this.isActiveDropDownShow=event;
+  }
+  // Output Emiter From Attendance end
+  
 
   GetNCHistoryLogs() {
     this._employeeService
@@ -105,8 +118,6 @@ export class ReportsListComponent implements OnInit {
           }
         },
         error: (err) => {
-          console.error("Error Status:", err.status);
-          console.error("Error Message:", err.error);
           let errorMessage = "An error occurred while fetching data.";
           if (err.status === 404 && err.error.message) {
             errorMessage = err.error.message;
@@ -127,9 +138,10 @@ export class ReportsListComponent implements OnInit {
   // date piker start
   setDefaultDates() {
     const today = new Date();
-    const firstDay = new Date(today.getFullYear(), today.getMonth(), 2);
+    const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+    const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
     this.startDate = this.formatDate(firstDay);
-    this.endDate = this.formatDate(today);
+    this.endDate = this.formatDate(lastDay);
     this.GetNCHistoryLogs();
   }
 
@@ -148,39 +160,39 @@ export class ReportsListComponent implements OnInit {
   }
 
   checkAndFetchAttendance() {
+    
     if (this.startDate && this.endDate) {
       this.GetNCHistoryLogs();
     }
   }
 
   formatDate(date: Date): string {
-    return date.toISOString().split("T")[0]; 
+    return date.getFullYear() + "-" + (date.getMonth() + 1).toString().padStart(2, "0") + "-" + date.getDate().toString().padStart(2, "0");
   }
+
   // date piker end
 
- 
-  
- displayReports(event: string) {
-  if (event) {
-    this.activeTable = event; 
-    console.log('Selected Report:', this.activeTable);
-    this._changeDetectorRef.detectChanges();
-  }
-}
 
-//  multi-select-dropdown start
-getReporsByEmployeeId(event: any) {
-  if (event == 1) {
-    console.log(event,"dahad if");
-    this.employeeId = '0';
-    this.GetNCHistoryLogs();
-  } else {
-    console.log(event,"dahad else");
-    this.employeeId = event
-    this.GetNCHistoryLogs();
+
+  displayReports(event: string) {
+    if (event) {
+      this.activeTable = event;
+      console.log('Selected Report:', this.activeTable);
+      this._changeDetectorRef.detectChanges();
+    }
   }
-}
-//  multi-select-dropdown end
+
+  //  multi-select-dropdown start
+  getReporsByEmployeeId(event: any) {
+    if (event == 1) {
+      this.employeeId = '0';
+      this.GetNCHistoryLogs();
+    } else {
+      this.employeeId = event
+      this.GetNCHistoryLogs();
+    }
+  }
+  //  multi-select-dropdown end
 
   //  Function to handle API errors
   private handleError(err: string) {

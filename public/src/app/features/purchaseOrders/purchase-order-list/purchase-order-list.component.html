@@ -1,12 +1,14 @@
 <div class="main-content mt-2 p-2">
   <app-page-header [HeadingName]="HeadingName">
     <div class="d-flex" pageHeaderBtn>
-      <button
+      @if(this.purchaseOrderAccess.add){
+        <button
         class="btn btn-info-dark btn-wave mx-2 text-white text-capitalize"
         (click)="addSalary($event)"
       >
         <i class="fa-solid fa-plus me-2"></i>Create
       </button>
+      }
       <div class="dropdown ms-2">
         <button
           class="btn btn-info-dark text-white btn-wave dropdown-toggle"

@@ -1,0 +1,30 @@
+<div mat-dialog-content class="dialog-content">
+    <form [formGroup]="roleForm">
+      <div class="pt-3 pb-2 px-3">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Role Name</mat-label>
+          <input matInput placeholder="Enter Role Name" formControlName="roleName" />
+          <mat-error *ngIf="roleForm.get('roleName')?.hasError('required')">
+            Role name is required.
+          </mat-error>
+          <mat-error *ngIf="roleForm.get('roleName')?.hasError('minlength')">
+            Minimum 3 characters required.
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </form>
+  
+    <div mat-dialog-actions align="end" class="dialog-actions px-3 py-2">
+      <button mat-dialog-close (click)="cancel()" class="btn btn-light border rounded-pill">
+        Cancel
+      </button>
+      <button 
+        (click)="createRole()" 
+        class="btn btn-primary rounded-pill" 
+        [disabled]="roleForm.invalid"
+        mat-dialog-close>
+        Save
+      </button>
+    </div>
+  </div>
+  

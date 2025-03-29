@@ -161,5 +161,21 @@ export interface employeeTimesheetI {
   isPushAllowToZF: boolean;
 }
 
+export interface employeeInvoiceResponseI {
+  success: boolean
+  message: string
+  data: employeeInvoiceI[]
+}
+
+export interface employeeInvoiceI {
+  id: number
+  invoiceId: number
+  employeeID: string
+  salary: number
+  billedAmount: number
+  currencyId: number
+  
+}
+
 export type employeeDetailsI = BaseResponse<employeeType>;
 export type attendanceListI = BaseResponse<attendanceTypeI[]>;

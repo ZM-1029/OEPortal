@@ -1,0 +1,72 @@
+<div class="main-content mt-2 p-2">
+    <app-page-header [HeadingName]="HeadingName">
+      <div class="d-flex" pageHeaderBtn>
+        <button class="btn btn-info-dark btn-wave mx-2 text-white text-capitalize" (click)="addCustomer($event)">
+          <i class="fa-solid fa-plus me-2"></i>Create
+        </button>
+        <button disabled class="btn btn-primary btn-wave me-0 text-white text-capitalize" (click)="export($event)">
+          <i class="bi bi-download me-1"></i>Export
+        </button>
+        <div class="dropdown ms-2">
+          <button class="btn btn-info-dark text-white btn-wave dropdown-toggle" type="button" id="dropdownMenuButton1"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            Manage Column
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+            @for (column of allColumns; track column) {
+            <li>
+              @if (
+              column.field == "edit" ||
+              column.field == "delete" ||
+              column.field == "customerName" ||
+              column.headerName == "S. No"
+              ) {
+              <div class="dropdown-item d-none checkbox-container">
+                <input type="checkbox" [checked]="isColumnDisplayed(column)" (change)="toggleColumn(column)"
+                  id="{{ column.field }}" />
+                <label for="{{ column.field }}">{{
+                  column.headerName
+                  }}</label>
+              </div>
+              } @else {
+              <div class="dropdown-item checkbox-container">
+                <input type="checkbox" [checked]="isColumnDisplayed(column)" (change)="toggleColumn(column)"
+                  id="{{ column.field }}" />
+                <label for="{{ column.field }}">{{
+                  column.headerName
+                  }}</label>
+              </div>
+              }
+            </li>
+            }
+          </ul>
+        </div>
+      </div>
+    </app-page-header>
+    @defer {
+    <div class="d-flex align-items-center justify-content-center">
+      <div class="container-fluid p-0">
+        <ag-grid-angular #agGrid style="width: 100%; height: 78vh !important; padding-bottom: 10px"
+          class="ag-theme-alpine" [rowData]="rowData" [columnDefs]="columnDefs" [defaultColDef]="defaultColDef"
+          [animateRows]="true" (cellClicked)="updateCustomer($event)" [paginationPageSize]="15" [pagination]="true"
+          [paginationPageSizeSelector]="paginationPageSizeSelector" (gridReady)="onGridReady($event)"
+          (paginationChanged)="onPaginationChanged($event)"></ag-grid-angular>
+        <div class="table-footer position-relative">
+          <div class="row g-2">
+            <div class="col-6 col-sm-3 fw-bold">
+              <label>Total Customers:</label>
+              <span class="text-bold ms-1">{{ totalCount }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    } @loading (minimum 1000ms) {
+    <app-loader></app-loader>
+    }
+    @if (isSideDrawerOpen) {
+    <app-side-drawer (sideDrawer)="sideDrawer()" [isSideDrawerOpen]="isSideDrawerOpen">
+      <app-user-create (formClose)="formClose($event)" [isSideDrawerOpen]="isSideDrawerOpen" [Id]="userId"></app-user-create>
+    </app-side-drawer>
+    }
+  </div>

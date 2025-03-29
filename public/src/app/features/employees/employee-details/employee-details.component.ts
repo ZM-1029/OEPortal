@@ -13,12 +13,13 @@ import { ActivatedRoute } from "@angular/router";
 import { ChangeDetectorRef } from "@angular/core";
 import { EmployeeAttendanceComponent } from "../employee-attendance/employee-attendance.component";
 import { LoaderComponent } from "../../../shared/components/UI/loader/loader.component";
-import { DatePipe, NgClass, NgIf } from "@angular/common";
-import { PageNotFoundComponent } from "../../../shared/components/UI/page-not-found/page-not-found.component";
+import { DatePipe, NgClass } from "@angular/common";
 import { HideShowInfoDirective } from "../../../shared/directive/hide-show-info.directive";
 import { EmployeeSalaryComponent } from "../employee-salary/employee-salary.component";
 import { EmployeeTimesheetComponent } from "../employee-timesheet/employee-timesheet.component";
 import { NonComplianceHistoryComponent } from "../non-compliance-history/non-compliance-history.component";
+import { EmployeeInvoiceComponent } from "../employee-invoice/employee-invoice.component";
+import { EmployeeAssetsComponent } from "../employee-assets/employee-assets.component";
 
 @Component({
   selector: "app-employee-details",
@@ -26,12 +27,13 @@ import { NonComplianceHistoryComponent } from "../non-compliance-history/non-com
     EmployeeAttendanceComponent,
     LoaderComponent,
     DatePipe,
-    PageNotFoundComponent,
     HideShowInfoDirective,
     EmployeeSalaryComponent,
     EmployeeTimesheetComponent,
     NonComplianceHistoryComponent,
     NgClass,
+    EmployeeInvoiceComponent,
+    EmployeeAssetsComponent
   ],
   templateUrl: "./employee-details.component.html",
   styleUrl: "./employee-details.component.scss",

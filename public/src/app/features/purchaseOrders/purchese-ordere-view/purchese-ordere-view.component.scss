@@ -1,6 +1,9 @@
 .card {
     border: none;
     border-radius: 10px;
+    width: 100%;
+    position: relative;
+    z-index: 1;
   }
   
   .bg-light {
@@ -43,7 +46,7 @@
     overflow: hidden;
 }
 .mat-icon svg {
-  color: green; /* Change to your desired color */
+  color: green; 
 }
 mat-icon svg {
   fill: red !important;

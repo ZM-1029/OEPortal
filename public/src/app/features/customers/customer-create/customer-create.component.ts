@@ -22,7 +22,6 @@ import { MatInputModule } from "@angular/material/input";
 import { MatRadioModule } from "@angular/material/radio";
 import { MatSelectModule } from "@angular/material/select";
 import { Subject, takeUntil } from "rxjs";
-import { customerDetailsI } from "../../../shared/types/customer.type";
 import { CustomersService } from "../customers.service";
 import { NgClass, NgIf } from "@angular/common";
 import { SuccessModalComponent } from "../../../shared/components/UI/success-modal/success-modal.component";

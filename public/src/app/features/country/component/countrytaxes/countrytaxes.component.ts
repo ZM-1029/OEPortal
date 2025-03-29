@@ -43,7 +43,7 @@ export class CountrytaxesComponent {
     { field: "country", headerName: "Country Name", sortable: true, filter: true, },
     { field: "tax", headerName: "Tax", sortable: true, filter: true,  },
     { field: "value", headerName: "Value", sortable: true, filter: true,  },
-    { field: "id", sortable: true, filter: true,  },
+    // { field: "id", sortable: true, filter: true,  },
    
   ];
 

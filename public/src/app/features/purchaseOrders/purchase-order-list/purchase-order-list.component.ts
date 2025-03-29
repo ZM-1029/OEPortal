@@ -17,6 +17,8 @@ import { purchaseOrderI, purchaseOrdersResponseI } from "src/app/shared/types/pu
 import { PurchaseOrderCreateComponent } from "../purchase-order-create/purchase-order-create.component";
 import { AllCommunityModule, GridApi, GridReadyEvent, ModuleRegistry } from "ag-grid-community";
 import { PurcheseOrdereViewComponent } from "../purchese-ordere-view/purchese-ordere-view.component";
+import { rolePermissionListI } from "src/app/shared/types/roles.type";
+import { RolePermissionService } from "../../role-permissions/role-permission.service";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 @Component({
@@ -46,7 +48,15 @@ export class PurchaseOrderListComponent implements OnInit {
   formHeading: string = "";
   PurchaseOrderRowId!: number;
   HeadingName: string = "Purchase Order";
-  rowData: any;
+  rowData: any[]=[];
+  purchaseOrderAccess: rolePermissionListI = {
+      id: 0,
+      formId: 0,
+      form: '',
+      view: false,
+      add: false,
+      edit: false
+    };
 
   
   columnDefs: any = [
@@ -141,6 +151,7 @@ export class PurchaseOrderListComponent implements OnInit {
     private _changeDetectorRef: ChangeDetectorRef,
     private dialog: MatDialog,
     private _successMessage: MatSnackBar,
+    private rolePermissionService:RolePermissionService
   ) { }
 
   ngOnInit(): void {
@@ -160,6 +171,37 @@ export class PurchaseOrderListComponent implements OnInit {
 
   pageHeader_customer(customerHeadingName: string) {
     this.HeadingName = customerHeadingName;
+  }
+
+  getPermissionToAccessPage(roleId: any) {
+    this.rolePermissionService.getPermissionsByRoleId(roleId).subscribe({
+      next: (response) => {
+        if (response.success) {
+          for (const purchaseOrderAccess of response.data) {
+            if (purchaseOrderAccess.form === "Purchase Order") {
+              this.purchaseOrderAccess = purchaseOrderAccess;
+              if (this.purchaseOrderAccess.view) {
+                this.getPurchaseOrderList();
+              } else {
+                this.rowData = [];
+                this.showErrorOverlay("You have not permission");
+              }
+              // Hide "Actions" column if `edit` is false
+              if (this.gridApi) {
+                this.gridApi.setColumnsVisible(["actions"], this.purchaseOrderAccess.edit);
+              }
+  
+              this._changeDetectorRef.detectChanges();
+            }
+          }
+        } else {
+          this.handleError("please try again leter");
+        }
+      },
+      error: (err) => {
+        this.handleError("please try again leter");
+      },
+    });
   }
 
   getPurchaseOrderList() {
@@ -333,9 +375,7 @@ export class PurchaseOrderListComponent implements OnInit {
 
   onGridReady(params: GridReadyEvent<any>) {
     this.gridApi = params.api;
-   
-    this.getPurchaseOrderList();
-
+    this.getPermissionToAccessPage(Number(localStorage.getItem('role')));
   }
 
   showErrorOverlay(message: string) {
@@ -375,5 +415,28 @@ export class PurchaseOrderListComponent implements OnInit {
       </div>
     `;
   }
+
+    //  Function to show success messages
+    private showSuccessMessage(message: string) {
+      this._successMessage.openFromComponent(SuccessModalComponent, {
+        data: { message },
+        duration: 4000,
+        panelClass: ["custom-toast"],
+        verticalPosition: "top",
+        horizontalPosition: "right",
+      });
+    }
+  
+    //  Function to handle API errors
+    private handleError(err: any) {
+      console.error("Error Status:", err.status);
+      console.error("Error Message:", err.error);
+      this._successMessage.open(err.error.message, "Close", {
+        duration: 4000,
+        panelClass: ["error-toast"],
+        verticalPosition: "top",
+        horizontalPosition: "right",
+      });
+    }
 
 }

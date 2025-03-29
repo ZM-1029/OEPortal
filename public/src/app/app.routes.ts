@@ -1,7 +1,6 @@
 import { Routes } from "@angular/router";
 import { LayoutComponent } from "./core/layouts/layout/layout.component";
 import { EmptyComponent } from "./core/layouts/empty/empty.component";
-import { SignInComponent } from "./features/auth/sign-in/sign-in.component";
 import { authGuard } from "./core/auth/guards/auth-guard.guard";
 
 export const routes: Routes = [
@@ -63,7 +62,7 @@ export const routes: Routes = [
           ),
       },
       {
-        path: "bussiness",
+        path: "business",
         loadChildren: () =>
           import("./features/bussiness/bussiness.routing").then(
             (m) => m.BUSSINESS_ROUTES,
@@ -97,10 +96,24 @@ export const routes: Routes = [
           ),
       },
       {
-        path: "roles",
+        path: "permissions",
         loadComponent: () =>
           import("./features/role-permissions/role-permission/role-permission.component").then(
             (m) => m.RolePermissionComponent,
+          ),
+      },
+      {
+        path: "roles",
+        loadComponent: () =>
+          import("./features/roles/role-list/role-list.component").then(
+            (m) => m.RoleListComponent,
+          ),
+      },
+      {
+        path: "user",
+        loadChildren: () =>
+          import("./features/users/user.router").then(
+            (m) => m.User_ROUTES,
           ),
       },
       {

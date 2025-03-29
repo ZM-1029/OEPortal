@@ -91,6 +91,21 @@ export interface itemReturnI {
     message: string;
     data: Branch[];
   }
+
+  export interface Tax {
+    id: number;
+    country: string;
+    tax: string;
+    value: number;
+  }
+  
+  export interface TaxListI {
+    success: boolean;
+    message: string;
+    data: Tax[];
+    errors: any[];
+  }
+  
   
   
   

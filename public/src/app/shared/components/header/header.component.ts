@@ -26,10 +26,14 @@ export class HeaderComponent implements OnInit {
   Menu = "openMenu";
   name:string|null='';
   roleName:string|null='';
+  email:any;
+  roleId:any;
   constructor(private authenticationService:AuthenticationService){}
   ngOnInit(): void {
     this.name=localStorage.getItem('name');
     this.roleName=localStorage.getItem('roleName');
+    this.roleId = Number(localStorage.getItem('role'));
+    this.email = localStorage.getItem('email');
   }
 
   openMenu() {

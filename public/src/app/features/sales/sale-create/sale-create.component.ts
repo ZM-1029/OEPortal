@@ -12,7 +12,7 @@ import { productDetailsI, Service, Unit } from "src/app/shared/types/items.type"
 import { CdkTextareaAutosize } from "@angular/cdk/text-field";
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { SalesService } from "../sales.service";
-import { Branch, Company, Country, Customer, PaymentTerm, PaymentTermsI } from "src/app/shared/types/sales.type";
+import { Branch, Company, Country, Customer, PaymentTerm, PaymentTermsI, Tax } from "src/app/shared/types/sales.type";
 
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core'; // For native date adapter
@@ -57,6 +57,7 @@ export class SaleCreateComponent {
   Countries:Country[]=[];
   Companies:Company[]=[];
   Branches:Branch[]=[];
+  Taxes:Tax[]=[];
   public customerEmail: string = '';
   public formHeading: string = "Create";
   public customerId: string = '';
@@ -87,9 +88,11 @@ export class SaleCreateComponent {
     });
     this.clearForm();
   }
+
   ngOnChanges(): void {
     this.loadDropdownData();
   }
+  
   clearForm() {
     if (this.isSideDrawerOpen) {
       if (this.Id < 1) {
@@ -225,11 +228,20 @@ export class SaleCreateComponent {
     this._salesService.getCompany().subscribe((res) => {
       if (res.success) this.Companies = res.data;
     });
+
+    this.getProductDetails(this.Id);
   }
   onCompanySelect(event: any) {
     const selectedCompanyId = event.value;
     this._salesService.getBranchDetailByCompanyId(selectedCompanyId).subscribe((res) => {
       if (res.success) this.Branches = res.data;
+    });
+  }
+
+  onCountrySelect(event: any) {
+    const selectedCompanyId = event.value;
+    this._salesService.getTaxByCountry(selectedCompanyId).subscribe((res) => {
+      if (res.success) this.Taxes = res.data;
     });
   }
 

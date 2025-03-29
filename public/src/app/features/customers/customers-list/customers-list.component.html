@@ -1,9 +1,11 @@
 <div class="main-content mt-2 p-2">
   <app-page-header [HeadingName]="HeadingName">
     <div class="d-flex" pageHeaderBtn>
-      <button class="btn btn-info-dark btn-wave mx-2 text-white text-capitalize" (click)="addCustomer($event)">
-        <i class="fa-solid fa-plus me-2"></i>Create
-      </button>
+      @if(this.customerAccess.add){
+        <button  class="btn btn-info-dark btn-wave mx-2 text-white text-capitalize" (click)="addCustomer($event)">
+          <i class="fa-solid fa-plus me-2"></i>Create
+        </button>
+      }
       <button disabled class="btn btn-primary btn-wave me-0 text-white text-capitalize" (click)="export($event)">
         <i class="bi bi-download me-1"></i>Export
       </button>
@@ -16,7 +18,7 @@
           @for (column of allColumns; track column) {
           <li>
             @if (
-            column.field == "edit" ||
+            column.field == "actions" ||
             column.field == "delete" ||
             column.field == "customerName" ||
             column.headerName == "S. No"

@@ -9,11 +9,12 @@ import { employeesDropdownI, efficiencyReportsEmployeeDetailI } from 'src/app/sh
 import { ReportsService } from '../../../reports.service';
 import { SingleSelectDropdownComponent } from 'src/app/shared/components/UI/single-select-dropdown/single-select-dropdown.component';
 import { MultiSelcetObjectDropdownComponent } from 'src/app/shared/components/UI/multi-selcet-object-dropdown/multi-selcet-object-dropdown.component';
+import { MonthMultiSelectDropdownComponent } from 'src/app/shared/components/UI/month-multi-select-dropdown/month-multi-select-dropdown.component';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 @Component({
   selector: 'app-efficiency-report-employees',
-  imports: [AgGridAngular, MultiSelectDropdownComponent,SingleSelectDropdownComponent,MultiSelcetObjectDropdownComponent],
+  imports: [AgGridAngular, MultiSelectDropdownComponent,SingleSelectDropdownComponent,MonthMultiSelectDropdownComponent],
   templateUrl: './efficiency-report-employees.component.html',
   styleUrl: './efficiency-report-employees.component.scss'
 })
@@ -63,7 +64,14 @@ export class EfficiencyReportEmployeesComponent {
     },
     {
       field: "employeeID",
-      headerName: "Salary",
+      headerName: "Employee Id",
+      sortable: true,
+      filter: true,
+      minWidth: 100,
+    },
+    {
+      field: "employeeName",
+      headerName: "Employee Name",
       sortable: true,
       filter: true,
       minWidth: 100,
@@ -73,37 +81,42 @@ export class EfficiencyReportEmployeesComponent {
       headerName: "Salary",
       sortable: true,
       filter: true,
-      minWidth: 100,
-    },
+      minWidth: 170,
+      valueGetter: (params: any) => params.data.salary === 0 ? "-" : params.data.salary, 
+      cellStyle: (params: any) => {
+        return params.value === "-" ? { color: "red", fontWeight: "bold" } : {};
+      }
+    }, 
     {
       field: "billedAmount",
       headerName: "Billed Amount",
       sortable: true,
       filter: true,
       minWidth: 170,
-    },
+      valueGetter: (params: any) => params.data.billedAmount === 0 ? "-" : params.data.billedAmount, 
+      cellStyle: (params: any) => {
+        return params.value === "-" ? { color: "red", fontWeight: "bold" } : {};
+      }
+    }, 
     {
       field: "profitratio",
-      headerName: "Profit Ratio",
+      headerName: "Profit ratio",
       sortable: true,
       filter: true,
       minWidth: 170,
-    },
+      valueGetter: (params: any) => params.data.profitratio === 0 ? "-" : params.data.profitratio, 
+      cellStyle: (params: any) => {
+        return params.value === "-" ? { color: "red", fontWeight: "bold" } : {};
+      }
+    }, 
     {
-      field: "month",
-      headerName: "Month",
+      headerName: "Month/Year",
+      field: "monthYear",
       sortable: true,
       filter: true,
-      minWidth: 120,
-    },
-    {
-      field: "year",
-      headerName: "Year",
-      sortable: true,
-      filter: true,
-      minWidth: 240,
-    },
-
+      minWidth: 150,
+      valueGetter: (params: { data: { month: any; year: any; }; }) => `${params.data.month}/${params.data.year}`
+    }
   ];
 
   defaultColDef = {
@@ -141,7 +154,6 @@ export class EfficiencyReportEmployeesComponent {
       this.yearDropdown.push({ value: year.toString(), label: year.toString() });
     }
     this.yearDropdown.reverse();
-    console.log("Generated Years:", this.yearDropdown);
     this._changeDetectorRef.detectChanges();
   }
 

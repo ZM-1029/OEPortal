@@ -66,10 +66,45 @@
     }
 
 .Permission-container{
-    max-height: 900px;
+    max-height: 100vh;
+    height: 100%;
     overflow-y:scroll  ;
 }
 .container-fluid{
     height: 100%;
 }
 
+::ng-deep .mat-checkbox-frame {
+    border-color: #007bff !important; 
+    border-width: 2px !important;
+  }
+  
+  ::ng-deep .mat-checkbox-background {
+    background-color: #007bff !important; 
+  }
+  
+  ::ng-deep .mat-checkbox-checked .mat-checkbox-checkmark-path {
+    stroke: white !important; 
+  }
+  
+  ::ng-deep .mat-checkbox-label {
+    font-size: 16px !important;
+    font-weight: bold;
+    color: black; 
+  }
+  
+  .mdc-checkbox__native-control:enabled:checked~.mdc-checkbox__background, .mdc-checkbox__native-control:enabled:indeterminate~.mdc-checkbox__background {
+    border-color: #007bff !important;
+    background-color: #007bff !important;
+}
+
+.Permissions-List{
+  border: 1px solid black;
+  background-color: white;
+  margin-bottom: 20px;
+  border-radius: 8px;
+}
+// .submenu-item{
+//   width: 300px;
+//   margin: 20px;
+// }

@@ -1,20 +1,15 @@
 .table-footer {
-    font-size: 14px;
-    z-index: 1 !important;
-  }
-  
-  // .table-footer .total-counts{
-  //   position: absolute;
-  //   width: 60%;
-  //   top: -40px;
-  //   left: 20px;
-  //   z-index: 2;
-  // }
-  .dropdown-manage-column{
-    position: absolute;
-    top: -110px;
-    right:10px;
-  }
+  font-size: 14px;
+  z-index: 1 !important;
+}
+
+
+.dropdown-manage-column {
+  position: absolute;
+  top: -130px;
+  right: 10px;
+}
+
 .btn-info-dark {
   background-color: #2e3b64 !important;
   outline: #2e3b64 !important;
@@ -31,9 +26,10 @@
 
 .checkbox-container input[type="checkbox"] {
   appearance: none;
-  width: 18px ;
-  height: 18px ;
-  border: 2px solid #3b82f6; /* Blue border */
+  width: 18px;
+  height: 18px;
+  border: 2px solid #3b82f6;
+  /* Blue border */
   border-radius: 4px;
   display: flex;
   align-items: center;

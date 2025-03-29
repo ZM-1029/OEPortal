@@ -165,7 +165,7 @@ isDesableAllInput: boolean = false;
   }
 
   @HostListener('document:click', ['$event'])
-onClickOutside(event: Event) {
+    onClickOutside(event: Event) {
   if (this.input && this.input.nativeElement !== event.target && !this.input.nativeElement.contains(event.target)) {
     if (this.autoTrigger && this.autoTrigger.panelOpen) { 
       this.autoTrigger.closePanel();
@@ -180,10 +180,8 @@ onClickOutside(event: Event) {
       (customer) => customer.customerName === event.option.viewValue
     );
     if (selectedCustomer) {
-      // this.selectedCustomerId = selectedCustomer.id;
       this.purchaseOrderForm.patchValue({ customerId: selectedCustomer.id })
     }
-  
   }
 
   date = new FormControl(moment());

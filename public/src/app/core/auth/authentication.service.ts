@@ -43,6 +43,7 @@ login(values: any) {
         localStorage.setItem('role', user.data.UserRoles);
         localStorage.setItem('name', user.Name);
         localStorage.setItem('roleName', user.RoleName);     
+        localStorage.setItem('email', user.Email);     
       } else {
         this._authenticated = false;
       }

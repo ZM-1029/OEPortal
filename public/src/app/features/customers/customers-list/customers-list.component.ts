@@ -13,7 +13,7 @@ import {
   customerListI,
   customerI,
 } from "../../../shared/types/customer.type";
-import { CommonModule } from "@angular/common";
+import { CommonModule, NgIf } from "@angular/common";
 import { PageHeaderComponent } from "../../../shared/components/UI/page-header/page-header.component";
 import { CustomersService } from "../customers.service";
 import { LoaderComponent } from "../../../shared/components/UI/loader/loader.component";
@@ -27,6 +27,8 @@ import { Subject } from "rxjs";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { SuccessModalComponent } from "src/app/shared/components/UI/success-modal/success-modal.component";
+import { RolePermissionService } from "../../role-permissions/role-permission.service";
+import { rolePermissionListI } from "src/app/shared/types/roles.type";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 @Component({
@@ -46,6 +48,31 @@ ModuleRegistry.registerModules([AllCommunityModule]);
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CustomersListComponent implements OnInit, OnDestroy {
+  public totalCount: number = 0;
+  public activeCustomer: number = 0;
+  public terminatedCustomer: number = 0;
+  public resignedCustomer: number = 0;
+  public currentPageNumber: number = 1;
+  public currentPageSize: number = 15;
+  public customerId: number = 0;
+  public isSideDrawerOpen: boolean = false;
+  public paginationPageSize = this.currentPageSize;
+  public paginationPageSizeSelector: number[] = [15, 25, 50, 100];
+  HeadingName: string = "customers";
+  rowData: customerI[] = [];
+  customerAccess: rolePermissionListI = {
+    id: 0,
+    formId: 0,
+    form: '',
+    view: false,
+    add: false,
+    edit: false
+  };
+
+  private gridApi!: GridApi<any>;
+
+  private _unsubscribeAll$: Subject<any> = new Subject<any>();
+
   columnDefs: any = [
     {
       headerName: "S. No",
@@ -109,8 +136,6 @@ export class CustomersListComponent implements OnInit, OnDestroy {
       filter: true,
       minWidth: 270,
     },
- 
-   
     {
       field: "businessType",
       headerName: "Business Type",
@@ -123,7 +148,7 @@ export class CustomersListComponent implements OnInit, OnDestroy {
       filter: true,
       minWidth: 170,
     },
-   
+
   ];
 
   defaultColDef = {
@@ -133,35 +158,52 @@ export class CustomersListComponent implements OnInit, OnDestroy {
     flex: 1,
   };
 
-  public totalCount: number = 0;
-  public activeCustomer: number = 0;
-  public terminatedCustomer: number = 0;
-  public resignedCustomer: number = 0;
-  public currentPageNumber: number = 1;
-  public currentPageSize: number = 15;
-  public customerId: number = 0;
-  public isSideDrawerOpen: boolean = false;
-  public paginationPageSize = this.currentPageSize;
-  public paginationPageSizeSelector: number[] = [15, 25, 50, 100];
-  HeadingName: string = "customers";
-  rowData: customerI[]=[];
- private gridApi!: GridApi<any>;
-
-private _unsubscribeAll$: Subject<any> = new Subject<any>();
-
   constructor(
     private _customerService: CustomersService,
     private _changeDetectorRef: ChangeDetectorRef,
     private dialog: MatDialog,
-    private _router: Router,
-    private _activatedRoute: ActivatedRoute,
     private _successMessage: MatSnackBar,
-  ) {}
+    private rolePermissionService: RolePermissionService
+  ) { }
 
   ngOnInit(): void {
     this.pageHeader_customer(this.HeadingName);
-    
+
   }
+
+
+  getPermissionToAccessPage(roleId: any) {
+    this.rolePermissionService.getPermissionsByRoleId(roleId).subscribe({
+      next: (response) => {
+        if (response.success) {
+          for (const customerAccess of response.data) {
+            if (customerAccess.form === "Customers") {
+              this.customerAccess = customerAccess;
+              if (this.customerAccess.view) {
+                this.getCustomerList();
+              } else {
+                this.rowData = [];
+                this.showErrorOverlay("You have not permission");
+              }
+              // Hide "Actions" column if `edit` is false
+              if (this.gridApi) {
+                this.gridApi.setColumnsVisible(["actions"], this.customerAccess.edit);
+              }
+
+              this._changeDetectorRef.detectChanges();
+            }
+          }
+        } else {
+          this.handleError("please try again leter");
+        }
+      },
+      error: (err) => {
+        this.handleError("please try again leter");
+      },
+    });
+  }
+
+
 
   addCustomer(event: Event) {
     this.customerId = 0;
@@ -181,7 +223,7 @@ private _unsubscribeAll$: Subject<any> = new Subject<any>();
           this.rowData = result.customers;
           this._changeDetectorRef.detectChanges();
         } else {
-          this.rowData=[];
+          this.rowData = [];
           this.showErrorOverlay('Data is not found')
           console.log("No customer data returned from API.");
         }
@@ -247,7 +289,7 @@ private _unsubscribeAll$: Subject<any> = new Subject<any>();
         this.getCustomerList();
       },
       error: (err) => {
-        this.handleError(err);
+        this.handleError("Error deleting Customer:");
         console.error("Error deleting row:", err);
       },
     });
@@ -263,7 +305,7 @@ private _unsubscribeAll$: Subject<any> = new Subject<any>();
     this.currentPageSize = pageSize;
   }
 
-  
+
   // for Manage Columns
   allColumns = [...this.columnDefs];
   displayedColumns = [...this.columnDefs];
@@ -290,30 +332,31 @@ private _unsubscribeAll$: Subject<any> = new Subject<any>();
   }
 
   // show message in table if api is false.. start
-    gridOptions = {
-      noRowsOverlayComponentParams: {
-        noRowsMessageFunc: () => "Data is not found",
-      },
-    };
-  
-    onGridReady(params: GridReadyEvent<any>) {
-      this.gridApi = params.api;
-      this.gridApi.hideOverlay();
-      this.getCustomerList();
+  gridOptions = {
+    noRowsOverlayComponentParams: {
+      noRowsMessageFunc: () => "Data is not found",
+    },
+  };
+
+  onGridReady(params: GridReadyEvent<any>) {
+    this.getPermissionToAccessPage(Number(localStorage.getItem('role')));
+    this.gridApi = params.api;
+    this.gridApi.hideOverlay();
+  }
+
+  showErrorOverlay(message: string) {
+    if (this.gridApi) {
+      this.gridApi.showNoRowsOverlay();
+      setTimeout(() => {
+        const overlay = document.querySelector(".ag-overlay-no-rows-center");
+        if (overlay) {
+          overlay.innerHTML = `<span style="color: #2e3b64; font-weight: bold;">${message}</span>`;
+        }
+        this._changeDetectorRef.detectChanges();
+      }, 100);
     }
-  
-    showErrorOverlay(message: string) {
-      if (this.gridApi) {
-        this.gridApi.showNoRowsOverlay();
-        setTimeout(() => {
-          const overlay = document.querySelector(".ag-overlay-no-rows-center");
-          if (overlay) {
-            overlay.innerHTML = `<span style="color: #2e3b64; font-weight: bold;">${message}</span>`;
-          }
-          this._changeDetectorRef.detectChanges();
-        }, 100);
-      }
-    }
+  }
+
   // show message in table if api is false.. end
 
   renderActionIcons(params: any): string {
@@ -333,7 +376,7 @@ private _unsubscribeAll$: Subject<any> = new Subject<any>();
     `;
   }
 
-  
+
   //  Function to show success messages
   private showSuccessMessage(message: string) {
     this._successMessage.openFromComponent(SuccessModalComponent, {
@@ -347,9 +390,7 @@ private _unsubscribeAll$: Subject<any> = new Subject<any>();
 
   //  Function to handle API errors
   private handleError(err: any) {
-    console.error("Error Status:", err.status);
-    console.error("Error Message:", err.error);
-    this._successMessage.open(err.error.message, "Close", {
+    this._successMessage.open(err, "Close", {
       duration: 4000,
       panelClass: ["error-toast"],
       verticalPosition: "top",
