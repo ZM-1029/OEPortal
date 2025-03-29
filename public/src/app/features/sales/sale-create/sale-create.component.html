@@ -144,7 +144,7 @@
 
         <h4>Item Table</h4>
 
-        <div class="form-group row pe-3">
+        <!-- <div class="form-group row pe-3">
           <div class="table-container py-4">
             <table>
               <thead>
@@ -223,8 +223,6 @@
                   <input type="text" placeholder="0.00" class="adjustment-label">
                   <i class="fa fa-question-circle tooltip" title="Shipping charges apply."></i>
                 </div>
-                <!-- <span class="summary-value">0.000</span> -->
-                <!-- <input type="text" placeholder="0.00" class="adjustment-label"> -->
               </div>
   
               <span class="apply-tax">Apply Tax on Shipping Charge</span>
@@ -248,7 +246,97 @@
                 <span class="summary-value fw-bold">0.000</span>
               </div>
             </div>
+
+
           </div>
+        </div> -->
+
+        <div class="form-group row pe-3">
+          <table formArrayName="items">
+            <thead>
+              <tr>
+                <th>Product Name</th>
+                <th>Quantity</th>
+                <th>Rate</th>
+                <th>Discount</th>
+                <th>Tax</th>
+                <th>Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of items.controls; let i = index" [formGroupName]="i">
+                <td>
+                  <mat-form-field appearance="outline" class="col-8 py-0">
+                    <mat-select formControlName="productId" (selectionChange)="onProductSelect($event, i)">
+                      <mat-option value="" disabled>Select Product</mat-option>
+                      <mat-option *ngFor="let product of Products" [value]="product.id">{{ product.name }}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </td>
+                <td><input formControlName="quantity" type="number" class="form-control"  min="0" (input)="amountCalculate()" />
+                </td>
+                <td><input formControlName="rate" type="number" class="form-control"  min="0"/>
+                </td>
+                <td>
+                  <input formControlName="discount" type="number" class="form-control"  min="0" (input)="amountCalculate()"/>
+                  <select formControlName="discountType" class="form-control" style="width: 30px;" (change)="onDiscountTypeChange($event, i)" (click)="setCurrentRowIndex(i)">
+                    <option value="rupee">₹</option>
+                    <option value="%">%</option>
+                  </select>
+                </td>
+                <td>
+                  <mat-form-field appearance="outline" class="col-8 py-0">
+                    <mat-select formControlName="taxId">
+                      <mat-option value="" disabled>Select Tax</mat-option>
+                      <mat-option *ngFor="let tax of Taxes" [value]="tax.id">{{ tax.tax }}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </td>
+                <td><input formControlName="subTotal" type="number" class="form-control" readonly /></td>
+                <!-- <button type="button" (click)="deleteRow(i)">Delete</button> -->
+                <button (click)="deleteRow(i)" class="btn delete-btn">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </tr>
+            </tbody>
+          </table>
+          <button type="button" class="btn btn-success my-2" (click)="addRow()">Add Row</button>
+          <div class="summary-container ">
+            <div class="summary-row">
+              <span class="summary-title">Sub Total</span>
+              <span class="summary-value">0.000</span>
+            </div>
+
+            <div class="summary-row">
+              <span class="summary-title">Shipping Charges</span>
+              <div class="input-group">
+                <input type="text" placeholder="0.00" class="adjustment-label">
+                <i class="fa fa-question-circle tooltip" title="Shipping charges apply."></i>
+              </div>
+            </div>
+
+            <span class="apply-tax">Apply Tax on Shipping Charge</span>
+
+            <div class="summary-row">
+              <div class="adjustment-container">
+                <input class="adjustment-label">
+                <input type="text" placeholder="0.00" class="adjustment-label">
+                <i class="fa fa-question-circle tooltip" title="Adjustments for discount or surcharge."></i>
+              </div>
+              <span class="summary-value">0.000</span>
+            </div>
+
+            <div class="summary-row">
+              <span class="summary-title">Round Off</span>
+              <span class="summary-value">0.000</span>
+            </div>
+
+            <div class="summary-row total-row">
+              <span>Total (₹)</span>
+              <span class="summary-value fw-bold">0.000</span>
+            </div>
+          </div>
+
         </div>
 
 

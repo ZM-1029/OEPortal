@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, Output, ViewChild, inject, Injector, afterNextRender } from "@angular/core";
-import { ReactiveFormsModule, FormGroup, FormBuilder, Validators, } from "@angular/forms";
+import { ReactiveFormsModule, FormGroup, FormBuilder, Validators,FormArray } from "@angular/forms";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
@@ -18,6 +18,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core'; // For native date adapter
 import { MatIconModule } from '@angular/material/icon'; // For calendar icon
 import { FormsModule } from '@angular/forms'; 
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-sale-create',
@@ -31,7 +32,8 @@ import { FormsModule } from '@angular/forms';
     MatSlideToggleModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatIconModule],
+    MatIconModule,
+    CommonModule],
   
   templateUrl: './sale-create.component.html',
   styleUrl: './sale-create.component.scss'
@@ -69,30 +71,55 @@ export class SaleCreateComponent {
   @Output() formClose: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Input() isSideDrawerOpen!: boolean;
   constructor(
-    private _formBuilder: FormBuilder,
+    private fb: FormBuilder,
     private _salesService: SalesService,
     private _changeDetetction: ChangeDetectorRef,
     private _successMessage: MatSnackBar,
   ) { }
 
   ngOnInit(): void {
-    this.productForm = this._formBuilder.group({
-      name: ["", [Validators.required, Validators.pattern("^[a-z A-Z]*$")]],
-      quotationNumber: ["",],
-      customerId: [""],
+    this.productForm = this.fb.group({
+      name: ['', [Validators.required, Validators.pattern("^[a-z A-Z]*$")]],
+      quotationNumber: ['', Validators.required],
+      customerId: ['', Validators.required],
       salesOrderDate: [new Date()],
-      expectedShipmentDate:[''],
-      paymentTermId: [""],
-      deliveryMethod: [""],
+      expectedShipmentDate: [''],
+      paymentTermId: ['', Validators.required],
+      deliveryMethod: [''],
       salesPerson: [''],
-      countryId: [""],
-      
+      countryId: ['', Validators.required],
+      items: this.fb.array([this.createItem()])
     });
     this.clearForm();
   }
 
   ngOnChanges(): void {
     this.loadDropdownData();
+  }
+  createItem(): FormGroup {
+    return this.fb.group({
+      productId: [0, Validators.required],
+      quantity: [1, [Validators.required, Validators.min(1)]],
+      rate: [0, [Validators.required, Validators.min(0)]],
+      discount: [0],
+      discountType: ['rupee'],
+      taxId: [0, Validators.required],
+      isFixedDiscount: [true],
+      subTotal: [{ value: 0, disabled: true }]
+    });
+  }
+
+  addRow() {
+    this.items.push(this.createItem());
+  }
+  
+  
+  deleteRow(index: number) {
+    this.items.removeAt(index);
+  }
+  
+  get items(): FormArray {
+    return this.productForm.get('items') as FormArray;
   }
   
   clearForm() {
@@ -249,53 +276,97 @@ export class SaleCreateComponent {
     });
   }
 
-  onProductSelect(event: any) {
-    const selectedProductId = event.value;
-    this._salesService.getProductById(selectedProductId).subscribe((res) => {
-      if (res.success) this.selectedProduct = res.data;
+  // onProductSelect(event: any) {
+  //   const selectedProductId = event.value;
+  //   this._salesService.getProductById(selectedProductId).subscribe((res) => {
+  //     if (res.success) this.selectedProduct = res.data;
+  //   });
+  // }
+  selectedProductId:number=0;
+  onProductSelect(event: any, index: number) {
+    this.selectedProductId = event.value;
+    this.currentRowIndex = index;
+  
+    this._salesService.getProductById(this.selectedProductId).subscribe((res) => {
+      if (res.success && res.data.length > 0) {
+        const selectedProduct = res.data[0];
+        this.items.at(index).patchValue({
+          rate: selectedProduct.salesPrice
+        });
+  
+        // Subscribe karna
+        this.items.at(index).get('rate')?.valueChanges.subscribe(() => {
+          this.amountCalculate();
+        });
+  
+        this.amountCalculate();
+      }
     });
   }
+  
+  
+ 
+  // calculateAmount(index: number) {
+  //   const item = this.items[index];
 
-  items = [
-    {
-      id: 0,
-      productId: 0,
-      quantity: 1,
-      rate: 0,
-      discount: 0,
-      discountType: 'rupee',
-      taxId: 0,
-      subTotal: 0
+  //   let discountAmount = 0;
+  //   if (item.discountType === 'rupee') {
+  //     discountAmount = item.discount;
+  //   } else if (item.discountType === '%') {
+  //     discountAmount = (item.rate * item.discount) / 100;
+  //   }
+
+  //   const subTotal = (item.quantity * item.rate) - discountAmount;
+  //   item.subTotal = parseFloat(subTotal.toFixed(3)); // Keeping precision to 3 decimal places
+  // }
+  currentRowIndex: number = -1; // Initialize with -1 (no row selected)
+
+  amountCalculate() {
+    if (this.currentRowIndex === -1) {
+      console.warn('No row selected for calculation.');
+      return;
     }
-  ];
-  addRow() {
-    const newRow = {
-      id: this.items.length,
-      productId: 0,
-      quantity: 1,
-      rate: 0,
-      discount: 0,
-      discountType: 'rupee', // Default discount type
-      taxId: 0,
-      subTotal: 0
+  
+    const currentItem = this.items.at(this.currentRowIndex);
+    console.log('Current Item:', currentItem.value);
+  
+    const payload = {
+      productId: this.selectedProductId,
+      quantity: currentItem.get('quantity')?.value,
+      salesPrice: currentItem.get('rate')?.value,
+      isFixedDiscount: currentItem.get('isFixedDiscount')?.value,
+      discount: currentItem.get('discount')?.value
     };
-    this.items.push(newRow);
+  
+    console.log('Payload:', payload);
+  
+    this._salesService.calculateItemsAmount(payload).subscribe({
+      next: (response: any) => {
+        if (response.success) {
+          console.log('Calculation successful', response);
+          currentItem.patchValue({
+            subTotal: response.data  // Assuming response.data contains the correct value
+          });
+        }
+      },
+      error: (err) => {
+        this.handleError(err);
+        console.error('Error Status:', err.status);
+        console.error('Error Message:', err.error);
+      },
+    });
   }
-  calculateAmount(index: number) {
-    const item = this.items[index];
-
-    let discountAmount = 0;
-    if (item.discountType === 'rupee') {
-      discountAmount = item.discount;
-    } else if (item.discountType === '%') {
-      discountAmount = (item.rate * item.discount) / 100;
-    }
-
-    const subTotal = (item.quantity * item.rate) - discountAmount;
-    item.subTotal = parseFloat(subTotal.toFixed(3)); // Keeping precision to 3 decimal places
+  
+  
+  setCurrentRowIndex(index: number) {
+    this.currentRowIndex = index;
   }
-  deleteRow(index: number): void {
-    this.items.splice(index, 1);
+  onDiscountTypeChange(event: any, index: number) {
+    const selectedType = event.target.value;
+    const isFixedDiscount = selectedType === 'rupee';
+  
+    // Update the corresponding form control
+    this.items.at(index).patchValue({ isFixedDiscount });
   }
   ngOnDestroy(): void {
     this.resetForm();

@@ -83,5 +83,12 @@ export class SalesService {
       params: { productId: id.toString() }
     });
   }
+
+  calculateItemsAmount(customer: any) {
+    return this.http.post<Item>(
+      `${environment.apiUrl}api/Quotation/CalculateItemsAmount`,
+      customer,
+    );
+  }
   
 }
