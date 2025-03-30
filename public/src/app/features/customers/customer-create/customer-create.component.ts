@@ -94,15 +94,15 @@ export class CustomerCreateComponent implements OnInit, OnChanges, OnDestroy {
 
       billingCity: ['', Validators.required],
       billingState: ['', Validators.required],
-      billingPin: ['', [Validators.required, Validators.pattern(/^\d{5,6}$/)]],
+      billingPin: ['', [Validators.required, Validators.maxLength(7)]],
       
       shippingaddressId:[0],
       shippingAttention: ['', [Validators.required, Validators.minLength(3)]],
-    
+      sameasbilling:['0'],
      
       shippingCity: ['', Validators.required],
       shippingState: ['', Validators.required],
-      shippingPin: ['', [Validators.required, Validators.pattern(/^\d{5,6}$/)]],
+      shippingPin: ['', [Validators.required, Validators.maxLength(7)]],
      
     });
     this.clearForm();
@@ -208,7 +208,14 @@ export class CustomerCreateComponent implements OnInit, OnChanges, OnDestroy {
                
                 
               }
+               
+
             );
+            if(response.data.addresses[1].address==response.data.addresses[0].address&&response.data.addresses[1].state==response.data.addresses[0].state&&response.data.addresses[0].city&&response.data.addresses[1].city){
+               this.customerForm.patchValue({
+                sameasbilling:'1'
+               })
+            }
             }
             for (let key in this.customerForm.value) {
               if (key == "Logo") {
@@ -230,11 +237,11 @@ export class CustomerCreateComponent implements OnInit, OnChanges, OnDestroy {
   // Create Edit Customer
   createUpdate() {
     this.submitted = true;
-    const formData = new FormData();
-    // if (!this.customerForm.valid) {
-    //   this.customerForm.markAllAsTouched();
-    //   return;
-    // }
+    
+    if (this.customerForm.invalid) {
+      this.customerForm.markAllAsTouched();
+      return;
+    }
     
       if (this.Id < 1) {
         var customer={
