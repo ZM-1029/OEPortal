@@ -95,10 +95,14 @@ export class SaleCreateComponent {
       shippingCharges: [0], 
       adjustment: [0] 
     });
-    
     this.clearForm();
   }
-
+ noPastDates = (date: Date | null): boolean => {
+    if (!date) return false;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); 
+    return date >= today;
+  };
   ngOnChanges(): void {
     this.loadDropdownData();
   }
