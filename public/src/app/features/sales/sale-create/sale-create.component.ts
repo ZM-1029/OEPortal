@@ -92,7 +92,7 @@ export class SaleCreateComponent {
       paymentTermId: ['', Validators.required],
       deliveryMethod: [''],
       salesPerson: [''],
-      items: this.fb.array([this.createItem()]),
+      items: this.fb.array([]),
       shippingCharges: [0], 
       adjustment: [0] 
     });
@@ -119,10 +119,12 @@ export class SaleCreateComponent {
       subTotal: [0]
     });
   }
+  
 
   addRow() {
     this.items.push(this.createItem());
   }
+  
 
 
   // deleteRow(index: number) {
@@ -147,6 +149,7 @@ export class SaleCreateComponent {
     if (this.isSideDrawerOpen) {
       if (this.Id < 1) {
         this.formHeading = "Create";
+        this.addRow();
       } else {
         this.formHeading = "Update";
         this.getQuotationDetails(this.Id);
@@ -179,8 +182,9 @@ export class SaleCreateComponent {
             shippingCharges: quotationDetails.shippingCharges,
             adjustment: quotationDetails.adjustment
           });
-          this.calculationDetails.subTotal=quotationDetails.subTotal
-          this.calculationDetails.total=quotationDetails.total
+          this.calculationDetails.subTotal=quotationDetails.subTotal;
+          this.calculationDetails.total=quotationDetails.total;
+          this.selectedCountryId = quotationDetails.countryId;
           this._salesService.getBranchDetailByCompanyId(quotationDetails.companyId).subscribe((res) => {
             if (res.success) this.Branches = res.data;
           });
@@ -197,6 +201,8 @@ export class SaleCreateComponent {
               taxId: [item.taxId, Validators.required],
               subTotal: [item.subTotal]
             }));
+
+            this.onTaxChange(null, itemsFormArray.length - 1);
           });
         });
     }
@@ -258,7 +264,7 @@ export class SaleCreateComponent {
     }
   
     const formValues = this.productForm.value;
-    console.log("FormArray Items:", formValues.items);
+    // console.log("FormArray Items:", formValues.items);
     // Construct the payload
     const payload = {
       id: this.Id || 0,
@@ -375,7 +381,7 @@ export class SaleCreateComponent {
   selectedCustomerId:number=0;
   onCustomerSelect(event:any){
     this.selectedCustomerId = event.value;
-    console.log(this.selectedCompanyId,'this.selectedCustomerId')
+    // console.log(this.selectedCompanyId,'this.selectedCustomerId')
   
     this._salesService.getCustomerAddressByCoustomerId(this.selectedCustomerId).subscribe((res) => {
       if (res.success) this.Address = res.data;
@@ -384,7 +390,7 @@ export class SaleCreateComponent {
   selectedCompanyId: number = 0;
   onCompanySelect(event: any) {
     this.selectedCompanyId = event.value;
-    console.log(this.selectedCompanyId,'this.selectedCompanyId')
+    // console.log(this.selectedCompanyId,'this.selectedCompanyId')
     this._salesService.getBranchDetailByCompanyId(this.selectedCompanyId).subscribe((res) => {
       if (res.success) this.Branches = res.data;
     });
@@ -505,12 +511,12 @@ export class SaleCreateComponent {
     };
     
   
-    console.log('Payload:', payload);
+    // console.log('Payload:', payload);
   
     this._salesService.calculateItemsAmount(payload).subscribe({
       next: (response: any) => {
         if (response.success) {
-          console.log('Calculation successful', response);
+          // console.log('Calculation successful', response);
           currentItem.patchValue({
             subTotal: response.data
           });
@@ -539,23 +545,71 @@ export class SaleCreateComponent {
   selectedTaxId: number = 0;
   subTotal:number=0;
   calculationDetails:any={};
-  onTaxChange(event?: any, index?: number) {
-    this.selectedTaxId = event?.value;
-    // if(index){
-    //   this.currentRowIndex = index;
-    // }
-    // if (this.currentRowIndex === -1) {
-    //   console.warn('No row selected for calculation.');
-    //   return;
-    // }
+  // onTaxChange(event?: any, index?: number) {
+  //   this.selectedTaxId = event?.value;
+  //   const productTaxes = this.items.controls.map((item, idx) => {
+  //     const productId = item.get('productId')?.value;
+  //     const subTotal = item.get('subTotal')?.value;
+  //     const countryId = this.selectedCountryId;  
+  //     const taxId = item.get('taxId')?.value;
   
-    const productTaxes = this.items.controls.map((item, idx) => {
+  //     if (productId && taxId) {  
+  //       return {
+  //         productId: productId,
+  //         pSubTotal: subTotal,
+  //         countryId: countryId,
+  //         taxId: taxId
+  //       };
+  //     }
+  //     return null;
+  //   }).filter(item => item !== null);
+  
+  //   const payload = {
+  //     productTaxes: productTaxes,
+  //     shippingCharges: this.productForm.value.shippingCharges || 0, 
+  //   adjustment: this.productForm.value.adjustment || 0 
+  //   };
+  
+  //   console.log('Payload:', payload);
+  
+  //   this._salesService.calculateFinalAmount(payload).subscribe({
+  //     next: (response: any) => {
+  //       if (response.success) {
+  //         console.log('Final Calculation Successful', response);
+  
+  //         // Saving amounts separately
+  //         this.calculationDetails = {
+  //           subTotal: response.data.subTotal,
+  //           shippingCharge: response.data.shippingCharge,
+  //           adjustment: response.data.adjustment,
+  //           total: response.data.total,
+  //           taxes: response.data.taxes
+  //         };
+  //       }
+  //     },
+  //     error: (err) => {
+  //       this.handleError(err);
+  //       console.error('Error Status:', err.status);
+  //       console.error('Error Message:', err.error);
+  //     },
+  //   });
+  // }
+
+  onTaxChange(event?: any, index?: number) {
+    const items = this.productForm.get('items') as FormArray;
+  
+    // Trigger only if event exists (for manual changes)
+    if (event && index !== undefined) {
+      this.selectedTaxId = event?.value;
+    }
+  
+    const productTaxes = items.controls.map((item, idx) => {
       const productId = item.get('productId')?.value;
       const subTotal = item.get('subTotal')?.value;
-      const countryId = this.selectedCountryId;  
+      const countryId = this.selectedCountryId;
       const taxId = item.get('taxId')?.value;
   
-      if (productId && taxId) {  
+      if (productId && taxId) {
         return {
           productId: productId,
           pSubTotal: subTotal,
@@ -568,8 +622,8 @@ export class SaleCreateComponent {
   
     const payload = {
       productTaxes: productTaxes,
-      shippingCharges: this.productForm.value.shippingCharges || 0, 
-    adjustment: this.productForm.value.adjustment || 0 
+      shippingCharges: this.productForm.value.shippingCharges || 0,
+      adjustment: this.productForm.value.adjustment || 0
     };
   
     console.log('Payload:', payload);
@@ -577,7 +631,7 @@ export class SaleCreateComponent {
     this._salesService.calculateFinalAmount(payload).subscribe({
       next: (response: any) => {
         if (response.success) {
-          console.log('Final Calculation Successful', response);
+          // console.log('Final Calculation Successful', response);
   
           // Saving amounts separately
           this.calculationDetails = {
@@ -596,6 +650,7 @@ export class SaleCreateComponent {
       },
     });
   }
+  
 
   onShippingChargesChange(event: any) {
     const value = parseFloat(event.target.value) || 0;
