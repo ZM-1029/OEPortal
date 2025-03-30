@@ -8,15 +8,13 @@ import { MatSelectModule } from "@angular/material/select";
 import { Subject, takeUntil } from "rxjs";
 import { SuccessModalComponent } from "../../../shared/components/UI/success-modal/success-modal.component";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { productDetailsI, Service, Unit } from "src/app/shared/types/items.type";
 import { CdkTextareaAutosize } from "@angular/cdk/text-field";
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { SalesService } from "../sales.service";
-import { AddressData, AddressResponse, Branch, Company, Country, Customer, PaymentTerm, PaymentTermsI, Product, QuotationResponse, selectedProduct, selectedProductI, Tax } from "src/app/shared/types/sales.type";
-
+import { AddressData, Branch, Company, Country, Customer, PaymentTerm, PaymentTermsI, Product, QuotationResponse, selectedProduct, Tax } from "src/app/shared/types/sales.type";
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core'; // For native date adapter
-import { MatIconModule } from '@angular/material/icon'; // For calendar icon
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
@@ -61,7 +59,7 @@ export class SaleCreateComponent {
   Branches: Branch[] = [];
   Products: Product[] = [];
   Taxes: Tax[] = [];
-  countryCurrency:string=''
+  countryCurrency: string = ''
   selectedProduct: selectedProduct[] = [];
   Address: AddressData | null = null;
   public customerEmail: string = '';
@@ -84,24 +82,24 @@ export class SaleCreateComponent {
       name: [''],
       quotationNumber: ['', Validators.required],
       customerId: ['', Validators.required],
-      companyId:['', Validators.required],
-      companyBranchId:['', Validators.required],
-      countryId:['', Validators.required],
+      companyId: ['', Validators.required],
+      companyBranchId: ['', Validators.required],
+      countryId: ['', Validators.required],
       salesOrderDate: [new Date()],
       expectedShipmentDate: [''],
       paymentTermId: ['', Validators.required],
       deliveryMethod: [''],
       salesPerson: [''],
       items: this.fb.array([]),
-      shippingCharges: [0], 
-      adjustment: [0] 
+      shippingCharges: [0],
+      adjustment: [0]
     });
     this.clearForm();
   }
- noPastDates = (date: Date | null): boolean => {
+  noPastDates = (date: Date | null): boolean => {
     if (!date) return false;
     const today = new Date();
-    today.setHours(0, 0, 0, 0); 
+    today.setHours(0, 0, 0, 0);
     return date >= today;
   };
   ngOnChanges(): void {
@@ -119,32 +117,17 @@ export class SaleCreateComponent {
       subTotal: [0]
     });
   }
-  
-
   addRow() {
     this.items.push(this.createItem());
   }
-  
-
-
-  // deleteRow(index: number) {
-  //   this.items.removeAt(index);
-  //   console.log(this.items,'this.items')
-  // }
-
   deleteRow(index: number) {
-    // Step 1: Remove the item from the form array
     this.items.removeAt(index);
     console.log(this.items, 'Updated items after deletion');
-  
-    // Step 2: Recalculate totals
     this.onTaxChange();
   }
-
   get items(): FormArray {
     return this.productForm.get('items') as FormArray;
   }
-
   clearForm() {
     if (this.isSideDrawerOpen) {
       if (this.Id < 1) {
@@ -165,13 +148,11 @@ export class SaleCreateComponent {
         .pipe(takeUntil(this._unsubscribeAll$))
         .subscribe((response: QuotationResponse) => {
           const quotationDetails = response.data;
-  
-          // Patch Form Fields
           this.productForm.patchValue({
             customerId: quotationDetails.customerId,
             companyId: quotationDetails.companyId,
             companyBranchId: quotationDetails.companyBranchId,
-            countryId: quotationDetails.countryId, 
+            countryId: quotationDetails.countryId,
             quotationNumber: quotationDetails.quotationNumber,
             name: quotationDetails.salesPerson,
             salesOrderDate: new Date(quotationDetails.salesOrderDate),
@@ -182,13 +163,12 @@ export class SaleCreateComponent {
             shippingCharges: quotationDetails.shippingCharges,
             adjustment: quotationDetails.adjustment
           });
-          this.calculationDetails.subTotal=quotationDetails.subTotal;
-          this.calculationDetails.total=quotationDetails.total;
+          this.calculationDetails.subTotal = quotationDetails.subTotal;
+          this.calculationDetails.total = quotationDetails.total;
           this.selectedCountryId = quotationDetails.countryId;
           this._salesService.getBranchDetailByCompanyId(quotationDetails.companyId).subscribe((res) => {
             if (res.success) this.Branches = res.data;
           });
-          // Items ko patch karna
           const itemsFormArray = this.productForm.get('items') as FormArray;
           quotationDetails.items.forEach(item => {
             itemsFormArray.push(this.fb.group({
@@ -197,7 +177,7 @@ export class SaleCreateComponent {
               quantity: [item.quantity, Validators.required],
               rate: [item.rate, Validators.required],
               discount: [item.discount],
-              discountType: ['rupee'], // Default
+              discountType: ['rupee'], 
               taxId: [item.taxId, Validators.required],
               subTotal: [item.subTotal]
             }));
@@ -207,65 +187,13 @@ export class SaleCreateComponent {
         });
     }
   }
-  
-  
-  // createUpdate() {
-  //   this.submitted = true;
-  //   if (!this.productForm.valid) {
-  //     this.productForm.markAllAsTouched();
-  //     return;
-  //   }
-  //   const payload = {
-  //     ...this.productForm.value,
-  //     Id: this.Id || 0,
-  //   };
-  //   if (this.Id < 1) {
-  //     this._salesService.addProduct(payload).subscribe({
-  //       next: (response: any) => {
-  //         if (response.success) {
-  //           this.showSuccessMessage(response.message);
-  //           this.resetForm();
-  //           this.formClose.emit(true);
-  //         } else {
-  //           this.showSuccessMessage(response.message);
-  //         }
-  //       },
-  //       error: (err) => {
-  //         this.handleError(err);
-  //         console.error("Error Status:", err.status);
-  //         console.error("Error Message:", err.error);
-  //       },
-  //     });
-  //   } else {
-  //     this._salesService.updateProduct(payload).subscribe({
-  //       next: (response: any) => {
-  //         if (response.success) {
-  //           this.showSuccessMessage(response.message);
-  //           this.resetForm();
-  //           this.formClose.emit(true);
-  //         } else {
-  //           this.showSuccessMessage(response.message);
-  //         }
-  //       },
-  //       error: (err) => {
-  //         this.handleError(err);
-  //         console.error("Error Status:", err.status);
-  //         console.error("Error Message:", err.error);
-  //       },
-  //     });
-  //   }
-  // }
-
   createUpdate() {
     this.submitted = true;
     if (!this.productForm.valid) {
       this.productForm.markAllAsTouched();
       return;
     }
-  
     const formValues = this.productForm.value;
-    // console.log("FormArray Items:", formValues.items);
-    // Construct the payload
     const payload = {
       id: this.Id || 0,
       customerId: formValues.customerId || 0,
@@ -283,7 +211,6 @@ export class SaleCreateComponent {
       subTotal: this.calculationDetails.subTotal || 0,
       total: this.calculationDetails.total || 0,
       items: formValues.items.map((item: any) => ({
-        
         id: item.id || 0,
         productId: item.productId || 0,
         quantity: item.quantity || 0,
@@ -293,7 +220,6 @@ export class SaleCreateComponent {
         subTotal: item.subTotal || 0,
       })),
     };
-  
     if (this.Id < 1) {
       this._salesService.createQuatation(payload).subscribe({
         next: (response: any) => {
@@ -330,7 +256,7 @@ export class SaleCreateComponent {
       });
     }
   }
-  
+
   resetForm() {
     this.submitted = false;
     this.productForm.reset();
@@ -347,8 +273,6 @@ export class SaleCreateComponent {
     });
   }
   private handleError(err: any) {
-    console.error("Error Status:", err.status);
-    console.error("Error Message:", err.error);
     this._successMessage.open(err.error.message, "Close", {
       duration: 4000,
       panelClass: ["error-toast"],
@@ -378,11 +302,9 @@ export class SaleCreateComponent {
       if (res.success) this.Products = res.data;
     });
   }
-  selectedCustomerId:number=0;
-  onCustomerSelect(event:any){
+  selectedCustomerId: number = 0;
+  onCustomerSelect(event: any) {
     this.selectedCustomerId = event.value;
-    // console.log(this.selectedCompanyId,'this.selectedCustomerId')
-  
     this._salesService.getCustomerAddressByCoustomerId(this.selectedCustomerId).subscribe((res) => {
       if (res.success) this.Address = res.data;
     });
@@ -390,12 +312,10 @@ export class SaleCreateComponent {
   selectedCompanyId: number = 0;
   onCompanySelect(event: any) {
     this.selectedCompanyId = event.value;
-    // console.log(this.selectedCompanyId,'this.selectedCompanyId')
     this._salesService.getBranchDetailByCompanyId(this.selectedCompanyId).subscribe((res) => {
       if (res.success) this.Branches = res.data;
     });
   }
-
   selectedCountryId: number = 0;
   onCountrySelect(event: any) {
     this.selectedCountryId = event.value;
@@ -407,26 +327,16 @@ export class SaleCreateComponent {
     });
 
   }
-
-  // onProductSelect(event: any) {
-  //   const selectedProductId = event.value;
-  //   this._salesService.getProductById(selectedProductId).subscribe((res) => {
-  //     if (res.success) this.selectedProduct = res.data;
-  //   });
-  // }
   selectedProductId: number = 0;
   onProductSelect(event: any, index: number) {
     this.selectedProductId = event.value;
     this.currentRowIndex = index;
-
     this._salesService.getProductById(this.selectedProductId).subscribe((res) => {
       if (res.success && res.data.length > 0) {
         const selectedProduct = res.data[0];
         this.items.at(index).patchValue({
           rate: selectedProduct.salesPrice
         });
-
-        // Subscribe karna
         this.items.at(index).get('rate')?.valueChanges.subscribe(() => {
           this.amountCalculate();
         });
@@ -435,73 +345,18 @@ export class SaleCreateComponent {
       }
     });
   }
-
-
-
-  // calculateAmount(index: number) {
-  //   const item = this.items[index];
-
-  //   let discountAmount = 0;
-  //   if (item.discountType === 'rupee') {
-  //     discountAmount = item.discount;
-  //   } else if (item.discountType === '%') {
-  //     discountAmount = (item.rate * item.discount) / 100;
-  //   }
-
-  //   const subTotal = (item.quantity * item.rate) - discountAmount;
-  //   item.subTotal = parseFloat(subTotal.toFixed(3)); // Keeping precision to 3 decimal places
-  // }
-  currentRowIndex: number = -1; // Initialize with -1 (no row selected)
-
-  // amountCalculate() {
-  //   if (this.currentRowIndex === -1) {
-  //     console.warn('No row selected for calculation.');
-  //     return;
-  //   }
-
-  //   const currentItem = this.items.at(this.currentRowIndex);
-  //   console.log('Current Item:', currentItem.value);
-
-  //   const payload = {
-  //     productId: this.selectedProductId,
-  //     quantity: currentItem.get('quantity')?.value,
-  //     salesPrice: currentItem.get('rate')?.value,
-  //     isFixedDiscount: currentItem.get('isFixedDiscount')?.value,
-  //     discount: currentItem.get('discount')?.value
-  //   };
-
-  //   console.log('Payload:', payload);
-
-  //   this._salesService.calculateItemsAmount(payload).subscribe({
-  //     next: (response: any) => {
-  //       if (response.success) {
-  //         console.log('Calculation successful', response);
-  //         currentItem.patchValue({
-  //           subTotal: response.data  // Assuming response.data contains the correct value
-  //         });
-  //       }
-  //     },
-  //     error: (err) => {
-  //       this.handleError(err);
-  //       console.error('Error Status:', err.status);
-  //       console.error('Error Message:', err.error);
-  //     },
-  //   });
-  // }
+  currentRowIndex: number = -1;
   amountCalculate() {
     if (this.currentRowIndex === -1) {
       console.warn('No row selected for calculation.');
       return;
     }
-  
+
     const currentItem = this.items.at(this.currentRowIndex);
     if (!currentItem) {
       console.error('Invalid row selected:', this.currentRowIndex);
       return;
     }
-  
-    console.log('Current Item:', currentItem.value);
-  
     const payload = {
       productId: this.selectedProductId || 0,
       quantity: currentItem.get('quantity')?.value || 0,
@@ -509,14 +364,9 @@ export class SaleCreateComponent {
       isFixedDiscount: currentItem.get('isFixedDiscount')?.value || 0,
       discount: currentItem.get('discount')?.value || 0,
     };
-    
-  
-    // console.log('Payload:', payload);
-  
     this._salesService.calculateItemsAmount(payload).subscribe({
       next: (response: any) => {
         if (response.success) {
-          // console.log('Calculation successful', response);
           currentItem.patchValue({
             subTotal: response.data
           });
@@ -529,86 +379,27 @@ export class SaleCreateComponent {
       },
     });
   }
-  
-
-
   setCurrentRowIndex(index: number) {
     this.currentRowIndex = index;
   }
   onDiscountTypeChange(event: any, index: number) {
     const selectedType = event.target.value;
     const isFixedDiscount = selectedType === 'rupee';
-
-    // Update the corresponding form control
     this.items.at(index).patchValue({ isFixedDiscount });
   }
   selectedTaxId: number = 0;
-  subTotal:number=0;
-  calculationDetails:any={};
-  // onTaxChange(event?: any, index?: number) {
-  //   this.selectedTaxId = event?.value;
-  //   const productTaxes = this.items.controls.map((item, idx) => {
-  //     const productId = item.get('productId')?.value;
-  //     const subTotal = item.get('subTotal')?.value;
-  //     const countryId = this.selectedCountryId;  
-  //     const taxId = item.get('taxId')?.value;
-  
-  //     if (productId && taxId) {  
-  //       return {
-  //         productId: productId,
-  //         pSubTotal: subTotal,
-  //         countryId: countryId,
-  //         taxId: taxId
-  //       };
-  //     }
-  //     return null;
-  //   }).filter(item => item !== null);
-  
-  //   const payload = {
-  //     productTaxes: productTaxes,
-  //     shippingCharges: this.productForm.value.shippingCharges || 0, 
-  //   adjustment: this.productForm.value.adjustment || 0 
-  //   };
-  
-  //   console.log('Payload:', payload);
-  
-  //   this._salesService.calculateFinalAmount(payload).subscribe({
-  //     next: (response: any) => {
-  //       if (response.success) {
-  //         console.log('Final Calculation Successful', response);
-  
-  //         // Saving amounts separately
-  //         this.calculationDetails = {
-  //           subTotal: response.data.subTotal,
-  //           shippingCharge: response.data.shippingCharge,
-  //           adjustment: response.data.adjustment,
-  //           total: response.data.total,
-  //           taxes: response.data.taxes
-  //         };
-  //       }
-  //     },
-  //     error: (err) => {
-  //       this.handleError(err);
-  //       console.error('Error Status:', err.status);
-  //       console.error('Error Message:', err.error);
-  //     },
-  //   });
-  // }
-
+  subTotal: number = 0;
+  calculationDetails: any = {};
   onTaxChange(event?: any, index?: number) {
     const items = this.productForm.get('items') as FormArray;
-  
-    // Trigger only if event exists (for manual changes)
     if (event && index !== undefined) {
       this.selectedTaxId = event?.value;
     }
-  
     const productTaxes = items.controls.map((item, idx) => {
       const productId = item.get('productId')?.value;
       const subTotal = item.get('subTotal')?.value;
       const countryId = this.selectedCountryId;
       const taxId = item.get('taxId')?.value;
-  
       if (productId && taxId) {
         return {
           productId: productId,
@@ -619,21 +410,16 @@ export class SaleCreateComponent {
       }
       return null;
     }).filter(item => item !== null);
-  
+
     const payload = {
       productTaxes: productTaxes,
       shippingCharges: this.productForm.value.shippingCharges || 0,
       adjustment: this.productForm.value.adjustment || 0
     };
-  
-    console.log('Payload:', payload);
-  
+
     this._salesService.calculateFinalAmount(payload).subscribe({
       next: (response: any) => {
         if (response.success) {
-          // console.log('Final Calculation Successful', response);
-  
-          // Saving amounts separately
           this.calculationDetails = {
             subTotal: response.data.subTotal,
             shippingCharge: response.data.shippingCharge,
@@ -650,22 +436,20 @@ export class SaleCreateComponent {
       },
     });
   }
-  
-
   onShippingChargesChange(event: any) {
     const value = parseFloat(event.target.value) || 0;
     this.productForm.patchValue({
       shippingCharges: value
     });
-    this.onTaxChange(event, -1); // Recalculate totals
+    this.onTaxChange(event, -1); 
   }
-  
+
   onAdjustmentChange(event: any) {
     const value = parseFloat(event.target.value) || 0;
     this.productForm.patchValue({
       adjustment: value
     });
-    this.onTaxChange(event, -1); // Recalculate totals
+    this.onTaxChange(event, -1); 
   }
   ngOnDestroy(): void {
     this.resetForm();
