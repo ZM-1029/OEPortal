@@ -3,7 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { BehaviorSubject } from "rxjs";
 import { environment } from "../../../environments/environment";
 import { AllServicesI, AllUnitI, Item, ItemsListI, productDetailsI } from 'src/app/shared/types/items.type';
-import { AllCustomersI, BranchListI, CompanyListI, CountryCurrencyI, CountryI, finalAmount, itemAmountCalculationI, PaymentTermsI, ProductListI, QuatationI, QuotationListI, QuotationNumberI, QuotationResponse, selectedProductI, TaxListI } from 'src/app/shared/types/sales.type';
+import { AddressResponse, AllCustomersI, BranchListI, CompanyListI, CountryCurrencyI, CountryI, finalAmount, itemAmountCalculationI, PaymentTermsI, ProductListI, QuatationI, QuotationListI, QuotationNumberI, QuotationResponse, selectedProductI, TaxListI } from 'src/app/shared/types/sales.type';
 
 @Injectable({
   providedIn: 'root'
@@ -55,12 +55,20 @@ export class SalesService {
       params: { countryId: id.toString() }
     });
   }
+  // updateQuatation(payload: any) {
+  //   return this.http.patch<QuatationI>(
+  //     `${environment.apiUrl}api/Quotation/EditQuotation`,
+  //     payload
+  //   );
+  // }
   updateQuatation(payload: any) {
     return this.http.patch<QuatationI>(
       `${environment.apiUrl}api/Quotation/EditQuotation`,
-      payload
+      payload,
+      { params: { id: payload.id.toString() } }
     );
   }
+  
 
   CustomerList() {
     return this.http.get<AllCustomersI>(
@@ -113,6 +121,11 @@ export class SalesService {
       `${environment.apiUrl}api/Quotation/CalculateQuotationFinalAmount`,
       payload,
     );
+  }
+  getCustomerAddressByCoustomerId(id: number | string) {
+    return this.http.get<AddressResponse>(`${environment.apiUrl}api/Quotation/GetCustomerAddressByCoustomerId`, {
+      params: { customerId: id.toString() }
+    });
   }
   
 }

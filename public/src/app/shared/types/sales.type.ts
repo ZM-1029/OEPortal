@@ -254,6 +254,19 @@ export interface itemReturnI {
     data: QuotationDetails;
     errors: any[];
   }
+
+  export  interface AddressResponse {
+    success: boolean;
+    message: string;
+    data: AddressData;
+    errors: any[];
+}
+
+export interface AddressData {
+    billingAddress: string;
+    shippingAddress: string;
+}
+
   
   
   

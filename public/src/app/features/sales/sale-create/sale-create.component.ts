@@ -12,7 +12,7 @@ import { productDetailsI, Service, Unit } from "src/app/shared/types/items.type"
 import { CdkTextareaAutosize } from "@angular/cdk/text-field";
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { SalesService } from "../sales.service";
-import { Branch, Company, Country, Customer, PaymentTerm, PaymentTermsI, Product, QuotationResponse, selectedProduct, selectedProductI, Tax } from "src/app/shared/types/sales.type";
+import { AddressData, AddressResponse, Branch, Company, Country, Customer, PaymentTerm, PaymentTermsI, Product, QuotationResponse, selectedProduct, selectedProductI, Tax } from "src/app/shared/types/sales.type";
 
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core'; // For native date adapter
@@ -63,6 +63,7 @@ export class SaleCreateComponent {
   Taxes: Tax[] = [];
   countryCurrency:string=''
   selectedProduct: selectedProduct[] = [];
+  Address: AddressData | null = null;
   public customerEmail: string = '';
   public formHeading: string = "Create";
   public customerId: string = '';
@@ -178,7 +179,11 @@ export class SaleCreateComponent {
             shippingCharges: quotationDetails.shippingCharges,
             adjustment: quotationDetails.adjustment
           });
-  
+          this.calculationDetails.subTotal=quotationDetails.subTotal
+          this.calculationDetails.total=quotationDetails.total
+          this._salesService.getBranchDetailByCompanyId(quotationDetails.companyId).subscribe((res) => {
+            if (res.success) this.Branches = res.data;
+          });
           // Items ko patch karna
           const itemsFormArray = this.productForm.get('items') as FormArray;
           quotationDetails.items.forEach(item => {
@@ -367,6 +372,15 @@ export class SaleCreateComponent {
       if (res.success) this.Products = res.data;
     });
   }
+  selectedCustomerId:number=0;
+  onCustomerSelect(event:any){
+    this.selectedCustomerId = event.value;
+    console.log(this.selectedCompanyId,'this.selectedCustomerId')
+  
+    this._salesService.getCustomerAddressByCoustomerId(this.selectedCustomerId).subscribe((res) => {
+      if (res.success) this.Address = res.data;
+    });
+  }
   selectedCompanyId: number = 0;
   onCompanySelect(event: any) {
     this.selectedCompanyId = event.value;
@@ -375,6 +389,7 @@ export class SaleCreateComponent {
       if (res.success) this.Branches = res.data;
     });
   }
+
   selectedCountryId: number = 0;
   onCountrySelect(event: any) {
     this.selectedCountryId = event.value;
