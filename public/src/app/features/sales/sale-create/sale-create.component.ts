@@ -115,7 +115,7 @@ export class SaleCreateComponent {
       discountType: ['rupee'],
       taxId: [0, Validators.required],
       isFixedDiscount: [true],
-      subTotal: [{ value: 0, disabled: true }]
+      subTotal: [0]
     });
   }
 
@@ -253,7 +253,7 @@ export class SaleCreateComponent {
     }
   
     const formValues = this.productForm.value;
-  
+    console.log("FormArray Items:", formValues.items);
     // Construct the payload
     const payload = {
       id: this.Id || 0,
@@ -272,6 +272,7 @@ export class SaleCreateComponent {
       subTotal: this.calculationDetails.subTotal || 0,
       total: this.calculationDetails.total || 0,
       items: formValues.items.map((item: any) => ({
+        
         id: item.id || 0,
         productId: item.productId || 0,
         quantity: item.quantity || 0,
@@ -485,7 +486,7 @@ export class SaleCreateComponent {
       quantity: currentItem.get('quantity')?.value || 0,
       salesPrice: currentItem.get('rate')?.value || 0,
       isFixedDiscount: currentItem.get('isFixedDiscount')?.value || 0,
-      discount: currentItem.get('discount')?.value || 0
+      discount: currentItem.get('discount')?.value || 0,
     };
     
   

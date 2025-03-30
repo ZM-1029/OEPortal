@@ -245,7 +245,7 @@
               <ul>
                 @for (tax of calculationDetails.taxes; track $index) {
                 <li>
-                  {{ tax.tax }}: Amount{{ tax.amount }}
+                  {{ tax.tax }}:{{ tax.amount }}
                 </li>
                 }
               </ul>
