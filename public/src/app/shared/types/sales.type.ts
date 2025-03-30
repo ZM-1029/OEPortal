@@ -214,6 +214,47 @@ export interface itemReturnI {
     errors: any[];
   }
   
+
+
+  export interface QuotationEditItem {
+    id: number;
+    productId: number;
+    quantity: number;
+    rate: number;
+    discount: number;
+    taxId: number;
+    subTotal: number;
+  }
+  
+  export interface QuotationDetails {
+    id: number;
+    quotationNumber: string;
+    companyId: number;
+    companyBranchId: number;
+    salesOrderDate: string;
+    expectedShippingDate: string;
+    total: number;
+    subTotal: number;
+    customerId: number;
+    countryId:number;
+    customerName: string;
+    statusId: number;
+    statusName: string;
+    salesPerson: string;
+    deliveryMethod: string;
+    shippingCharges: number;
+    paymentTermId: number;
+    adjustment: number;
+    items: QuotationEditItem[];
+  }
+  
+  export interface QuotationResponse {
+    success: boolean;
+    message: string;
+    data: QuotationDetails;
+    errors: any[];
+  }
+  
   
   
   

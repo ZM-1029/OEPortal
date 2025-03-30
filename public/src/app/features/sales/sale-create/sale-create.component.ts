@@ -12,7 +12,7 @@ import { productDetailsI, Service, Unit } from "src/app/shared/types/items.type"
 import { CdkTextareaAutosize } from "@angular/cdk/text-field";
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { SalesService } from "../sales.service";
-import { Branch, Company, Country, Customer, PaymentTerm, PaymentTermsI, Product, selectedProduct, selectedProductI, Tax } from "src/app/shared/types/sales.type";
+import { Branch, Company, Country, Customer, PaymentTerm, PaymentTermsI, Product, QuotationResponse, selectedProduct, selectedProductI, Tax } from "src/app/shared/types/sales.type";
 
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core'; // For native date adapter
@@ -148,43 +148,56 @@ export class SaleCreateComponent {
         this.formHeading = "Create";
       } else {
         this.formHeading = "Update";
-        this.getProductDetails(this.Id);
+        this.getQuotationDetails(this.Id);
         this._changeDetetction.detectChanges();
       }
     }
   }
-  getProductDetails(id: number) {
+  getQuotationDetails(id: number) {
     if (id !== 0) {
       this.Id = id;
       this._salesService
-        .getProductByProductId(id)
+        .getQuotationById(id)
         .pipe(takeUntil(this._unsubscribeAll$))
-        .subscribe((response: productDetailsI) => {
-          if (response.success) {
-            if (response.data && response.data.length > 0) {
-              const product = response.data[0];
-              this.productForm.patchValue({
-                name: product.name,
-                sku: product.sku,
-                hsnCode: product.hsnCode,
-                description: product.description,
-                salesPrice: product.salesPrice,
-                costPrice: product.costPrice,
-                unitId: product.unitId,
-                serviceId: product.serviceId,
-                isService: product.isService,
-                isActive: product.isActive
-              });
-              this._changeDetetction.detectChanges();
-            } else {
-              console.log('No products found');
-            }
-          } else {
-            console.log('Failed to fetch product details');
-          }
+        .subscribe((response: QuotationResponse) => {
+          const quotationDetails = response.data;
+  
+          // Patch Form Fields
+          this.productForm.patchValue({
+            customerId: quotationDetails.customerId,
+            companyId: quotationDetails.companyId,
+            companyBranchId: quotationDetails.companyBranchId,
+            countryId: quotationDetails.countryId, 
+            quotationNumber: quotationDetails.quotationNumber,
+            name: quotationDetails.salesPerson,
+            salesOrderDate: new Date(quotationDetails.salesOrderDate),
+            expectedShipmentDate: new Date(quotationDetails.expectedShippingDate),
+            paymentTermId: quotationDetails.paymentTermId,
+            deliveryMethod: quotationDetails.deliveryMethod,
+            salesPerson: quotationDetails.salesPerson,
+            shippingCharges: quotationDetails.shippingCharges,
+            adjustment: quotationDetails.adjustment
+          });
+  
+          // Items ko patch karna
+          const itemsFormArray = this.productForm.get('items') as FormArray;
+          quotationDetails.items.forEach(item => {
+            itemsFormArray.push(this.fb.group({
+              id: [item.id],
+              productId: [item.productId, Validators.required],
+              quantity: [item.quantity, Validators.required],
+              rate: [item.rate, Validators.required],
+              discount: [item.discount],
+              discountType: ['rupee'], // Default
+              taxId: [item.taxId, Validators.required],
+              subTotal: [item.subTotal]
+            }));
+          });
         });
     }
   }
+  
+  
   // createUpdate() {
   //   this.submitted = true;
   //   if (!this.productForm.valid) {
@@ -287,7 +300,7 @@ export class SaleCreateComponent {
         },
       });
     } else {
-      this._salesService.updateProduct(payload).subscribe({
+      this._salesService.updateQuatation(payload).subscribe({
         next: (response: any) => {
           if (response.success) {
             this.showSuccessMessage(response.message);
