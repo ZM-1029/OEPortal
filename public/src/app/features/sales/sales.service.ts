@@ -3,7 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { BehaviorSubject } from "rxjs";
 import { environment } from "../../../environments/environment";
 import { AllServicesI, AllUnitI, Item, ItemsListI, productDetailsI } from 'src/app/shared/types/items.type';
-import { AllCustomersI, BranchListI, CompanyListI, CountryI, PaymentTermsI, ProductListI, QuotationListI, QuotationNumberI, selectedProductI, TaxListI } from 'src/app/shared/types/sales.type';
+import { AllCustomersI, BranchListI, CompanyListI, CountryCurrencyI, CountryI, finalAmount, itemAmountCalculationI, PaymentTermsI, ProductListI, QuatationI, QuotationListI, QuotationNumberI, selectedProductI, TaxListI } from 'src/app/shared/types/sales.type';
 
 @Injectable({
   providedIn: 'root'
@@ -28,6 +28,12 @@ export class SalesService {
       customer,
     );
   }
+  createQuatation(payload: any) {
+    return this.http.post<QuatationI>(
+      `${environment.apiUrl}api/Quotation/CreateQuotation`,
+      payload,
+    );
+  }
   getProductByProductId(id: number | string) {
     return this.http.get<productDetailsI>(`${environment.apiUrl}api/Product/GetProductById`, {
       params: { productId: id.toString() }
@@ -35,6 +41,11 @@ export class SalesService {
   }
   getTaxByCountry(id: number | string) {
     return this.http.get<TaxListI>(`${environment.apiUrl}api/Product/GetTaxByCountry`, {
+      params: { countryId: id.toString() }
+    });
+  }
+  getCountryCurrency(id: number | string) {
+    return this.http.get<CountryCurrencyI>(`${environment.apiUrl}api/Quotation/GetCountryCurrency`, {
       params: { countryId: id.toString() }
     });
   }
@@ -84,10 +95,17 @@ export class SalesService {
     });
   }
 
-  calculateItemsAmount(customer: any) {
-    return this.http.post<Item>(
+  calculateItemsAmount(payload: any) {
+    return this.http.post<itemAmountCalculationI>(
       `${environment.apiUrl}api/Quotation/CalculateItemsAmount`,
-      customer,
+      payload,
+    );
+  }
+
+  calculateFinalAmount(payload: any) {
+    return this.http.post<finalAmount>(
+      `${environment.apiUrl}api/Quotation/CalculateQuotationFinalAmount`,
+      payload,
     );
   }
   

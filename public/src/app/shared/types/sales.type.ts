@@ -148,6 +148,74 @@ export interface itemReturnI {
     data: selectedProduct[];
     errors: any[];
   }
+
+  export interface itemAmountCalculationI {
+    success: boolean;
+    message: string;
+    data: number;
+    errors: any[];
+  }
+  
+  export interface amountTax {
+    tax: string;
+    value: number;
+    amount: number;
+  }
+  
+  export interface finalAmount {
+    subTotal: number;
+    taxes: amountTax[];
+    shippingCharge: number;
+    adjustment: number;
+    total: number;
+  }
+  
+  export interface finalAmountListI {
+    success: boolean;
+    message: string;
+    data: finalAmount;
+    errors: any[];
+  }
+
+
+
+  export interface quatationItem {
+    id: number;
+    productId: number;
+    quantity: number;
+    rate: number;
+    discount: number;
+    taxId: number;
+    subTotal: number;
+  }
+  
+  export interface QuatationI {
+    id: number;
+    customerId: number;
+    countryId: number;
+    companyId: number;
+    companyBranchId: number;
+    quotationNumber: string;
+    salesOrderDate: string; // ISO Date Format
+    expectedShippingDate: string; // ISO Date Format
+    salesPerson: string;
+    deliveryMethod: string;
+    shippingCharges: number;
+    paymentTermId: number;
+    adjustment: number;
+    subTotal: number;
+    total: number;
+    items: quatationItem[];
+  }
+ export interface CountryCurrencyI {
+    success: boolean;
+    message: string;
+    data: string;
+    errors: any[];
+  }
+  
+  
+  
   
   
   

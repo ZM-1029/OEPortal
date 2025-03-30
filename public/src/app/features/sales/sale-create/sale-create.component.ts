@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, Output, ViewChild, inject, Injector, afterNextRender } from "@angular/core";
-import { ReactiveFormsModule, FormGroup, FormBuilder, Validators,FormArray } from "@angular/forms";
+import { ReactiveFormsModule, FormGroup, FormBuilder, Validators, FormArray } from "@angular/forms";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
@@ -17,12 +17,12 @@ import { Branch, Company, Country, Customer, PaymentTerm, PaymentTermsI, Product
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core'; // For native date adapter
 import { MatIconModule } from '@angular/material/icon'; // For calendar icon
-import { FormsModule } from '@angular/forms'; 
+import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-sale-create',
-  imports: [   ReactiveFormsModule,
+  imports: [ReactiveFormsModule,
     FormsModule,
     MatFormFieldModule,
     MatInputModule,
@@ -34,12 +34,12 @@ import { CommonModule } from '@angular/common';
     MatNativeDateModule,
     MatIconModule,
     CommonModule],
-  
+
   templateUrl: './sale-create.component.html',
   styleUrl: './sale-create.component.scss'
 })
 export class SaleCreateComponent {
- private _injector = inject(Injector);
+  private _injector = inject(Injector);
   @ViewChild("autosize") autosize: CdkTextareaAutosize | undefined;
   triggerResize() {
     afterNextRender(
@@ -55,13 +55,14 @@ export class SaleCreateComponent {
   public submitted = false;
   Customers: Customer[] = [];
   QuotationNo: string = '';
-  PaymentTerms:PaymentTerm[]=[];
-  Countries:Country[]=[];
-  Companies:Company[]=[];
-  Branches:Branch[]=[];
-  Products:Product[]=[];
-  Taxes:Tax[]=[];
-  selectedProduct:selectedProduct[]=[];
+  PaymentTerms: PaymentTerm[] = [];
+  Countries: Country[] = [];
+  Companies: Company[] = [];
+  Branches: Branch[] = [];
+  Products: Product[] = [];
+  Taxes: Tax[] = [];
+  countryCurrency:string=''
+  selectedProduct: selectedProduct[] = [];
   public customerEmail: string = '';
   public formHeading: string = "Create";
   public customerId: string = '';
@@ -79,17 +80,22 @@ export class SaleCreateComponent {
 
   ngOnInit(): void {
     this.productForm = this.fb.group({
-      name: ['', [Validators.required, Validators.pattern("^[a-z A-Z]*$")]],
+      name: [''],
       quotationNumber: ['', Validators.required],
       customerId: ['', Validators.required],
+      companyId:['', Validators.required],
+      companyBranchId:['', Validators.required],
+      countryId:['', Validators.required],
       salesOrderDate: [new Date()],
       expectedShipmentDate: [''],
       paymentTermId: ['', Validators.required],
       deliveryMethod: [''],
       salesPerson: [''],
-      countryId: ['', Validators.required],
-      items: this.fb.array([this.createItem()])
+      items: this.fb.array([this.createItem()]),
+      shippingCharges: [0], 
+      adjustment: [0] 
     });
+    
     this.clearForm();
   }
 
@@ -112,16 +118,26 @@ export class SaleCreateComponent {
   addRow() {
     this.items.push(this.createItem());
   }
-  
-  
+
+
+  // deleteRow(index: number) {
+  //   this.items.removeAt(index);
+  //   console.log(this.items,'this.items')
+  // }
+
   deleteRow(index: number) {
+    // Step 1: Remove the item from the form array
     this.items.removeAt(index);
-  }
+    console.log(this.items, 'Updated items after deletion');
   
+    // Step 2: Recalculate totals
+    this.onTaxChange();
+  }
+
   get items(): FormArray {
     return this.productForm.get('items') as FormArray;
   }
-  
+
   clearForm() {
     if (this.isSideDrawerOpen) {
       if (this.Id < 1) {
@@ -165,22 +181,92 @@ export class SaleCreateComponent {
         });
     }
   }
+  // createUpdate() {
+  //   this.submitted = true;
+  //   if (!this.productForm.valid) {
+  //     this.productForm.markAllAsTouched();
+  //     return;
+  //   }
+  //   const payload = {
+  //     ...this.productForm.value,
+  //     Id: this.Id || 0,
+  //   };
+  //   if (this.Id < 1) {
+  //     this._salesService.addProduct(payload).subscribe({
+  //       next: (response: any) => {
+  //         if (response.success) {
+  //           this.showSuccessMessage(response.message);
+  //           this.resetForm();
+  //           this.formClose.emit(true);
+  //         } else {
+  //           this.showSuccessMessage(response.message);
+  //         }
+  //       },
+  //       error: (err) => {
+  //         this.handleError(err);
+  //         console.error("Error Status:", err.status);
+  //         console.error("Error Message:", err.error);
+  //       },
+  //     });
+  //   } else {
+  //     this._salesService.updateProduct(payload).subscribe({
+  //       next: (response: any) => {
+  //         if (response.success) {
+  //           this.showSuccessMessage(response.message);
+  //           this.resetForm();
+  //           this.formClose.emit(true);
+  //         } else {
+  //           this.showSuccessMessage(response.message);
+  //         }
+  //       },
+  //       error: (err) => {
+  //         this.handleError(err);
+  //         console.error("Error Status:", err.status);
+  //         console.error("Error Message:", err.error);
+  //       },
+  //     });
+  //   }
+  // }
+
   createUpdate() {
     this.submitted = true;
     if (!this.productForm.valid) {
       this.productForm.markAllAsTouched();
       return;
     }
-    const costPrice = parseFloat(this.productForm.get('costPrice')?.value);
-    const salesPrice = parseFloat(this.productForm.get('salesPrice')?.value);
+  
+    const formValues = this.productForm.value;
+  
+    // Construct the payload
     const payload = {
-      ...this.productForm.value,
-      costPrice: isNaN(costPrice) ? 0 : costPrice,
-      salesPrice: isNaN(salesPrice) ? 0 : salesPrice,
-      Id: this.Id || 0,
+      id: this.Id || 0,
+      customerId: formValues.customerId || 0,
+      countryId: formValues.countryId || 0,
+      companyId: formValues.companyId || 0,
+      companyBranchId: formValues.companyBranchId || 0,
+      quotationNumber: formValues.quotationNumber || "",
+      salesOrderDate: formValues.salesOrderDate ? formValues.salesOrderDate.toISOString() : new Date().toISOString(),
+      expectedShippingDate: formValues.expectedShipmentDate ? formValues.expectedShipmentDate.toISOString() : new Date().toISOString(),
+      salesPerson: formValues.salesPerson || "",
+      deliveryMethod: formValues.deliveryMethod || "",
+      shippingCharges: formValues.shippingCharges || 0,
+      paymentTermId: formValues.paymentTermId || 0,
+      adjustment: formValues.adjustment || 0,
+      subTotal: this.calculationDetails.subTotal || 0,
+      total: this.calculationDetails.total || 0,
+      items: formValues.items.map((item: any) => ({
+        id: item.id || 0,
+        productId: item.productId || 0,
+        quantity: item.quantity || 0,
+        rate: item.rate || 0,
+        discount: item.discount || 0,
+        taxId: item.taxId || 0,
+        subTotal: item.subTotal || 0,
+      })),
     };
+  
     if (this.Id < 1) {
-      this._salesService.addProduct(payload).subscribe({
+      this._salesService.createQuatation(payload).subscribe({
         next: (response: any) => {
           if (response.success) {
             this.showSuccessMessage(response.message);
@@ -215,6 +301,7 @@ export class SaleCreateComponent {
       });
     }
   }
+  
   resetForm() {
     this.submitted = false;
     this.productForm.reset();
@@ -262,18 +349,24 @@ export class SaleCreateComponent {
       if (res.success) this.Products = res.data;
     });
   }
+  selectedCompanyId: number = 0;
   onCompanySelect(event: any) {
-    const selectedCompanyId = event.value;
-    this._salesService.getBranchDetailByCompanyId(selectedCompanyId).subscribe((res) => {
+    this.selectedCompanyId = event.value;
+    console.log(this.selectedCompanyId,'this.selectedCompanyId')
+    this._salesService.getBranchDetailByCompanyId(this.selectedCompanyId).subscribe((res) => {
       if (res.success) this.Branches = res.data;
     });
   }
-
+  selectedCountryId: number = 0;
   onCountrySelect(event: any) {
-    const selectedCompanyId = event.value;
-    this._salesService.getTaxByCountry(selectedCompanyId).subscribe((res) => {
+    this.selectedCountryId = event.value;
+    this._salesService.getTaxByCountry(this.selectedCountryId).subscribe((res) => {
       if (res.success) this.Taxes = res.data;
     });
+    this._salesService.getCountryCurrency(this.selectedCountryId).subscribe((res) => {
+      if (res.success) this.countryCurrency = res.data;
+    });
+
   }
 
   // onProductSelect(event: any) {
@@ -282,30 +375,30 @@ export class SaleCreateComponent {
   //     if (res.success) this.selectedProduct = res.data;
   //   });
   // }
-  selectedProductId:number=0;
+  selectedProductId: number = 0;
   onProductSelect(event: any, index: number) {
     this.selectedProductId = event.value;
     this.currentRowIndex = index;
-  
+
     this._salesService.getProductById(this.selectedProductId).subscribe((res) => {
       if (res.success && res.data.length > 0) {
         const selectedProduct = res.data[0];
         this.items.at(index).patchValue({
           rate: selectedProduct.salesPrice
         });
-  
+
         // Subscribe karna
         this.items.at(index).get('rate')?.valueChanges.subscribe(() => {
           this.amountCalculate();
         });
-  
+
         this.amountCalculate();
       }
     });
   }
-  
-  
- 
+
+
+
   // calculateAmount(index: number) {
   //   const item = this.items[index];
 
@@ -321,6 +414,41 @@ export class SaleCreateComponent {
   // }
   currentRowIndex: number = -1; // Initialize with -1 (no row selected)
 
+  // amountCalculate() {
+  //   if (this.currentRowIndex === -1) {
+  //     console.warn('No row selected for calculation.');
+  //     return;
+  //   }
+
+  //   const currentItem = this.items.at(this.currentRowIndex);
+  //   console.log('Current Item:', currentItem.value);
+
+  //   const payload = {
+  //     productId: this.selectedProductId,
+  //     quantity: currentItem.get('quantity')?.value,
+  //     salesPrice: currentItem.get('rate')?.value,
+  //     isFixedDiscount: currentItem.get('isFixedDiscount')?.value,
+  //     discount: currentItem.get('discount')?.value
+  //   };
+
+  //   console.log('Payload:', payload);
+
+  //   this._salesService.calculateItemsAmount(payload).subscribe({
+  //     next: (response: any) => {
+  //       if (response.success) {
+  //         console.log('Calculation successful', response);
+  //         currentItem.patchValue({
+  //           subTotal: response.data  // Assuming response.data contains the correct value
+  //         });
+  //       }
+  //     },
+  //     error: (err) => {
+  //       this.handleError(err);
+  //       console.error('Error Status:', err.status);
+  //       console.error('Error Message:', err.error);
+  //     },
+  //   });
+  // }
   amountCalculate() {
     if (this.currentRowIndex === -1) {
       console.warn('No row selected for calculation.');
@@ -328,15 +456,21 @@ export class SaleCreateComponent {
     }
   
     const currentItem = this.items.at(this.currentRowIndex);
+    if (!currentItem) {
+      console.error('Invalid row selected:', this.currentRowIndex);
+      return;
+    }
+  
     console.log('Current Item:', currentItem.value);
   
     const payload = {
-      productId: this.selectedProductId,
-      quantity: currentItem.get('quantity')?.value,
-      salesPrice: currentItem.get('rate')?.value,
-      isFixedDiscount: currentItem.get('isFixedDiscount')?.value,
-      discount: currentItem.get('discount')?.value
+      productId: this.selectedProductId || 0,
+      quantity: currentItem.get('quantity')?.value || 0,
+      salesPrice: currentItem.get('rate')?.value || 0,
+      isFixedDiscount: currentItem.get('isFixedDiscount')?.value || 0,
+      discount: currentItem.get('discount')?.value || 0
     };
+    
   
     console.log('Payload:', payload);
   
@@ -345,7 +479,7 @@ export class SaleCreateComponent {
         if (response.success) {
           console.log('Calculation successful', response);
           currentItem.patchValue({
-            subTotal: response.data  // Assuming response.data contains the correct value
+            subTotal: response.data
           });
         }
       },
@@ -357,16 +491,93 @@ export class SaleCreateComponent {
     });
   }
   
-  
+
+
   setCurrentRowIndex(index: number) {
     this.currentRowIndex = index;
   }
   onDiscountTypeChange(event: any, index: number) {
     const selectedType = event.target.value;
     const isFixedDiscount = selectedType === 'rupee';
-  
+
     // Update the corresponding form control
     this.items.at(index).patchValue({ isFixedDiscount });
+  }
+  selectedTaxId: number = 0;
+  subTotal:number=0;
+  calculationDetails:any={};
+  onTaxChange(event?: any, index?: number) {
+    this.selectedTaxId = event?.value;
+    // if(index){
+    //   this.currentRowIndex = index;
+    // }
+    // if (this.currentRowIndex === -1) {
+    //   console.warn('No row selected for calculation.');
+    //   return;
+    // }
+  
+    const productTaxes = this.items.controls.map((item, idx) => {
+      const productId = item.get('productId')?.value;
+      const subTotal = item.get('subTotal')?.value;
+      const countryId = this.selectedCountryId;  
+      const taxId = item.get('taxId')?.value;
+  
+      if (productId && taxId) {  
+        return {
+          productId: productId,
+          pSubTotal: subTotal,
+          countryId: countryId,
+          taxId: taxId
+        };
+      }
+      return null;
+    }).filter(item => item !== null);
+  
+    const payload = {
+      productTaxes: productTaxes,
+      shippingCharges: this.productForm.value.shippingCharges || 0, 
+    adjustment: this.productForm.value.adjustment || 0 
+    };
+  
+    console.log('Payload:', payload);
+  
+    this._salesService.calculateFinalAmount(payload).subscribe({
+      next: (response: any) => {
+        if (response.success) {
+          console.log('Final Calculation Successful', response);
+  
+          // Saving amounts separately
+          this.calculationDetails = {
+            subTotal: response.data.subTotal,
+            shippingCharge: response.data.shippingCharge,
+            adjustment: response.data.adjustment,
+            total: response.data.total,
+            taxes: response.data.taxes
+          };
+        }
+      },
+      error: (err) => {
+        this.handleError(err);
+        console.error('Error Status:', err.status);
+        console.error('Error Message:', err.error);
+      },
+    });
+  }
+
+  onShippingChargesChange(event: any) {
+    const value = parseFloat(event.target.value) || 0;
+    this.productForm.patchValue({
+      shippingCharges: value
+    });
+    this.onTaxChange(event, -1); // Recalculate totals
+  }
+  
+  onAdjustmentChange(event: any) {
+    const value = parseFloat(event.target.value) || 0;
+    this.productForm.patchValue({
+      adjustment: value
+    });
+    this.onTaxChange(event, -1); // Recalculate totals
   }
   ngOnDestroy(): void {
     this.resetForm();
