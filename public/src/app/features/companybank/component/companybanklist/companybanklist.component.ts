@@ -48,7 +48,7 @@ export class CompanybanklistComponent {
     { field: "ifscCode", headerName: "IFSC Code", sortable: true, filter: true },
     { field: "accountType", headerName: "Account Type", sortable: true, filter: true },
     { field: "swissCode", headerName: "Swiss Code", sortable: true, filter: true },
-    { field: "sortcode", headerName: "Sort Code", sortable: true, filter: true },
+    { field: "sortCode", headerName: "Swift Code", sortable: true, filter: true },
    
    
    
