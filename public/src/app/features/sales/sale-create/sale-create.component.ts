@@ -140,6 +140,54 @@ export class SaleCreateComponent {
       }
     }
   }
+  // getQuotationDetails(id: number) {
+  //   if (id !== 0) {
+  //     this.Id = id;
+  //     this._salesService
+  //       .getQuotationById(id)
+  //       .pipe(takeUntil(this._unsubscribeAll$))
+  //       .subscribe((response: QuotationResponse) => {
+  //         const quotationDetails = response.data;
+  //         this.productForm.patchValue({
+  //           customerId: quotationDetails.customerId,
+  //           companyId: quotationDetails.companyId,
+  //           companyBranchId: quotationDetails.companyBranchId,
+  //           countryId: quotationDetails.countryId,
+  //           quotationNumber: quotationDetails.quotationNumber,
+  //           name: quotationDetails.salesPerson,
+  //           salesOrderDate: new Date(quotationDetails.salesOrderDate),
+  //           expectedShipmentDate: new Date(quotationDetails.expectedShippingDate),
+  //           paymentTermId: quotationDetails.paymentTermId,
+  //           deliveryMethod: quotationDetails.deliveryMethod,
+  //           salesPerson: quotationDetails.salesPerson,
+  //           shippingCharges: quotationDetails.shippingCharges,
+  //           adjustment: quotationDetails.adjustment
+  //         });
+  //         this.calculationDetails.subTotal = quotationDetails.subTotal;
+  //         this.calculationDetails.total = quotationDetails.total;
+  //         this.selectedCountryId = quotationDetails.countryId;
+  //         this._salesService.getBranchDetailByCompanyId(quotationDetails.companyId).subscribe((res) => {
+  //           if (res.success) this.Branches = res.data;
+  //         });
+  //         const itemsFormArray = this.productForm.get('items') as FormArray;
+  //         quotationDetails.items.forEach(item => {
+  //           itemsFormArray.push(this.fb.group({
+  //             id: [item.id],
+  //             productId: [item.productId, Validators.required],
+  //             quantity: [item.quantity, Validators.required],
+  //             rate: [item.rate, Validators.required],
+  //             discount: [item.discount],
+  //             discountType: ['rupee'], 
+  //             taxId: [item.taxId, Validators.required],
+  //             subTotal: [item.subTotal]
+  //           }));
+
+  //           this.onTaxChange(null, itemsFormArray.length - 1);
+  //         });
+  //       });
+  //   }
+  // }
+
   getQuotationDetails(id: number) {
     if (id !== 0) {
       this.Id = id;
@@ -148,6 +196,8 @@ export class SaleCreateComponent {
         .pipe(takeUntil(this._unsubscribeAll$))
         .subscribe((response: QuotationResponse) => {
           const quotationDetails = response.data;
+          
+          // Form patching
           this.productForm.patchValue({
             customerId: quotationDetails.customerId,
             companyId: quotationDetails.companyId,
@@ -163,12 +213,26 @@ export class SaleCreateComponent {
             shippingCharges: quotationDetails.shippingCharges,
             adjustment: quotationDetails.adjustment
           });
+  
+          // Trigger change detection after patching
+          this._changeDetetction.detectChanges();
+  
           this.calculationDetails.subTotal = quotationDetails.subTotal;
           this.calculationDetails.total = quotationDetails.total;
           this.selectedCountryId = quotationDetails.countryId;
-          this._salesService.getBranchDetailByCompanyId(quotationDetails.companyId).subscribe((res) => {
-            if (res.success) this.Branches = res.data;
-          });
+  
+          // Fetching branch details
+          this._salesService.getBranchDetailByCompanyId(quotationDetails.companyId)
+            .subscribe((res) => {
+              if (res.success) {
+                this.Branches = res.data;
+  
+                // After updating branches, trigger change detection
+                this._changeDetetction.detectChanges();
+              }
+            });
+  
+          // Handling items
           const itemsFormArray = this.productForm.get('items') as FormArray;
           quotationDetails.items.forEach(item => {
             itemsFormArray.push(this.fb.group({
@@ -177,16 +241,19 @@ export class SaleCreateComponent {
               quantity: [item.quantity, Validators.required],
               rate: [item.rate, Validators.required],
               discount: [item.discount],
-              discountType: ['rupee'], 
+              discountType: ['rupee'],
               taxId: [item.taxId, Validators.required],
               subTotal: [item.subTotal]
             }));
-
+  
+            // Trigger change detection after adding each item
             this.onTaxChange(null, itemsFormArray.length - 1);
+            this._changeDetetction.detectChanges();
           });
         });
     }
   }
+  
   createUpdate() {
     this.submitted = true;
     if (!this.productForm.valid) {
@@ -307,6 +374,7 @@ export class SaleCreateComponent {
     this.selectedCustomerId = event.value;
     this._salesService.getCustomerAddressByCoustomerId(this.selectedCustomerId).subscribe((res) => {
       if (res.success) this.Address = res.data;
+      this._changeDetetction.detectChanges();
     });
   }
   selectedCompanyId: number = 0;
@@ -322,6 +390,8 @@ export class SaleCreateComponent {
     this._salesService.getTaxByCountry(this.selectedCountryId).subscribe((res) => {
       if (res.success) this.Taxes = res.data;
     });
+
+    
     this._salesService.getCountryCurrency(this.selectedCountryId).subscribe((res) => {
       if (res.success) this.countryCurrency = res.data;
     });
@@ -359,7 +429,7 @@ export class SaleCreateComponent {
     }
     const payload = {
       productId: this.selectedProductId || 0,
-      quantity: currentItem.get('quantity')?.value || 0,
+      quantity: currentItem.get('quantity')?.value || 1,
       salesPrice: currentItem.get('rate')?.value || 0,
       isFixedDiscount: currentItem.get('isFixedDiscount')?.value || 0,
       discount: currentItem.get('discount')?.value || 0,
@@ -370,6 +440,8 @@ export class SaleCreateComponent {
           currentItem.patchValue({
             subTotal: response.data
           });
+          this._changeDetetction.detectChanges();
+          this.onTaxChange()
         }
       },
       error: (err) => {
@@ -400,7 +472,7 @@ export class SaleCreateComponent {
       const subTotal = item.get('subTotal')?.value;
       const countryId = this.selectedCountryId;
       const taxId = item.get('taxId')?.value;
-      if (productId && taxId) {
+      if (productId ) {
         return {
           productId: productId,
           pSubTotal: subTotal,
@@ -427,6 +499,7 @@ export class SaleCreateComponent {
             total: response.data.total,
             taxes: response.data.taxes
           };
+          this._changeDetetction.detectChanges();
         }
       },
       error: (err) => {
