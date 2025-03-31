@@ -79,7 +79,6 @@ export class SaleCreateComponent {
 
   ngOnInit(): void {
     this.productForm = this.fb.group({
-      name: [''],
       quotationNumber: ['', Validators.required],
       customerId: ['', Validators.required],
       companyId: ['', Validators.required],

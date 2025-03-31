@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { BehaviorSubject } from "rxjs";
 import { environment } from "../../../environments/environment";
-import { AllServicesI, AllUnitI, Item, ItemsListI, productDetailsI } from 'src/app/shared/types/items.type';
+import {  Item,  productDetailsI } from 'src/app/shared/types/items.type';
 import { AddressResponse, AllCustomersI, BranchListI, CompanyListI, CountryCurrencyI, CountryI, finalAmount, itemAmountCalculationI, PaymentTermsI, ProductListI, QuatationI, QuotationListI, QuotationNumberI, QuotationResponse, selectedProductI, TaxListI } from 'src/app/shared/types/sales.type';
-
+import { Observable } from 'rxjs'; 
 @Injectable({
   providedIn: 'root'
 })
@@ -126,6 +126,9 @@ export class SalesService {
     return this.http.get<AddressResponse>(`${environment.apiUrl}api/Quotation/GetCustomerAddressByCoustomerId`, {
       params: { customerId: id.toString() }
     });
+  }
+  downloadPDF(quotationId: number): Observable<Blob> {
+    return this.http.get(`${environment.apiUrl}api/Quotation/DownloadPdf?quotationId=${quotationId}`, { responseType: 'blob' });
   }
   
 }
