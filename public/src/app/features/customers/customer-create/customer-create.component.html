@@ -160,7 +160,7 @@
           <div class="form-group row">
             <mat-label class="outer-mat-lable col-4 pt-2">Address</mat-label>
             <mat-form-field appearance="outline" class="col-8">
-              <input formControlName="billingAttention" matInput placeholder="Enter Attention" />
+              <input formControlName="billingAttention" matInput placeholder="Enter Address" />
               <mat-error *ngIf="customerForm.controls['billingAttention'].hasError('required')">
                 Address is required
               </mat-error>
@@ -200,7 +200,7 @@
               <mat-error *ngIf="customerForm.controls['billingPin'].hasError('required')">
                 Postal code is required
               </mat-error>
-              <mat-error *ngIf="customerForm.controls['billingPin'].hasError('pattern')">
+              <mat-error *ngIf="customerForm.controls['billingPin'].hasError('maxlength')">
                 Enter a valid 5 or 6-digit postal code
               </mat-error>
             </mat-form-field>
@@ -212,7 +212,7 @@
 
   <div class="form-group row">
     <mat-label class="outer-mat-lable col-4 pt-2">
-      <input type="checkbox" (change)="copyBillingToShipping($event)" />
+      <input type="checkbox" formControlName="sameasbilling" (change)="copyBillingToShipping($event)" />
       Same as Billing Address
     </mat-label>
   </div>
@@ -261,7 +261,7 @@
       <mat-error *ngIf="customerForm.controls['shippingPin'].hasError('required')">
         Postal code is required
       </mat-error>
-      <mat-error *ngIf="customerForm.controls['shippingPin'].hasError('pattern')">
+      <mat-error *ngIf="customerForm.controls['shippingPin'].hasError('maxlength')">
         Enter a valid 5 or 6-digit postal code
       </mat-error>
     </mat-form-field>

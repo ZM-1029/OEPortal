@@ -1,0 +1,38 @@
+<div class="main-content mt-2 p-2">
+    <app-page-header [HeadingName]="'Branch'">
+        <div class="d-flex" pageHeaderBtn>
+            <button class="btn btn-primary btn-wave mx-2 text-white" (click)="openAddCountryDrawer()">
+                <i class="fa-solid fa-plus me-2"></i> Create
+              </button>
+            
+          </div>
+    </app-page-header>
+  
+    <div class="d-flex align-items-center justify-content-center">
+      <div class="container-fluid p-0">
+        <ag-grid-angular
+          #agGrid
+          style="width: 100%; height: 78vh;"
+          class="ag-theme-alpine"
+          [rowData]="rowData"
+          [columnDefs]="columnDefs"
+          [defaultColDef]="defaultColDef"
+          [animateRows]="true"
+          (cellClicked)="updateCompanyProfile($event)"
+          [pagination]="true"
+          (gridReady)="onGridReady($event)">
+        </ag-grid-angular>
+      </div>
+    </div>
+  
+    @if (isSideDrawerOpen) {
+        <app-side-drawer (sideDrawer)="sideDrawer()" [isSideDrawerOpen]="isSideDrawerOpen">
+          <app-add-branch (formClose)="formClose($event)" [isSideDrawerOpen]="isSideDrawerOpen"
+            [Id]="id"></app-add-branch>
+        </app-side-drawer>
+        }
+      
+      
+      
+  </div>
+  
