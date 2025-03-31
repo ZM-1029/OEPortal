@@ -19,7 +19,7 @@
                   <mat-form-field appearance="outline" class="me-2" >
                     <input formControlName="TaxName" matInput placeholder="Tax Name (e.g., VAT)" />
                     <mat-error *ngIf="tax.get('TaxName')?.hasError('required') && tax.get('TaxName')?.touched">Tax Name is required</mat-error>
-                    <mat-error *ngIf="tax.get('TaxName')?.hasError('pattern') && tax.get('TaxName')?.touched">Tax Name can only contain letters and spaces</mat-error>
+                   
                   </mat-form-field>
                   
                   <mat-form-field appearance="outline">

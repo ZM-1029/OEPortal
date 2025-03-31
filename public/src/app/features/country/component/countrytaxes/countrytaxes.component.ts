@@ -78,7 +78,11 @@ export class CountrytaxesComponent {
   formClose(event: any) {
     this.sideDrawer();
     if (event) {
-      this.getCountryTaxesList(this.countryId);
+      this.route.paramMap.subscribe(params => {
+        this.countryId = Number(params.get('id'));
+        this.getCountryTaxesList(this.countryId);
+        
+      });
       this.countryId = 0;
     }
   }
