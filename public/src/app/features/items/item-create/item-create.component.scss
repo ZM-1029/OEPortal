@@ -62,9 +62,10 @@
     display: flex !important;
   }
   .input-form-container{
-    max-height: 56vh;
+    max-height: 67vh;
     width: 100%;
     min-width:430px;
+    padding-right: 10px;
     overflow-y: scroll;
     overflow-x: hidden;
   }

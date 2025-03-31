@@ -4,10 +4,10 @@
 }
 
 
-.dropdown-manage-column{
+.dropdown-manage-column {
   position: absolute;
   top: -130px;
-  right:10px;
+  right: 10px;
 }
 
 .btn-info-dark {
@@ -29,7 +29,6 @@
   width: 18px;
   height: 18px;
   border: 2px solid #3b82f6;
-  /* Blue border */
   border-radius: 4px;
   display: flex;
   align-items: center;
@@ -59,31 +58,48 @@
 .multi-select-dropdown {
   display: flex;
   position: absolute;
-  top: -46px;
-  right: 288px;
+  top: -52px;
+  right: 250px;
   width: 100%;
   max-width: 700px;
 }
 
-.dropdown select2 {
-  width: 200px;
-}
-.multi-select-dropdown .dropdown-employee{
-  max-width: 300px;
-  width: 200px;
+.employee-efficiency-report .emplooye-dropdown ::ng-deep .ng-select-container,
+.dropdown ::ng-deep .ng-select-container {
+  width: 300px !important;
+  max-width: 300px !important;
 }
 
-.select2-container {
-  display: inline-block;
-  position: relative;
-  vertical-align: middle;
-  box-sizing: border-box;
-  margin: 0;
-  width: 100%;
-  min-width: 140px;
+.dropdown .dropdown-employee {
+  max-height: 300px;
 }
 
-.dropdown {
-  max-height: 500px;
+@media (max-width: 1500px) {
+ 
+  .multi-select-dropdown {
+    display: flex;
+    position: absolute;
+    top: -52px;
+    right: 230px;
+    width: 100%;
+    max-width: 700px;
+  }
 }
 
+@media (max-width: 1300px) {
+  .multi-select-dropdown {
+    display: flex;
+    position: relative;
+    flex-wrap: wrap;
+    top: 0px;
+    right: 0px;
+    width: 100%;
+    max-width: 700px;
+  }
+
+  .employee-efficiency-report  .emplooye-dropdown{
+    padding-left: 0;
+    margin: 10px 0;
+  }
+  
+}

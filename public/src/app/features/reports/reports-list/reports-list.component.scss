@@ -25,3 +25,9 @@
   width: 300px;
   max-width: 300px;
 }
+
+@media (max-width: 1200px) {
+  .matDatepicker-container {
+    max-width: 300px;
+  }
+}
