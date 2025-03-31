@@ -189,7 +189,6 @@ export class CustomersListComponent implements OnInit, OnDestroy {
               if (this.gridApi) {
                 this.gridApi.setColumnsVisible(["actions"], this.customerAccess.edit);
               }
-
               this._changeDetectorRef.detectChanges();
             }
           }

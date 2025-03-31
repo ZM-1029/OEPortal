@@ -67,6 +67,29 @@ export const routes: Routes = [
           import("./features/bussiness/bussiness.routing").then(
             (m) => m.BUSSINESS_ROUTES,
           ),
+      }
+      ,
+      {
+        path: "company",
+        loadChildren: () =>
+          import("./features/company/company.routing").then(
+            (m) => m.COMPANY_ROUTES,
+          ),
+      },
+      
+      {
+        path: "branch",
+        loadChildren: () =>
+          import("./features/branch/branch.routing").then(
+            (m) => m.BRANCH_ROUTES,
+          ),
+      },
+      {
+        path: "bank",
+        loadChildren: () =>
+          import("./features/companybank/bank.routing").then(
+            (m) => m.BANK_ROUTES,
+          ),
       },
       {
         path: "salary",

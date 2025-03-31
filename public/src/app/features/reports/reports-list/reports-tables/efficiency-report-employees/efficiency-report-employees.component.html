@@ -1,6 +1,6 @@
-<div class="position-relative ">
+<div class=" employee-efficiency-report position-relative ">
     <div class="multi-select-dropdown d-flex justify-content-between">
-        <div class="dropdown px-3 ">
+        <div class="dropdown px-3 ps-0">
             @if(yearDropdown.length!=0){
                 <app-single-select-dropdown [dropdownHeading]="'Select Year'" [defaultValue]="selectedValueYear"
                 [dataList]="yearDropdown" (selectedOutput)="selectedYear($event)">
@@ -15,7 +15,7 @@
               (selectedOutput)="selectedMonth($event)">
             </app-month-multi-select-dropdown>
           </div>
-        <div class="dropdown-employee px-3">
+        <div class="emplooye-dropdown ">
             <app-multi-select-dropdown [dropdownHeading]="'Employee'" [dataList]="allEmployees"
                 (selectedOutput)="selectedEmployee($event)">
             </app-multi-select-dropdown>

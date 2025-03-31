@@ -1,0 +1,110 @@
+<div class="main-content m-4">
+    
+    
+    <div class="border-bottom bg-light pb-2">
+      <h2 class="formHeading">{{heading}} Company Branch</h2>
+    </div>
+  
+    <div class="form-container d-flex ">
+      <form [formGroup]="companyForm" (ngSubmit)="submitForm()">
+        <div class="input-form-container py-3">
+          <!-- Business Dropdown -->
+         
+  
+          <!-- Country Dropdown -->
+          <div class="form-group row ">
+            <mat-label class="outer-mat-label col-4 px-1 pt-2">Company</mat-label>
+            <mat-form-field appearance="outline" class="col-8">
+              <mat-select formControlName="companyId" (selectionChange)="checkCountry($event)">
+             
+                <mat-option *ngFor="let country of countries" [value]="country.value">
+                  {{ country.label }}
+                </mat-option>
+              </mat-select>
+              <div *ngIf="iscountryfail" style="color: red; font-size: 12px;">
+                Company is required.
+              </div>
+            </mat-form-field>
+          </div>
+  
+          <!-- Terms & Conditions -->
+          <div class="form-group row">
+              <mat-label class="outer-mat-lable col-4 pt-2">Name</mat-label>
+              <mat-form-field appearance="outline" class="col-8">
+                <input formControlName="name" matInput placeholder="Enter  Name" />
+                <mat-error *ngIf="companyForm.controls['name'].hasError('required')">
+                   Name is required
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="form-group row">
+                <mat-label class="outer-mat-lable col-4 pt-2">Phone Number</mat-label>
+                <mat-form-field appearance="outline" class="col-8">
+                  <input formControlName="phoneNumber" appOnlyNumbers matInput placeholder="Enter Phone Number" />
+                  <mat-error *ngIf="companyForm.controls['phoneNumber'].hasError('required')">
+                     Phone Number is required
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="form-group row">
+          <mat-label class="outer-mat-lable col-4 pt-2">State</mat-label>
+          <mat-form-field appearance="outline" class="col-8">
+            <input formControlName="State" matInput placeholder="Enter State " />
+            <mat-error *ngIf="companyForm.controls['State'].hasError('required')">
+              State is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="form-group row">
+            <mat-label class="outer-mat-lable col-4 pt-2">City</mat-label>
+            <mat-form-field appearance="outline" class="col-8">
+              <input formControlName="City" matInput placeholder="Enter City Name" />
+              <mat-error *ngIf="companyForm.controls['City'].hasError('required')">
+                City is required
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="form-group row">
+            <mat-label class="outer-mat-lable col-4 pt-2">Address</mat-label>
+            <mat-form-field appearance="outline" class="col-8">
+              <input formControlName="Address" matInput placeholder="Enter Address Name" />
+              <mat-error *ngIf="companyForm.controls['Address'].hasError('required')">
+                Address is required
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="form-group row">
+            <mat-label class="outer-mat-lable col-4 pt-2">Pincode</mat-label>
+            <mat-form-field appearance="outline" class="col-8">
+              <input formControlName="pincode" matInput placeholder="Enter Pincode Name" />
+              <mat-error *ngIf="companyForm.controls['pincode'].hasError('required')">
+                Pincode is required
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="form-group row">
+            <mat-label class="outer-mat-lable col-4 pt-2">GST NO</mat-label>
+            <mat-form-field appearance="outline" class="col-8">
+              <input formControlName="gstno" matInput placeholder="Enter GST NO " />
+              <mat-error *ngIf="companyForm.controls['gstno'].hasError('required')">
+                GST NO is required
+              </mat-error>
+            </mat-form-field>
+          </div>
+        
+          <div style="display: flex; align-items: center;">
+            <mat-label class="outer-mat-label col-4 p-2">Is Fixed</mat-label>
+            <mat-slide-toggle formControlName="IsActive">Active</mat-slide-toggle>
+          </div>
+       
+        </div>
+  
+        <!-- Form Buttons -->
+        <div class="form-btn d-flex align-items-start justify-content-end p-4">
+          <button class="btn btn-secondary mx-2" (click)="reset()">Clear</button>
+          <button class="btn btn-primary" type="submit">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  

@@ -1,6 +1,7 @@
 .main-content {
   background-color: white !important;
   border-radius: 16px;
+  box-sizing: border-box;
 }
 
 .main-content .bg-light {
@@ -26,22 +27,12 @@ form {
   height: 77vh;
 }
 
-.form-control {
-  display: block;
-  width: 100%;
-  padding: 0.375rem 0.75rem;
-  font-size: 1rem;
-  font-weight: 400;
-  line-height: 1.6;
-  color: #212529;
-  background-color: #fff;
-  background-clip: padding-box;
-  border: 1px solid #d7d5e2;
-  appearance: none;
-  border-radius: var(--zf-form-input-border-radius);
-  transition:
-    border-color 0.15s ease-in-out,
-    // box-shadow 0.15s ease-in-out;
+.table-data {
+  border-color: #3f51b5;
+}
+
+.table-data :active {
+  border-color: #3f51b5;
 }
 
 .customer-info {
@@ -68,7 +59,7 @@ form {
 }
 
 .input-form-container {
-  max-height: 66vh;
+  max-height: 500px;
   width: 100%;
   min-width: 430px;
   padding-right: 10px;
@@ -79,7 +70,6 @@ form {
 .form-group,
 mat-form-field {
   background-color: transparent;
-  // margin-bottom: 10px;
   padding-bottom: 5px;
 
 }
@@ -91,34 +81,6 @@ mat-label {
   font-size: 14px;
 }
 
-
-input[type="file"] {
-  padding: 3px;
-}
-
-input[type="radio"] {
-  width: auto;
-  margin-right: 5px;
-}
-
-input[type="radio"]:checked {
-  background-color: #408dfb;
-  border-color: #408dfb;
-}
-
-input[type="text"]:required {
-  border-left: 2px solid #408dfb;
-}
-
-input :hover,
-input:active,
-input:focus,
-mat-select:hover,
-mat-select:active,
-mat-select:focus {
-  outline: none;
-  border: 1px solid #408dfb;
-}
 
 .cdk-overlay-pane:not(.mat-mdc-select-panel-above) div.mat-mdc-select-panel {
   background-color: white;
@@ -140,55 +102,6 @@ mat-select:focus {
   height: 70px;
 }
 
-.profile-container {
-  text-align: center;
-}
-
-.image-circle {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  border: 3px solid #ccc;
-  position: relative;
-  overflow: hidden;
-  display: inline-block;
-  background: #f3f3f3;
-}
-
-.image-circle img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.image-circle .overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 1;
-  transition: opacity 0.3s ease-in-out;
-}
-
-.image-circle:hover .overlay {
-  opacity: 1;
-}
-
-.icon {
-  color: white;
-  cursor: pointer;
-  margin: 0 10px;
-  font-size: 24px;
-}
-
-.delete-icon {
-  color: red;
-}
 
 .name-field {
   margin-top: 15px;
@@ -298,9 +211,12 @@ mat-select:focus {
 
 
 /* Table container with scroll */
-.table-container {
-  min-height: 470px;
-  overflow-y: auto;
+/* Make the table container scrollable */
+.table-responsive {
+  max-height: 500px; /* Set the max height for scrolling */
+  max-width: 100%;  /* Set the max width for scrolling */
+  overflow-x: auto; /* Horizontal scroll when needed */
+  overflow-y: auto; /* Vertical scroll when needed */
   border: 1px solid #ddd;
   border-radius: 4px;
   margin-top: 20px;
@@ -329,6 +245,61 @@ tr:nth-child(even) {
   background-color: #f9f9f9;
 }
 
+/* Hide scrollbar for WebKit browsers */
+.table-responsive::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.table-responsive::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+// .table-container {
+//   min-height: 470px;
+//   max-width: 300px;
+//   overflow-x: scroll;
+//   overflow-y: auto;
+//   border: 1px solid #ddd;
+//   border-radius: 4px;
+//   margin-top: 20px;
+// }
+
+// /* General Table Styling */
+// table {
+//   width: 100%;
+//   border-collapse: collapse;
+// }
+
+// th,
+// td {
+//   padding: 12px;
+//   text-align: left;
+//   border: 1px solid #ddd;
+//   font-size: 14px;
+// }
+
+// th {
+//   background-color: #f1f1f1;
+//   font-weight: 600;
+// }
+
+// tr:nth-child(even) {
+//   background-color: #f9f9f9;
+// }
+
+
+
+
 /* Styling for Input Fields */
 input[type="number"],
 select {
@@ -352,7 +323,7 @@ select {
   padding: 20px;
   width: 500px;
   margin: 20px auto;
-  background-color:#f9f9fb;
+  background-color: #f9f9fb;
   float: inline-end;
   margin-right: 45px;
 }
@@ -424,4 +395,18 @@ select {
   border-radius: 4px;
   font-size: 14px;
 }
+
 // summary-container end
+.form {
+  width: 100%;
+}
+
+.form .Address {
+  width: 100%;
+}
+
+
+
+// @media () {
+
+// }

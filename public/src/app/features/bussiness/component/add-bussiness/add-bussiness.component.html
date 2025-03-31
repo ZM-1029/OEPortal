@@ -1,6 +1,6 @@
-<div class="main-content m-4">
+<div class="businessForm main-content m-4">
     
-  <mat-icon class="close-icon" style="float:right" (click)="closePopup()">close</mat-icon>
+  <!-- <mat-icon class="close-icon" style="float:right" (click)="closePopup()">close</mat-icon> -->
     <div class="border-bottom bg-light pb-2">
       <h2 class="formHeading">{{heading}} Term and condition</h2>
     </div>
@@ -12,7 +12,7 @@
          
   
           <!-- Country Dropdown -->
-          <div class="form-group ">
+          <div class="form-group row ">
             <mat-label class="outer-mat-label col-4 px-1 pt-2">Country</mat-label>
             <mat-form-field appearance="outline" class="col-8">
               <mat-select formControlName="Country" (selectionChange)="checkCountry($event)">
@@ -44,8 +44,6 @@
               </mat-error>
             </div>
           </div>
-          
-  
        
         </div>
   
