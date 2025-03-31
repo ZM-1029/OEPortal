@@ -220,7 +220,7 @@ export class SaleCreateComponent {
           this.calculationDetails.subTotal = quotationDetails.subTotal;
           this.calculationDetails.total = quotationDetails.total;
           this.selectedCountryId = quotationDetails.countryId;
-  
+          this.selectedCustomerId=quotationDetails.customerId;
           // Fetching branch details
           this._salesService.getBranchDetailByCompanyId(quotationDetails.companyId)
             .subscribe((res) => {
@@ -230,6 +230,15 @@ export class SaleCreateComponent {
                 // After updating branches, trigger change detection
                 this._changeDetetction.detectChanges();
               }
+            });
+
+            this._salesService.getTaxByCountry(this.selectedCountryId).subscribe((res) => {
+              if (res.success) this.Taxes = res.data;
+              this._changeDetetction.detectChanges();
+            });
+            this._salesService.getCustomerAddressByCoustomerId(this.selectedCustomerId).subscribe((res) => {
+              if (res.success) this.Address = res.data;
+              this._changeDetetction.detectChanges();
             });
   
           // Handling items
@@ -431,7 +440,7 @@ export class SaleCreateComponent {
       productId: this.selectedProductId || 0,
       quantity: currentItem.get('quantity')?.value || 1,
       salesPrice: currentItem.get('rate')?.value || 0,
-      isFixedDiscount: currentItem.get('isFixedDiscount')?.value || 0,
+      isFixedDiscount: currentItem.get('isFixedDiscount')?.value || true,
       discount: currentItem.get('discount')?.value || 0,
     };
     this._salesService.calculateItemsAmount(payload).subscribe({
