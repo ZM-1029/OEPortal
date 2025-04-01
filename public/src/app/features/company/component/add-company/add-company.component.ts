@@ -74,7 +74,7 @@ export class AddCompanyComponent {
       Country: ['0', Validators.required],
       headquater: ['', [Validators.required]],
       name: ['', [Validators.required]],
-      IsActive:['']
+      IsActive:['1']
    
     });
 if(this.Id>0)
