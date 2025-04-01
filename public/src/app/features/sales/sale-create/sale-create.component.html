@@ -123,12 +123,12 @@
               </div>
             </div>
             <div class="salary-form2 mx-2">
-              <div class="form-group row ">
+              <!-- <div class="form-group row ">
                 <mat-label class="outer-mat-lable col-4 pt-2 ">Reference </mat-label>
                 <mat-form-field appearance="outline" class="col-8">
                   <input formControlName="name" matInput placeholder="Enter Reference" />
                 </mat-form-field>
-              </div>
+              </div> -->
               <div class="form-group row">
                 <mat-label class="outer-mat-lable col-4 pt-2">Sales Order Date</mat-label>
                 <mat-form-field appearance="outline" class="col-8">
@@ -265,12 +265,12 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let item of items.controls; let i = index" [formGroupName]="i">
+                <tr *ngFor="let item of items.controls; let i = index" [formGroupName]="i" (click)="setCurrentRowIndex(i)">
                   <td>{{ i + 1 }}</td>
                   <td>
                     <div class="d-flex justify-content-center align-items-center mt-3">
                       <mat-form-field appearance="outline" class="col-8 py-0">
-                        <mat-select formControlName="productId" (selectionChange)="onProductSelect($event, i)">
+                        <mat-select formControlName="productId" (selectionChange)="onProductSelect($event, i)" placeholder="Select Product">
                           <mat-option value="" disabled>Select Product</mat-option>
                           <mat-option *ngFor="let product of Products" [value]="product.id">{{ product.name }}</mat-option>
                         </mat-select>
@@ -280,8 +280,8 @@
                       </mat-form-field>
                     </div>
                   </td>
-                  <td><input formControlName="quantity" type="number" class="table-data" min="0" (input)="amountCalculate()" /></td>
-                  <td><input formControlName="rate" type="number" class="table-data" min="0" /></td>
+                  <td><input formControlName="quantity" type="number" class="table-data" min="1" (input)="amountCalculate()" /></td>
+                  <td><input formControlName="rate" type="number" class="table-data" min="1" /></td>
                   <td>
                     <div class="d-flex">
                       <input formControlName="discount" type="number" class="table-data" min="0" (input)="amountCalculate()" />
@@ -293,14 +293,23 @@
                     </div>
                   </td>
                   <td>
-                    <div class="d-flex justify-content-center align-items-center mt-3">
+                    <!-- <div class="d-flex justify-content-center align-items-center mt-3">
                       <mat-form-field appearance="outline" class="col-8 py-0">
                         <mat-select formControlName="taxId" (selectionChange)="onTaxChange($event, i)">
                           <mat-option value="" disabled>Select Tax</mat-option>
                           <mat-option *ngFor="let tax of Taxes" [value]="tax.id">{{ tax.tax }}</mat-option>
                         </mat-select>
                       </mat-form-field>
+                    </div> -->
+                    <div class="d-flex justify-content-center align-items-center mt-3">
+                      <mat-form-field appearance="outline" class="col-8 py-0">
+                        <mat-select formControlName="taxId" (selectionChange)="onTaxChange($event, i)" placeholder="Select Tax">
+                          <mat-option value="" disabled>Select Tax</mat-option>
+                          <mat-option *ngFor="let tax of Taxes" [value]="tax.id">{{ tax.tax }}</mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </div>
+                    
                   </td>
                   <td><input formControlName="subTotal" type="number" class="table-data" readonly /></td>
                   <td class="text-center">

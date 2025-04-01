@@ -153,18 +153,39 @@ columnDefs: any = [
       this._changeDetectorRef.detectChanges();
     }
   }
+  // updateQuotation(event: any): void {
+  //   if (event.event.target.closest(".edit-icon")) {
+  //     const quotationId = event.event.target.closest(".edit-icon").getAttribute("data-id");
+  //     console.log(quotationId, 'quotationId')
+  //     this.quotationId = Number(quotationId);
+  //     this.isSideDrawerOpen = true;
+  //   }
+  //   if (event.event.target.closest(".delete-icon")) {
+  //     const quotationId = event.event.target.closest(".delete-icon").getAttribute("data-id");
+  //     this.openDeleteModal(Number(quotationId));
+  //   }
+    
+  // }
   updateQuotation(event: any): void {
-    if (event.event.target.closest(".edit-icon")) {
-      const quotationId = event.event.target.closest(".edit-icon").getAttribute("data-id");
-      console.log(quotationId, 'quotationId')
+    const target = event.event.target;
+  
+    if (target.closest(".edit-icon")) {
+      const quotationId = target.closest(".edit-icon").getAttribute("data-id");
       this.quotationId = Number(quotationId);
       this.isSideDrawerOpen = true;
     }
-    if (event.event.target.closest(".delete-icon")) {
-      const quotationId = event.event.target.closest(".delete-icon").getAttribute("data-id");
+  
+    if (target.closest(".download-icon")) {
+      const quotationId = target.closest(".download-icon").getAttribute("data-id");
+      this.downloadPDF(Number(quotationId));
+    }
+  
+    if (target.closest(".delete-icon")) {
+      const quotationId = target.closest(".delete-icon").getAttribute("data-id");
       this.openDeleteModal(Number(quotationId));
     }
   }
+  
   openDeleteModal(quotationId: number): void {
     const dialogRef = this.dialog.open(DeleteModalComponent, {
       width: "400px",
@@ -233,17 +254,37 @@ columnDefs: any = [
       }, 100);
     }
   }
+  // renderActionIcons(params: any): string {
+  //   return `
+  //     <div class="action-icons d-flex align-items-center justify-content-around">
+  //       <span class="icon-container text-primary edit-icon" data-id="${params.data.id}" style="display: block; width: 20px; height: 20px;">
+  //         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+  //           <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+  //         </svg>
+  //       </span>
+  //     </div>
+  //   `;
+  // }
   renderActionIcons(params: any): string {
     return `
       <div class="action-icons d-flex align-items-center justify-content-around">
+        <!-- Edit Icon -->
         <span class="icon-container text-primary edit-icon" data-id="${params.data.id}" style="display: block; width: 20px; height: 20px;">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
             <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
           </svg>
         </span>
+  
+        <!-- Download PDF Icon -->
+       <span class="icon-container text-success download-icon" data-id="${params.data.id}" style="display: block; width: 20px; height: 20px; cursor: pointer;">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M3 3v16.5a1.5 1.5 0 0 0 1.5 1.5h16.5a1.5 1.5 0 0 0 1.5-1.5V9m-6 9V3M9 12l3 3 3-3" />
+    </svg>
+  </span>
       </div>
     `;
   }
+  
   private showSuccessMessage(message: string) {
     this._successMessage.openFromComponent(SuccessModalComponent, {
       data: { message },
@@ -263,7 +304,27 @@ columnDefs: any = [
       horizontalPosition: "right",
     });
   }
-
+  downloadPDF(quotationId: number): void {
+    this._salesService.downloadPDF(quotationId).subscribe({
+      next: (response: any) => {
+        const blob = new Blob([response], { type: 'application/pdf' });
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `Quotation_${quotationId}.pdf`;
+        link.click();
+        window.URL.revokeObjectURL(url);
+      },
+      error: (error) => {
+        console.error('PDF download error:', error);
+        this._successMessage.open('Failed to download PDF.', 'Close', {
+          duration: 3000,
+          panelClass: ['error-toast'],
+        });
+      },
+    });
+  }
+  
   ngOnDestroy(): void {
     this._unsubscribeAll$.next(this._salesService);
     this._unsubscribeAll$.complete();
