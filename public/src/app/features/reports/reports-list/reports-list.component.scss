@@ -1,5 +1,5 @@
-.dropdown {
-  min-width: 165px;
+.dropdown-container .dropdown {
+  min-width: 270px;
 }
 .dropdown-container  {
   position: relative;
@@ -22,10 +22,20 @@
   right: 200px;
 }
 .date-range-picker mat-form-field{
-  width: 300px;
-  max-width: 300px;
+  // width: 300px;
+  // max-width: 300px;
 }
 
+.main-content .date-range-picker .mat-mdc-form-field-has-icon-suffix .mat-mdc-text-field-wrapper {
+  padding-right: 0;
+  background: white !important;
+}
+
+
+.mat-mdc-text-field-wrapper {
+  width: 100%;
+  z-index: 0;
+}
 @media (max-width: 1200px) {
   .matDatepicker-container {
     max-width: 300px;

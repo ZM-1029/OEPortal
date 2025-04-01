@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule, NgOptionTemplateDirective, NgSelectComponent } from '@ng-select/ng-select';
 
@@ -11,11 +11,10 @@ import { NgSelectModule, NgOptionTemplateDirective, NgSelectComponent } from '@n
   templateUrl: './multi-selcet-object-dropdown.component.html',
   styleUrl: './multi-selcet-object-dropdown.component.scss'
 })
-export class MultiSelcetObjectDropdownComponent {
+export class MultiSelcetObjectDropdownComponent implements OnInit, OnChanges {
  @Input() dataList: any = [];
   @Input() dropdownHeading: string = '';
   @Input() defaultValue: any;
-  @Input() isCustomerId: boolean = false;
   @Output() selectedOutput: EventEmitter<any> = new EventEmitter<any>();
   transformedDataList: { id: string; name: string }[] = [];
   selectedData: any;
@@ -25,27 +24,71 @@ export class MultiSelcetObjectDropdownComponent {
   private previousSelectedData: any[] = [];
   constructor() { }
 
+  // ngOnInit() {
+  //   if (this.defaultValue) {
+  //     this.selectedData = this.defaultValue;
+  //     this.selectedOutput.emit(this.selectedData);
+  //   }
+  // }
+
+  // ngOnChanges(changes: SimpleChanges): void {
+  //   if (changes['dataList']) {
+  //     this.dataList = changes['dataList'].currentValue;
+  //     this.transformedDataList = this.dataList.map((item: any, index: number) => {
+  //       if (typeof (item) == 'string') {
+  //         this.stringArray = 'string';
+  //         return { id: item, name: item }
+  //       } else {
+  //         this.stringArray = 'object';
+  //         return { id: item.id, name: item.name }
+  //       }
+  //     }
+  //     );
+
+  //   }
+  // }
+
   ngOnInit() {
-    if (this.defaultValue) {
-      this.selectedData = this.defaultValue;
-      this.selectedOutput.emit(this.selectedData);
+    // Initialize with default value if provided
+    if (this.defaultValue === '0') {
+      this.allSelected = true;
+      // Don't set selectedData here - wait for dataList to be available
+    } else if (this.defaultValue) {
+      this.selectedData = Array.isArray(this.defaultValue) ? 
+        [...this.defaultValue] : 
+        [this.defaultValue];
     }
   }
-
+  
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['dataList']) {
       this.dataList = changes['dataList'].currentValue;
-      this.transformedDataList = this.dataList.map((item: any, index: number) => {
-        if (typeof (item) == 'string') {
+      this.transformedDataList = this.dataList.map((item: any) => {
+        if (typeof item === 'string') {
           this.stringArray = 'string';
-          return { id: item, name: item }
+          return { id: item, name: item };
         } else {
           this.stringArray = 'object';
-          return { id: item.id, name: item.name }
+          return { id: item.id, name: item.name };
         }
+      });
+  
+      // Handle default value after data is loaded
+      if (this.defaultValue === '0' && this.transformedDataList.length > 0) {
+        this.allSelected = true;
+        this.toggleSelectAll();
+      } else if (this.defaultValue && this.transformedDataList.length > 0) {
+        // Ensure default values exist in the data
+        const defaultIds = Array.isArray(this.defaultValue) ? 
+          this.defaultValue : 
+          [this.defaultValue];
+        
+        this.selectedData = this.transformedDataList
+          .filter(item => defaultIds.includes(item.id))
+          .map(item => item.id);
+        
+        this.updateAllSelected();
       }
-      );
-
     }
   }
 
@@ -72,13 +115,13 @@ export class MultiSelcetObjectDropdownComponent {
     this.allSelected = this.selectedData.length === this.transformedDataList.length;
   
     if (this.allSelected) {
-      this.selectedOutput.emit(1);
+      this.selectedOutput.emit(0);
     } else if (this.selectedData.length !== 0) {
       console.log(this.selectedData,"updateAllSelected");
       
       this.selectedOutput.emit(this.selectedData); // ✅ Emit IDs directly
     } else {
-      this.selectedOutput.emit(1);
+      // this.selectedOutput.emit(1);
     }
   }
 

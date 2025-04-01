@@ -2,21 +2,20 @@
     <div class="multi-select-dropdown d-flex justify-content-between">
         <div class="dropdown px-3 ps-0">
             @if(yearDropdown.length!=0){
-                <app-single-select-dropdown [dropdownHeading]="'Select Year'" [defaultValue]="selectedValueYear"
+            <app-single-select-dropdown [dropdownHeading]="'Select Year'" [defaultValue]="selectedValueYear"
                 [dataList]="yearDropdown" (selectedOutput)="selectedYear($event)">
             </app-single-select-dropdown>
             }
         </div>
         <div class="dropdown px-3">
-            <app-month-multi-select-dropdown 
-              [dropdownHeading]="'Months'" 
-              [defaultValue]="selectedValueMonth"  
-              [dataList]="Month"
-              (selectedOutput)="selectedMonth($event)">
-            </app-month-multi-select-dropdown>
-          </div>
+           @if(selectedValueMonth){
+            <app-month-multi-select-dropdown [dropdownHeading]="'Months'" [defaultValue]="selectedValueMonth"
+            [dataList]="Month" (selectedOutput)="selectedMonth($event)">
+           </app-month-multi-select-dropdown>
+           }
+        </div>
         <div class="emplooye-dropdown ">
-            <app-multi-select-dropdown [dropdownHeading]="'Employee'" [dataList]="allEmployees"
+                <app-multi-select-dropdown [dropdownHeading]="'Employee'" [defaultValue]="employeeId" [dataList]="allEmployees"
                 (selectedOutput)="selectedEmployee($event)">
             </app-multi-select-dropdown>
         </div>
@@ -64,7 +63,13 @@
                 @for(summary of reportsEmployeesummary; track summary){
                 <div class="col-auto fw-bold">
                     <label class="summary-item text-bold">
-                        <span class="text-capitalize">{{ summary.key }}</span>: {{ summary.value }}
+                        @if(summary.key=='_1'){
+                        <span class="text-capitalize">Total Salary</span>: {{ summary.value }}
+                        }@else if(summary.key=='_2'){
+                        <span class="text-capitalize">Total Billed Amount</span>: {{ summary.value }}
+                        }@else if(summary.key=='_3'){
+                        <span class="text-capitalize">Profit Margin</span>: {{ summary.value }}
+                        }
                     </label>
                 </div>
                 }

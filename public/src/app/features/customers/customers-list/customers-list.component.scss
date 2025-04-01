@@ -114,3 +114,14 @@
   outline: #2e3b64 !important;
   border: #2e3b64;
 }
+
+// sideDrawer start
+.customer-list  app-side-drawer .drawer {
+  position: absolute;
+  z-index: 999 !important;
+  width: 35rem !important;
+  height: 100%;
+  box-sizing: border-box;
+  background-color: transparent;
+}
+// sideDrawer end

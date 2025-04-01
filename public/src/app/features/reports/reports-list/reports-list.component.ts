@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, OnInit, Output } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, OnInit, Output, ViewEncapsulation } from "@angular/core";
 import { AttendanceNonComplianceHistoryComponent } from "./reports-tables/attendance-non-compliance-history/attendance-non-compliance-history.component";
 import { CommonModule, DatePipe, NgClass } from "@angular/common";
 import { ncTypeCountsI, nonComplianceHistoryI, nonComplianceI } from "src/app/shared/types/nonCompliance.type";
@@ -41,6 +41,7 @@ import { MatInputModule } from "@angular/material/input";
   templateUrl: "./reports-list.component.html",
   styleUrl: "./reports-list.component.scss",
   providers: [provideNativeDateAdapter(), DatePipe],
+  encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReportsListComponent implements OnInit {
@@ -53,7 +54,7 @@ export class ReportsListComponent implements OnInit {
   attendanceRowData: nonComplianceI[] = [];
   timesheetRowData: nonComplianceI[] = [];
   ncTypeCounts: ncTypeCountsI | any;
-  employeeId: any = '0'
+  employeeId: string='0' 
   allEmployees: any[] = [];
   isActiveDropDownShow:boolean=false;
 
@@ -69,6 +70,7 @@ export class ReportsListComponent implements OnInit {
     private _changeDetectorRef: ChangeDetectorRef, private reportsService: ReportsService
   ) { }
   ngOnInit(): void {
+    this.employeeId='0'
     this.setDefaultDates();
     this.pageHeader_employee(this.HeadingName);
     this.GetEmployeesForDropdown();
@@ -151,12 +153,12 @@ export class ReportsListComponent implements OnInit {
     }
   }
 
-  getEndDate(event: MatDatepickerInputEvent<Date> | any) {
-    if (event.value) {
-      this.endDate = this.formatDate(event.value);
-      this.checkAndFetchAttendance();
-    }
-  }
+  // getEndDate(event: MatDatepickerInputEvent<Date> | any) {
+  //   if (event.value) {
+  //     this.endDate = this.formatDate(event.value);
+  //     this.checkAndFetchAttendance();
+  //   }
+  // }
 
   checkAndFetchAttendance() {
     
@@ -168,6 +170,27 @@ export class ReportsListComponent implements OnInit {
   formatDate(date: Date): string {
     return date.getFullYear() + "-" + (date.getMonth() + 1).toString().padStart(2, "0") + "-" + date.getDate().toString().padStart(2, "0");
   }
+
+  dateFilter = (d: Date | null): boolean => {
+    if (!this.startDate) return true; 
+    return d! >= new Date(this.startDate); 
+  };
+  
+  getEndDate(event: MatDatepickerInputEvent<Date> | any) {
+    if (event.value) {
+      const selectedEndDate = event.value;
+      
+      // Ensure the end date is not before the start date
+      if (selectedEndDate < new Date(this.startDate)) {
+        alert("End date cannot be earlier than the start date.");
+        return;
+      }
+  
+      this.endDate = this.formatDate(selectedEndDate);
+      this.checkAndFetchAttendance();
+    }
+  }
+  
 
   // date piker end
 

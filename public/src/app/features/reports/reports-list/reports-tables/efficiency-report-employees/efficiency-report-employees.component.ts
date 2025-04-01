@@ -27,7 +27,7 @@ export class EfficiencyReportEmployeesComponent {
   public paginationPageSizeSelector: number[] = [15, 25, 50, 100];
   getDateForm!: FormGroup;
   private gridApi!: GridApi<any>;
-  employeeId: any = '1';
+  employeeId: string='' ;
   selectedValueMonth: any;
   selectedValueYear: any = '2025';
   dropdownHeading: string = "Month";
@@ -133,6 +133,7 @@ export class EfficiencyReportEmployeesComponent {
   ) { }
 
   ngOnInit(): void {
+    this.employeeId='0'
     this._changeDetectorRef.detectChanges();
     this.selectedValueMonth = new Date().getMonth()+1;
     const currentYear = new Date().getFullYear();

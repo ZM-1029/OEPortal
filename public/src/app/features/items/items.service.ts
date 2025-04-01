@@ -54,7 +54,7 @@ export class ItemsService {
   }
   getServices() {
     return this.http.get<AllServicesI>(
-      `${environment.apiUrl}api/Product/GetServices`,
+      `${environment.apiUrl}api/Product/GetServiceList`,
     );
   }
 }
