@@ -74,3 +74,31 @@
   flex-wrap: wrap;
   max-height: 36px;
 }
+
+.selected-items-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.selected-item {
+  background-color: #e0e0e0;
+  border-radius: 16px;
+  padding: 2px 8px;
+  font-size: 14px;
+}
+
+.plus-count {
+  background-color: #f0f0f0;
+  border-radius: 16px;
+  padding: 2px 8px;
+  font-size: 14px;
+  color: #666;
+}
+
+.ng-value-container {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+}

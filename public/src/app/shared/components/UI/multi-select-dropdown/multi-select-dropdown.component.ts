@@ -20,12 +20,12 @@ export class MultiSelectDropdownComponent implements OnInit, OnChanges {
   iscloseDropdown: boolean = false;
   stringArray: string = '';
   private previousSelectedData: string[] = [];
-  selectedValue: string[] =[]
+  selectedValue: string[] = []
   constructor() { }
 
   ngOnInit() {
-    this.allSelected=true;
-    
+    this.allSelected = true;
+
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -59,24 +59,24 @@ export class MultiSelectDropdownComponent implements OnInit, OnChanges {
     }
     this.updateAllSelected();
   }
-  
 
-  updateAllSelected() {    
+
+  updateAllSelected() {
     if (JSON.stringify(this.previousSelectedData) === JSON.stringify(this.selectedData)) {
       return;
     }
     this.previousSelectedData = [...this.selectedData];
-    
-    this.selectedValue =[...this.selectedData];
-console.log(this.selectedValue);
+
+    this.selectedValue = [...this.selectedData];
+    console.log(this.selectedValue);
 
     this.allSelected = this.selectedData.length === this.transformedDataList.length;
     const extractedData: string[] = [];
     if (this.allSelected) {
       this.selectedOutput.emit(1);
-    }else if(this.selectedData.length !== 0 && this.stringArray == 'string' && !this.allSelected){
+    } else if (this.selectedData.length !== 0 && this.stringArray == 'string' && !this.allSelected) {
       this.selectedOutput.emit(this.selectedData);
-    }else if(this.selectedData.length !== 0 && this.stringArray == 'object' && !this.allSelected){
+    } else if (this.selectedData.length !== 0 && this.stringArray == 'object' && !this.allSelected) {
       for (const data of this.selectedData) {
         const match = data.match(/\((.*?)\)/);
         if (match) {
@@ -84,25 +84,10 @@ console.log(this.selectedValue);
         }
       }
       this.selectedOutput.emit(extractedData);
-    }else{
+    } else {
       this.selectedOutput.emit(1);
     }
   }
-
-  displaySelectedValues(): string {
-    if (!this.selectedData || this.selectedData.length === 0) {
-      return `Select ${this.dropdownHeading}`;
-    }
-  
-    // For single selection, show the selected value
-    if (this.selectedData.length === 1) {
-      return this.selectedData[0];
-    }
-  
-    // For multiple selections, show count
-    return `${this.selectedData.length} ${this.dropdownHeading} selected`;
-  }
-
 }
 
 
