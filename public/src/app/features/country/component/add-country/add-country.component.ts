@@ -34,7 +34,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class AddCountryComponent {
   countryForm!: FormGroup;
   formHeading = "Create";
-  currencies = ['USD', 'INR', 'EUR', 'GBP', 'AUD', 'CAD']; // Example currencies
+
   countryId:number=0;
 constructor(private fb: FormBuilder,private apiservice:CountryService,private route: ActivatedRoute,private _successMessage: MatSnackBar,) {}
 
@@ -59,7 +59,7 @@ constructor(private fb: FormBuilder,private apiservice:CountryService,private ro
   initializeForm() {
     this.countryForm = this.fb.group({
      
-      IsActive: [true],
+      IsActive: [false],
       Taxes: this.fb.array([this.createTaxField()]) // Default one tax field
     });
 
@@ -80,7 +80,7 @@ patchvalue(id:number)
     });
     
     this.countryForm.patchValue({
-      isFixed: data.data.isFixed  // Ensure data.data.isFixed is the correct path to the value
+      IsActive: data.data.isFixed  // Ensure data.data.isFixed is the correct path to the value
     });
       
     
@@ -95,7 +95,7 @@ patchvalue(id:number)
   // Create a new tax field
   createTaxField(): FormGroup {
     return this.fb.group({
-      TaxName: ['', [Validators.required, Validators.pattern('[a-zA-Z ]*')]], // Only letters and spaces
+      TaxName: ['', [Validators.required]], // Only letters and spaces
       TaxRate: ['', [Validators.required, Validators.min(0), Validators.max(100)]],
     });
   }
@@ -141,7 +141,8 @@ patchvalue(id:number)
             if(count==count1)
               {
                 this.showSuccessMessage("Tax Added/Updated successfully");
-             this.formClose.emit(true)
+                this.formClose.emit(true)
+                return;
               }
             
           })
@@ -153,7 +154,7 @@ patchvalue(id:number)
               if(count==count1)
                 {
                   this.showSuccessMessage("Tax Added/Updated successfully");
-               this.formClose.emit(true)
+                  this.formClose.emit(true)
                 }
           })
         }

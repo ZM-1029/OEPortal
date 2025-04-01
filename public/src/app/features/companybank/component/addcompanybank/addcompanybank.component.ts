@@ -79,11 +79,11 @@ companyForm!: FormGroup;
       companyId: ['0', Validators.required],
       accountType: ['', [Validators.required]],
       ifscCode: ['', [Validators.required]],
-      sortCode: ['', [Validators.required]],
+      sortCode: ['', ],
       bankName: ['', [Validators.required]],
       accountNumber: ['', [Validators.required]],
     
-      swissCode: ['', [Validators.required]],
+      swissCode: ['', ],
       isPrimary:['1']
       
    
