@@ -322,7 +322,6 @@
             </table>
           </div>
           
-
           <!-- <button type="button" class="btn btn-success my-2" (click)="addRow()">Add Row</button> -->
           <div class="add-row my-2 ps-0">
             <button type="button" class="btn btn-light d-flex align-items-center px-3 py-2 shadow-sm rounded"
@@ -339,12 +338,14 @@
               <span class="summary-title">Sub Total</span>
               <span class="summary-value">{{ calculationDetails.subTotal || 0 }}</span>
             </div>
-            <div class="summary-row">
-              <span class="summary-title">Shipping Charges</span>
+            <div class="summary-row row">
+              <span class="summary-title col-5">Shipping Charges</span>
+             <div class="col-6 d-flex">
               <input type="text" placeholder="0.00" class="adjustment-label" formControlName="shippingCharges"
-                (input)="onShippingChargesChange($event)" />
-              <i class="fa fa-question-circle tooltip" title="Shipping charges apply."></i>
-              <span class="summary-value">{{ productForm.value.shippingCharges || 0 }}</span>
+              (input)="onShippingChargesChange($event)" />
+              <mat-icon class="mat-icon mx-2  " svgIcon="question"></mat-icon>
+            </div>
+            <span class="summary-value col-1 text-end">{{ productForm.value.shippingCharges || 0 }}</span>
             </div>
 
             <div class="summary-row">

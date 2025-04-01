@@ -1,4 +1,4 @@
-<ng-select
+<!-- <ng-select
   [placeholder]="'Select '+dropdownHeading"
   [items]="transformedDataList"
   [multiple]="true"
@@ -9,7 +9,7 @@
   [(ngModel)]="selectedData"
   (change)="updateAllSelected()">
   
-  <!-- Custom "Select All" Checkbox -->
+
   <ng-template ng-header-tmp>
     <div class="custom-select-all">
       <input type="checkbox" [checked]="allSelected" (change)="allSelected = !allSelected; toggleSelectAll()" />
@@ -17,10 +17,46 @@
     </div>
   </ng-template>
 
-  <!-- Custom Options with Checkboxes -->
+
   <ng-template ng-option-tmp let-item="item" let-item$="item$">
     <input type="checkbox" [disabled]="allSelected" [checked]="item$.selected" />
     <span class="px-2"> {{ item.name }}</span>
+  </ng-template>
+
+</ng-select> -->
+
+
+<ng-select
+class="multiple-select"
+  [placeholder]="'Select '+dropdownHeading"
+  [items]="transformedDataList"
+  [multiple]="true"
+  [searchable]="true"
+  bindLabel="name"
+  bindValue="id"
+  [closeOnSelect]="iscloseDropdown"
+  [(ngModel)]="selectedData"
+  (change)="updateAllSelected()">
+  
+  <!-- Custom "Select All" Checkbox -->
+  <ng-template ng-header-tmp>
+    <div class="custom-select-all">
+      <input type="checkbox" [checked]="allSelected" (change)="allSelected = !allSelected; toggleSelectAll()" />
+      <span class="px-2">All {{dropdownHeading}}</span>
+    </div>
+  </ng-template>
+
+  <!-- Custom Options with Checkboxes -->
+  <ng-template ng-option-tmp let-item="item" let-item$="item$">
+    <input type="checkbox" [disabled]="allSelected" [checked]="item$.selected" />
+    <span class="px-2">{{ item.name }}</span>
+  </ng-template>
+
+  <!-- Custom selected items display -->
+  <ng-template ng-label-tmp let-items="items" let-clear="clear">
+    <div class="ng-value">
+      <span class="ng-value-label">{{ getSelectedItemsDisplay() }}</span>
+    </div>
   </ng-template>
 
 </ng-select>

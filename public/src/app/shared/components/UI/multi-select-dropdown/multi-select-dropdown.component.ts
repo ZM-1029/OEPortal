@@ -19,7 +19,8 @@ export class MultiSelectDropdownComponent implements OnInit, OnChanges {
   allSelected: boolean = false;
   iscloseDropdown: boolean = false;
   stringArray: string = '';
-  private previousSelectedData: any[] = [];
+  private previousSelectedData: string[] = [];
+  selectedValue: string[] =[]
   constructor() { }
 
   ngOnInit() {
@@ -60,11 +61,15 @@ export class MultiSelectDropdownComponent implements OnInit, OnChanges {
   }
   
 
-  updateAllSelected() {
+  updateAllSelected() {    
     if (JSON.stringify(this.previousSelectedData) === JSON.stringify(this.selectedData)) {
       return;
     }
     this.previousSelectedData = [...this.selectedData];
+    
+    this.selectedValue =[...this.selectedData];
+console.log(this.selectedValue);
+
     this.allSelected = this.selectedData.length === this.transformedDataList.length;
     const extractedData: string[] = [];
     if (this.allSelected) {
@@ -82,6 +87,20 @@ export class MultiSelectDropdownComponent implements OnInit, OnChanges {
     }else{
       this.selectedOutput.emit(1);
     }
+  }
+
+  displaySelectedValues(): string {
+    if (!this.selectedData || this.selectedData.length === 0) {
+      return `Select ${this.dropdownHeading}`;
+    }
+  
+    // For single selection, show the selected value
+    if (this.selectedData.length === 1) {
+      return this.selectedData[0];
+    }
+  
+    // For multiple selections, show count
+    return `${this.selectedData.length} ${this.dropdownHeading} selected`;
   }
 
 }

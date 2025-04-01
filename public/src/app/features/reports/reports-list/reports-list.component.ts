@@ -98,7 +98,6 @@ export class ReportsListComponent implements OnInit {
   }
   // Output Emiter From Attendance end
   
-
   GetNCHistoryLogs() {
     this._employeeService
       .GetNCHistoryLogs(this.employeeId, this.startDate, this.endDate)

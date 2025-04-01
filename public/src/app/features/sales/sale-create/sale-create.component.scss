@@ -213,10 +213,10 @@ mat-label {
 /* Table container with scroll */
 /* Make the table container scrollable */
 .table-responsive {
-  max-height: 500px; /* Set the max height for scrolling */
-  max-width: 100%;  /* Set the max width for scrolling */
-  overflow-x: auto; /* Horizontal scroll when needed */
-  overflow-y: auto; /* Vertical scroll when needed */
+  max-height: 500px; 
+  max-width: 100%;  
+  overflow-x: auto;
+  overflow-y: auto; 
   border: 1px solid #ddd;
   border-radius: 4px;
   margin-top: 20px;
@@ -264,6 +264,11 @@ tr:nth-child(even) {
   background: #555;
 }
 
+.mat-icon{
+  width: 18px;
+  height: 18px;
+}
+
 // .table-container {
 //   min-height: 470px;
 //   max-width: 300px;
@@ -301,7 +306,16 @@ tr:nth-child(even) {
 
 
 /* Styling for Input Fields */
-input[type="number"],
+input[type="number"]{
+  width: 100%;
+  padding: 8px;
+  margin: 5px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  min-width: 100px
+}
+
 select {
   width: 100%;
   padding: 8px;

@@ -14,6 +14,7 @@ import { SaleCreateComponent } from '../sale-create/sale-create.component';
 import { SalesService } from '../sales.service';
 import { Quotation, QuotationListI } from "src/app/shared/types/sales.type";
 import moment from 'moment';
+import { MatIconModule } from "@angular/material/icon";
 ModuleRegistry.registerModules([AllCommunityModule]);
 @Component({
   selector: 'app-sales-list',
@@ -22,7 +23,7 @@ ModuleRegistry.registerModules([AllCommunityModule]);
       LoaderComponent,
       PageHeaderComponent,
       SideDrawerComponent,
-      SaleCreateComponent],
+      SaleCreateComponent,MatIconModule],
   templateUrl: './sales-list.component.html',
   styleUrl: './sales-list.component.scss',
   encapsulation: ViewEncapsulation.None,
@@ -277,10 +278,10 @@ columnDefs: any = [
   
         <!-- Download PDF Icon -->
        <span class="icon-container text-success download-icon" data-id="${params.data.id}" style="display: block; width: 20px; height: 20px; cursor: pointer;">
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M3 3v16.5a1.5 1.5 0 0 0 1.5 1.5h16.5a1.5 1.5 0 0 0 1.5-1.5V9m-6 9V3M9 12l3 3 3-3" />
-    </svg>
-  </span>
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+      </svg>
+      </span>
       </div>
     `;
   }

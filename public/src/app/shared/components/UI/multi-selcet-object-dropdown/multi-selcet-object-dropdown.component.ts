@@ -81,7 +81,28 @@ export class MultiSelcetObjectDropdownComponent {
       this.selectedOutput.emit(1);
     }
   }
+
+  // Add this method to your component class
+getSelectedItemsDisplay(): string {
+  if (!this.selectedData || this.selectedData.length === 0) {
+    return `Select ${this.dropdownHeading}`;
+  }
+
+  if (this.allSelected || this.selectedData.length === this.transformedDataList.length) {
+    return `All ${this.dropdownHeading} selected`;
+  }
+
+  if (this.selectedData.length === 1) {
+    const selectedItem = this.transformedDataList.find(item => item.id === this.selectedData[0]);
+    return selectedItem ? selectedItem.name : '';
+  }
+
+  // Get the first selected item's name
+  const firstSelected = this.transformedDataList.find(item => item.id === this.selectedData[0]);
+  const firstName = firstSelected ? firstSelected.name : '';
   
+  return `${firstName} + ${this.selectedData.length - 1}`;
+}
 
 }
 
