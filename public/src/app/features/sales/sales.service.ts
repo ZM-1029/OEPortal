@@ -130,5 +130,15 @@ export class SalesService {
   downloadPDF(quotationId: number): Observable<Blob> {
     return this.http.get(`${environment.apiUrl}api/Quotation/DownloadPdf?quotationId=${quotationId}`, { responseType: 'blob' });
   }
+
+  approveQuotation(data: FormData): Observable<any> {
+    return this.http.post<any>(
+      `${environment.apiUrl}api/Quotation/ChangeQuotationStatus`,
+      data,
+    );
+  }
   
+  getQuotationStatusDetails(quotationId: number): Observable<any> {
+    return this.http.get<any>(`${environment.apiUrl}api/Quotation/GetQuotationStatusDetails?quotationId=${quotationId}`);
+  }
 }
