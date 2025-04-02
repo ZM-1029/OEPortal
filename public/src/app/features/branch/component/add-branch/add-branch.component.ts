@@ -81,7 +81,7 @@ companyForm!: FormGroup;
       Address: ['', [Validators.required]],
       gstno: ['', [Validators.required]],
       pincode: ['', [Validators.required]],
-      IsActive:[""]
+      IsActive:["1"]
       
    
     });

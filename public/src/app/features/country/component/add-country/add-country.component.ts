@@ -80,7 +80,7 @@ patchvalue(id:number)
     });
     
     this.countryForm.patchValue({
-      IsActive: data.data.isFixed  // Ensure data.data.isFixed is the correct path to the value
+      IsActive: data.data.isActive  // Ensure data.data.isFixed is the correct path to the value
     });
       
     
@@ -127,9 +127,11 @@ patchvalue(id:number)
         var para=
         {
           countryId: this.countryId,
-          isFixed: this.countryForm.get("IsActive")?.value,
+          isActive: this.countryForm.get("IsActive")?.value,
           name: element.TaxName,
           value: element.TaxRate,
+          isFixed:false
+          
           
         }
         count1++
@@ -140,7 +142,7 @@ patchvalue(id:number)
             count++
             if(count==count1)
               {
-                this.showSuccessMessage("Tax Added/Updated successfully");
+                this.showSuccessMessage(data.message);
                 this.formClose.emit(true)
                 return;
               }
@@ -153,7 +155,7 @@ patchvalue(id:number)
               count++
               if(count==count1)
                 {
-                  this.showSuccessMessage("Tax Added/Updated successfully");
+                  this.showSuccessMessage(data.message);
                   this.formClose.emit(true)
                 }
           })
