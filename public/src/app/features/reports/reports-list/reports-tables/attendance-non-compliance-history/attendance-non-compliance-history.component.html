@@ -29,7 +29,7 @@
               }}</label>
             </div>
           } @else {
-            <div class="dropdown-item checkbox-container">
+            <div class="dropdown-item checkbox-container px-3" (click)="preventClose($event)">
               <input
                 type="checkbox"
                 [checked]="isColumnDisplayed(column)"

@@ -52,18 +52,20 @@ export interface efficiencyReportsEmployeeDetailI {
 export interface EfficiencyReportsCustomerResponseI {
   success: boolean
   message: string
-  details: efficiencyReportsCustomerDetailsI[]
-  summary:any
+  customerSummaries: CustomerReportsSummary[]
+  summary: Summary
 }
 
-export interface efficiencyReportsCustomerDetailsI {
-  month: number
-  year: number
-  employeeID: string
-  employeeName: string
+export interface CustomerReportsSummary {
   customerId: number
   customerName: string
-  salary: number
-  billedAmount: number
-  profitPercentage: number
+  _1: number
+  _2: number
+  _3: number
+}
+
+export interface Summary {
+  _1: number
+  _2: number
+  _3: number
 }

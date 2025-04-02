@@ -13,6 +13,7 @@ import { NgOptionTemplateDirective, NgSelectComponent, NgSelectModule } from '@n
 export class MultiSelectDropdownComponent implements OnInit, OnChanges {
   @Input() dataList: any = [];
   @Input() dropdownHeading: string = '';
+  @Input() defaultValue: any;
   @Output() selectedOutput: EventEmitter<any> = new EventEmitter<any>();
   transformedDataList: { id: string; name: string }[] = [];
   selectedData: any[] = [];
@@ -24,26 +25,54 @@ export class MultiSelectDropdownComponent implements OnInit, OnChanges {
   constructor() { }
 
   ngOnInit() {
-    this.allSelected = true;
-
+    if(this.defaultValue=='0'){
+      this.allSelected=true;
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['dataList']) {
       this.dataList = changes['dataList'].currentValue;
       this.transformedDataList = this.dataList.map((item: any, index: number) => {
-        if (typeof (item) == 'string') {
+        if (typeof item == 'string') {
           this.stringArray = 'string';
-          return { id: item, name: item }
+          return { id: item, name: item };
         } else {
           this.stringArray = 'object';
-          return { id: item.id, name: item.name }
+          return { id: item.id, name: item.name };
         }
+      });
+  
+      // Add this after transforming the data
+      if (this.defaultValue === '0') {
+        this.allSelected = true;
+        this.toggleSelectAll(); // This will actually select all items
       }
-      );
-
+    }
+  
+    // Also handle changes to defaultValue
+    if (changes['defaultValue'] && changes['defaultValue'].currentValue === '0') {
+      this.allSelected = true;
+      this.toggleSelectAll();
     }
   }
+
+  // ngOnChanges(changes: SimpleChanges): void {
+  //   if (changes['dataList']) {
+  //     this.dataList = changes['dataList'].currentValue;
+  //     this.transformedDataList = this.dataList.map((item: any, index: number) => {
+  //       if (typeof (item) == 'string') {
+  //         this.stringArray = 'string';
+  //         return { id: item, name: item }
+  //       } else {
+  //         this.stringArray = 'object';
+  //         return { id: item.id, name: item.name }
+  //       }
+  //     }
+  //     );
+
+  //   }
+  // }
 
   toggleSelectAll() {
     // this.allSelected=!this.allSelected;
@@ -73,7 +102,7 @@ export class MultiSelectDropdownComponent implements OnInit, OnChanges {
     this.allSelected = this.selectedData.length === this.transformedDataList.length;
     const extractedData: string[] = [];
     if (this.allSelected) {
-      this.selectedOutput.emit(1);
+      this.selectedOutput.emit(0);
     } else if (this.selectedData.length !== 0 && this.stringArray == 'string' && !this.allSelected) {
       this.selectedOutput.emit(this.selectedData);
     } else if (this.selectedData.length !== 0 && this.stringArray == 'object' && !this.allSelected) {
@@ -85,7 +114,7 @@ export class MultiSelectDropdownComponent implements OnInit, OnChanges {
       }
       this.selectedOutput.emit(extractedData);
     } else {
-      this.selectedOutput.emit(1);
+      this.selectedOutput.emit(0);
     }
   }
 }

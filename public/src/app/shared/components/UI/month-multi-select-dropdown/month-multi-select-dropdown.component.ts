@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule, NgOptionTemplateDirective, NgSelectComponent } from '@ng-select/ng-select';
 
@@ -11,7 +11,7 @@ import { NgSelectModule, NgOptionTemplateDirective, NgSelectComponent } from '@n
   templateUrl: './month-multi-select-dropdown.component.html',
   styleUrl: './month-multi-select-dropdown.component.scss'
 })
-export class MonthMultiSelectDropdownComponent {
+export class MonthMultiSelectDropdownComponent implements OnInit ,OnChanges {
   @Input() dataList: { id: string; name: string }[] = [];
   @Input() dropdownHeading: string = '';
   @Input() defaultValue: any;
@@ -56,10 +56,8 @@ export class MonthMultiSelectDropdownComponent {
   updateAllSelected() {
     this.allSelected = this.selectedData.length === this.transformedDataList.length;
 
-    if (this.allSelected) {
-      this.selectedOutput.emit('0'); 
-    } else if (this.selectedData.length !== 0) {
-      this.selectedOutput.emit(this.selectedData);
+    if (this.selectedData.length !== 0) {
+      this.selectedOutput.emit(this.selectedData); 
     } else {
       this.selectedOutput.emit('0'); 
     }

@@ -3,7 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AgGridAngular } from 'ag-grid-angular';
 import { ModuleRegistry, AllCommunityModule, GridApi, GridReadyEvent } from 'ag-grid-community';
-import { efficiencyReportsCustomerDetailsI} from 'src/app/shared/types/reports.type';
+import { CustomerReportsSummary} from 'src/app/shared/types/reports.type';
 import { ReportsService } from '../../../reports.service';
 import { SingleSelectDropdownComponent } from 'src/app/shared/components/UI/single-select-dropdown/single-select-dropdown.component';
 import { MultiSelcetObjectDropdownComponent } from 'src/app/shared/components/UI/multi-selcet-object-dropdown/multi-selcet-object-dropdown.component';
@@ -18,20 +18,19 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 })
 export class EfficiencyReportCustomersComponent {
   @ViewChild(AgGridAngular) agGrid!: AgGridAngular;
-  rowData: efficiencyReportsCustomerDetailsI[] = [];
+  rowData: CustomerReportsSummary[] = [];
   public currentPageNumber: number = 1;
   public currentPageSize: number = 15;
   public paginationPageSize = this.currentPageSize;
   public paginationPageSizeSelector: number[] = [15, 25, 50, 100];
   getDateForm!: FormGroup;
   private gridApi!: GridApi<any>;
-  CustomerId: any = '1';
+  customerId: string ='';
   selectedValueMonth: any;
   selectedValueYear: any = '2025';
   dropdownHeading: string = "Month";
   reportsCustomersSummary: any[] = [];
   yearDropdown: any[] = [];
-  isCustomerId: boolean = false;
   Year: { value: string; label: string }[] = [];
   allCustomers: { id: string; name: string }[] = [];
   Month: { id: string; name: string }[] = [
@@ -69,49 +68,34 @@ export class EfficiencyReportCustomersComponent {
       minWidth: 100,
     },
     {
-      field: "employeeName",
-      headerName: "Employee Name",
-      sortable: true,
-      filter: true,
-      minWidth: 100,
-    },
-    {
-      headerName: "Month/Year",
-      field: "monthYear",
-      sortable: true,
-      filter: true,
-      minWidth: 150,
-      valueGetter: (params: { data: { month: any; year: any; }; }) => `${params.data.month}/${params.data.year}`
-    },
-    {
-      field: "salary",
+      field: "_1",
       headerName: "Salary",
       sortable: true,
       filter: true,
       minWidth: 170,
-      valueGetter: (params: any) => params.data.salary === 0 ? "-" : params.data.salary, 
+      valueGetter: (params: any) => params.data._1 === 0 ? "-" : params.data._1, 
       cellStyle: (params: any) => {
         return params.value === "-" ? { color: "red", fontWeight: "bold" } : {};
       }
     }, 
     {
-      field: "billedAmount",
+      field: "_2",
       headerName: "Billed Amount",
       sortable: true,
       filter: true,
       minWidth: 170,
-      valueGetter: (params: any) => params.data.billedAmount === 0 ? "-" : params.data.billedAmount, 
+      valueGetter: (params: any) => params.data._2 === 0 ? "-" : params.data._2, 
       cellStyle: (params: any) => {
         return params.value === "-" ? { color: "red", fontWeight: "bold" } : {};
       }
     }, 
     {
-      field: "profitPercentage",
-      headerName: "Profit Percentage",
+      field: "_3",
+      headerName: "Profit Margin",
       sortable: true,
       filter: true,
       minWidth: 170,
-      valueGetter: (params: any) => params.data.profitPercentage === 0 ? "-" : params.data.profitPercentage, 
+      valueGetter: (params: any) => params.data._3 === 0 ? "-" : params.data._3, 
       cellStyle: (params: any) => {
         return params.value === "-" ? { color: "red", fontWeight: "bold" } : {};
       }
@@ -132,7 +116,7 @@ export class EfficiencyReportCustomersComponent {
   ) { }
 
   ngOnInit(): void {
-    this.isCustomerId = true;
+    this.customerId='0';
     this._changeDetectorRef.detectChanges();
     this.selectedValueMonth = new Date().getMonth()+1;
     const currentYear = new Date().getFullYear();
@@ -168,7 +152,7 @@ export class EfficiencyReportCustomersComponent {
   }
 
   selectedCustomer(event: any) {
-    this.CustomerId = event
+    this.customerId = event
     this.getEfficiencyReportsCustomer();
     this._changeDetectorRef.detectChanges();
   }
@@ -197,14 +181,14 @@ export class EfficiencyReportCustomersComponent {
 
 
   getEfficiencyReportsCustomer() {
-    this.reportsService.getEfficiencyReportsCustomer(this.CustomerId, this.selectedValueMonth, this.selectedValueYear).subscribe(
+    this.reportsService.getEfficiencyReportsCustomer(this.customerId, this.selectedValueMonth, this.selectedValueYear).subscribe(
       {
         next: ((response) => {
           if (response.success) {
             this.reportsCustomersSummary = Object.entries(response.summary).map(([key, value]) => ({
               key, value
             }));
-            this.rowData = response.details;
+            this.rowData = response.customerSummaries;
             this._changeDetectorRef.detectChanges();
           } else {
             this.handleError(response.message)

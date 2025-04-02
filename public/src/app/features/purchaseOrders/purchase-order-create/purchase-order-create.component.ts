@@ -1,4 +1,4 @@
-import { CommonModule, DatePipe} from "@angular/common";
+import { CommonModule, DatePipe } from "@angular/common";
 import {
   afterNextRender,
   AfterViewInit,
@@ -89,7 +89,7 @@ export const MY_FORMATS = {
     MatCheckboxModule,
     MatDatepickerModule,
     MatFormFieldModule,
-    CommonModule,FormsModule,
+    CommonModule, FormsModule,
     MatAutocompleteModule
   ],
   templateUrl: "./purchase-order-create.component.html",
@@ -108,17 +108,17 @@ export const MY_FORMATS = {
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PurchaseOrderCreateComponent implements OnInit,OnChanges, AfterViewInit{
+export class PurchaseOrderCreateComponent implements OnInit, OnChanges, AfterViewInit {
   @Input() formHeading: string = "";
   @Input() PurchaseOrderRowId!: number;
   @Input() isSideDrawerOpen!: boolean;
   @Output() formClose = new EventEmitter<boolean>();
-@ViewChild("input") input!: ElementRef<any>;
-@ViewChild('autoTrigger') autoTrigger!: MatAutocompleteTrigger;
-isDesableAllInput: boolean = false;
+  @ViewChild("input") input!: ElementRef<any>;
+  @ViewChild('autoTrigger') autoTrigger!: MatAutocompleteTrigger;
+  isDesableAllInput: boolean = false;
   purchaseOrderForm!: FormGroup;
-  allCustomers: customerI[] = []; 
-  filteredCustomers: customerI[] = []; 
+  allCustomers: customerI[] = [];
+  filteredCustomers: customerI[] = [];
   searchText: string = '';
   allCurrencies: currency[] = [];
   updateSalary!: createSalaryI;
@@ -129,9 +129,9 @@ isDesableAllInput: boolean = false;
     private customerService: CustomersService,
     private salaryService: SalaryService,
     private datePipe: DatePipe,
-    private _changeDetectorRef:ChangeDetectorRef,
+    private _changeDetectorRef: ChangeDetectorRef,
     private purchaseOrdersService: PurchaseOrdersService,
-  ) {}
+  ) { }
   // textarea resize.
   private _injector = inject(Injector);
   @ViewChild("autosize") autosize: CdkTextareaAutosize | undefined;
@@ -153,9 +153,9 @@ isDesableAllInput: boolean = false;
   }
 
   ngAfterViewInit(): void {
-  
+
   }
-  
+
 
   filter(): void {
     const filterValue = this.input.nativeElement.value.toLowerCase();
@@ -165,14 +165,14 @@ isDesableAllInput: boolean = false;
   }
 
   @HostListener('document:click', ['$event'])
-    onClickOutside(event: Event) {
-  if (this.input && this.input.nativeElement !== event.target && !this.input.nativeElement.contains(event.target)) {
-    if (this.autoTrigger && this.autoTrigger.panelOpen) { 
-      this.autoTrigger.closePanel();
-      this._changeDetectorRef.detectChanges(); // Ensure UI updates
+  onClickOutside(event: Event) {
+    if (this.input && this.input.nativeElement !== event.target && !this.input.nativeElement.contains(event.target)) {
+      if (this.autoTrigger && this.autoTrigger.panelOpen) {
+        this.autoTrigger.closePanel();
+        this._changeDetectorRef.detectChanges(); // Ensure UI updates
+      }
     }
   }
-}
 
 
   onSelectCustomer(event: MatAutocompleteSelectedEvent): void {
@@ -218,8 +218,8 @@ isDesableAllInput: boolean = false;
   private initializeForm(): void {
     this.purchaseOrderForm = this.fb.group({
       customerId: [],
-      customerName:["", [Validators.required,]],
-      poid: ["",[Validators.required]],
+      customerName: ["", [Validators.required,]],
+      poid: ["", [Validators.required]],
       poDate: [this.date.value?.format("YYYY-MM-DD")],
       currencyId: ["", [Validators.required]],
       amount: ["", [Validators.required, Validators.pattern("^[0-9]*$")]],
@@ -250,28 +250,28 @@ isDesableAllInput: boolean = false;
         next: (response: purchaseOrdersResponseI) => {
           if (response.success) {
             const purchaseOrderData: any = response.data;
-  
+
             if (!this.purchaseOrderForm) {
               console.error("Form is not initialized yet!");
               return;
             }
-  
+
             setTimeout(() => {
               this.purchaseOrderForm.patchValue({
                 customerId: purchaseOrderData.customerId,
-                customerName:purchaseOrderData.customerName,
+                customerName: purchaseOrderData.customerName,
                 poid: purchaseOrderData.poid,
                 currencyId: purchaseOrderData.currencyId,
                 amount: purchaseOrderData.amount,
                 description: purchaseOrderData.description,
               });
-  
+
               if (purchaseOrderData.poDate) {
                 this.date.patchValue(moment(purchaseOrderData.poDate));
               } else {
                 console.warn("poDate is missing or invalid:", purchaseOrderData);
               }
-  
+
               this._changeDetectorRef.detectChanges();
             }, 0);
           }
@@ -279,7 +279,7 @@ isDesableAllInput: boolean = false;
         error: (err) => this.handleError(err),
       });
   }
-  
+
 
   createUpdate(): void {
     for (let key in this.purchaseOrderForm.value) {
@@ -301,9 +301,9 @@ isDesableAllInput: boolean = false;
 
     const apiCall = this.PurchaseOrderRowId
       ? this.purchaseOrdersService.updatePOById(
-          this.PurchaseOrderRowId,
-          purchaseOrderData,
-        )
+        this.PurchaseOrderRowId,
+        purchaseOrderData,
+      )
       : this.purchaseOrdersService.createPO(purchaseOrderData);
 
     apiCall.subscribe({

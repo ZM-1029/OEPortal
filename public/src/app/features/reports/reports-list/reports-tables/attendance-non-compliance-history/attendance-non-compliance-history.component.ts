@@ -379,6 +379,18 @@ export class AttendanceNonComplianceHistoryComponent implements OnInit, OnChange
     return this.displayedColumns.some((col) => col.field === column.field);
   }
 
+  // In your component class
+preventClose(event: MouseEvent) {
+  event.stopPropagation();
+  // If you need to manually handle the checkbox toggle:
+  const checkbox = event.target as HTMLInputElement;
+  if (checkbox.tagName === 'INPUT' && checkbox.type === 'checkbox') {
+    // The (change) event will handle the toggle
+    return;
+  }
+  event.preventDefault();
+}
+
   // for Manage Columns end
 
   //  Function to show success messages

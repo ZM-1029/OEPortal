@@ -109,15 +109,6 @@ input[type="text"]:required {
   border-left: 2px solid #408dfb;
 }
 
-input :hover,
-input:active,
-input:focus,
-mat-select:hover,
-mat-select:active,
-mat-select:focus {
-  outline: none;
-  border: 1px solid #408dfb;
-}
 
 .cdk-overlay-pane:not(.mat-mdc-select-panel-above) div.mat-mdc-select-panel {
   background-color: white;

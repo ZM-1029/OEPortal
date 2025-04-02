@@ -15,9 +15,8 @@
       </div>
     </div>
     @if(allProjects.length > 0){
-      <app-multi-select-dropdown class="col-4" (selectedOutput)="selectedOutput($event)" [dropdownHeading]="dropdownHeading"  [dataList]="allProjects"></app-multi-select-dropdown>
+      <app-multi-select-dropdown class="col-4" (selectedOutput)="selectedOutput($event)" [defaultValue]="'0'" [dropdownHeading]="dropdownHeading"  [dataList]="allProjects"></app-multi-select-dropdown>
     }
-
   </div>
   <div class="table-content">
     @defer {

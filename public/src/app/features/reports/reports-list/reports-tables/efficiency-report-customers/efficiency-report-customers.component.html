@@ -8,15 +8,17 @@
             }
         </div>
         <div class="dropdown px-3">
-            <app-month-multi-select-dropdown 
+            @if(selectedValueMonth){
+                <app-month-multi-select-dropdown 
               [dropdownHeading]="'Months'" 
               [defaultValue]="selectedValueMonth"  
               [dataList]="Month"
               (selectedOutput)="selectedMonth($event)">
             </app-month-multi-select-dropdown>
+            }
           </div>
         <div class="customer-dropdown  ">
-            <app-multi-selcet-object-dropdown [dropdownHeading]="'Customer'" [isCustomerId]="isCustomerId" [dataList]="allCustomers"
+            <app-multi-selcet-object-dropdown [dropdownHeading]="'Customer'" [defaultValue]="customerId" [dataList]="allCustomers"
                 (selectedOutput)="selectedCustomer($event)">
             </app-multi-selcet-object-dropdown>
         </div>
@@ -64,7 +66,13 @@
             @for(summary of reportsCustomersSummary; track summary){
             <div class="col-auto fw-bold">
                 <label class="summary-item text-bold">
-                    <span class="text-capitalize">{{ summary.key }}</span>: {{ summary.value }}
+                    @if(summary.key=='_1'){
+                        <span class="text-capitalize">Total Salary</span>: {{ summary.value }}
+                    }@else if(summary.key=='_2'){
+                        <span class="text-capitalize">Total Billed Amount</span>: {{ summary.value }}
+                    }@else if(summary.key=='_3'){
+                        <span class="text-capitalize">Profit Margin</span>: {{ summary.value }}
+                    }
                 </label>
             </div>
             }
