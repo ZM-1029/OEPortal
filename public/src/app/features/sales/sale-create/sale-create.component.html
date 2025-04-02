@@ -335,11 +335,11 @@
 
           <div class="summary-container ">
             <div class="summary-row">
-              <span class="summary-title">Sub Total</span>
+              <span class="summary-title fw-bold">Sub Total</span>
               <span class="summary-value">{{ calculationDetails.subTotal || 0 }}</span>
             </div>
             <div class="summary-row row">
-              <span class="summary-title col-5">Shipping Charges</span>
+              <span class="summary-title col-5 fw-bold">Shipping Charges</span>
              <div class="col-6 d-flex">
               <input type="text" placeholder="0.00" class="adjustment-label" formControlName="shippingCharges"
               (input)="onShippingChargesChange($event)" />
@@ -348,18 +348,20 @@
             <span class="summary-value col-1 text-end">{{ productForm.value.shippingCharges || 0 }}</span>
             </div>
 
-            <div class="summary-row">
-              <span class="summary-title">Adjustment</span>
-              <input type="text" placeholder="0.00" class="adjustment-label" formControlName="adjustment"
+            <div class="summary-row row">
+              <span class="summary-title col-5 fw-bold">Adjustment</span>
+              <div class="col-6 d-flex">
+                <input type="text" placeholder="0.00" class="adjustment-label" formControlName="adjustment"
                 (input)="onAdjustmentChange($event)" />
               <i class="fa fa-question-circle tooltip" title="Adjustment charges apply."></i>
-              <span class="summary-value">{{ productForm.value.adjustment || 0 }}</span>
+            </div>
+            <span class="summary-value col-1 text-end">{{ productForm.value.adjustment || 0 }}</span>
             </div>
 
-            <div class="summary-row">
+            <div class="summary-row row">
               @for (tax of calculationDetails.taxes; track $index) {
-              <span class="summary-title">{{tax.tax}}</span>
-              <ul class="list-unstyled">
+              <span class="summary-title col-6">{{tax.tax}}</span>
+              <ul class="list-unstyled col-6 text-end">
                 <li class="text-decoration-none">
                   {{ tax.amount }}
                 </li>

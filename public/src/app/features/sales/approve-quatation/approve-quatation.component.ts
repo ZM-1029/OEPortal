@@ -21,10 +21,11 @@ import { MatIconModule } from '@angular/material/icon';
     MatSelectModule,
     MatInputModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    
   ],
   templateUrl: './approve-quatation.component.html',
-  styleUrls: ['./approve-quatation.component.scss']
+  styleUrl: './approve-quatation.component.scss'
 })
 export class ApproveQuatationComponent {
 

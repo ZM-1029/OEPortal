@@ -14,6 +14,7 @@ import { SaleCreateComponent } from '../sale-create/sale-create.component';
 import { SalesService } from '../sales.service';
 import { Quotation, QuotationListI } from "src/app/shared/types/sales.type";
 import moment from 'moment';
+import { ApproveQuatationComponent } from "../approve-quatation/approve-quatation.component";
 ModuleRegistry.registerModules([AllCommunityModule]);
 @Component({
   selector: 'app-sales-list',
@@ -23,6 +24,7 @@ ModuleRegistry.registerModules([AllCommunityModule]);
       PageHeaderComponent,
       SideDrawerComponent,
       SaleCreateComponent,
+      ApproveQuatationComponent
     ],
   templateUrl: './sales-list.component.html',
   styleUrl: './sales-list.component.scss',
@@ -215,8 +217,6 @@ export class SalesListComponent {
     document.body.removeChild(link); // Clean up the DOM
   }
   
-  
-
 
   openDeleteModal(quotationId: number): void {
     const dialogRef = this.dialog.open(DeleteModalComponent, {

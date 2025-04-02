@@ -46,7 +46,7 @@ export class MultiSelectDropdownComponent implements OnInit, OnChanges {
       // Add this after transforming the data
       if (this.defaultValue === '0') {
         this.allSelected = true;
-        this.toggleSelectAll(); // This will actually select all items
+        this.toggleSelectAll(); 
       }
     }
   
@@ -57,22 +57,6 @@ export class MultiSelectDropdownComponent implements OnInit, OnChanges {
     }
   }
 
-  // ngOnChanges(changes: SimpleChanges): void {
-  //   if (changes['dataList']) {
-  //     this.dataList = changes['dataList'].currentValue;
-  //     this.transformedDataList = this.dataList.map((item: any, index: number) => {
-  //       if (typeof (item) == 'string') {
-  //         this.stringArray = 'string';
-  //         return { id: item, name: item }
-  //       } else {
-  //         this.stringArray = 'object';
-  //         return { id: item.id, name: item.name }
-  //       }
-  //     }
-  //     );
-
-  //   }
-  // }
 
   toggleSelectAll() {
     // this.allSelected=!this.allSelected;
@@ -97,7 +81,6 @@ export class MultiSelectDropdownComponent implements OnInit, OnChanges {
     this.previousSelectedData = [...this.selectedData];
 
     this.selectedValue = [...this.selectedData];
-    console.log(this.selectedValue);
 
     this.allSelected = this.selectedData.length === this.transformedDataList.length;
     const extractedData: string[] = [];

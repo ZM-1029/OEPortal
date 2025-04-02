@@ -1,13 +1,13 @@
 <div class=" customer-efficiency-report position-relative">
     <div class="multi-select-dropdown ">
-        <div class="dropdown  ">
+        <div class="dropdown-year  ">
             @if(yearDropdown.length!=0){
                 <app-single-select-dropdown [dropdownHeading]="'Select Year'" [defaultValue]="selectedValueYear"
                 [dataList]="yearDropdown" (selectedOutput)="selectedYear($event)">
             </app-single-select-dropdown>
             }
         </div>
-        <div class="dropdown px-3">
+        <div class="dropdown-month px-3">
             @if(selectedValueMonth){
                 <app-month-multi-select-dropdown 
               [dropdownHeading]="'Months'" 

@@ -74,32 +74,32 @@
   max-height: 300px;
 }
 
-@media (max-width: 1500px) {
+// @media (max-width: 1500px) {
  
-  .multi-select-dropdown {
-    display: flex;
-    position: absolute;
-    top: -52px;
-    right: 230px;
-    width: 100%;
-    max-width: 700px;
-  }
-}
+//   .multi-select-dropdown {
+//     display: flex;
+//     position: absolute;
+//     top: -52px;
+//     right: 230px;
+//     width: 100%;
+//     max-width: 700px;
+//   }
+// }
 
-@media (max-width: 1300px) {
-  .multi-select-dropdown {
-    display: flex;
-    position: relative;
-    flex-wrap: wrap;
-    top: 0px;
-    right: 0px;
-    width: 100%;
-    max-width: 700px;
-  }
+// @media (max-width: 1300px) {
+//   .multi-select-dropdown {
+//     display: flex;
+//     position: relative;
+//     flex-wrap: wrap;
+//     top: 0px;
+//     right: 0px;
+//     width: 100%;
+//     max-width: 700px;
+//   }
 
-  .employee-efficiency-report  .emplooye-dropdown{
-    padding-left: 0;
-    margin: 10px 0;
-  }
+//   .employee-efficiency-report  .emplooye-dropdown{
+//     padding-left: 0;
+//     margin: 10px 0;
+//   }
   
-}
+// }

@@ -31,7 +31,8 @@ import { CommonModule } from '@angular/common';
     MatDatepickerModule,
     MatNativeDateModule,
     MatIconModule,
-    CommonModule],
+    CommonModule,
+  ],
 
   templateUrl: './sale-create.component.html',
   styleUrl: './sale-create.component.scss'
