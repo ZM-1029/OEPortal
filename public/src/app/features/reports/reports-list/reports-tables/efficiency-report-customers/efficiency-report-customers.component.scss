@@ -65,18 +65,53 @@
   max-width: 700px;
 }
 
-.customer-efficiency-report .customer-dropdown ::ng-deep .ng-select-container,
-.dropdown ::ng-deep .ng-select-container {
-  width: 300px !important;
-  max-width: 300px !important;
+.multi-select-dropdown {
+  position: absolute;
+  top: -52px;
+  right: -15px;
+  width: 100%;
+  max-width: 700px;
 }
 
-.dropdown .dropdown-employee {
+.multi-select-dropdown .dropdown-month {
+  max-width: 200px;
+  min-width: 200px;
+}
+
+.multi-select-dropdown .dropdown-year {
+  max-width: 150px;
+  min-width: 150px;
+}
+
+.multi-select-dropdown .dropdown-employee {
   max-height: 300px;
 }
 
-// @media (max-width: 1500px) {
- 
+
+@media (max-width: 1200px) {
+
+  .multi-select-dropdown {
+    max-width: 500px;
+    right: 0px;
+    // background-color: #3b82f6;
+  }
+
+  .multi-select-dropdown .dropdown-month {
+    max-width: 150px;
+    min-width: 150px;
+  }
+
+  .multi-select-dropdown .dropdown-year {
+    max-width: 100px;
+    min-width: 100px;
+  }
+
+  .multi-select-dropdown .dropdown-employee {
+    max-height: 250px;
+  }
+
+}
+
 //   .multi-select-dropdown {
 //     display: flex;
 //     position: absolute;
@@ -102,5 +137,5 @@
 //     padding-left: 0;
 //     margin: 10px 0;
 //   }
-  
+
 // }

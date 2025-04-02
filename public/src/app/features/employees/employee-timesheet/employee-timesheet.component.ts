@@ -171,7 +171,11 @@ export class EmployeeTimesheetComponent implements OnInit, AfterViewInit {
 
   // dropdown selected Output
   selectedOutput(event: any) {
-    this.selectedProject = event;
+    if(event==0){
+      this.selectedProject = 1;
+    }else{
+      this.selectedProject = event;
+    }
     // if (selectedProject.length == 0) {
     //   this.selectedProject = 1
     // } else {
@@ -226,13 +230,6 @@ export class EmployeeTimesheetComponent implements OnInit, AfterViewInit {
     )
   }
 
-  // onProjectSelect(event: MatAutocompleteSelectedEvent) {
-  //   const selectedProject = event.option.value;
-  //   console.log("Selected Project:", selectedProject);
-  //   this.selectedProject = selectedProject;
-  //   this.getTimesheetByEmail();
-  // }
-
   getTimesheetByEmail() {
     this.selectedMonth = this.date.value?.format("MM");
     this.selectedYear = this.date.value?.format("YYYY");
@@ -255,16 +252,14 @@ export class EmployeeTimesheetComponent implements OnInit, AfterViewInit {
             }
           },
           error: (err) => {
-            this.handleError(err);
-            console.error("Error Status:", err.status);
-            console.error("Error Message:", err.error);
+            // this.handleError(err);
             let errorMessage = "An error occurred while fetching data.";
             if (err.status === 404 && err.error.message) {
               this.rowData = [];
               errorMessage = err.error.message;
               this.showErrorOverlay('Data is not found');
             }
-            this.handleError(err.error.message);
+            // this.handleError(err.error.message);
           },
         });
     }

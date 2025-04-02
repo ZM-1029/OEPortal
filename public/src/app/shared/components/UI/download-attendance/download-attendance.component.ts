@@ -92,8 +92,12 @@ export class DownloadAttendanceComponent implements OnInit {
 
   // dropdown selected Output
 selectedOutput(event:any){
-  const selectedProject = event;
-  console.log(selectedProject,"III");
+  let selectedProject 
+  if(event==0){
+     selectedProject = 1;
+  }else{
+    selectedProject=event
+  }
   this.attendanceForm.patchValue({
     projectName:selectedProject
   })
@@ -234,6 +238,11 @@ selectedOutput(event:any){
     return date ? this.datePipe.transform(date, "MM-dd-yyyy")! : "";
   }
 
+  dateFilter = (d: Date | null): boolean => {
+    if (!this.startDate) return true;
+    return d! >= new Date(this.startDate);
+  };
+
   // Custom Validator
   dateValidator(control: FormControl) {
     if (!control.value || isNaN(new Date(control.value).getTime())) {
@@ -280,8 +289,6 @@ selectedOutput(event:any){
 
   //  Function to handle API errors
   private handleError(err: any) {
-    console.error("Error Status:", err.status);
-    console.error("Error Message:", err.error);
     this._successMessage.open(
       "Failed to save attendance. Please try again.",
       "Close",

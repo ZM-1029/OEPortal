@@ -56,35 +56,49 @@
 }
 
 .multi-select-dropdown {
-  display: flex;
   position: absolute;
   top: -52px;
-  right: 250px;
+  right: 0;
   width: 100%;
   max-width: 700px;
 }
 
-// .employee-efficiency-report .emplooye-dropdown ::ng-deep .ng-select-container,
-// .dropdown ::ng-deep .ng-select-container {
-//   width: 300px !important;
-//   max-width: 300px !important;
-// }
+.multi-select-dropdown .dropdown-month {
+  max-width: 200px;
+  min-width: 200px;
+}
 
-.dropdown .dropdown-employee {
+.multi-select-dropdown .dropdown-year {
+  max-width: 150px;
+  min-width: 150px;
+}
+
+.multi-select-dropdown .dropdown-employee {
   max-height: 300px;
 }
 
-// @media (max-width: 1500px) {
- 
-//   .multi-select-dropdown {
-//     display: flex;
-//     position: absolute;
-//     top: -52px;
-//     right: 230px;
-//     width: 100%;
-//     max-width: 700px;
-//   }
-// }
+@media (max-width: 1200px) {
+
+  .multi-select-dropdown {
+    max-width: 500px;
+    // background-color: #3b82f6;
+  }
+
+  .multi-select-dropdown .dropdown-month {
+    max-width: 150px;
+    min-width: 150px;
+  }
+
+  .multi-select-dropdown .dropdown-year {
+    max-width: 150px;
+    min-width: 150px;
+  }
+
+  .multi-select-dropdown .dropdown-employee {
+    max-height: 250px;
+  }
+
+}
 
 // @media (max-width: 1300px) {
 //   .multi-select-dropdown {
@@ -101,5 +115,5 @@
 //     padding-left: 0;
 //     margin: 10px 0;
 //   }
-  
+
 // }

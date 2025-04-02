@@ -20,7 +20,7 @@
           </mat-form-field>
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>End date</mat-label>
-            <input matInput [matDatepicker]="picker" formControlName="endDate" (dateChange)="onDateChange('endDate', $event)">
+            <input matInput [matDatepicker]="picker" [matDatepickerFilter]="dateFilter" formControlName="endDate" (dateChange)="onDateChange('endDate', $event)">
             <mat-hint>MM/DD/YYYY</mat-hint>
             <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
