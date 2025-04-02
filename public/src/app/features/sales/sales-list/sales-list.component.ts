@@ -14,23 +14,24 @@ import { SaleCreateComponent } from '../sale-create/sale-create.component';
 import { SalesService } from '../sales.service';
 import { Quotation, QuotationListI } from "src/app/shared/types/sales.type";
 import moment from 'moment';
+import { ApproveQuatationComponent } from "../approve-quatation/approve-quatation.component";
 import { MatIconModule } from "@angular/material/icon";
 ModuleRegistry.registerModules([AllCommunityModule]);
 @Component({
   selector: 'app-sales-list',
-  imports: [  AgGridAngular,
-      CommonModule,
-      LoaderComponent,
-      PageHeaderComponent,
-      SideDrawerComponent,
-      SaleCreateComponent,MatIconModule],
+  imports: [AgGridAngular,
+    CommonModule,
+    LoaderComponent,
+    PageHeaderComponent,
+    SideDrawerComponent,
+    SaleCreateComponent, ApproveQuatationComponent, MatIconModule],
   templateUrl: './sales-list.component.html',
   styleUrl: './sales-list.component.scss',
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SalesListComponent {
-columnDefs: any = [
+  columnDefs: any = [
     {
       headerName: "Quotation No.",
       field: "quotationNumber",
@@ -61,7 +62,7 @@ columnDefs: any = [
       sortable: true,
       filter: true,
       minWidth: 170,
-      valueFormatter: (params:any) => {
+      valueFormatter: (params: any) => {
         const formattedDate = moment(params.value).format('DD/MM/YYYY');
         return formattedDate;
       },
@@ -107,6 +108,9 @@ columnDefs: any = [
   rowData: Quotation[] = [];
   private gridApi!: GridApi<any>;
   private _unsubscribeAll$: Subject<any> = new Subject<any>();
+  selectedQuotationId: number | null = null;
+  isApprovePopupOpen: boolean = false;
+
   constructor(
     private _salesService: SalesService,
     private _changeDetectorRef: ChangeDetectorRef,
@@ -153,6 +157,10 @@ columnDefs: any = [
       this.isSideDrawerOpen = false;
       this._changeDetectorRef.detectChanges();
     }
+    if (this.isApprovePopupOpen) {
+      this.isApprovePopupOpen = false;
+      this._changeDetectorRef.detectChanges();
+    }
   }
   // updateQuotation(event: any): void {
   //   if (event.event.target.closest(".edit-icon")) {
@@ -165,7 +173,7 @@ columnDefs: any = [
   //     const quotationId = event.event.target.closest(".delete-icon").getAttribute("data-id");
   //     this.openDeleteModal(Number(quotationId));
   //   }
-    
+
   // }
   updateQuotation(event: any): void {
     const target = event.event.target;
@@ -185,8 +193,32 @@ columnDefs: any = [
       const quotationId = target.closest(".delete-icon").getAttribute("data-id");
       this.openDeleteModal(Number(quotationId));
     }
+  
+    if (target.closest(".approve-icon")) {
+      const quotationId = target.closest(".approve-icon").getAttribute("data-id");
+      this.quotationId = Number(quotationId);
+      this.isApprovePopupOpen = true;
+    }
+  
+    if (target.closest(".download-invoice-icon")) {
+      const invoiceURL = target.closest(".download-invoice-icon").getAttribute("data-url");
+      this.downloadInvoice(invoiceURL);
+    }
   }
   
+  downloadInvoice(url: string) {
+    const link = document.createElement('a');
+    link.href = url;
+    link.target = '_blank'; // Optional: To open in a new tab if needed
+    link.download = url.split('/').pop() || 'download'; // Ensure the file name is set
+    document.body.appendChild(link); // Append link to the DOM
+    link.click(); // Trigger the download
+    document.body.removeChild(link); // Clean up the DOM
+  }
+  
+  
+
+
   openDeleteModal(quotationId: number): void {
     const dialogRef = this.dialog.open(DeleteModalComponent, {
       width: "400px",
@@ -267,25 +299,43 @@ columnDefs: any = [
   //   `;
   // }
   renderActionIcons(params: any): string {
+    const statusId = params.data.statusId;
+    const invoiceURL = params.data.invoiceURL; // Assuming invoiceURL exists in the data
+  
+    const approveIcon = statusId !== 4 
+      ? `<span class="icon-container text-success approve-icon" data-id="${params.data.id}" style="display: block; width: 20px; height: 20px; cursor: pointer;">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+          </svg>
+        </span>`
+      : '';
+  
+    const downloadInvoiceIcon = statusId === 4 && invoiceURL
+      ? `<span class="icon-container text-info download-invoice-icon" data-url="${invoiceURL}" style="display: block; width: 20px; height: 20px; cursor: pointer;">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v12m0 0l3-3m-3 3l-3-3m4.5 0A2.25 2.25 0 0 1 15.75 21H8.25A2.25 2.25 0 0 1 6 18.75V8.25A2.25 2.25 0 0 1 8.25 6H15.75A2.25 2.25 0 0 1 18 8.25v4.5" />
+          </svg>
+        </span>`
+      : '';
+  
     return `
       <div class="action-icons d-flex align-items-center justify-content-around">
-        <!-- Edit Icon -->
         <span class="icon-container text-primary edit-icon" data-id="${params.data.id}" style="display: block; width: 20px; height: 20px;">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
             <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
           </svg>
         </span>
   
-        <!-- Download PDF Icon -->
-       <span class="icon-container text-success download-icon" data-id="${params.data.id}" style="display: block; width: 20px; height: 20px; cursor: pointer;">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
-      </svg>
-      </span>
+  
+        ${approveIcon}
+        ${downloadInvoiceIcon}
       </div>
     `;
   }
   
+  
+
+
   private showSuccessMessage(message: string) {
     this._successMessage.openFromComponent(SuccessModalComponent, {
       data: { message },
@@ -325,7 +375,7 @@ columnDefs: any = [
       },
     });
   }
-  
+
   ngOnDestroy(): void {
     this._unsubscribeAll$.next(this._salesService);
     this._unsubscribeAll$.complete();

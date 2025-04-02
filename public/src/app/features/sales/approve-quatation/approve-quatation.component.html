@@ -1,0 +1,32 @@
+<div class="main-content m-4">
+    <div class="border-bottom bg-light pb-2">
+        <h2 class="formHeading">Change Status</h2>
+    </div>
+    <button class="btn btn-primary" (click)="downloadPDF()">Download Pdf</button>
+    <div class="form-container d-flex">
+        <form [formGroup]="approveForm" (ngSubmit)="submitForm()">
+            <div class="input-form-container py-3">
+                <div style="display: flex; gap: 20px; align-items: center;">
+                    <mat-slide-toggle formControlName="selfApprove">Self Approve</mat-slide-toggle>
+                    <mat-slide-toggle formControlName="approveByAccountant" (change)="onToggleChange()">Approve by
+                        Accountant</mat-slide-toggle>
+                </div>
+                @if(showFileUpload){
+                <div class="form-group row mt-3">
+                    <mat-label class="outer-mat-label col-4 pt-2">Upload File</mat-label>
+                    <div class="col-8">
+                        <input type="file" (change)="onFileChange($event)" />
+                    </div>
+                </div>
+                @if (errorMessage) {
+                <p *ngIf="errorMessage" class="text-danger">{{ errorMessage }}</p>
+                }
+                }
+            </div>
+            <div class="form-btn d-flex align-items-start justify-content-end p-4">
+                <button class="btn btn-secondary mx-2" type="button" (click)="reset()">Clear</button>
+                <button class="btn btn-primary" type="submit">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>
