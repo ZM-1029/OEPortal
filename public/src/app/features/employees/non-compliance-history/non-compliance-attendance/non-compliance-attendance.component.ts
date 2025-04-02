@@ -34,6 +34,7 @@ export class NonComplianceAttendanceComponent implements OnInit, OnChanges, Afte
       sortable: true,
       filter: true,
       pinned: "left",
+      lockPinned: true,
       minWidth: 100,
       maxWidth: 100,
       cellStyle: () => {
@@ -46,6 +47,7 @@ export class NonComplianceAttendanceComponent implements OnInit, OnChanges, Afte
       sortable: true,
       filter: true,
       pinned: "left",
+      lockPinned: true,
       minWidth: 220,
       cellStyle: () => {
         return { border: "none" };
@@ -57,6 +59,7 @@ export class NonComplianceAttendanceComponent implements OnInit, OnChanges, Afte
       sortable: true,
       filter: true,
       pinned: "left",
+      lockPinned: true,
       minWidth: 240,
       cellStyle: () => {
         return { border: "none" };
@@ -193,15 +196,15 @@ export class NonComplianceAttendanceComponent implements OnInit, OnChanges, Afte
   }
 
   ngOnChanges() {
-    if (this.agGrid && this.attendanceRowData.length!==0) {
+    if (this.agGrid && this.attendanceRowData.length !== 0) {
       this.attendanceNcTypeCounts = this.ncTypeCounts && typeof this.ncTypeCounts === 'object' ? this.ncTypeCounts : {};
-      this.rowData=this.attendanceRowData;
+      this.rowData = this.attendanceRowData;
       this._changeDetectorRef.detectChanges();
     } else {
-      this.rowData=[];
+      this.rowData = [];
       this.attendanceNcTypeCounts = {};
       this.showErrorOverlay("Data is not found");
-     
+
     }
   }
 
@@ -216,25 +219,25 @@ export class NonComplianceAttendanceComponent implements OnInit, OnChanges, Afte
   }
 
   getLabel(type: string): string {
-   const labels: { [key: string]: string } = {
+    const labels: { [key: string]: string } = {
       "1": "Short Login Hour",
       "2": "Late Checkin",
       "3": "Early Checkout",
       "4": "Forget Checkin",
       "5": "Forget Checkout",
       "1004": "Absent"
-    }; 
-    return labels[type] ;
+    };
+    return labels[type];
   }
 
- 
+
   getAttendanceNonCompliance() {
     if (this.attendanceRowData.length !== 0) {
       this.rowData = this.attendanceRowData;
       this._changeDetectorRef.detectChanges();
     } else {
       this.attendanceNcTypeCounts = this.ncTypeCounts && typeof this.ncTypeCounts === 'object' ? this.ncTypeCounts : {};
-      this.rowData=[];
+      this.rowData = [];
       this.showErrorOverlay("Data is not found")
     }
   }

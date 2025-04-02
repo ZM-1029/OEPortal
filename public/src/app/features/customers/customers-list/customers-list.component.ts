@@ -80,6 +80,7 @@ export class CustomersListComponent implements OnInit, OnDestroy {
       sortable: false,
       filter: false,
       pinned: "left",
+      lockPinned: true,
       minWidth: 100,
       maxWidth: 100,
     },
@@ -102,6 +103,7 @@ export class CustomersListComponent implements OnInit, OnDestroy {
       headerName: "Customer Name",
       sortable: true,
       pinned: "left",
+      lockPinned: true,
       filter: true,
       minWidth: 180,
       cellStyle: () => {

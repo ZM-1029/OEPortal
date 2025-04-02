@@ -14,7 +14,7 @@ ModuleRegistry.registerModules([AllCommunityModule]);
   templateUrl: './efficiency-reports.component.html',
   styleUrl: './efficiency-reports.component.scss'
 })
-export class EfficiencyReportsComponent implements OnInit,OnChanges,AfterViewInit{
+export class EfficiencyReportsComponent implements OnInit, OnChanges, AfterViewInit {
   @ViewChild(AgGridAngular) agGrid!: AgGridAngular;
   rowData: getEmployeeProfitDetailListI[] = [];
   public currentPageNumber: number = 1;
@@ -31,6 +31,7 @@ export class EfficiencyReportsComponent implements OnInit,OnChanges,AfterViewIni
       sortable: true,
       filter: true,
       pinned: "left",
+      lockPinned: true,
       minWidth: 100,
       maxWidth: 100,
       cellStyle: () => {
@@ -79,7 +80,7 @@ export class EfficiencyReportsComponent implements OnInit,OnChanges,AfterViewIni
       filter: true,
       minWidth: 240,
     },
-    
+
   ];
 
   defaultColDef = {
@@ -91,7 +92,7 @@ export class EfficiencyReportsComponent implements OnInit,OnChanges,AfterViewIni
 
   constructor(
     private _changeDetectorRef: ChangeDetectorRef,
-    private reportsService:ReportsService,
+    private reportsService: ReportsService,
     private _successMessage: MatSnackBar
   ) { }
 
@@ -102,25 +103,25 @@ export class EfficiencyReportsComponent implements OnInit,OnChanges,AfterViewIni
   }
 
   ngOnChanges() {
-    
+
   }
 
   ngAfterViewInit() {
     this._changeDetectorRef.detectChanges();
   }
 
-   
+
   getEmployeeProfitDetails() {
     this.reportsService.getEmployeeProfitDetail().subscribe(
       {
-        next:((response)=>{
-          if(response.success){
-            this.rowData=response.data
-          }else{
+        next: ((response) => {
+          if (response.success) {
+            this.rowData = response.data
+          } else {
             this.handleError(response.message)
           }
         }),
-        error:((err)=>{
+        error: ((err) => {
           this.handleError(err.error.message)
         })
       }
@@ -133,15 +134,15 @@ export class EfficiencyReportsComponent implements OnInit,OnChanges,AfterViewIni
   }
 
   getLabel(type: string): string {
-   const labels: { [key: string]: string } = {
+    const labels: { [key: string]: string } = {
       "1": "Short Login Hour",
       "2": "Late Checkin",
       "3": "Early Checkout",
       "4": "Forget Checkin",
       "5": "Forget Checkout",
       "1004": "Absent"
-    }; 
-    return labels[type] ;
+    };
+    return labels[type];
   }
 
 
@@ -169,7 +170,7 @@ export class EfficiencyReportsComponent implements OnInit,OnChanges,AfterViewIni
     this.gridApi = params.api;
     this.gridApi.hideOverlay();
     this.getEmployeeProfitDetails();
-    if(this.rowData.length==0){
+    if (this.rowData.length == 0) {
       this.showErrorOverlay("Data is not found")
     }
   }
@@ -182,34 +183,34 @@ export class EfficiencyReportsComponent implements OnInit,OnChanges,AfterViewIni
     this.currentPageSize = pageSize;
   }
 
-    // for Manage Columns start
-    allColumns = [...this.columnDefs];
-    displayedColumns = [...this.columnDefs];
-  
-    toggleColumn(column: any) {
-      const columnIndex = this.displayedColumns.findIndex(
+  // for Manage Columns start
+  allColumns = [...this.columnDefs];
+  displayedColumns = [...this.columnDefs];
+
+  toggleColumn(column: any) {
+    const columnIndex = this.displayedColumns.findIndex(
+      (col) => col.field === column.field,
+    );
+    if (columnIndex >= 0) {
+      this.displayedColumns.splice(columnIndex, 1);
+    } else {
+      const colToAdd = this.allColumns.find(
         (col) => col.field === column.field,
       );
-      if (columnIndex >= 0) {
-        this.displayedColumns.splice(columnIndex, 1);
-      } else {
-        const colToAdd = this.allColumns.find(
-          (col) => col.field === column.field,
-        );
-        if (colToAdd) {
-          this.displayedColumns.push(colToAdd);
-        }
+      if (colToAdd) {
+        this.displayedColumns.push(colToAdd);
       }
-      this.columnDefs = [...this.displayedColumns];
     }
-  
-    isColumnDisplayed(column: any): boolean {
-      return this.displayedColumns.some((col) => col.field === column.field);
-    }
-  
-    // for Manage Columns end
+    this.columnDefs = [...this.displayedColumns];
+  }
 
-     //  Function to handle API errors
+  isColumnDisplayed(column: any): boolean {
+    return this.displayedColumns.some((col) => col.field === column.field);
+  }
+
+  // for Manage Columns end
+
+  //  Function to handle API errors
   private handleError(err: any) {
     this._successMessage.open(err, "Close", {
       duration: 4000,

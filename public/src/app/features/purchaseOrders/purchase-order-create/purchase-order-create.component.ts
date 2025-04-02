@@ -64,6 +64,7 @@ import * as _moment from "moment";
 
 import { default as _rollupMoment, Moment } from "moment";
 import { MatAutocompleteModule, MatAutocompleteSelectedEvent, MatAutocompleteTrigger } from "@angular/material/autocomplete";
+import { MatIconModule } from "@angular/material/icon";
 
 const moment = _rollupMoment || _moment;
 
@@ -90,7 +91,7 @@ export const MY_FORMATS = {
     MatDatepickerModule,
     MatFormFieldModule,
     CommonModule, FormsModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,MatIconModule
   ],
   templateUrl: "./purchase-order-create.component.html",
   styleUrl: "./purchase-order-create.component.scss",

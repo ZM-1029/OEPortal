@@ -4,7 +4,6 @@ import { FormGroup } from "@angular/forms";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { AgGridAngular, AgGridModule } from "ag-grid-angular";
 import { ModuleRegistry, AllCommunityModule, GridApi, GridReadyEvent } from "ag-grid-community";
-import { SuccessModalComponent } from "src/app/shared/components/UI/success-modal/success-modal.component";
 import { nonComplianceI, nonComplianceHistoryI, ncTypeCountsI } from "src/app/shared/types/nonCompliance.type";
 
 // Register AG Grid modules
@@ -17,7 +16,7 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 })
 export class NonComplianceTimesheetComponent implements OnInit, OnChanges, AfterViewInit {
   @Input() timesheetRowData: nonComplianceI[] = [];
-  @Input() ncTypeCounts:any ;
+  @Input() ncTypeCounts: any;
   columnDefs: any = [
     {
       headerName: "S. No",
@@ -25,6 +24,7 @@ export class NonComplianceTimesheetComponent implements OnInit, OnChanges, After
       sortable: true,
       filter: true,
       pinned: "left",
+      lockPinned: true,
       minWidth: 100,
       maxWidth: 100,
       cellStyle: () => {
@@ -37,6 +37,7 @@ export class NonComplianceTimesheetComponent implements OnInit, OnChanges, After
       sortable: true,
       filter: true,
       pinned: "left",
+      lockPinned: true,
       minWidth: 220,
       cellStyle: () => {
         return { border: "none" };
@@ -48,12 +49,13 @@ export class NonComplianceTimesheetComponent implements OnInit, OnChanges, After
       sortable: true,
       filter: true,
       pinned: "left",
+      lockPinned: true,
       minWidth: 240,
       cellStyle: () => {
         return { border: "none" };
       },
     },
-   
+
     {
       field: "description",
       headerName: "Description",
@@ -82,7 +84,7 @@ export class NonComplianceTimesheetComponent implements OnInit, OnChanges, After
       filter: true,
       minWidth: 240,
       cellStyle: (params: { value: string }) => {
-        if (params.value === "Present"||params.value === "Weekend, Present") {
+        if (params.value === "Present" || params.value === "Weekend, Present") {
           return { color: "green" };
         }
         return null;
@@ -111,37 +113,37 @@ export class NonComplianceTimesheetComponent implements OnInit, OnChanges, After
     flex: 1,
   };
 
-  rowData:any
+  rowData: any
   public currentPageNumber: number = 1;
   public currentPageSize: number = 15;
   public paginationPageSize = this.currentPageSize;
   public paginationPageSizeSelector: number[] = [15, 25, 50, 100];
   getDateForm!: FormGroup;
-  timesheetNcTypeCounts:any
+  timesheetNcTypeCounts: any
   private gridApi!: GridApi<any>;
-  
+
   @ViewChild(AgGridAngular) agGrid2!: AgGridAngular;
   constructor(
     private _changeDetectorRef: ChangeDetectorRef,
   ) { }
 
- ngOnInit(): void {
-  this.timesheetNcTypeCounts = this.ncTypeCounts && typeof (this.ncTypeCounts) === 'object' ? this.ncTypeCounts : {};
-  this._changeDetectorRef.detectChanges();
-}
+  ngOnInit(): void {
+    this.timesheetNcTypeCounts = this.ncTypeCounts && typeof (this.ncTypeCounts) === 'object' ? this.ncTypeCounts : {};
+    this._changeDetectorRef.detectChanges();
+  }
 
 
   ngOnChanges() {
-    if (this.agGrid2 && this.timesheetRowData.length!==0) {
+    if (this.agGrid2 && this.timesheetRowData.length !== 0) {
       this.timesheetNcTypeCounts = this.ncTypeCounts && typeof this.ncTypeCounts === 'object' ? this.ncTypeCounts : {};
-      this.rowData=this.timesheetRowData;
+      this.rowData = this.timesheetRowData;
       this._changeDetectorRef.detectChanges();
     } else {
-      this.rowData=[];
+      this.rowData = [];
       this.timesheetNcTypeCounts = {};
       this.showErrorOverlay("Data is not found");
       this._changeDetectorRef.detectChanges();
-      
+
     }
   }
 
@@ -160,15 +162,15 @@ export class NonComplianceTimesheetComponent implements OnInit, OnChanges, After
       "1005": "Short Timesheet Hours:",
       "1006": "Blank Timesheet Hours:",
     };
-    return labels[type] ;
+    return labels[type];
   }
 
   getTimesheetNonCompliance() {
-    if (this.timesheetRowData.length!=0) {
+    if (this.timesheetRowData.length != 0) {
       this.rowData = this.timesheetRowData;
       this._changeDetectorRef.detectChanges();
-    }else{
-      this.rowData=[]
+    } else {
+      this.rowData = []
       this.showErrorOverlay("Data is not found");
     }
   }
@@ -207,5 +209,5 @@ export class NonComplianceTimesheetComponent implements OnInit, OnChanges, After
     this.currentPageSize = pageSize;
   }
 
-  
+
 }

@@ -41,6 +41,7 @@ export class EmployeeSalaryComponent implements OnInit, AfterViewInit {
       sortable: true,
       filter: true,
       pinned: "left",
+      lockPinned: true,
       minWidth: 100,
       maxWidth: 100,
       cellStyle: () => {
@@ -91,12 +92,12 @@ export class EmployeeSalaryComponent implements OnInit, AfterViewInit {
     flex: 1,
   };
 
- 
+
   constructor(
     private _employeeService: EmployeesService,
     private _successMessage: MatSnackBar,
     private _changeDetectorRef: ChangeDetectorRef,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
   }

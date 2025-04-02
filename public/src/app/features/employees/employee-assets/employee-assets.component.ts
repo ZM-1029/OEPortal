@@ -5,11 +5,13 @@ import { ModuleRegistry, AllCommunityModule, GridApi, GridReadyEvent } from 'ag-
 import { LoaderComponent } from 'src/app/shared/components/UI/loader/loader.component';
 import { SuccessModalComponent } from 'src/app/shared/components/UI/success-modal/success-modal.component';
 import { EmployeesService } from '../employees.service';
+import { DatePipe } from '@angular/common';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 @Component({
   selector: 'app-employee-assets',
   imports: [AgGridAngular, LoaderComponent],
+  providers: [DatePipe],
   templateUrl: './employee-assets.component.html',
   styleUrl: './employee-assets.component.scss'
 })
@@ -55,6 +57,7 @@ export class EmployeeAssetsComponent implements OnInit, AfterViewInit {
       sortable: true,
       filter: true,
       minWidth: 100,
+      cellRenderer: (params: any) => this.getDate(params.value),
     },
   ];
 
@@ -70,6 +73,7 @@ export class EmployeeAssetsComponent implements OnInit, AfterViewInit {
     private _employeeService: EmployeesService,
     private _successMessage: MatSnackBar,
     private _changeDetectorRef: ChangeDetectorRef,
+    private datePipe: DatePipe,
   ) {}
 
   ngOnInit(): void {
@@ -135,6 +139,10 @@ export class EmployeeAssetsComponent implements OnInit, AfterViewInit {
     const pageSize = params.api.paginationGetPageSize();
     this.currentPageNumber = currentPage + 1;
     this.currentPageSize = pageSize;
+  }
+
+  getDate(formatDate: any, format: string = "dd-MMM-YYYY"): string | null {
+    return this.datePipe.transform(formatDate, format);
   }
 
   //  Function to show success messages

@@ -62,20 +62,19 @@ export class AttendanceNonComplianceHistoryComponent implements OnInit, OnChange
     {
       headerName: "S. No",
       valueGetter: "node.rowIndex + 1",
+      pinned: "left",
+      lockPinned: true,
       sortable: true,
       filter: true,
-      pinned: "left",
       minWidth: 100,
       maxWidth: 100,
-      cellStyle: () => {
-        return { border: "none" };
-      },
     },
     {
       field: "empId",
       headerName: "Employee Id",
       sortable: true,
       pinned: "left",
+      lockPinned: true,
       filter: true,
       minWidth: 100,
     },
@@ -84,6 +83,7 @@ export class AttendanceNonComplianceHistoryComponent implements OnInit, OnChange
       headerName: "Employee Name",
       sortable: true,
       pinned: "left",
+      lockPinned: true,
       filter: true,
       minWidth: 170,
     },
@@ -93,6 +93,7 @@ export class AttendanceNonComplianceHistoryComponent implements OnInit, OnChange
       sortable: true,
       filter: true,
       pinned: "left",
+      lockPinned: true,
       minWidth: 120,
       cellStyle: () => {
         return { border: "none" };
@@ -104,6 +105,7 @@ export class AttendanceNonComplianceHistoryComponent implements OnInit, OnChange
       sortable: true,
       filter: true,
       pinned: "left",
+      lockPinned: true,
       minWidth: 240,
       cellStyle: () => {
         return { border: "none" };
@@ -226,6 +228,7 @@ export class AttendanceNonComplianceHistoryComponent implements OnInit, OnChange
     filter: true,
     resizable: true,
     flex: 1,
+    applyOrder: true,
   };
 
   constructor(
@@ -380,16 +383,16 @@ export class AttendanceNonComplianceHistoryComponent implements OnInit, OnChange
   }
 
   // In your component class
-preventClose(event: MouseEvent) {
-  event.stopPropagation();
-  // If you need to manually handle the checkbox toggle:
-  const checkbox = event.target as HTMLInputElement;
-  if (checkbox.tagName === 'INPUT' && checkbox.type === 'checkbox') {
-    // The (change) event will handle the toggle
-    return;
+  preventClose(event: MouseEvent) {
+    event.stopPropagation();
+    // If you need to manually handle the checkbox toggle:
+    const checkbox = event.target as HTMLInputElement;
+    if (checkbox.tagName === 'INPUT' && checkbox.type === 'checkbox') {
+      // The (change) event will handle the toggle
+      return;
+    }
+    event.preventDefault();
   }
-  event.preventDefault();
-}
 
   // for Manage Columns end
 

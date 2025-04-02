@@ -57,14 +57,14 @@ export class EmployeeListComponent implements OnInit, OnChanges {
   HeadingName: string = "employees";
 
   employeeAccess: rolePermissionListI = {
-      id: 0,
-      formId: 0,
-      form: '',
-      view: false,
-      add: false,
-      edit: false
-    };
-  
+    id: 0,
+    formId: 0,
+    form: '',
+    view: false,
+    add: false,
+    edit: false
+  };
+
 
   columnDefs: any = [
     {
@@ -73,7 +73,9 @@ export class EmployeeListComponent implements OnInit, OnChanges {
       sortable: true,
       filter: true,
       maxWidth: 100,
+      minWidth: 100,
       pinned: "left",
+      lockPinned: true,
     },
     {
       field: "employeeID",
@@ -82,6 +84,7 @@ export class EmployeeListComponent implements OnInit, OnChanges {
       filter: true,
       minWidth: 120,
       pinned: "left",
+      lockPinned: true,
     },
     {
       field: "firstName",
@@ -91,6 +94,7 @@ export class EmployeeListComponent implements OnInit, OnChanges {
       filter: true,
       minWidth: 170,
       pinned: "left",
+      lockPinned: true,
       cellStyle: () => {
         return { border: "none" };
       },
@@ -171,10 +175,10 @@ export class EmployeeListComponent implements OnInit, OnChanges {
     private _changeDetectorRef: ChangeDetectorRef,
     private _router: Router,
     private _successMessage: MatSnackBar,
-    private rolePermissionService:RolePermissionService
+    private rolePermissionService: RolePermissionService
   ) { }
 
-  
+
   ngOnInit(): void {
     this.pageHeader_employee(this.HeadingName);
     // this.getEmployeesList();
@@ -227,21 +231,21 @@ export class EmployeeListComponent implements OnInit, OnChanges {
         {
           next: (
             (result: employeeListI) => {
-              if(result.success){
+              if (result.success) {
                 this.rowData = result.employees;
-              for (let i of this.rowData) {
-                i.employeestatus == "Active"
-                  ? this.activeEmployees++
-                  : i.employeestatus == "Terminated"
-                    ? this.terminatedEmployees++
-                    : this.resignedEmployees++;
-              }
-              this.totalCount = result.totalCount;
-              this.currentPageNumber = result.pageNumber;
-              this.currentPageSize = result.pageSize;
-              this.paginationPageSizeSelector = [15, 50, 100];
-              this._changeDetectorRef.detectChanges();
-              }else{
+                for (let i of this.rowData) {
+                  i.employeestatus == "Active"
+                    ? this.activeEmployees++
+                    : i.employeestatus == "Terminated"
+                      ? this.terminatedEmployees++
+                      : this.resignedEmployees++;
+                }
+                this.totalCount = result.totalCount;
+                this.currentPageNumber = result.pageNumber;
+                this.currentPageSize = result.pageSize;
+                this.paginationPageSizeSelector = [15, 50, 100];
+                this._changeDetectorRef.detectChanges();
+              } else {
                 this.showErrorOverlay(result.message);
               }
             }
@@ -285,7 +289,7 @@ export class EmployeeListComponent implements OnInit, OnChanges {
     }
   }
 
-   // it show message when api is false .... end
+  // it show message when api is false .... end
 
   onPaginationChanged(params: any) {
     const currentPage = params.api.paginationGetCurrentPage();
@@ -305,7 +309,7 @@ export class EmployeeListComponent implements OnInit, OnChanges {
     this.isSideDrawerOpen = true;
   }
 
-  
+
   // side Drawer close
   sideDrawer() {
     if (this.isSideDrawerOpen) {

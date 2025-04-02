@@ -29,6 +29,7 @@ export class EmployeeInvoiceComponent {
       sortable: true,
       filter: true,
       pinned: "left",
+      lockPinned: true,
       minWidth: 100,
       maxWidth: 100,
       cellStyle: () => {
@@ -79,12 +80,12 @@ export class EmployeeInvoiceComponent {
     flex: 1,
   };
 
- 
+
   constructor(
     private _employeeService: EmployeesService,
     private _successMessage: MatSnackBar,
     private _changeDetectorRef: ChangeDetectorRef,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
   }

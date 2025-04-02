@@ -114,6 +114,15 @@
   outline: #2e3b64 !important;
   border: #2e3b64;
 }
+@media (max-width: 1344px) {
+  .table-footer .row {
+    position: absolute;
+    width: 100%;
+    top: -40px;
+    left: 20px;
+    z-index: 2;
+  }
+}
 
 // sideDrawer start
 .customer-list  app-side-drawer .drawer {

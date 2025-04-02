@@ -33,13 +33,21 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 export class ItemsListComponent {
   columnDefs: any = [
     {
+      headerName: "S. No",
+      valueGetter: "node.rowIndex + 1",
+      sortable: true,
+      filter: true,
+      maxWidth: 100,
+      minWidth: 100,
+      pinned: "left",
+    },
+    {
       headerName: "Name",
       field: "name",
-      sortable: false,
-      filter: false,
+      sortable: true,
+      filter: true,
       pinned: "left",
-      minWidth: 100,
-      maxWidth: 100,
+      minWidth: 200,
     },
     {
       headerName: "Actions",
@@ -75,7 +83,7 @@ export class ItemsListComponent {
       headerName: "Unit",
       sortable: true,
       filter: true,
-      minWidth: 200,
+      minWidth: 150,
     },
     {
       field: "businessLine",

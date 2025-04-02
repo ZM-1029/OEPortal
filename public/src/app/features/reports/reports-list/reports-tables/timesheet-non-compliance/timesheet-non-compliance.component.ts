@@ -11,19 +11,19 @@ ModuleRegistry.registerModules([AllCommunityModule]);
   templateUrl: './timesheet-non-compliance.component.html',
   styleUrl: './timesheet-non-compliance.component.scss'
 })
-export class TimesheetNonComplianceComponent implements OnInit,OnChanges,AfterViewInit {
+export class TimesheetNonComplianceComponent implements OnInit, OnChanges, AfterViewInit {
   @Input() timesheetRowData: nonComplianceI[] = [];
-  @Input() ncTypeCounts!:ncTypeCountsI ;
+  @Input() ncTypeCounts!: ncTypeCountsI;
   @ViewChild(AgGridAngular) agGrid!: AgGridAngular;
-  rowData:nonComplianceI[]=[];
+  rowData: nonComplianceI[] = [];
   public currentPageNumber: number = 1;
   public currentPageSize: number = 15;
   public paginationPageSize = this.currentPageSize;
   public paginationPageSizeSelector: number[] = [15, 25, 50, 100];
   getDateForm!: FormGroup;
-  timesheetNcTypeCounts:ncTypeCountsI|any;
+  timesheetNcTypeCounts: ncTypeCountsI | any;
   private gridApi!: GridApi<any>;
-  
+
   columnDefs: any = [
     {
       headerName: "S. No",
@@ -31,16 +31,18 @@ export class TimesheetNonComplianceComponent implements OnInit,OnChanges,AfterVi
       sortable: true,
       filter: true,
       pinned: "left",
+      lockPinned: true,
       minWidth: 100,
       maxWidth: 100,
       cellStyle: () => {
         return { border: "none" };
       },
-    },  {
+    }, {
       field: "empId",
       headerName: "Employee Id",
       sortable: true,
       pinned: "left",
+      lockPinned: true,
       filter: true,
       minWidth: 100,
     },
@@ -49,6 +51,7 @@ export class TimesheetNonComplianceComponent implements OnInit,OnChanges,AfterVi
       headerName: "Employee Name",
       sortable: true,
       pinned: "left",
+      lockPinned: true,
       filter: true,
       minWidth: 170,
     },
@@ -58,6 +61,7 @@ export class TimesheetNonComplianceComponent implements OnInit,OnChanges,AfterVi
       sortable: true,
       filter: true,
       pinned: "left",
+      lockPinned: true,
       minWidth: 120,
       cellStyle: () => {
         return { border: "none" };
@@ -69,12 +73,13 @@ export class TimesheetNonComplianceComponent implements OnInit,OnChanges,AfterVi
       sortable: true,
       filter: true,
       pinned: "left",
+      lockPinned: true,
       minWidth: 240,
       cellStyle: () => {
         return { border: "none" };
       },
     },
-   
+
     {
       field: "description",
       headerName: "Description",
@@ -103,7 +108,7 @@ export class TimesheetNonComplianceComponent implements OnInit,OnChanges,AfterVi
       filter: true,
       minWidth: 240,
       cellStyle: (params: { value: string }) => {
-        if (params.value === "Present"||params.value === "Weekend, Present") {
+        if (params.value === "Present" || params.value === "Weekend, Present") {
           return { color: "green" };
         }
         return null;
@@ -136,22 +141,22 @@ export class TimesheetNonComplianceComponent implements OnInit,OnChanges,AfterVi
     private _changeDetectorRef: ChangeDetectorRef,
   ) { }
 
- ngOnInit(): void {
-  this.timesheetNcTypeCounts = this.ncTypeCounts && typeof (this.ncTypeCounts) === 'object' ? this.ncTypeCounts : {};
-  this._changeDetectorRef.detectChanges();
-}
+  ngOnInit(): void {
+    this.timesheetNcTypeCounts = this.ncTypeCounts && typeof (this.ncTypeCounts) === 'object' ? this.ncTypeCounts : {};
+    this._changeDetectorRef.detectChanges();
+  }
 
   ngOnChanges() {
-    if (this.agGrid && this.timesheetRowData.length!==0) {
+    if (this.agGrid && this.timesheetRowData.length !== 0) {
       this.timesheetNcTypeCounts = this.ncTypeCounts && typeof this.ncTypeCounts === 'object' ? this.ncTypeCounts : {};
-      this.rowData=this.timesheetRowData;
+      this.rowData = this.timesheetRowData;
       this._changeDetectorRef.detectChanges();
     } else {
-      this.rowData=[];
+      this.rowData = [];
       this.timesheetNcTypeCounts = {};
       this.showErrorOverlay("Data is not found");
       this._changeDetectorRef.detectChanges();
-      
+
     }
   }
 
@@ -160,11 +165,11 @@ export class TimesheetNonComplianceComponent implements OnInit,OnChanges,AfterVi
   }
 
   getTimesheetNonCompliance() {
-    if (this.timesheetRowData.length!=0) {
+    if (this.timesheetRowData.length != 0) {
       this.rowData = this.timesheetRowData;
       this._changeDetectorRef.detectChanges();
-    }else{
-      this.rowData=[];
+    } else {
+      this.rowData = [];
       this.showErrorOverlay("Data is not found");
     }
   }
@@ -179,7 +184,7 @@ export class TimesheetNonComplianceComponent implements OnInit,OnChanges,AfterVi
       "1005": "Short Timesheet Hours:",
       "1006": "Blank Timesheet Hours:",
     };
-    return labels[type] ;
+    return labels[type];
   }
 
   gridOptions = {
@@ -217,30 +222,30 @@ export class TimesheetNonComplianceComponent implements OnInit,OnChanges,AfterVi
   }
 
   // for Manage Columns start
-    allColumns = [...this.columnDefs];
-    displayedColumns = [...this.columnDefs];
-  
-    toggleColumn(column: any) {
-      const columnIndex = this.displayedColumns.findIndex(
+  allColumns = [...this.columnDefs];
+  displayedColumns = [...this.columnDefs];
+
+  toggleColumn(column: any) {
+    const columnIndex = this.displayedColumns.findIndex(
+      (col) => col.field === column.field,
+    );
+    if (columnIndex >= 0) {
+      this.displayedColumns.splice(columnIndex, 1);
+    } else {
+      const colToAdd = this.allColumns.find(
         (col) => col.field === column.field,
       );
-      if (columnIndex >= 0) {
-        this.displayedColumns.splice(columnIndex, 1);
-      } else {
-        const colToAdd = this.allColumns.find(
-          (col) => col.field === column.field,
-        );
-        if (colToAdd) {
-          this.displayedColumns.push(colToAdd);
-        }
+      if (colToAdd) {
+        this.displayedColumns.push(colToAdd);
       }
-      this.columnDefs = [...this.displayedColumns];
     }
-  
-    isColumnDisplayed(column: any): boolean {
-      return this.displayedColumns.some((col) => col.field === column.field);
-    }
-  
-    // for Manage Columns end
+    this.columnDefs = [...this.displayedColumns];
+  }
+
+  isColumnDisplayed(column: any): boolean {
+    return this.displayedColumns.some((col) => col.field === column.field);
+  }
+
+  // for Manage Columns end
 
 }

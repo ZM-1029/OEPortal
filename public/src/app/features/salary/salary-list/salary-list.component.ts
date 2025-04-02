@@ -1,5 +1,4 @@
 import {
-  AfterContentChecked,
   AfterViewInit,
   ChangeDetectorRef,
   Component,
@@ -71,6 +70,7 @@ export class SalaryListComponent implements OnInit, AfterViewInit {
       sortable: false,
       filter: false,
       pinned: "left",
+      lockPinned: true,
       minWidth: 100,
       maxWidth: 100,
       cellStyle: () => {
@@ -156,7 +156,7 @@ export class SalaryListComponent implements OnInit, AfterViewInit {
     private _changeDetectorRef: ChangeDetectorRef,
     private dialog: MatDialog,
     private _successMessage: MatSnackBar,
-    private rolePermissionService:RolePermissionService
+    private rolePermissionService: RolePermissionService
   ) { }
 
   ngOnInit(): void {
@@ -166,8 +166,6 @@ export class SalaryListComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this._changeDetectorRef.detectChanges();
   }
-
-
 
   getPermissionToAccessPage(roleId: any) {
     this.rolePermissionService.getPermissionsByRoleId(roleId).subscribe({

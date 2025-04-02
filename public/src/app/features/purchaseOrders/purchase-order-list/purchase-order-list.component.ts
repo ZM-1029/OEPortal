@@ -48,17 +48,17 @@ export class PurchaseOrderListComponent implements OnInit {
   formHeading: string = "";
   PurchaseOrderRowId!: number;
   HeadingName: string = "Purchase Order";
-  rowData: any[]=[];
+  rowData: any[] = [];
   purchaseOrderAccess: rolePermissionListI = {
-      id: 0,
-      formId: 0,
-      form: '',
-      view: false,
-      add: false,
-      edit: false
-    };
+    id: 0,
+    formId: 0,
+    form: '',
+    view: false,
+    add: false,
+    edit: false
+  };
 
-  
+
   columnDefs: any = [
     {
       headerName: "S. No",
@@ -66,6 +66,7 @@ export class PurchaseOrderListComponent implements OnInit {
       sortable: false,
       filter: false,
       pinned: "left",
+      lockPinned: true,
       minWidth: 100,
       maxWidth: 100,
       cellStyle: () => {
@@ -151,7 +152,7 @@ export class PurchaseOrderListComponent implements OnInit {
     private _changeDetectorRef: ChangeDetectorRef,
     private dialog: MatDialog,
     private _successMessage: MatSnackBar,
-    private rolePermissionService:RolePermissionService
+    private rolePermissionService: RolePermissionService
   ) { }
 
   ngOnInit(): void {
@@ -190,7 +191,7 @@ export class PurchaseOrderListComponent implements OnInit {
               if (this.gridApi) {
                 this.gridApi.setColumnsVisible(["actions"], this.purchaseOrderAccess.edit);
               }
-  
+
               this._changeDetectorRef.detectChanges();
             }
           }
@@ -209,9 +210,8 @@ export class PurchaseOrderListComponent implements OnInit {
       .getPurchaseOrderList()
       .subscribe(
         {
-          next:((result: purchaseOrdersResponseI)=>{
+          next: ((result: purchaseOrdersResponseI) => {
             if (result.success) {
-              console.log(result.data, "result.data");
               this.rowData = result.data;
               this._changeDetectorRef.detectChanges();
             } else {
@@ -220,14 +220,14 @@ export class PurchaseOrderListComponent implements OnInit {
               this.showErrorOverlay("Data is not found");
               console.log("No customer data returned from API.");
             }
-          }),error:((err)=>{
+          }), error: ((err) => {
             this.rowData = [];
             this.gridApi.hideOverlay();
             this.showErrorOverlay("Data is not found");
             console.log("No customer data returned from API.");
           })
         },
-    );
+      );
   }
 
   extractMonth(date: any) {
@@ -263,7 +263,6 @@ export class PurchaseOrderListComponent implements OnInit {
 
   // side Drawer close
   handleSideDrawer(event?: boolean) {
-    console.log(event, "aaji idhar aayefa babe");
     if (event === false) {
       this.isSideDrawerOpen = event;
     }
@@ -275,7 +274,7 @@ export class PurchaseOrderListComponent implements OnInit {
   updatePO(event: any): void {
     if (event.event.target.closest(".eye-icon")) {
       const PurchaseOrderRowId = event.event.target.closest(".eye-icon").getAttribute("data-id");
-    const viewPurchseOrder= this.dialog.open(PurcheseOrdereViewComponent,{
+      const viewPurchseOrder = this.dialog.open(PurcheseOrdereViewComponent, {
         width: "700px",
         height: "390px",
         disableClose: true,
@@ -326,7 +325,7 @@ export class PurchaseOrderListComponent implements OnInit {
       next: (response: any) => {
         this._successMessage.openFromComponent(SuccessModalComponent, {
           data: { message: response.message },
-          duration: 4000, 
+          duration: 4000,
           panelClass: ["custom-toast"],
           verticalPosition: "top",
           horizontalPosition: "right",
@@ -416,27 +415,27 @@ export class PurchaseOrderListComponent implements OnInit {
     `;
   }
 
-    //  Function to show success messages
-    private showSuccessMessage(message: string) {
-      this._successMessage.openFromComponent(SuccessModalComponent, {
-        data: { message },
-        duration: 4000,
-        panelClass: ["custom-toast"],
-        verticalPosition: "top",
-        horizontalPosition: "right",
-      });
-    }
-  
-    //  Function to handle API errors
-    private handleError(err: any) {
-      console.error("Error Status:", err.status);
-      console.error("Error Message:", err.error);
-      this._successMessage.open(err.error.message, "Close", {
-        duration: 4000,
-        panelClass: ["error-toast"],
-        verticalPosition: "top",
-        horizontalPosition: "right",
-      });
-    }
+  //  Function to show success messages
+  private showSuccessMessage(message: string) {
+    this._successMessage.openFromComponent(SuccessModalComponent, {
+      data: { message },
+      duration: 4000,
+      panelClass: ["custom-toast"],
+      verticalPosition: "top",
+      horizontalPosition: "right",
+    });
+  }
+
+  //  Function to handle API errors
+  private handleError(err: any) {
+    console.error("Error Status:", err.status);
+    console.error("Error Message:", err.error);
+    this._successMessage.open(err.error.message, "Close", {
+      duration: 4000,
+      panelClass: ["error-toast"],
+      verticalPosition: "top",
+      horizontalPosition: "right",
+    });
+  }
 
 }

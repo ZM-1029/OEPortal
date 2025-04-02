@@ -3,7 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AgGridAngular } from 'ag-grid-angular';
 import { ModuleRegistry, AllCommunityModule, GridApi, GridReadyEvent } from 'ag-grid-community';
-import { CustomerReportsSummary} from 'src/app/shared/types/reports.type';
+import { CustomerReportsSummary } from 'src/app/shared/types/reports.type';
 import { ReportsService } from '../../../reports.service';
 import { SingleSelectDropdownComponent } from 'src/app/shared/components/UI/single-select-dropdown/single-select-dropdown.component';
 import { MultiSelcetObjectDropdownComponent } from 'src/app/shared/components/UI/multi-selcet-object-dropdown/multi-selcet-object-dropdown.component';
@@ -12,7 +12,7 @@ import { MonthMultiSelectDropdownComponent } from 'src/app/shared/components/UI/
 ModuleRegistry.registerModules([AllCommunityModule]);
 @Component({
   selector: 'app-efficiency-report-customers',
-  imports: [AgGridAngular, SingleSelectDropdownComponent, MultiSelcetObjectDropdownComponent,MonthMultiSelectDropdownComponent],
+  imports: [AgGridAngular, SingleSelectDropdownComponent, MultiSelcetObjectDropdownComponent, MonthMultiSelectDropdownComponent],
   templateUrl: './efficiency-report-customers.component.html',
   styleUrl: './efficiency-report-customers.component.scss'
 })
@@ -25,7 +25,7 @@ export class EfficiencyReportCustomersComponent {
   public paginationPageSizeSelector: number[] = [15, 25, 50, 100];
   getDateForm!: FormGroup;
   private gridApi!: GridApi<any>;
-  customerId: string ='';
+  customerId: string = '';
   selectedValueMonth: any;
   selectedValueYear: any = '2025';
   dropdownHeading: string = "Month";
@@ -54,6 +54,7 @@ export class EfficiencyReportCustomersComponent {
       sortable: true,
       filter: true,
       pinned: "left",
+      lockPinned: true,
       minWidth: 100,
       maxWidth: 100,
       cellStyle: () => {
@@ -73,33 +74,33 @@ export class EfficiencyReportCustomersComponent {
       sortable: true,
       filter: true,
       minWidth: 170,
-      valueGetter: (params: any) => params.data._1 === 0 ? "-" : params.data._1, 
+      valueGetter: (params: any) => params.data._1 === 0 ? "-" : params.data._1,
       cellStyle: (params: any) => {
         return params.value === "-" ? { color: "red", fontWeight: "bold" } : {};
       }
-    }, 
+    },
     {
       field: "_2",
       headerName: "Billed Amount",
       sortable: true,
       filter: true,
       minWidth: 170,
-      valueGetter: (params: any) => params.data._2 === 0 ? "-" : params.data._2, 
+      valueGetter: (params: any) => params.data._2 === 0 ? "-" : params.data._2,
       cellStyle: (params: any) => {
         return params.value === "-" ? { color: "red", fontWeight: "bold" } : {};
       }
-    }, 
+    },
     {
       field: "_3",
       headerName: "Profit Margin",
       sortable: true,
       filter: true,
       minWidth: 170,
-      valueGetter: (params: any) => params.data._3 === 0 ? "-" : params.data._3, 
+      valueGetter: (params: any) => params.data._3 === 0 ? "-" : params.data._3,
       cellStyle: (params: any) => {
         return params.value === "-" ? { color: "red", fontWeight: "bold" } : {};
       }
-    }, 
+    },
   ];
 
   defaultColDef = {
@@ -116,9 +117,9 @@ export class EfficiencyReportCustomersComponent {
   ) { }
 
   ngOnInit(): void {
-    this.customerId='0';
+    this.customerId = '0';
     this._changeDetectorRef.detectChanges();
-    this.selectedValueMonth = new Date().getMonth()+1;
+    this.selectedValueMonth = new Date().getMonth() + 1;
     const currentYear = new Date().getFullYear();
     this.generateYears(2021, currentYear);
     this._changeDetectorRef.detectChanges();

@@ -3,8 +3,6 @@ import {
   AfterViewInit,
   ChangeDetectorRef,
   Component,
-  DestroyRef,
-  inject,
   OnInit,
 } from "@angular/core";
 import { Router, RouterLink } from "@angular/router";
@@ -20,7 +18,6 @@ import { invoiceListI } from "src/app/shared/types/invoice.type";
 import { InvoiceService } from "../invoice.service";
 import { rolePermissionListI } from "src/app/shared/types/roles.type";
 import { RolePermissionService } from "../../role-permissions/role-permission.service";
-
 
 
 ModuleRegistry.registerModules([AllCommunityModule]);
@@ -68,6 +65,7 @@ export class InvoiceListComponent implements OnInit, AfterViewInit {
       sortable: false,
       filter: false,
       pinned: "left",
+      lockPinned: true,
       minWidth: 100,
       maxWidth: 100,
       cellStyle: () => {
@@ -131,7 +129,7 @@ export class InvoiceListComponent implements OnInit, AfterViewInit {
     private dialog: MatDialog,
     private _successMessage: MatSnackBar,
     private _router: Router,
-    private rolePermissionService:RolePermissionService
+    private rolePermissionService: RolePermissionService
   ) { }
 
 
@@ -165,7 +163,7 @@ export class InvoiceListComponent implements OnInit, AfterViewInit {
               if (this.gridApi) {
                 this.gridApi.setColumnsVisible(["actions"], this.InvoiceAccess.edit);
               }
-  
+
               this._changeDetectorRef.detectChanges();
             }
           }
@@ -178,7 +176,7 @@ export class InvoiceListComponent implements OnInit, AfterViewInit {
       },
     });
   }
-  
+
 
 
   getInvoiceList() {

@@ -33,13 +33,21 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 export class SalesListComponent {
   columnDefs: any = [
     {
+      headerName: "S. No",
+      valueGetter: "node.rowIndex + 1",
+      sortable: true,
+      filter: true,
+      maxWidth: 100,
+      minWidth: 100,
+      pinned: "left",
+    },
+    {
       headerName: "Quotation No.",
       field: "quotationNumber",
-      sortable: false,
-      filter: false,
+      sortable: true,
+      filter: true,
       pinned: "left",
-      minWidth: 100,
-      maxWidth: 140,
+      minWidth: 140,
     },
     {
       headerName: "Actions",

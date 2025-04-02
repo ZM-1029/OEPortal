@@ -10,7 +10,7 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 
 @Component({
   selector: 'app-salary-reports',
-  imports: [AgGridAngular,MultiSelectDropdownComponent],
+  imports: [AgGridAngular, MultiSelectDropdownComponent],
   templateUrl: './salary-reports.component.html',
   styleUrl: './salary-reports.component.scss'
 })
@@ -23,22 +23,22 @@ export class SalaryReportsComponent {
   public paginationPageSizeSelector: number[] = [15, 25, 50, 100];
   getDateForm!: FormGroup;
   private gridApi!: GridApi<any>;
- dropdownHeading: string = "Month"
- Year: { id: string; name: string }[] = [];
- allEmployees: { id: string; name: string }[] = [];
-  Month:{ id: string; name: string }[]=[
+  dropdownHeading: string = "Month"
+  Year: { id: string; name: string }[] = [];
+  allEmployees: { id: string; name: string }[] = [];
+  Month: { id: string; name: string }[] = [
     { id: '1', name: 'January' },
-  { id: '2', name: 'February' },
-  { id: '3', name: 'March' },
-  { id: '4', name: 'April' },
-  { id: '5', name: 'May' },
-  { id: '6', name: 'June' },
-  { id: '7', name: 'July' },
-  { id: '8', name: 'August' },
-  { id: '9', name: 'September' },
-  { id: '10', name: 'October' },
-  { id: '11', name: 'November' },
-  { id: '12', name: 'December' }
+    { id: '2', name: 'February' },
+    { id: '3', name: 'March' },
+    { id: '4', name: 'April' },
+    { id: '5', name: 'May' },
+    { id: '6', name: 'June' },
+    { id: '7', name: 'July' },
+    { id: '8', name: 'August' },
+    { id: '9', name: 'September' },
+    { id: '10', name: 'October' },
+    { id: '11', name: 'November' },
+    { id: '12', name: 'December' }
   ]
   columnDefs: any = [
     {
@@ -47,6 +47,7 @@ export class SalaryReportsComponent {
       sortable: true,
       filter: true,
       pinned: "left",
+      lockPinned: true,
       minWidth: 100,
       maxWidth: 100,
       cellStyle: () => {
@@ -95,7 +96,7 @@ export class SalaryReportsComponent {
       filter: true,
       minWidth: 240,
     },
-    
+
   ];
 
   defaultColDef = {
@@ -107,7 +108,7 @@ export class SalaryReportsComponent {
 
   constructor(
     private _changeDetectorRef: ChangeDetectorRef,
-    private reportsService:ReportsService,
+    private reportsService: ReportsService,
     private _successMessage: MatSnackBar
   ) { }
 
@@ -121,7 +122,7 @@ export class SalaryReportsComponent {
   }
 
   ngOnChanges() {
-    
+
   }
 
   ngAfterViewInit() {
@@ -136,14 +137,14 @@ export class SalaryReportsComponent {
     console.log(this.Year); // Debugging output
   }
 
-   // dropdown selected Output
-   selectedYear(event: Array<string>) {
-    
-  }
-  selectedEmployee(event:any){
+  // dropdown selected Output
+  selectedYear(event: Array<string>) {
 
   }
-  selectedMonth(event:any){
+  selectedEmployee(event: any) {
+
+  }
+  selectedMonth(event: any) {
 
   }
   // dropdown selected Output
@@ -155,7 +156,7 @@ export class SalaryReportsComponent {
           id: obj.employeeID,  // Correctly map employeeID
           name: `(${obj.employeeID}) - ${obj.firstName} ${obj.lastName}`, // Full name format
         }));
-  
+
         this._changeDetectorRef.detectChanges(); // Trigger UI update
         console.log("Employees Loaded:", this.allEmployees);
       },
@@ -164,19 +165,19 @@ export class SalaryReportsComponent {
       }
     });
   }
-  
-   
+
+
   getEmployeeProfitDetails() {
     this.reportsService.getEmployeeProfitDetail().subscribe(
       {
-        next:((response)=>{
-          if(response.success){
-            this.rowData=response.data
-          }else{
+        next: ((response) => {
+          if (response.success) {
+            this.rowData = response.data
+          } else {
             this.handleError(response.message)
           }
         }),
-        error:((err)=>{
+        error: ((err) => {
           this.handleError(err.error.message)
         })
       }
@@ -189,15 +190,15 @@ export class SalaryReportsComponent {
   }
 
   getLabel(type: string): string {
-   const labels: { [key: string]: string } = {
+    const labels: { [key: string]: string } = {
       "1": "Short Login Hour",
       "2": "Late Checkin",
       "3": "Early Checkout",
       "4": "Forget Checkin",
       "5": "Forget Checkout",
       "1004": "Absent"
-    }; 
-    return labels[type] ;
+    };
+    return labels[type];
   }
 
 
@@ -225,7 +226,7 @@ export class SalaryReportsComponent {
     this.gridApi = params.api;
     this.gridApi.hideOverlay();
     this.getEmployeeProfitDetails();
-    if(this.rowData.length==0){
+    if (this.rowData.length == 0) {
       this.showErrorOverlay("Data is not found")
     }
   }
@@ -238,34 +239,34 @@ export class SalaryReportsComponent {
     this.currentPageSize = pageSize;
   }
 
-    // for Manage Columns start
-    allColumns = [...this.columnDefs];
-    displayedColumns = [...this.columnDefs];
-  
-    toggleColumn(column: any) {
-      const columnIndex = this.displayedColumns.findIndex(
+  // for Manage Columns start
+  allColumns = [...this.columnDefs];
+  displayedColumns = [...this.columnDefs];
+
+  toggleColumn(column: any) {
+    const columnIndex = this.displayedColumns.findIndex(
+      (col) => col.field === column.field,
+    );
+    if (columnIndex >= 0) {
+      this.displayedColumns.splice(columnIndex, 1);
+    } else {
+      const colToAdd = this.allColumns.find(
         (col) => col.field === column.field,
       );
-      if (columnIndex >= 0) {
-        this.displayedColumns.splice(columnIndex, 1);
-      } else {
-        const colToAdd = this.allColumns.find(
-          (col) => col.field === column.field,
-        );
-        if (colToAdd) {
-          this.displayedColumns.push(colToAdd);
-        }
+      if (colToAdd) {
+        this.displayedColumns.push(colToAdd);
       }
-      this.columnDefs = [...this.displayedColumns];
     }
-  
-    isColumnDisplayed(column: any): boolean {
-      return this.displayedColumns.some((col) => col.field === column.field);
-    }
-  
-    // for Manage Columns end
+    this.columnDefs = [...this.displayedColumns];
+  }
 
-     //  Function to handle API errors
+  isColumnDisplayed(column: any): boolean {
+    return this.displayedColumns.some((col) => col.field === column.field);
+  }
+
+  // for Manage Columns end
+
+  //  Function to handle API errors
   private handleError(err: any) {
     this._successMessage.open(err, "Close", {
       duration: 4000,

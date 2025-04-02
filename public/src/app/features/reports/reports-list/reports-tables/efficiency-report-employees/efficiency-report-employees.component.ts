@@ -14,7 +14,7 @@ import { MonthMultiSelectDropdownComponent } from 'src/app/shared/components/UI/
 ModuleRegistry.registerModules([AllCommunityModule]);
 @Component({
   selector: 'app-efficiency-report-employees',
-  imports: [AgGridAngular, MultiSelectDropdownComponent,SingleSelectDropdownComponent,MonthMultiSelectDropdownComponent],
+  imports: [AgGridAngular, MultiSelectDropdownComponent, SingleSelectDropdownComponent, MonthMultiSelectDropdownComponent],
   templateUrl: './efficiency-report-employees.component.html',
   styleUrl: './efficiency-report-employees.component.scss'
 })
@@ -27,7 +27,7 @@ export class EfficiencyReportEmployeesComponent {
   public paginationPageSizeSelector: number[] = [15, 25, 50, 100];
   getDateForm!: FormGroup;
   private gridApi!: GridApi<any>;
-  employeeId: string='' ;
+  employeeId: string = '';
   selectedValueMonth: any;
   selectedValueYear: any = '2025';
   dropdownHeading: string = "Month";
@@ -56,6 +56,7 @@ export class EfficiencyReportEmployeesComponent {
       sortable: true,
       filter: true,
       pinned: "left",
+      lockPinned: true,
       minWidth: 100,
       maxWidth: 100,
       cellStyle: () => {
@@ -82,33 +83,33 @@ export class EfficiencyReportEmployeesComponent {
       sortable: true,
       filter: true,
       minWidth: 170,
-      valueGetter: (params: any) => params.data.salary === 0 ? "-" : params.data.salary, 
+      valueGetter: (params: any) => params.data.salary === 0 ? "-" : params.data.salary,
       cellStyle: (params: any) => {
         return params.value === "-" ? { color: "red", fontWeight: "bold" } : {};
       }
-    }, 
+    },
     {
       field: "billedAmount",
       headerName: "Billed Amount",
       sortable: true,
       filter: true,
       minWidth: 170,
-      valueGetter: (params: any) => params.data.billedAmount === 0 ? "-" : params.data.billedAmount, 
+      valueGetter: (params: any) => params.data.billedAmount === 0 ? "-" : params.data.billedAmount,
       cellStyle: (params: any) => {
         return params.value === "-" ? { color: "red", fontWeight: "bold" } : {};
       }
-    }, 
+    },
     {
       field: "profitratio",
       headerName: "Profit ratio",
       sortable: true,
       filter: true,
       minWidth: 170,
-      valueGetter: (params: any) => params.data.profitratio === 0 ? "-" : params.data.profitratio, 
+      valueGetter: (params: any) => params.data.profitratio === 0 ? "-" : params.data.profitratio,
       cellStyle: (params: any) => {
         return params.value === "-" ? { color: "red", fontWeight: "bold" } : {};
       }
-    }, 
+    },
     {
       headerName: "Month/Year",
       field: "monthYear",
@@ -133,9 +134,9 @@ export class EfficiencyReportEmployeesComponent {
   ) { }
 
   ngOnInit(): void {
-    this.employeeId='0'
+    this.employeeId = '0'
     this._changeDetectorRef.detectChanges();
-    this.selectedValueMonth = new Date().getMonth()+1;
+    this.selectedValueMonth = new Date().getMonth() + 1;
     const currentYear = new Date().getFullYear();
     this.generateYears(2021, currentYear);
     this._changeDetectorRef.detectChanges();

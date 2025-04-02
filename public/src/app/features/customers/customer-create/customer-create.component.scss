@@ -273,58 +273,37 @@
 }
 
 // Radio button styling
-.mat-radio-button {
-  .mat-radio-outer-circle {
-    border-color: #408dfb;
-  }
+.customer-create  .mat-mdc-radio-button .mdc-radio__native-control:enabled:checked+.mdc-radio__background>.mdc-radio__outer-circle, .mat-mdc-radio-button .mdc-radio__native-control:enabled:checked+.mdc-radio__background>.mdc-radio__inner-circle {
+  border-color: #007bff ;
+}
 
-  &.mat-radio-checked {
-    .mat-radio-inner-circle {
-      background-color: #408dfb;
-    }
-  }
+.customer-create .mat-mdc-radio-button .mdc-radio:hover>.mdc-radio__native-control:enabled:checked+.mdc-radio__background>.mdc-radio__outer-circle, .mat-mdc-radio-button .mdc-radio:hover>.mdc-radio__native-control:enabled:checked+.mdc-radio__background>.mdc-radio__inner-circle {
+  border-color: #007bff;
 }
 
 // Checkbox styling
-.mat-checkbox {
-  .mat-checkbox-frame {
-    border-color: #408dfb;
-  }
-
-  &.mat-checkbox-checked {
-    .mat-checkbox-background {
-      background-color: #408dfb;
-    }
-  }
+::ng-deep .mat-checkbox-frame {
+  border-color: #007bff !important; 
+  border-width: 2px !important;
 }
 
-// Focus state for both
-.mat-radio-button.mat-radio-focused,
-.mat-checkbox.mat-checkbox-focused {
-  .mat-radio-outer-circle,
-  .mat-checkbox-frame {
-    border-color: #408dfb;
-  }
+::ng-deep .mat-checkbox-background {
+  background-color: #007bff !important; 
 }
 
-.business-type-radio {
-  .mat-radio-button {
-    .mat-radio-outer-circle {
-      border-color: #408dfb !important;
-    }
+::ng-deep .mat-checkbox-checked .mat-checkbox-checkmark-path {
+  stroke: white !important; 
+}
 
-    &.mat-radio-checked {
-      .mat-radio-inner-circle {
-        background-color: #408dfb !important;
-      }
-    }
-  }
+::ng-deep .mat-checkbox-label {
+  font-size: 16px !important;
+  font-weight: bold;
+  color: black; 
+}
 
-  .mat-radio-button.mat-radio-focused {
-    .mat-radio-outer-circle {
-      border-color: #408dfb;
-    }
-  }
+.mdc-checkbox__native-control:enabled:checked~.mdc-checkbox__background, .mdc-checkbox__native-control:enabled:indeterminate~.mdc-checkbox__background {
+  border-color: #007bff !important;
+  background-color: #007bff !important;
 }
 
 // Responsive adjustments

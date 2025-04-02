@@ -48,7 +48,27 @@
         [paginationPageSizeSelector]="paginationPageSizeSelector" (gridReady)="onGridReady($event)"
         (paginationChanged)="onPaginationChanged($event)"></ag-grid-angular>
 
-      <div class="table-footer position-relative">
+      <!-- <div class="table-footer position-relative">
+        <div class="row g-2">
+          <div class="col-6 col-sm-3 fw-bold">
+            <label>Total Employees:</label>
+            <span class="text-bold ms-1">{{ totalCount }}</span>
+          </div>
+          <div class="col-6 col-sm-3 fw-bold text-success">
+            <label>Active:</label>
+            <span class="text-bold ms-1">{{ activeEmployees }}</span>
+          </div>
+          <div class="col-6 col-sm-3 fw-bold text-danger">
+            <label>Terminated:</label>
+            <span class="text-bold ms-1">{{ terminatedEmployees }}</span>
+          </div>
+          <div class="col-6 col-sm-3 fw-bold text-danger">
+            <label>Resigned:</label>
+            <span class="text-bold ms-1">{{ resignedEmployees }}</span>
+          </div>
+        </div>
+      </div> -->
+      <div class="table-footer position-relative responsive-font">
         <div class="row g-2">
           <div class="col-6 col-sm-3 fw-bold">
             <label>Total Employees:</label>
