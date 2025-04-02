@@ -153,15 +153,7 @@ export class ReportsListComponent implements OnInit {
     }
   }
 
-  // getEndDate(event: MatDatepickerInputEvent<Date> | any) {
-  //   if (event.value) {
-  //     this.endDate = this.formatDate(event.value);
-  //     this.checkAndFetchAttendance();
-  //   }
-  // }
-
-  checkAndFetchAttendance() {
-    
+   checkAndFetchAttendance() {
     if (this.startDate && this.endDate) {
       this.GetNCHistoryLogs();
     }
@@ -179,10 +171,7 @@ export class ReportsListComponent implements OnInit {
   getEndDate(event: MatDatepickerInputEvent<Date> | any) {
     if (event.value) {
       const selectedEndDate = event.value;
-      
-      // Ensure the end date is not before the start date
       if (selectedEndDate < new Date(this.startDate)) {
-        alert("End date cannot be earlier than the start date.");
         return;
       }
   

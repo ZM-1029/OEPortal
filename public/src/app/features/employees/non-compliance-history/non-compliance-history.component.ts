@@ -36,12 +36,14 @@ import {
 } from "src/app/shared/types/nonCompliance.type";
 import { NonComplianceAttendanceComponent } from "./non-compliance-attendance/non-compliance-attendance.component";
 import { NonComplianceTimesheetComponent } from "./non-compliance-timesheet/non-compliance-timesheet.component";
+import { MatInputModule } from "@angular/material/input";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 @Component({
   selector: "app-non-compliance-history",
   imports: [
     MatFormFieldModule,
+    MatInputModule,
     MatDatepickerModule,
     ReactiveFormsModule,
     NonComplianceAttendanceComponent,
@@ -63,19 +65,19 @@ export class NonComplianceHistoryComponent implements OnInit {
   timesheetRowData: any = [];
   startDate: string = "";
   endDate: string = "";
-  ncTypeCounts:any
-  activeTable:string='attendance'
+  ncTypeCounts: any
+  activeTable: string = 'attendance'
   private gridApi!: GridApi<any>;
-   today = new Date();
+  today = new Date();
   constructor(
     private _employeeService: EmployeesService,
     private _successMessage: MatSnackBar,
     private datePipe: DatePipe,
     private _changeDetectorRef: ChangeDetectorRef,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
-    this.activeTable='attendance'
+    this.activeTable = 'attendance'
     this.setDefaultDates();
     this.checkActiveTable();
   }
@@ -84,22 +86,21 @@ export class NonComplianceHistoryComponent implements OnInit {
     this._changeDetectorRef.detectChanges();
   }
 
-  checkActiveTable(){
-    if(this.activeTable=='attendance'){
-      this.activeTable='timesheet'
-    }else{
-      this.activeTable='attendance'
+  checkActiveTable() {
+    if (this.activeTable == 'attendance') {
+      this.activeTable = 'timesheet'
+    } else {
+      this.activeTable = 'attendance'
     }
   }
 
-  formatDate(date: Date): string {
-    return date.toISOString().split("T")[0];
-  }
-
-  setDefaultDates() { 
-    const firstDay = new Date(this.today.getFullYear(), this.today.getMonth(), 2);
+  // date piker start
+  setDefaultDates() {
+    const today = new Date();
+    const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+    const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
     this.startDate = this.formatDate(firstDay);
-    this.endDate = this.formatDate(this.today);
+    this.endDate = this.formatDate(lastDay);
     this.GetNCHistoryLogs();
   }
 
@@ -110,26 +111,36 @@ export class NonComplianceHistoryComponent implements OnInit {
     }
   }
 
-  getEndDate(event: MatDatepickerInputEvent<Date> | any) {
-    if (event.value) {
-      this.endDate = this.formatDate(event.value);
-      console.log(this.endDate, 'enddate');
-      console.log(this.startDate, 'state datyet');
-      this.checkAndFetchAttendance();
-    }
-  }
-
   checkAndFetchAttendance() {
     if (this.startDate && this.endDate) {
       this.GetNCHistoryLogs();
     }
   }
 
-  disableFutureDates = (date: Date | null): boolean => {
-    if (!date) return false;
-    return date <= this.today; 
+  formatDate(date: Date): string {
+    return date.getFullYear() + "-" + (date.getMonth() + 1).toString().padStart(2, "0") + "-" + date.getDate().toString().padStart(2, "0");
+  }
+
+  dateFilter = (d: Date | null): boolean => {
+    if (!this.startDate) return true;
+    return d! >= new Date(this.startDate);
   };
 
+  getEndDate(event: MatDatepickerInputEvent<Date> | any) {
+    if (event.value) {
+      const selectedEndDate = event.value;
+      // Ensure the end date is not before the start date
+      if (selectedEndDate < new Date(this.startDate)) {
+        return;
+      }
+
+      this.endDate = this.formatDate(selectedEndDate);
+      this.checkAndFetchAttendance();
+    }
+  }
+
+
+  // date piker end
 
   GetNCHistoryLogs() {
     this._employeeService
@@ -139,13 +150,13 @@ export class NonComplianceHistoryComponent implements OnInit {
           if (response.success) {
             this.timesheetRowData = response.data.filter((value: any) => value.ncTypeId == 1005 || value.ncTypeId == 1006);
             this.attendanceRowData = response.data.filter((value: any) => value.ncTypeId != 1005 && value.ncTypeId != 1006);
-            this.ncTypeCounts=response.ncTypeCounts?response.ncTypeCounts:{}
+            this.ncTypeCounts = response.ncTypeCounts ? response.ncTypeCounts : {}
             this._changeDetectorRef.detectChanges();
           } else {
             this.handleError(response.message);
-            this.attendanceRowData=[];
-            this.timesheetRowData =[];
-            this.ncTypeCounts=response.ncTypeCounts?response.ncTypeCounts:{};
+            this.attendanceRowData = [];
+            this.timesheetRowData = [];
+            this.ncTypeCounts = response.ncTypeCounts ? response.ncTypeCounts : {};
             this._changeDetectorRef.detectChanges();
           }
         },
@@ -155,8 +166,8 @@ export class NonComplianceHistoryComponent implements OnInit {
           let errorMessage = "An error occurred while fetching data.";
           if (err.status === 404 && err.error.message) {
             errorMessage = err.error.message;
-            this.attendanceRowData=[];
-            this.timesheetRowData =[];
+            this.attendanceRowData = [];
+            this.timesheetRowData = [];
             this.handleError(err.error.message);
           }
           this._changeDetectorRef.detectChanges();
@@ -164,7 +175,7 @@ export class NonComplianceHistoryComponent implements OnInit {
       });
   }
 
-  
+
 
   //  Function to show success messages
   private showSuccessMessage(message: string) {

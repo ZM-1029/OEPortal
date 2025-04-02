@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   ElementRef,
@@ -9,6 +10,7 @@ import {
   OnInit,
   Output,
   ViewChild,
+  ViewEncapsulation,
 } from "@angular/core";
 import {
   ReactiveFormsModule,
@@ -43,6 +45,8 @@ import { MatIconModule } from "@angular/material/icon";
   ],
   templateUrl: "./customer-create.component.html",
   styleUrl: "./customer-create.component.scss",
+  encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CustomerCreateComponent implements OnInit, OnChanges, OnDestroy {
   public customerForm!: FormGroup;

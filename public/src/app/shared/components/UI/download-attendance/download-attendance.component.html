@@ -35,7 +35,7 @@
           </mat-form-field>
 
           @if(allProjects.length > 0){
-            <app-multi-select-dropdown class="pb-3"  (selectedOutput)="selectedOutput($event)" [dropdownHeading]="dropdownHeading"  [dataList]="allProjects"></app-multi-select-dropdown>
+            <app-multi-select-dropdown class="pb-3"  (selectedOutput)="selectedOutput($event)" [dropdownHeading]="dropdownHeading" [defaultValue]="'0'"  [dataList]="allProjects"></app-multi-select-dropdown>
           }
           <mat-form-field appearance="outline">
             <mat-label>Select Format</mat-label>
