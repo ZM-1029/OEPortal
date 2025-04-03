@@ -81,7 +81,6 @@ export class EmployeeDetailsComponent implements OnInit {
   }
 
   employeeGetById(employeeId: string) {
-    console.log(employeeId, "IDDDD");
     this._employeeService
       .employeeGetById(employeeId)
       .subscribe((result: employeeDetailsI) => {

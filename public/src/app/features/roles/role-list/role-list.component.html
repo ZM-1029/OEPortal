@@ -1,6 +1,9 @@
 <div class="main-content mt-2 p-2">
     <app-page-header [HeadingName]="HeadingName">
       <div pageHeaderBtn class="d-flex">
+        <button class="btn btn-info-dark btn-wave mx-2 text-white text-capitalize" (click)="createRole()" >
+          <i class="fa-solid fa-plus me-2"></i> Craete
+      </button>
         <div class="dropdown">
           <button class="btn btn-info-dark text-white btn-wave dropdown-toggle" type="button" id="dropdownMenuButton1"
             data-bs-toggle="dropdown" aria-expanded="false">
@@ -34,9 +37,7 @@
             }
           </ul>
         </div>
-        <button class="btn btn-info-dark btn-wave mx-2 text-white text-capitalize" (click)="createRole()" >
-            <i class="fa-solid fa-plus me-2"></i> Craete
-        </button>
+        
       </div>
     </app-page-header>
     @defer {

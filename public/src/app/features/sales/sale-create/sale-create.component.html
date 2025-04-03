@@ -1,10 +1,10 @@
-<div class="main-content  m-4">
+<div class="sale-create  m-4">
   <div class="border-bottom bg-light pb-2">
     <h2 class="formHeading">{{ formHeading }} Quotation</h2>
   </div>
   <div class="form-container d-flex justify-content-center">
     <form [formGroup]="productForm">
-      <div class="input-form-container py-3">
+      <div class="input-form-container py-3 mb-4 ">
         <div class="form">
           <div class="form-group row">
             <div class="col-6 row pe-0 ms-2">
@@ -181,7 +181,7 @@
         <!-- </div> -->
 
         <h4 class="fw-bold">Item Table</h4>
-        <div class="container form-group row pe-3">
+        <div class="container form-group row pe-3 pb-4 mb-4">
           <!-- <table formArrayName="items">
             <thead>
               <tr>
@@ -374,15 +374,15 @@
               <span class="summary-value fw-bold">{{ calculationDetails.total || 0 }}</span>
             </div>
           </div>
+          <div class="form-btn d-flex align-items-start justify-content-end p-4 ">
+            <button class="btn btn-secondary mx-2" type="button" (click)="resetForm()">
+              Clear
+            </button>
+            <button class="btn btn-primary" (click)="createUpdate()">
+              {{ formHeading }}
+            </button>
+          </div>
         </div>
-      </div>
-      <div class="form-btn d-flex align-items-start justify-content-end p-4 ">
-        <button class="btn btn-secondary mx-2" type="button" (click)="resetForm()">
-          Clear
-        </button>
-        <button class="btn btn-primary" (click)="createUpdate()">
-          {{ formHeading }}
-        </button>
       </div>
     </form>
   </div>

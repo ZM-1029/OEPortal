@@ -39,7 +39,9 @@ import { ActivatedRoute } from "@angular/router";
 export class CountrytaxesComponent {
   columnDefs: any = [
     { headerName: "S. No", valueGetter: "node.rowIndex + 1", pinned: "left" },
-    { headerName: "Actions", field: "actions", cellRenderer: (params: any) => this.renderActionIcons(params),  pinned: "right" },
+    { headerName: "Actions", field: "actions", cellRenderer: (params: any) => this.renderActionIcons(params),  pinned: "right" ,cellStyle: () => {
+      return { border: "none", cursor: "pointer" };
+    },},
     { field: "country", headerName: "Country Name", sortable: true, filter: true, },
     { field: "tax", headerName: "Tax", sortable: true, filter: true,  },
     { field: "value", headerName: "Value", sortable: true, filter: true,  },
@@ -90,7 +92,7 @@ export class CountrytaxesComponent {
 
     ngOnInit(): void {
       // Fetching the route parameter 'id'
-      debugger;
+     ;
       this.route.paramMap.subscribe(params => {
         this.countryId = Number(params.get('id'));
         this.getCountryTaxesList(this.countryId);
@@ -134,7 +136,7 @@ export class CountrytaxesComponent {
 
 
   updateCountry(event: any): void {
-    debugger
+   
     const countryId = event.data.id;
    
       this.isSideDrawerOpen=true;

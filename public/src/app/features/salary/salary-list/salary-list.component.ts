@@ -67,8 +67,8 @@ export class SalaryListComponent implements OnInit, AfterViewInit {
     {
       headerName: "S. No",
       valueGetter: "node.rowIndex + 1",
-      sortable: false,
-      filter: false,
+      sortable: true,
+      filter: true,
       pinned: "left",
       lockPinned: true,
       minWidth: 100,
@@ -88,7 +88,7 @@ export class SalaryListComponent implements OnInit, AfterViewInit {
       sortable: false,
       filter: false,
       cellStyle: () => {
-        return { border: "none" };
+        return { border: "none", cursor: "pointer" };
       },
     },
     {
@@ -138,8 +138,14 @@ export class SalaryListComponent implements OnInit, AfterViewInit {
       headerName: "Amount",
       sortable: true,
       filter: true,
-      minWidth: 140,
-    },
+      minWidth: 240,
+      valueFormatter: (params: { value: any; }) => {
+        if (params.value) {
+          return Number(params.value).toLocaleString(); 
+        }
+        return params.value;
+      },
+    }, 
   ];
 
   defaultColDef = {

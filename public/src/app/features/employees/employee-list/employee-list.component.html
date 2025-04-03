@@ -1,6 +1,9 @@
 <div class="main-content mt-2 p-2">
   <app-page-header [HeadingName]="HeadingName">
     <div pageHeaderBtn class="d-flex">
+      <button disabled class="btn btn-primary btn-wave mx-2 text-white text-capitalize" (click)="export($event)">
+        <i class="bi bi-download me-1"></i> Export
+      </button>
       <div class="dropdown">
         <button class="btn btn-info-dark text-white btn-wave dropdown-toggle" type="button" id="dropdownMenuButton1"
           data-bs-toggle="dropdown" aria-expanded="false">
@@ -34,9 +37,6 @@
           }
         </ul>
       </div>
-      <button disabled class="btn btn-primary btn-wave mx-2 text-white text-capitalize" (click)="export($event)">
-        <i class="bi bi-download me-1"></i> Export
-      </button>
     </div>
   </app-page-header>
   @defer {
@@ -47,27 +47,6 @@
         [defaultColDef]="defaultColDef" [animateRows]="true" [paginationPageSize]="15" [pagination]="true"
         [paginationPageSizeSelector]="paginationPageSizeSelector" (gridReady)="onGridReady($event)"
         (paginationChanged)="onPaginationChanged($event)"></ag-grid-angular>
-
-      <!-- <div class="table-footer position-relative">
-        <div class="row g-2">
-          <div class="col-6 col-sm-3 fw-bold">
-            <label>Total Employees:</label>
-            <span class="text-bold ms-1">{{ totalCount }}</span>
-          </div>
-          <div class="col-6 col-sm-3 fw-bold text-success">
-            <label>Active:</label>
-            <span class="text-bold ms-1">{{ activeEmployees }}</span>
-          </div>
-          <div class="col-6 col-sm-3 fw-bold text-danger">
-            <label>Terminated:</label>
-            <span class="text-bold ms-1">{{ terminatedEmployees }}</span>
-          </div>
-          <div class="col-6 col-sm-3 fw-bold text-danger">
-            <label>Resigned:</label>
-            <span class="text-bold ms-1">{{ resignedEmployees }}</span>
-          </div>
-        </div>
-      </div> -->
       <div class="table-footer position-relative responsive-font">
         <div class="row g-2">
           <div class="col-6 col-sm-3 fw-bold">

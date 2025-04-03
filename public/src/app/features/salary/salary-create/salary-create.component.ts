@@ -28,6 +28,7 @@ import { customerI } from "src/app/shared/types/customer.type";
 import {
   createSalaryI,
   currency,
+  salaryI,
   salaryListI,
 } from "src/app/shared/types/salary.type";
 import { SuccessModalComponent } from "src/app/shared/components/UI/success-modal/success-modal.component";
@@ -54,6 +55,7 @@ import { FormControl } from "@angular/forms";
 import * as _moment from "moment";
 import { default as _rollupMoment, Moment } from "moment";
 import { MatAutocompleteModule, MatAutocompleteSelectedEvent, MatAutocompleteTrigger } from "@angular/material/autocomplete";
+import { MatIconModule } from "@angular/material/icon";
 
 const moment = _rollupMoment || _moment;
 
@@ -83,7 +85,7 @@ export const MY_FORMATS = {
     MatDatepickerModule,
     MatFormFieldModule,
     CommonModule, FormsModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,MatIconModule
   ],
   providers: [
     provideNativeDateAdapter(),
@@ -157,7 +159,6 @@ export class SalaryCreateComponent implements OnInit, OnChanges {
   }
 
 
-
   private initializeForm(): void {
     this.salaryForm = this.fb.group({
       customerId: ["", ],
@@ -203,7 +204,6 @@ filter(): void {
 }
 
 
-
 onSelectCustomer(event: MatAutocompleteSelectedEvent): void {
   const selectedCustomer = this.allCustomers.find(
     (customer) => customer.customerName === event.option.viewValue
@@ -223,6 +223,29 @@ onSelectCustomer(event: MatAutocompleteSelectedEvent): void {
     this.salaryForm.markAsUntouched();
   }
 
+  // private setSalaryValues(): void {
+  //   this.salaryService.getSalaryById(this.salaryRowId).subscribe({
+  //     next: (response: salaryListI) => {
+  //       if (response.success) {
+  //         const salaryData: any = response.data;
+          
+  //         this.salaryForm.patchValue({
+  //           customerId: salaryData.customerId,
+  //           customerName:salaryData.customerName,
+  //           employeeID: salaryData.employeeid,
+  //           currencyId: salaryData.currencyId,
+  //           amount: salaryData.amount,
+  //         });
+  //         this.date.patchValue(moment(salaryData.dateOfPayment));
+  //         console.log(salaryData);
+  //         this.updateSalary = this.salaryForm.value;
+  //         this._changeDetectorRef.detectChanges()
+  //       }
+  //     },
+  //     error: (err) => this.handleError(err),
+  //   });
+  // }
+
   private setSalaryValues(): void {
     this.salaryService.getSalaryById(this.salaryRowId).subscribe({
       next: (response: salaryListI) => {
@@ -230,20 +253,28 @@ onSelectCustomer(event: MatAutocompleteSelectedEvent): void {
           const salaryData: any = response.data;
           this.salaryForm.patchValue({
             customerId: salaryData.customerId,
-            customerName:salaryData.customerName,
+            customerName: salaryData.customerName,
             employeeID: salaryData.employeeid,
             currencyId: salaryData.currencyId,
-            amount: salaryData.amount,
+            amount: salaryData.amount, 
           });
+
           this.date.patchValue(moment(salaryData.dateOfPayment));
+
+          // ✅ Format amount after patching
+          if (salaryData.amount) {
+            this.formattedAmount = Number(salaryData.amount).toLocaleString();
+          }
+
           console.log(salaryData);
           this.updateSalary = this.salaryForm.value;
-          this._changeDetectorRef.detectChanges()
+          this._changeDetectorRef.detectChanges();
         }
       },
       error: (err) => this.handleError(err),
     });
-  }
+}
+
 
   createUpdate(): void {
     console.log(this.salaryForm.value,this.salaryForm.valid);
@@ -284,8 +315,18 @@ onSelectCustomer(event: MatAutocompleteSelectedEvent): void {
     });
   }
 
-  // customer dropdown start
-  // customer dropdown end
+  // amount value in comma separator start
+  formattedAmount = ''; // Display value
+
+  onAmountChange(event: any) {
+    let inputValue = event.target.value.replace(/,/g, ''); // Remove commas
+    if (!/^\d*$/.test(inputValue)) return; // Ensure only numbers
+
+    this.formattedAmount = Number(inputValue).toLocaleString(); // Add commas
+    this.salaryForm.controls['amount'].setValue(inputValue); // Store raw value
+  }
+
+  // amount value in comma separator end
 
   private showSuccessMessage(message: string): void {
     this.snackBar.openFromComponent(SuccessModalComponent, {

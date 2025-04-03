@@ -70,7 +70,7 @@ constructor(private fb: FormBuilder,private apiservice:CountryService,private ro
   }
 patchvalue(id:number)
 {
-  debugger
+ 
   this.apiservice.GetTaxesBytaxId(id).subscribe({next:(data:any)=>{
    
       
@@ -122,7 +122,7 @@ patchvalue(id:number)
       console.log(this.countryForm.value)
       var count=0;
       var count1=0;
-      debugger
+     
       this.countryForm.get("Taxes")?.value.forEach((element:any,index:any) => {
         var para=
         {

@@ -1,11 +1,11 @@
-<div class="main-content  m-4">
+<!-- <div class="main-content  m-4">
     <div class="border-bottom bg-light pb-2">
         <h2 class="formHeading">{{ formHeading }} User</h2>
     </div>
     <div class="form-container d-flex justify-content-center">
         <form [formGroup]="userForm">
             <div class=" py-3">
-                <!-- User Name -->
+                
                 <div class="form-group row ">
                     <mat-label class="outer-mat-lable col-4 pt-2 ">User Name </mat-label>
                     <mat-form-field appearance="outline" class="col-8">
@@ -20,7 +20,7 @@
                     </mat-form-field>
                 </div>
 
-                <!-- email -->
+                
                 <div class="form-group row">
                     <mat-label class="outer-mat-lable col-4 pt-2 ">email</mat-label>
                     <mat-form-field appearance="outline" class="col-8">
@@ -34,7 +34,7 @@
                         </mat-error>
                     </mat-form-field>
                 </div>
-                <!-- Password Field -->
+                
                 <div class="form-group row">
                     <mat-label class="outer-mat-lable col-4 pt-2">Password</mat-label>
                     <mat-form-field appearance="outline" class="col-8">
@@ -54,7 +54,7 @@
                     </mat-form-field>
                 </div>
 
-                <!-- Role Selection -->
+                
             
                 <div class="form-group row">
                     <mat-label class="outer-mat-lable col-4 pt-2 ">Select Role</mat-label>
@@ -75,7 +75,7 @@
                 </div>
             </div>
 
-            <!-- Buttons -->
+          
             <div class="form-btn d-flex align-items-start justify-content-end p-4 ">
                 <button class="btn btn-secondary mx-2" type="button" (click)="resetForm()">
                     Clear
@@ -85,5 +85,201 @@
                 </button>
             </div>
         </form>
+    </div>
+</div> -->
+
+<div class="purchase-order-form m-4">
+    <div class="border-bottom bg-light pb-2">
+        <h2 class="formHeading">{{ formHeading }} User</h2>
+    </div>
+    <div class="form-container d-flex justify-content-center">
+
+        <form [formGroup]="userForm">
+            <div class="input-form-container pe-2">
+                <div class="form-group row ">
+                    <mat-label class="outer-mat-lable col-4 pt-2 ">User Name </mat-label>
+                    <mat-form-field appearance="outline" class="col-8">
+                        <input formControlName="name" matInput placeholder="Enter User Name" />
+                        <mat-error>
+                            @if (userForm.controls["name"].errors?.["required"]) {
+                            <span>User Name is required.</span>
+                            } @else if (userForm.controls["name"].errors?.["pattern"]) {
+                            <span>Only alphabetic characters are allowed.</span>
+                            }
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                
+                <div class="form-group row">
+                    <mat-label class="outer-mat-lable col-4 pt-2 ">email</mat-label>
+                    <mat-form-field appearance="outline" class="col-8">
+                        <input formControlName="email" matInput placeholder="Enter email Address" />
+                        <mat-error>
+                            @if (userForm.controls["email"].errors?.["required"]) {
+                            <span class="ms-1">email is required!</span>
+                            } @else if (userForm.controls["email"].errors?.["email"]) {
+                            <span class="ms-1">Invalid email format!</span>
+                            }
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                
+                <div class="form-group row">
+                    <mat-label class="outer-mat-lable col-4 pt-2">Password</mat-label>
+                    <mat-form-field appearance="outline" class="col-8">
+                        <input formControlName="password" matInput [type]="hide ? 'password' : 'text'"
+                            placeholder="Enter your password" />
+                        <button type="button" mat-icon-button matSuffix (click)="hide = !hide"
+                            [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                            <mat-icon>{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
+                        </button>
+                        <mat-error>
+                            @if (userForm.controls["password"].errors?.["required"]) {
+                            <span class="ms-1">Password is required!</span>
+                            } @else if (userForm.controls["password"].errors?.["minlength"]) {
+                            <span class="ms-1">Minimum 6 characters required!</span>
+                            }
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                
+            
+                <div class="form-group row">
+                    <mat-label class="outer-mat-lable col-4 pt-2 ">Select Role</mat-label>
+                    <mat-form-field appearance="outline" class="col-8">
+                        <input #input type="text" placeholder="Select role" matInput formControlName="roleName"
+                            [matAutocomplete]="auto" (input)="filter()" (focus)="filter()" />
+                        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onRoleSelected($event)">
+                            @for( role of filteredRoles; track role){
+                            <mat-option [value]="role.name">
+                                {{ role.name }}
+                            </mat-option>
+                            }
+                        </mat-autocomplete>
+                        @if (userForm.controls["roleName"].hasError("required")) {
+                        <mat-error>Customer Name is required</mat-error>
+                        }
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div class="form-btn d-flex align-items-start justify-content-end p-4">
+                <button class="btn btn-secondary mx-2" type="button" (click)="resetForm()">
+                    Clear
+                </button>
+                <button class="btn btn-info-dark text-white" (click)="createUpdate()">
+                    {{ formHeading }}
+                </button>
+            </div>
+          
+            <!-- <div class="form-btn d-flex align-items-start justify-content-end p-4 ">
+                <button class="btn btn-secondary mx-2" type="button" (click)="resetForm()">
+                    Clear
+                </button>
+                <button class="btn btn-primary" (click)="createUpdate()">
+                    {{ formHeading }}
+                </button>
+            </div> -->
+        </form>
+
+        <!-- <form [formGroup]="purchaseOrderForm">
+            <div class="input-form-container py-3">
+                <div class="input-form-container py-3">
+                    <div class="form-group row">
+                        <mat-label class="outer-mat-lable col-4 pt-2">Select Customer</mat-label>
+                        <mat-form-field appearance="outline" class="col-8">
+                            <input #input type="text" placeholder="Select customer" matInput
+                                formControlName="customerName" [matAutocomplete]="auto" (input)="filter()" />
+
+                            
+                            <mat-icon matSuffix (click)="input.focus()">arrow_drop_down</mat-icon>
+
+                            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onSelectCustomer($event)">
+                                @for (customer of filteredCustomers; track customer) {
+                                <mat-option [value]="customer.customerName">
+                                    {{ customer.customerName }}
+                                </mat-option>
+                                }
+                            </mat-autocomplete>
+                            @if (purchaseOrderForm.controls["customerName"].hasError("required")) {
+                            <mat-error>Customer Name is required</mat-error>
+                            }
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <mat-label class="outer-mat-lable col-4 pt-2">Purchase Order Id</mat-label>
+                    <mat-form-field appearance="outline" class="col-8">
+                        <input formControlName="poid" matInput placeholder="eg. PO-0000" />
+                        @if (purchaseOrderForm.controls["poid"].hasError("required")) {
+                        <mat-error>Purchase Order Id is required</mat-error>
+                        }
+                    </mat-form-field>
+                </div>
+
+                <div class="form-group row">
+                    <mat-label class="outer-mat-lable col-4 pt-2">Amount</mat-label>
+                    <mat-form-field appearance="outline" class="col-8">
+                        <input matInput placeholder="Amount" formControlName="amount" [value]="formattedAmount"
+                            (input)="onAmountChange($event)" />
+                        <mat-error>
+                            @if (purchaseOrderForm.controls["amount"].hasError("required")) {
+                            <span>Amount is required.</span>
+                            }
+                            @if (purchaseOrderForm.controls["amount"].hasError("pattern")) {
+                            <span>Only numbers are allowed.</span>
+                            }
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="form-group row">
+                    <mat-label class="outer-mat-lable col-4 pt-2">Select Currency</mat-label>
+                    <mat-form-field appearance="outline" class="col-8 py-0">
+                        <mat-select class="py-0" formControlName="currencyId">
+                            @for (currency of allCurrencies; track currency) {
+                            <mat-option [value]="currency.currencyId">
+                                {{ currency.currencyName }}
+                            </mat-option>
+                            }
+                        </mat-select>
+                        @if (purchaseOrderForm.controls["currencyId"].hasError("required")) {
+                        <mat-error>Currency is required</mat-error>
+                        }
+                    </mat-form-field>
+                </div>
+
+                <div class="form-group row">
+                    <mat-label class="outer-mat-lable col-4 pt-2">Month & Year</mat-label>
+                    <mat-form-field appearance="outline" class="col-8">
+                        <input matInput [matDatepicker]="dp" placeholder="Month and Year" [formControl]="date" />
+                        <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+                        <mat-datepicker #dp startView="multi-year" (yearSelected)="chosenYearHandler($event)"
+                            (monthSelected)="chosenMonthHandler($event, dp)" panelClass="example-month-picker">
+                        </mat-datepicker>
+                    </mat-form-field>
+                </div>
+
+                <div class="form-group row">
+                    <mat-label class="outer-mat-lable col-4 ">Description</mat-label>
+                    <mat-form-field appearance="outline" class="col-8">
+                        <textarea formControlName="description" matInput cdkTextareaAutosize
+                            #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"></textarea>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div class="form-btn d-flex align-items-start justify-content-end p-4">
+                <button class="btn btn-secondary mx-2" type="button" (click)="resetForm()">
+                    Clear
+                </button>
+                <button class="btn btn-info-dark text-white" (click)="createUpdate()">
+                    {{ formHeading }}
+                </button>
+            </div>
+        </form> -->
     </div>
 </div>

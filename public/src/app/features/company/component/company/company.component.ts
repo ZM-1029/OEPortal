@@ -39,7 +39,9 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 export class CompanyComponent {
 columnDefs: any = [
     { headerName: "S. No", valueGetter: "node.rowIndex + 1", pinned: "left" },
-    { headerName: "Actions", field: "actions", cellRenderer: (params: any) => this.renderActionIcons(params), pinned: "right" },
+    { headerName: "Actions", field: "actions", cellRenderer: (params: any) => this.renderActionIcons(params), pinned: "right",cellStyle: () => {
+      return { border: "none", cursor: "pointer" };
+    }, },
     { field: "name", headerName: "Company Name", sortable: true, filter: true },
     { field: "headquater", headerName: "Head Quater", sortable: true, filter: true },
    

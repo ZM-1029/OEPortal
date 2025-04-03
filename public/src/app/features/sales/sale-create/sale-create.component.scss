@@ -1,10 +1,30 @@
-.main-content {
-  background-color: white !important;
+
+.sale-create {
+  background-color: white;
   border-radius: 16px;
-  box-sizing: border-box;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin: 1rem;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 6rem); 
+  overflow: hidden;
+
+  .bg-light {
+    padding: 10px 0;
+    border-radius: 16px 16px 0 0;
+    background-color: #f8f9fa !important;
+  }
+
+  .formHeading {
+    text-align: start;
+    font-size: 1.25rem;
+    padding: 10px 20px;
+    margin: 0;
+    color: #333;
+  }
 }
 
-.main-content .bg-light {
+.sale-create .bg-light {
   padding: 10px 0;
   border-radius: 16px 16px 0 0;
 }

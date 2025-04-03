@@ -1,4 +1,8 @@
-export type userListResponseI = userListI[]
+export type userListResponseI = {
+  success: true,
+  message: string,
+  data:userListI[]
+}
 
 export interface userListI {
   id: number

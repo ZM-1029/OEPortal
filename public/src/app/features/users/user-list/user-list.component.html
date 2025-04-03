@@ -51,14 +51,7 @@
           [animateRows]="true" (cellClicked)="updateCustomer($event)" [paginationPageSize]="15" [pagination]="true"
           [paginationPageSizeSelector]="paginationPageSizeSelector" (gridReady)="onGridReady($event)"
           (paginationChanged)="onPaginationChanged($event)"></ag-grid-angular>
-        <div class="table-footer position-relative">
-          <div class="row g-2">
-            <div class="col-6 col-sm-3 fw-bold">
-              <label>Total Customers:</label>
-              <span class="text-bold ms-1">{{ totalCount }}</span>
-            </div>
-          </div>
-        </div>
+        
       </div>
     </div>
     } @loading (minimum 1000ms) {

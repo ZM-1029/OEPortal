@@ -77,8 +77,8 @@ export class CustomersListComponent implements OnInit, OnDestroy {
     {
       headerName: "S. No",
       valueGetter: "node.rowIndex + 1",
-      sortable: false,
-      filter: false,
+      sortable: true,
+      filter: true,
       pinned: "left",
       lockPinned: true,
       minWidth: 100,
@@ -95,7 +95,7 @@ export class CustomersListComponent implements OnInit, OnDestroy {
       sortable: false,
       filter: false,
       cellStyle: () => {
-        return { border: "none" };
+        return { border: "none", cursor: "pointer" };
       },
     },
     {

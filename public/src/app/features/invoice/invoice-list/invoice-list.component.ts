@@ -62,8 +62,8 @@ export class InvoiceListComponent implements OnInit, AfterViewInit {
     {
       headerName: "S. No",
       valueGetter: "node.rowIndex + 1",
-      sortable: false,
-      filter: false,
+      sortable: true,
+      filter: true,
       pinned: "left",
       lockPinned: true,
       minWidth: 100,
@@ -83,7 +83,7 @@ export class InvoiceListComponent implements OnInit, AfterViewInit {
       sortable: false,
       filter: false,
       cellStyle: () => {
-        return { border: "none" };
+        return { border: "none", cursor: "pointer" };
       },
     },
     {

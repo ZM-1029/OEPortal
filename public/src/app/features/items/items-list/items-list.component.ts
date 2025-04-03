@@ -60,7 +60,7 @@ export class ItemsListComponent {
       sortable: false,
       filter: false,
       cellStyle: () => {
-        return { border: "none" };
+        return { border: "none", cursor: "pointer" };
       },
     },
 
@@ -108,6 +108,12 @@ export class ItemsListComponent {
       sortable: true,
       filter: true,
       minWidth: 270,
+      valueFormatter: (params: { value: any; }) => {
+        if (params.value) {
+          return Number(params.value).toLocaleString(); 
+        }
+        return params.value;
+      },
     },
     {
       field: "costPrice",
@@ -115,6 +121,12 @@ export class ItemsListComponent {
       sortable: true,
       filter: true,
       minWidth: 270,
+      valueFormatter: (params: { value: any; }) => {
+        if (params.value) {
+          return Number(params.value).toLocaleString(); 
+        }
+        return params.value;
+      },
     },
 
 

@@ -223,7 +223,7 @@ export class PurchaseOrderCreateComponent implements OnInit, OnChanges, AfterVie
       poid: ["", [Validators.required]],
       poDate: [this.date.value?.format("YYYY-MM-DD")],
       currencyId: ["", [Validators.required]],
-      amount: ["", [Validators.required, Validators.pattern("^[0-9]*$")]],
+      amount: ["", [Validators.required,Validators.pattern(/^\d+$/)]],
       description: [""],
     });
   }
@@ -251,28 +251,37 @@ export class PurchaseOrderCreateComponent implements OnInit, OnChanges, AfterVie
         next: (response: purchaseOrdersResponseI) => {
           if (response.success) {
             const purchaseOrderData: any = response.data;
-
+  
             if (!this.purchaseOrderForm) {
               console.error("Form is not initialized yet!");
               return;
             }
-
+  
             setTimeout(() => {
+              // Convert amount to a formatted string with commas
+              const formattedAmount = purchaseOrderData.amount 
+                ? Number(purchaseOrderData.amount).toLocaleString() 
+                : '';
+  
               this.purchaseOrderForm.patchValue({
                 customerId: purchaseOrderData.customerId,
                 customerName: purchaseOrderData.customerName,
                 poid: purchaseOrderData.poid,
                 currencyId: purchaseOrderData.currencyId,
-                amount: purchaseOrderData.amount,
+                amount: purchaseOrderData.amount, 
                 description: purchaseOrderData.description,
               });
-
+  
+              // Set the formatted display value (for UI)
+              this.formattedAmount = formattedAmount;  
+  
+              // Patch the date field if available
               if (purchaseOrderData.poDate) {
                 this.date.patchValue(moment(purchaseOrderData.poDate));
               } else {
                 console.warn("poDate is missing or invalid:", purchaseOrderData);
               }
-
+  
               this._changeDetectorRef.detectChanges();
             }, 0);
           }
@@ -280,7 +289,7 @@ export class PurchaseOrderCreateComponent implements OnInit, OnChanges, AfterVie
         error: (err) => this.handleError(err),
       });
   }
-
+  
 
   createUpdate(): void {
     for (let key in this.purchaseOrderForm.value) {
@@ -318,6 +327,19 @@ export class PurchaseOrderCreateComponent implements OnInit, OnChanges, AfterVie
       error: (err) => this.handleError(err),
     });
   }
+
+  // amount value in comma separator start
+  formattedAmount = ''; // Display value
+
+  onAmountChange(event: any) {
+    let inputValue = event.target.value.replace(/,/g, ''); // Remove commas
+    if (!/^\d*$/.test(inputValue)) return; // Ensure only numbers
+
+    this.formattedAmount = Number(inputValue).toLocaleString(); // Add commas
+    this.purchaseOrderForm.controls['amount'].setValue(inputValue); // Store raw value
+  }
+
+  // amount value in comma separator end
 
   private showSuccessMessage(message: string): void {
     this.snackBar.openFromComponent(SuccessModalComponent, {

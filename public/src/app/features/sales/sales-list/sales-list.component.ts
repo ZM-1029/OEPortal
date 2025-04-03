@@ -60,9 +60,10 @@ export class SalesListComponent {
       sortable: false,
       filter: false,
       cellStyle: () => {
-        return { border: "none" };
+        return { border: "none", cursor: "pointer" };
       },
     },
+    
 
     {
       field: "salesOrderDate",

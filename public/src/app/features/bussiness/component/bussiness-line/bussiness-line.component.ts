@@ -60,7 +60,9 @@ export class BussinessLineComponent {
     {
       headerName: 'Actions',
       cellRenderer: (params: any) => this.renderActionIcons(params),
-      onCellClicked: (params) => this.updateBussiness(params)
+      onCellClicked: (params) => this.updateBussiness(params),cellStyle: () => {
+        return { border: "none", cursor: "pointer" };
+      },
     }
   ];
 

@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -22,6 +22,7 @@ ModuleRegistry.registerModules([AllCommunityModule]);
     PageHeaderComponent,
     SideDrawerComponent,
     UserCreateComponent],
+    providers: [DatePipe],
   templateUrl: './user-list.component.html',
   styleUrl: './user-list.component.scss',
   encapsulation: ViewEncapsulation.None,
@@ -49,7 +50,7 @@ export class UserListComponent implements OnInit {
       sortable: false,
       filter: false,
       cellStyle: () => {
-        return { border: "none" };
+        return { border: "none", cursor: "pointer" };
       },
     },
     {
@@ -72,6 +73,7 @@ export class UserListComponent implements OnInit {
       sortable: true,
       filter: true,
       minWidth: 200,
+      cellRenderer: (params: any) => this.getDate(params.value),
     },
     {
       field: "email",
@@ -109,7 +111,7 @@ export class UserListComponent implements OnInit {
     private _userService: UserService,
     private _changeDetectorRef: ChangeDetectorRef,
     private dialog: MatDialog,
-    private _router: Router,
+    private datePipe: DatePipe,
     private _activatedRoute: ActivatedRoute,
     private _successMessage: MatSnackBar,
   ) { }
@@ -134,24 +136,18 @@ export class UserListComponent implements OnInit {
       .subscribe(
         {
           next: ((response) => {
-            this.rowData = response;
+            if(response.success){
+              this.rowData = response.data;
             this._changeDetectorRef.detectChanges();
+            }else{
+              this.rowData=[];
+              this.showErrorOverlay('Data is not found')
+            }
           }), error: ((err) => {
             this.rowData = [];
             this.showErrorOverlay('Data is not found')
           })
         }
-        //   (result: customerListI) => {
-        //   if (result.success) {
-        //     this.totalCount = result.totalCount;
-        //     this.rowData = result.customers;
-        //     this._changeDetectorRef.detectChanges();
-        //   } else {
-        //     this.rowData=[];
-        //     this.showErrorOverlay('Data is not found')
-        //     console.log("No customer data returned from API.");
-        //   }
-        // }
       );
   }
 
@@ -256,7 +252,12 @@ export class UserListComponent implements OnInit {
     return this.displayedColumns.some((col) => col.field === column.field);
   }
 
+  getDate(formatDate: any, format: string = "dd-MMM-YYYY"): string | null {
+    return this.datePipe.transform(formatDate, format);
+  }
+
   // show message in table if api is false.. start
+
   gridOptions = {
     noRowsOverlayComponentParams: {
       noRowsMessageFunc: () => "Data is not found",

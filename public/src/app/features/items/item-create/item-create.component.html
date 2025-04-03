@@ -1,12 +1,12 @@
-<div class="main-content  m-4">
+<div class="product-create  m-4">
   <div class="border-bottom bg-light pb-2">
     <h2 class="formHeading">{{ formHeading }} Product</h2>
   </div>
   <div class="form-container d-flex justify-content-center">
     <form [formGroup]="productForm">
-      <div class="input-form-container py-3">
+      <div class="input-form-container pe-3">
         <div class="form-group row">
-          <mat-label class="outer-mat-lable col-4 pt-2">Type:</mat-label>
+          <mat-label class="outer-mat-lable col-4 ">Type:</mat-label>
           <div class="col-8 mb-2">
             <div class="d-flex align-items-center">
               <mat-radio-group formControlName="isService">
@@ -32,7 +32,7 @@
           </div>
         </div>
         <div class="form-group row ">
-          <mat-label class="outer-mat-lable col-4 pt-2 ">Name </mat-label>
+          <mat-label class="outer-mat-lable col-4  ">Name </mat-label>
           <mat-form-field appearance="outline" class="col-8">
             <input formControlName="name" matInput placeholder="Enter Name" />
             <mat-error class="text-danger">
@@ -45,7 +45,7 @@
           </mat-form-field>
         </div>
         <div class="form-group row ">
-          <mat-label class="outer-mat-lable col-4 pt-2 ">SKU </mat-label>
+          <mat-label class="outer-mat-lable col-4  ">SKU </mat-label>
           <mat-form-field appearance="outline" class="col-8">
             <input formControlName="sku" matInput placeholder="Enter SKU" />
             <mat-error class="text-danger">
@@ -53,7 +53,7 @@
           </mat-form-field>
         </div>
         <div class="form-group row">
-          <mat-label class="outer-mat-lable col-4 pt-2">Unit</mat-label>
+          <mat-label class="outer-mat-lable col-4 ">Unit</mat-label>
           <mat-form-field appearance="outline" class="col-8 py-0">
             <mat-select class="py-0" formControlName="unitId">
               <mat-option value="" disabled selected>Select a Unit</mat-option>
@@ -66,7 +66,7 @@
           </mat-form-field>
         </div>
         <div class="form-group row">
-          <mat-label class="outer-mat-lable col-4 pt-2">Service</mat-label>
+          <mat-label class="outer-mat-lable col-4 ">Service</mat-label>
           <mat-form-field appearance="outline" class="col-8 py-0">
             <mat-select class="py-0" formControlName="serviceId">
               <mat-option value="" disabled selected>Select a Service</mat-option>
@@ -79,7 +79,7 @@
           </mat-form-field>
         </div>
         <div class="form-group row ">
-          <mat-label class="outer-mat-lable col-4 pt-2 ">HSN Code </mat-label>
+          <mat-label class="outer-mat-lable col-4  ">HSN Code </mat-label>
           <mat-form-field appearance="outline" class="col-8">
             <input formControlName="hsnCode" matInput placeholder="Enter HSN Code" />
             <mat-error class="text-danger">
@@ -87,7 +87,7 @@
           </mat-form-field>
         </div>
         <div class="form-group row">
-          <mat-label class="outer-mat-lable col-4 pt-2">Description </mat-label>
+          <mat-label class="outer-mat-lable col-4 ">Description </mat-label>
           <mat-form-field appearance="outline" class="col-8">
             <textarea formControlName="description" matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize"
               cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"></textarea>
@@ -95,7 +95,7 @@
         </div>
         <h4>Sales Information</h4>
         <div class="form-group row ">
-          <mat-label class="outer-mat-lable col-4 pt-2 ">Selling Price </mat-label>
+          <mat-label class="outer-mat-lable col-4  ">Selling Price </mat-label>
           <mat-form-field appearance="outline" class="col-8">
             <input formControlName="salesPrice" matInput placeholder="Enter Selling Price" />
             <mat-error class="text-danger">
@@ -109,7 +109,7 @@
         </div>
         <h4>Purchase Information</h4>
         <div class="form-group row ">
-          <mat-label class="outer-mat-lable col-4 pt-2 ">Cost Price </mat-label>
+          <mat-label class="outer-mat-lable col-4  ">Cost Price </mat-label>
           <mat-form-field appearance="outline" class="col-8">
             <input formControlName="costPrice" matInput placeholder="Enter Cost Price" />
             <mat-error class="text-danger">
@@ -121,9 +121,10 @@
             </mat-error>
           </mat-form-field>
         </div>
+        
         @if (Id > 1) {
-        <mat-label class="outer-mat-lable col-4 pt-2">Active/Inactive</mat-label>
-        <div class="col-8 mb-2">
+          <div class="col-12 mb-2 text-end">
+          <mat-label class="outer-mat-lable col-4 ">Active/Inactive</mat-label>
           <mat-slide-toggle formControlName="isActive" [checked]="productForm.get('isActive')?.value">
           </mat-slide-toggle>
         </div>
@@ -133,7 +134,7 @@
         <button class="btn btn-secondary mx-2" type="button" (click)="resetForm()">
           Clear
         </button>
-        <button class="btn btn-primary" (click)="createUpdate()">
+        <button class="btn btn-info-dark text-white" (click)="createUpdate()">
           {{ formHeading }}
         </button>
       </div>

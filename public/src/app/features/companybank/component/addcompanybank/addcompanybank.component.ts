@@ -14,7 +14,6 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { ReactiveFormsModule } from '@angular/forms';
-
 import { OnlyNumbersDirective } from 'src/app/shared/directive/only-numbers.directive';
 import { CompanybanklistService } from '../../companybanklist.service';
 

@@ -63,8 +63,8 @@ export class PurchaseOrderListComponent implements OnInit {
     {
       headerName: "S. No",
       valueGetter: "node.rowIndex + 1",
-      sortable: false,
-      filter: false,
+      sortable: true,
+      filter: true,
       pinned: "left",
       lockPinned: true,
       minWidth: 100,
@@ -84,7 +84,7 @@ export class PurchaseOrderListComponent implements OnInit {
       sortable: false,
       filter: false,
       cellStyle: () => {
-        return { border: "none" };
+        return { border: "none", cursor: "pointer" };
       },
     },
     {
@@ -117,14 +117,19 @@ export class PurchaseOrderListComponent implements OnInit {
       filter: true,
       minWidth: 200,
     },
-
     {
       field: "amount",
       headerName: "Amount",
       sortable: true,
       filter: true,
       minWidth: 240,
-    },
+      valueFormatter: (params: { value: any; }) => {
+        if (params.value) {
+          return Number(params.value).toLocaleString(); 
+        }
+        return params.value;
+      },
+    },    
     {
       field: "currencyCode",
       headerName: "Currency Code",
@@ -160,6 +165,7 @@ export class PurchaseOrderListComponent implements OnInit {
 
   }
 
+  
   ngAfterViewInit() {
     this._changeDetectorRef.detectChanges();
   }
@@ -390,6 +396,8 @@ export class PurchaseOrderListComponent implements OnInit {
     }
   }
   // show message in table if api is false.. end
+
+  
 
   renderActionIcons(params: any): string {
     return ` 

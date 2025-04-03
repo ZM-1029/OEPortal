@@ -41,7 +41,9 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 export class CompanybranchlistComponent {
   columnDefs: any = [
     { headerName: "S. No", valueGetter: "node.rowIndex + 1", pinned: "left" },
-    { headerName: "Actions", field: "actions", cellRenderer: (params: any) => this.renderActionIcons(params), pinned: "right" },
+    { headerName: "Actions", field: "actions", cellRenderer: (params: any) => this.renderActionIcons(params), pinned: "right",cellStyle: () => {
+      return { border: "none", cursor: "pointer" };
+    }, },
     { field: "name", headerName: "Company Name", sortable: true, filter: true },
     { field: "phoneNumber", headerName: "Phone Number", sortable: true, filter: true },
     { field: "state", headerName: "State", sortable: true, filter: true },
