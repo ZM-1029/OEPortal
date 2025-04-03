@@ -356,6 +356,14 @@ export class SaleCreateComponent {
       horizontalPosition: "right",
     });
   }
+  private showMessage(err: any) {
+    this._successMessage.open(err, "Close", {
+      duration: 4000,
+      panelClass: ["error-toast"],
+      verticalPosition: "top",
+      horizontalPosition: "right",
+    });
+  }
   private loadDropdownData(): void {
     this._salesService.CustomerList().subscribe((response) => {
       if (response.success) this.Customers = response.data;
@@ -394,19 +402,29 @@ export class SaleCreateComponent {
     });
   }
   selectedCountryId: number = 0;
+  noCompaniesMessage: string = '';
   onCountrySelect(event: any) {
     this.selectedCountryId = event.value;
     this._salesService.getTaxByCountry(this.selectedCountryId).subscribe((res) => {
       if (res.success) this.Taxes = res.data;
     });
-
-
     this._salesService.getCountryCurrency(this.selectedCountryId).subscribe((res) => {
       if (res.success) this.countryCurrency = res.data;
     });
     this._salesService.getCompany(this.selectedCountryId).subscribe((res) => {
-      if (res.success) this.Companies = res.data;
+      if (res.success) {
+        this.Companies = res.data;
+        // this.noCompaniesMessage = this.Companies.length === 0 ? res.message : ''; 
+        if( this.Companies.length==0){
+          this.noCompaniesMessage =res.message;
+          this.showMessage(this.noCompaniesMessage );// Show message if no companies found
+        }
+       
+      } else {
+        this.noCompaniesMessage = res.message; // Show error message if API fails
+      }
     });
+    
   }
   selectedProductId: number = 0;
   onProductSelect(event: any, index: number) {

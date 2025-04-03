@@ -129,7 +129,7 @@ export class SalesService {
     );
   }
   getCustomerAddressByCoustomerId(id: number | string) {
-    return this.http.get<AddressResponse>(`${environment.apiUrl}api/Quotation/GetCustomerAddressByCoustomerId`, {
+    return this.http.get<AddressResponse>(`${environment.apiUrl}api/Quotation/GetCustomerAddressByCustomerId`, {
       params: { customerId: id.toString() }
     });
   }

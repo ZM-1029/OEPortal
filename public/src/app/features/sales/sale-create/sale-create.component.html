@@ -78,7 +78,6 @@
                     }
                   </mat-error>
                 </mat-form-field>
-
               </div>
               <div class="form-group row">
                 <mat-label class="outer-mat-lable col-4 pt-2">Branch</mat-label>
@@ -368,7 +367,7 @@
                   (input)="onAdjustmentChange($event)" />
               </div>
               <div *ngIf="invalidAdjustmentInput" class="text-danger col-12">
-               Only numbers (including decimals) are allowed.
+                Only numbers (including decimals) are allowed.
               </div>
               <span class="summary-value col-1 text-end">{{ productForm.value.adjustment || 0 }}</span>
             </div>
