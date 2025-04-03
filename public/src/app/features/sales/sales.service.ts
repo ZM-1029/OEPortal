@@ -55,6 +55,16 @@ export class SalesService {
       params: { countryId: id.toString() }
     });
   }
+  getCompany(id: number | string) {
+    return this.http.get<CompanyListI>(`${environment.apiUrl}api/Quotation/GetCompanyByCountryId`, {
+      params: { countryId: id.toString() }
+    });
+  }
+  // getCompany() {
+  //   return this.http.get<CompanyListI>(
+  //     `${environment.apiUrl}api/CompanyProfile/GetAll`,
+  //   );
+  // }
   // updateQuatation(payload: any) {
   //   return this.http.patch<QuatationI>(
   //     `${environment.apiUrl}api/Quotation/EditQuotation`,
@@ -90,11 +100,7 @@ export class SalesService {
       `${environment.apiUrl}api/Product/GetCountry`,
     );
   }
-  getCompany() {
-    return this.http.get<CompanyListI>(
-      `${environment.apiUrl}api/CompanyProfile/GetAll`,
-    );
-  }
+ 
   getBranchDetailByCompanyId(id: number | string) {
     return this.http.get<BranchListI>(`${environment.apiUrl}api/CompanyProfile/GetBranchDetailByCompanyId/${id}`);
   }
@@ -140,5 +146,8 @@ export class SalesService {
   
   getQuotationStatusDetails(quotationId: number): Observable<any> {
     return this.http.get<any>(`${environment.apiUrl}api/Quotation/GetQuotationStatusDetails?quotationId=${quotationId}`);
+  }
+  getQuotationStatus(quotationId: number): Observable<any> {
+    return this.http.get<any>(`${environment.apiUrl}api/Quotation/GetQuotationStatus?id=${quotationId}`);
   }
 }

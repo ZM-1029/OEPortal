@@ -20,7 +20,7 @@
                 </div>
                 @if (errorMessage) {
                 <p *ngIf="errorMessage" class="text-danger">{{ errorMessage }}</p>
-                 }
+                }
                 }
             </div>
             <div class="form-btn d-flex align-items-start justify-content-end p-4">
@@ -28,5 +28,29 @@
                 <button class="btn btn-primary" type="submit">Submit</button>
             </div>
         </form>
+    </div>
+
+    <div class="table-responsive py-4">
+        <table>
+            <thead>
+                <tr>
+                    <th>Status</th>
+                    <th>Created on</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (status of quotationStatus; track $index) {
+                <tr>
+                    <td>{{status.statusName}}</td>
+                    <td>{{status.createdOn |date}}</td>
+                    <td>{{status.createdByName}}</td>
+                    <td>{{status.createdByEmail}}</td>
+                </tr>
+                }
+
+            </tbody>
+        </table>
     </div>
 </div>

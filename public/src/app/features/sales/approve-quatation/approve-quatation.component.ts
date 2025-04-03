@@ -33,7 +33,7 @@ export class ApproveQuatationComponent {
   selectedFile: File | null = null;
   errorMessage: string = '';
   showFileUpload: boolean = false;
-
+  quotationStatus:any[]=[];
   @Input() isApprovePopupOpen: boolean = false;
   @Input() Id: number = 0;
   @Output() formClose = new EventEmitter<boolean>();
@@ -43,6 +43,7 @@ export class ApproveQuatationComponent {
   }
   ngOnInit(): void {
     this.getQuotationDetails(this.Id);
+    this.getQuotationStatus(this.Id);
   }
   getQuotationDetails(quotationId: number) {
     this._salesService.getQuotationStatusDetails(quotationId).subscribe({
@@ -63,6 +64,20 @@ export class ApproveQuatationComponent {
             approveByAccountantControl?.disable();
           }
           this.showFileUpload = isApprovedByAccountant;
+        }
+      },
+      error: (error) => {
+        console.error('Error fetching quotation details:', error);
+      }
+    });
+  }
+  getQuotationStatus(quotationId: number) {
+    this._salesService.getQuotationStatus(quotationId).subscribe({
+      next: (response: any) => {
+        if (response && response.success) {
+           this.quotationStatus = response.data;
+           this.cdr.detectChanges();
+           console.log(this.quotationStatus ,'this.quotationStatus ')
         }
       },
       error: (error) => {

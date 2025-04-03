@@ -370,9 +370,9 @@ export class SaleCreateComponent {
     this._salesService.getCountry().subscribe((res) => {
       if (res.success) this.Countries = res.data;
     });
-    this._salesService.getCompany().subscribe((res) => {
-      if (res.success) this.Companies = res.data;
-    });
+    // this._salesService.getCompany().subscribe((res) => {
+    //   if (res.success) this.Companies = res.data;
+    // });
 
     this._salesService.getProduct().subscribe((res) => {
       if (res.success) this.Products = res.data;
@@ -404,7 +404,9 @@ export class SaleCreateComponent {
     this._salesService.getCountryCurrency(this.selectedCountryId).subscribe((res) => {
       if (res.success) this.countryCurrency = res.data;
     });
-
+    this._salesService.getCompany(this.selectedCountryId).subscribe((res) => {
+      if (res.success) this.Companies = res.data;
+    });
   }
   selectedProductId: number = 0;
   onProductSelect(event: any, index: number) {
