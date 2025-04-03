@@ -43,6 +43,25 @@
           <div class="d-flex justify-content-center">
             <div class="salary-form1 mx-2">
               <div class="form-group row">
+                <mat-label class="outer-mat-lable col-4 pt-2">Country</mat-label>
+                <mat-form-field appearance="outline" class="col-8 py-0">
+                  <mat-select class="py-0" formControlName="countryId" (selectionChange)="onCountrySelect($event)">
+                    <mat-option value="" disabled selected>Select Country</mat-option>
+                    @for (country of Countries; track country) {
+                    <mat-option [value]="country.id">{{
+                      country.name
+                      }}</mat-option>
+                    }
+                  </mat-select>
+                  <mat-error class="text-danger">
+                    @if (productForm.controls["countryId"].errors?.["required"]) {
+                    <span>Country is required.</span>
+                    }
+                  </mat-error>
+                </mat-form-field>
+
+              </div>
+              <div class="form-group row">
                 <mat-label class="outer-mat-lable col-4 pt-2">Company</mat-label>
                 <mat-form-field appearance="outline" class="col-8 py-0">
                   <mat-select class="py-0" formControlName="companyId" (selectionChange)="onCompanySelect($event)">
@@ -80,25 +99,7 @@
                 </mat-form-field>
 
               </div>
-              <div class="form-group row">
-                <mat-label class="outer-mat-lable col-4 pt-2">Country</mat-label>
-                <mat-form-field appearance="outline" class="col-8 py-0">
-                  <mat-select class="py-0" formControlName="countryId" (selectionChange)="onCountrySelect($event)">
-                    <mat-option value="" disabled selected>Select Country</mat-option>
-                    @for (country of Countries; track country) {
-                    <mat-option [value]="country.id">{{
-                      country.name
-                      }}</mat-option>
-                    }
-                  </mat-select>
-                  <mat-error class="text-danger">
-                    @if (productForm.controls["countryId"].errors?.["required"]) {
-                    <span>Country is required.</span>
-                    }
-                  </mat-error>
-                </mat-form-field>
 
-              </div>
               <div class="form-group row ">
                 <mat-label class="outer-mat-lable col-4 pt-2 ">Quotation Number </mat-label>
                 <mat-form-field appearance="outline" class="col-8">
@@ -265,28 +266,35 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let item of items.controls; let i = index" [formGroupName]="i" (click)="setCurrentRowIndex(i)">
+                <tr *ngFor="let item of items.controls; let i = index" [formGroupName]="i"
+                  (click)="setCurrentRowIndex(i)">
                   <td>{{ i + 1 }}</td>
                   <td>
                     <div class="d-flex justify-content-center align-items-center mt-3">
                       <mat-form-field appearance="outline" class="col-8 py-0">
-                        <mat-select formControlName="productId" (selectionChange)="onProductSelect($event, i)" placeholder="Select Product">
+                        <mat-select formControlName="productId" (selectionChange)="onProductSelect($event, i)"
+                          placeholder="Select Product">
                           <mat-option value="" disabled>Select Product</mat-option>
-                          <mat-option *ngFor="let product of Products" [value]="product.id">{{ product.name }}</mat-option>
+                          <mat-option *ngFor="let product of Products" [value]="product.id">{{ product.name
+                            }}</mat-option>
                         </mat-select>
-                        <mat-error class="text-danger" *ngIf="item.get('productId')?.hasError('required') && item.get('productId')?.touched">
+                        <mat-error class="text-danger"
+                          *ngIf="item.get('productId')?.hasError('required') && item.get('productId')?.touched">
                           Please select product
                         </mat-error>
                       </mat-form-field>
                     </div>
                   </td>
-                  <td><input formControlName="quantity" type="number" class="table-data" min="1" (input)="amountCalculate()" /></td>
+                  <td><input formControlName="quantity" type="number" class="table-data" min="1"
+                      (input)="amountCalculate()" /></td>
                   <td><input formControlName="rate" type="number" class="table-data" min="1" /></td>
                   <td>
                     <div class="d-flex">
-                      <input formControlName="discount" type="number" class="table-data" min="0" (input)="amountCalculate()" />
-                      <select formControlName="discountType" class="table-data mx-2 p-0" style="width: 40px; text-align: center;" 
-                        (change)="onDiscountTypeChange($event, i)" (click)="setCurrentRowIndex(i)">
+                      <input formControlName="discount" type="number" class="table-data" min="0"
+                        (input)="amountCalculate()" />
+                      <select formControlName="discountType" class="table-data mx-2 p-0"
+                        style="width: 40px; text-align: center;" (change)="onDiscountTypeChange($event, i)"
+                        (click)="setCurrentRowIndex(i)">
                         <option value="rupee">₹</option>
                         <option value="%">%</option>
                       </select>
@@ -303,13 +311,14 @@
                     </div> -->
                     <div class="d-flex justify-content-center align-items-center mt-3">
                       <mat-form-field appearance="outline" class="col-8 py-0">
-                        <mat-select formControlName="taxId" (selectionChange)="onTaxChange($event, i)" placeholder="Select Tax">
+                        <mat-select formControlName="taxId" (selectionChange)="onTaxChange($event, i)"
+                          placeholder="Select Tax">
                           <mat-option value="" disabled>Select Tax</mat-option>
                           <mat-option *ngFor="let tax of Taxes" [value]="tax.id">{{ tax.tax }}</mat-option>
                         </mat-select>
                       </mat-form-field>
                     </div>
-                    
+
                   </td>
                   <td><input formControlName="subTotal" type="number" class="table-data" readonly /></td>
                   <td class="text-center">
@@ -321,7 +330,7 @@
               </tbody>
             </table>
           </div>
-          
+
           <!-- <button type="button" class="btn btn-success my-2" (click)="addRow()">Add Row</button> -->
           <div class="add-row my-2 ps-0">
             <button type="button" class="btn btn-light d-flex align-items-center px-3 py-2 shadow-sm rounded"
@@ -340,23 +349,30 @@
             </div>
             <div class="summary-row row">
               <span class="summary-title col-5 fw-bold">Shipping Charges</span>
-             <div class="col-6 d-flex">
-              <input type="text" placeholder="0.00" class="adjustment-label" formControlName="shippingCharges"
-              (input)="onShippingChargesChange($event)" />
-              <mat-icon class="mat-icon mx-2  " svgIcon="question"></mat-icon>
-            </div>
-            <span class="summary-value col-1 text-end">{{ productForm.value.shippingCharges || 0 }}</span>
+              <div class="col-6 d-flex">
+                <input type="text" placeholder="0.00" class="adjustment-label" formControlName="shippingCharges"
+                  (input)="onShippingChargesChange($event)" />
+                <mat-icon class="mat-icon mx-2" svgIcon="question"></mat-icon>
+              </div>
+              <div *ngIf="invalidShippingChargesInput" style="color: red;">
+                Only numbers (including decimals) are allowed.
+              </div>
+
+              <span class="summary-value col-1 text-end">{{ productForm.value.shippingCharges || 0 }}</span>
             </div>
 
             <div class="summary-row row">
               <span class="summary-title col-5 fw-bold">Adjustment</span>
               <div class="col-6 d-flex">
                 <input type="text" placeholder="0.00" class="adjustment-label" formControlName="adjustment"
-                (input)="onAdjustmentChange($event)" />
-              <i class="fa fa-question-circle tooltip" title="Adjustment charges apply."></i>
+                  (input)="onAdjustmentChange($event)" />
+              </div>
+              <div *ngIf="invalidAdjustmentInput" class="text-danger col-12">
+               Only numbers (including decimals) are allowed.
+              </div>
+              <span class="summary-value col-1 text-end">{{ productForm.value.adjustment || 0 }}</span>
             </div>
-            <span class="summary-value col-1 text-end">{{ productForm.value.adjustment || 0 }}</span>
-            </div>
+
 
             <div class="summary-row row">
               @for (tax of calculationDetails.taxes; track $index) {

@@ -91,8 +91,8 @@ export class SaleCreateComponent {
       deliveryMethod: [''],
       salesPerson: [''],
       items: this.fb.array([]),
-      shippingCharges: [0],
-      adjustment: [0]
+      shippingCharges: ['', [Validators.pattern(/^\d*\.?\d*$/)]],
+      adjustment: ['', [Validators.pattern(/^\d*\.?\d*$/)]]
     });
     this.clearForm();
   }
@@ -196,7 +196,7 @@ export class SaleCreateComponent {
         .pipe(takeUntil(this._unsubscribeAll$))
         .subscribe((response: QuotationResponse) => {
           const quotationDetails = response.data;
-          
+
           // Form patching
           this.productForm.patchValue({
             customerId: quotationDetails.customerId,
@@ -213,34 +213,34 @@ export class SaleCreateComponent {
             shippingCharges: quotationDetails.shippingCharges,
             adjustment: quotationDetails.adjustment
           });
-  
+
           // Trigger change detection after patching
           this._changeDetetction.detectChanges();
-  
+
           this.calculationDetails.subTotal = quotationDetails.subTotal;
           this.calculationDetails.total = quotationDetails.total;
           this.selectedCountryId = quotationDetails.countryId;
-          this.selectedCustomerId=quotationDetails.customerId;
+          this.selectedCustomerId = quotationDetails.customerId;
           // Fetching branch details
           this._salesService.getBranchDetailByCompanyId(quotationDetails.companyId)
             .subscribe((res) => {
               if (res.success) {
                 this.Branches = res.data;
-  
+
                 // After updating branches, trigger change detection
                 this._changeDetetction.detectChanges();
               }
             });
 
-            this._salesService.getTaxByCountry(this.selectedCountryId).subscribe((res) => {
-              if (res.success) this.Taxes = res.data;
-              this._changeDetetction.detectChanges();
-            });
-            this._salesService.getCustomerAddressByCoustomerId(this.selectedCustomerId).subscribe((res) => {
-              if (res.success) this.Address = res.data;
-              this._changeDetetction.detectChanges();
-            });
-  
+          this._salesService.getTaxByCountry(this.selectedCountryId).subscribe((res) => {
+            if (res.success) this.Taxes = res.data;
+            this._changeDetetction.detectChanges();
+          });
+          this._salesService.getCustomerAddressByCoustomerId(this.selectedCustomerId).subscribe((res) => {
+            if (res.success) this.Address = res.data;
+            this._changeDetetction.detectChanges();
+          });
+
           // Handling items
           const itemsFormArray = this.productForm.get('items') as FormArray;
           quotationDetails.items.forEach(item => {
@@ -254,7 +254,7 @@ export class SaleCreateComponent {
               taxId: [item.taxId, Validators.required],
               subTotal: [item.subTotal]
             }));
-  
+
             // Trigger change detection after adding each item
             this.onTaxChange(null, itemsFormArray.length - 1);
             this._changeDetetction.detectChanges();
@@ -262,7 +262,7 @@ export class SaleCreateComponent {
         });
     }
   }
-  
+
   createUpdate() {
     this.submitted = true;
     if (!this.productForm.valid) {
@@ -400,7 +400,7 @@ export class SaleCreateComponent {
       if (res.success) this.Taxes = res.data;
     });
 
-    
+
     this._salesService.getCountryCurrency(this.selectedCountryId).subscribe((res) => {
       if (res.success) this.countryCurrency = res.data;
     });
@@ -481,7 +481,7 @@ export class SaleCreateComponent {
       const subTotal = item.get('subTotal')?.value;
       const countryId = this.selectedCountryId;
       const taxId = item.get('taxId')?.value;
-      if (productId ) {
+      if (productId) {
         return {
           productId: productId,
           pSubTotal: subTotal,
@@ -518,21 +518,34 @@ export class SaleCreateComponent {
       },
     });
   }
-  onShippingChargesChange(event: any) {
-    const value = parseFloat(event.target.value) || 0;
-    this.productForm.patchValue({
-      shippingCharges: value
-    });
-    this.onTaxChange(event, -1); 
+  invalidShippingChargesInput: boolean = false;
+
+  onShippingChargesChange(event: any): void {
+    const value = event.target.value;
+    if (/^\d*\.?\d*$/.test(value)) {
+      this.productForm.patchValue({ shippingCharges: value }, { emitEvent: false });
+      this.invalidShippingChargesInput = false; 
+      this.onTaxChange(event, -1);
+    } else {
+      this.invalidShippingChargesInput = true; 
+      this.productForm.patchValue({ shippingCharges: value.slice(0, -1) }, { emitEvent: false });
+    }
   }
+  
+  invalidAdjustmentInput: boolean = false; 
 
   onAdjustmentChange(event: any) {
-    const value = parseFloat(event.target.value) || 0;
-    this.productForm.patchValue({
-      adjustment: value
-    });
-    this.onTaxChange(event, -1); 
+    const value = event.target.value;
+    if (/^\d*\.?\d*$/.test(value)) {
+      this.productForm.patchValue({ adjustment: value }, { emitEvent: false });
+      this.invalidAdjustmentInput = false;
+      this.onTaxChange(event, -1);
+    } else {
+      this.invalidAdjustmentInput = true; 
+      this.productForm.patchValue({ adjustment: value.slice(0, -1) }, { emitEvent: false });
+    }
   }
+  
   ngOnDestroy(): void {
     this.resetForm();
     this._unsubscribeAll$.next(
