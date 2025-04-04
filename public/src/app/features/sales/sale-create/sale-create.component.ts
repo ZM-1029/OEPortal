@@ -122,7 +122,6 @@ export class SaleCreateComponent {
   }
   deleteRow(index: number) {
     this.items.removeAt(index);
-    console.log(this.items, 'Updated items after deletion');
     this.onTaxChange();
   }
   get items(): FormArray {
@@ -140,54 +139,7 @@ export class SaleCreateComponent {
       }
     }
   }
-  // getQuotationDetails(id: number) {
-  //   if (id !== 0) {
-  //     this.Id = id;
-  //     this._salesService
-  //       .getQuotationById(id)
-  //       .pipe(takeUntil(this._unsubscribeAll$))
-  //       .subscribe((response: QuotationResponse) => {
-  //         const quotationDetails = response.data;
-  //         this.productForm.patchValue({
-  //           customerId: quotationDetails.customerId,
-  //           companyId: quotationDetails.companyId,
-  //           companyBranchId: quotationDetails.companyBranchId,
-  //           countryId: quotationDetails.countryId,
-  //           quotationNumber: quotationDetails.quotationNumber,
-  //           name: quotationDetails.salesPerson,
-  //           salesOrderDate: new Date(quotationDetails.salesOrderDate),
-  //           expectedShipmentDate: new Date(quotationDetails.expectedShippingDate),
-  //           paymentTermId: quotationDetails.paymentTermId,
-  //           deliveryMethod: quotationDetails.deliveryMethod,
-  //           salesPerson: quotationDetails.salesPerson,
-  //           shippingCharges: quotationDetails.shippingCharges,
-  //           adjustment: quotationDetails.adjustment
-  //         });
-  //         this.calculationDetails.subTotal = quotationDetails.subTotal;
-  //         this.calculationDetails.total = quotationDetails.total;
-  //         this.selectedCountryId = quotationDetails.countryId;
-  //         this._salesService.getBranchDetailByCompanyId(quotationDetails.companyId).subscribe((res) => {
-  //           if (res.success) this.Branches = res.data;
-  //         });
-  //         const itemsFormArray = this.productForm.get('items') as FormArray;
-  //         quotationDetails.items.forEach(item => {
-  //           itemsFormArray.push(this.fb.group({
-  //             id: [item.id],
-  //             productId: [item.productId, Validators.required],
-  //             quantity: [item.quantity, Validators.required],
-  //             rate: [item.rate, Validators.required],
-  //             discount: [item.discount],
-  //             discountType: ['rupee'], 
-  //             taxId: [item.taxId, Validators.required],
-  //             subTotal: [item.subTotal]
-  //           }));
-
-  //           this.onTaxChange(null, itemsFormArray.length - 1);
-  //         });
-  //       });
-  //   }
-  // }
-
+  
   getQuotationDetails(id: number) {
     if (id !== 0) {
       this.Id = id;
@@ -196,8 +148,6 @@ export class SaleCreateComponent {
         .pipe(takeUntil(this._unsubscribeAll$))
         .subscribe((response: QuotationResponse) => {
           const quotationDetails = response.data;
-
-          // Form patching
           this.productForm.patchValue({
             customerId: quotationDetails.customerId,
             companyId: quotationDetails.companyId,
@@ -213,25 +163,18 @@ export class SaleCreateComponent {
             shippingCharges: quotationDetails.shippingCharges,
             adjustment: quotationDetails.adjustment
           });
-
-          // Trigger change detection after patching
           this._changeDetetction.detectChanges();
-
           this.calculationDetails.subTotal = quotationDetails.subTotal;
           this.calculationDetails.total = quotationDetails.total;
           this.selectedCountryId = quotationDetails.countryId;
           this.selectedCustomerId = quotationDetails.customerId;
-          // Fetching branch details
           this._salesService.getBranchDetailByCompanyId(quotationDetails.companyId)
             .subscribe((res) => {
               if (res.success) {
                 this.Branches = res.data;
-
-                // After updating branches, trigger change detection
                 this._changeDetetction.detectChanges();
               }
             });
-
           this._salesService.getTaxByCountry(this.selectedCountryId).subscribe((res) => {
             if (res.success) this.Taxes = res.data;
             this._changeDetetction.detectChanges();
@@ -240,8 +183,6 @@ export class SaleCreateComponent {
             if (res.success) this.Address = res.data;
             this._changeDetetction.detectChanges();
           });
-
-          // Handling items
           const itemsFormArray = this.productForm.get('items') as FormArray;
           quotationDetails.items.forEach(item => {
             itemsFormArray.push(this.fb.group({
@@ -255,14 +196,12 @@ export class SaleCreateComponent {
               subTotal: [item.subTotal]
             }));
 
-            // Trigger change detection after adding each item
             this.onTaxChange(null, itemsFormArray.length - 1);
             this._changeDetetction.detectChanges();
           });
         });
     }
   }
-
   createUpdate() {
     this.submitted = true;
     if (!this.productForm.valid) {
@@ -309,8 +248,6 @@ export class SaleCreateComponent {
         },
         error: (err) => {
           this.handleError(err);
-          console.error("Error Status:", err.status);
-          console.error("Error Message:", err.error);
         },
       });
     } else {
@@ -326,8 +263,6 @@ export class SaleCreateComponent {
         },
         error: (err) => {
           this.handleError(err);
-          console.error("Error Status:", err.status);
-          console.error("Error Message:", err.error);
         },
       });
     }
@@ -378,10 +313,6 @@ export class SaleCreateComponent {
     this._salesService.getCountry().subscribe((res) => {
       if (res.success) this.Countries = res.data;
     });
-    // this._salesService.getCompany().subscribe((res) => {
-    //   if (res.success) this.Companies = res.data;
-    // });
-
     this._salesService.getProduct().subscribe((res) => {
       if (res.success) this.Products = res.data;
     });
@@ -414,17 +345,15 @@ export class SaleCreateComponent {
     this._salesService.getCompany(this.selectedCountryId).subscribe((res) => {
       if (res.success) {
         this.Companies = res.data;
-        // this.noCompaniesMessage = this.Companies.length === 0 ? res.message : ''; 
         if( this.Companies.length==0){
           this.noCompaniesMessage =res.message;
-          this.showMessage(this.noCompaniesMessage );// Show message if no companies found
+          this.showMessage(this.noCompaniesMessage );
         }
        
       } else {
-        this.noCompaniesMessage = res.message; // Show error message if API fails
+        this.noCompaniesMessage = res.message; 
       }
     });
-    
   }
   selectedProductId: number = 0;
   onProductSelect(event: any, index: number) {
@@ -439,7 +368,6 @@ export class SaleCreateComponent {
         this.items.at(index).get('rate')?.valueChanges.subscribe(() => {
           this.amountCalculate();
         });
-
         this.amountCalculate();
       }
     });
@@ -450,7 +378,6 @@ export class SaleCreateComponent {
       console.warn('No row selected for calculation.');
       return;
     }
-
     const currentItem = this.items.at(this.currentRowIndex);
     if (!currentItem) {
       console.error('Invalid row selected:', this.currentRowIndex);
@@ -475,8 +402,6 @@ export class SaleCreateComponent {
       },
       error: (err) => {
         this.handleError(err);
-        console.error('Error Status:', err.status);
-        console.error('Error Message:', err.error);
       },
     });
   }
@@ -511,13 +436,11 @@ export class SaleCreateComponent {
       }
       return null;
     }).filter(item => item !== null);
-
     const payload = {
       productTaxes: productTaxes,
       shippingCharges: this.productForm.value.shippingCharges || 0,
       adjustment: this.productForm.value.adjustment || 0
     };
-
     this._salesService.calculateFinalAmount(payload).subscribe({
       next: (response: any) => {
         if (response.success) {
@@ -533,13 +456,10 @@ export class SaleCreateComponent {
       },
       error: (err) => {
         this.handleError(err);
-        console.error('Error Status:', err.status);
-        console.error('Error Message:', err.error);
       },
     });
   }
   invalidShippingChargesInput: boolean = false;
-
   onShippingChargesChange(event: any): void {
     const value = event.target.value;
     if (/^\d*\.?\d*$/.test(value)) {
@@ -551,9 +471,7 @@ export class SaleCreateComponent {
       this.productForm.patchValue({ shippingCharges: value.slice(0, -1) }, { emitEvent: false });
     }
   }
-  
   invalidAdjustmentInput: boolean = false; 
-
   onAdjustmentChange(event: any) {
     const value = event.target.value;
     if (/^\d*\.?\d*$/.test(value)) {
@@ -565,7 +483,6 @@ export class SaleCreateComponent {
       this.productForm.patchValue({ adjustment: value.slice(0, -1) }, { emitEvent: false });
     }
   }
-  
   ngOnDestroy(): void {
     this.resetForm();
     this._unsubscribeAll$.next(

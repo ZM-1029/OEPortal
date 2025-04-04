@@ -59,7 +59,6 @@
                     }
                   </mat-error>
                 </mat-form-field>
-
               </div>
               <div class="form-group row">
                 <mat-label class="outer-mat-lable col-4 pt-2">Company</mat-label>
@@ -96,9 +95,7 @@
                     }
                   </mat-error>
                 </mat-form-field>
-
               </div>
-
               <div class="form-group row ">
                 <mat-label class="outer-mat-lable col-4 pt-2 ">Quotation Number </mat-label>
                 <mat-form-field appearance="outline" class="col-8">
@@ -112,7 +109,6 @@
                   </mat-error>
                 </mat-form-field>
               </div>
-
               <div class="form-group row ">
                 <mat-label class="outer-mat-lable col-4 pt-2 ">Sales person </mat-label>
                 <mat-form-field appearance="outline" class="col-8">
@@ -123,12 +119,6 @@
               </div>
             </div>
             <div class="salary-form2 mx-2">
-              <!-- <div class="form-group row ">
-                <mat-label class="outer-mat-lable col-4 pt-2 ">Reference </mat-label>
-                <mat-form-field appearance="outline" class="col-8">
-                  <input formControlName="name" matInput placeholder="Enter Reference" />
-                </mat-form-field>
-              </div> -->
               <div class="form-group row">
                 <mat-label class="outer-mat-lable col-4 pt-2">Sales Order Date</mat-label>
                 <mat-form-field appearance="outline" class="col-8">
@@ -164,7 +154,6 @@
                     }
                   </mat-error>
                 </mat-form-field>
-
               </div>
               <div class="form-group row ">
                 <mat-label class="outer-mat-lable col-4 pt-2 ">Delivery Method </mat-label>
@@ -177,79 +166,8 @@
             </div>
           </div>
         </div>
-
-        <!-- </div> -->
-
         <h4 class="fw-bold">Item Table</h4>
         <div class="container form-group row pe-3 pb-4 mb-4">
-          <!-- <table formArrayName="items">
-            <thead>
-              <tr>
-                <th>S. No.</th> 
-                <th>Product Name</th>
-                <th>Quantity</th>
-                <th>Rate</th>
-                <th>Discount</th>
-                <th>Tax</th>
-                <th>Amount</th>
-              </tr>
-            </thead>
-            <tbody class="table-container ">
-              <tr *ngFor="let item of items.controls; let i = index" [formGroupName]="i">
-                <td>{{ i + 1 }}</td>
-                <td>
-                  <div class="d-flex justify-content-center align-items-center mt-3">
-                    <mat-form-field appearance="outline" class="col-8 py-0">
-                      <mat-select formControlName="productId" (selectionChange)="onProductSelect($event, i)">
-                        <mat-option value="" disabled>Select Product</mat-option>
-                        <mat-option *ngFor="let product of Products" [value]="product.id">{{ product.name
-                          }}</mat-option>
-                      </mat-select>
-
-                      <mat-error class="text-danger"
-                        *ngIf="item.get('productId')?.hasError('required') && item.get('productId')?.touched">
-                        Please select product
-                      </mat-error>
-                    </mat-form-field>
-                  </div>
-                </td>
-                <td><input formControlName="quantity" type="number" class="table-data" min="0"
-                    (input)="amountCalculate()" />
-                </td>
-                <td><input formControlName="rate" type="number" class="table-data" min="0" />
-                </td>
-                <td>
-                  <div class="d-flex">
-                    <input formControlName="discount" type="number" class="table-data" min="0"
-                      (input)="amountCalculate()" />
-                    <select formControlName="discountType" class="table-data mx-2 p-0"
-                      style="width: 40px; text-align: center;" (change)="onDiscountTypeChange($event, i)"
-                      (click)="setCurrentRowIndex(i)">
-                      <option value="rupee">₹</option>
-                      <option value="%">%</option>
-                    </select>
-                  </div>
-                </td>
-                <td>
-                  <div class="d-flex justify-content-center align-items-center mt-3">
-                    <mat-form-field appearance="outline" class="col-8 py-0">
-                      <mat-select formControlName="taxId" (selectionChange)="onTaxChange($event, i)">
-                        <mat-option value="" disabled>Select Tax</mat-option>
-                        <mat-option *ngFor="let tax of Taxes" [value]="tax.id">{{ tax.tax }}</mat-option>
-                      </mat-select>
-                    </mat-form-field>
-                  </div>
-                </td>
-                <td><input formControlName="subTotal" type="number" class="table-data" readonly /></td>
-                <td class="text-center">
-                  <button (click)="deleteRow(i)" class="btn delete-btn text-danger">
-                    <mat-icon>delete</mat-icon>
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table> -->
-
           <div class="table-responsive py-4">
             <table formArrayName="items">
               <thead>
@@ -300,14 +218,6 @@
                     </div>
                   </td>
                   <td>
-                    <!-- <div class="d-flex justify-content-center align-items-center mt-3">
-                      <mat-form-field appearance="outline" class="col-8 py-0">
-                        <mat-select formControlName="taxId" (selectionChange)="onTaxChange($event, i)">
-                          <mat-option value="" disabled>Select Tax</mat-option>
-                          <mat-option *ngFor="let tax of Taxes" [value]="tax.id">{{ tax.tax }}</mat-option>
-                        </mat-select>
-                      </mat-form-field>
-                    </div> -->
                     <div class="d-flex justify-content-center align-items-center mt-3">
                       <mat-form-field appearance="outline" class="col-8 py-0">
                         <mat-select formControlName="taxId" (selectionChange)="onTaxChange($event, i)"
@@ -317,7 +227,6 @@
                         </mat-select>
                       </mat-form-field>
                     </div>
-
                   </td>
                   <td><input formControlName="subTotal" type="number" class="table-data" readonly /></td>
                   <td class="text-center">
@@ -329,8 +238,6 @@
               </tbody>
             </table>
           </div>
-
-          <!-- <button type="button" class="btn btn-success my-2" (click)="addRow()">Add Row</button> -->
           <div class="add-row my-2 ps-0">
             <button type="button" class="btn btn-light d-flex align-items-center px-3 py-2 shadow-sm rounded"
               (click)="addRow()">
@@ -340,7 +247,6 @@
               Add New Row
             </button>
           </div>
-
           <div class="summary-container ">
             <div class="summary-row">
               <span class="summary-title fw-bold">Sub Total</span>
@@ -356,10 +262,8 @@
               <div *ngIf="invalidShippingChargesInput" style="color: red;">
                 Only numbers (including decimals) are allowed.
               </div>
-
               <span class="summary-value col-1 text-end">{{ productForm.value.shippingCharges || 0 }}</span>
             </div>
-
             <div class="summary-row row">
               <span class="summary-title col-5 fw-bold">Adjustment</span>
               <div class="col-6 d-flex">
@@ -371,8 +275,6 @@
               </div>
               <span class="summary-value col-1 text-end">{{ productForm.value.adjustment || 0 }}</span>
             </div>
-
-
             <div class="summary-row row">
               @for (tax of calculationDetails.taxes; track $index) {
               <span class="summary-title col-6">{{tax.tax}}</span>
@@ -383,7 +285,6 @@
               </ul>
               }
             </div>
-
             <div class="summary-row total-row">
               <span>Total {{countryCurrency}}</span>
               <span class="summary-value fw-bold">{{ calculationDetails.total || 0 }}</span>
