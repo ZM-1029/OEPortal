@@ -63,8 +63,6 @@ export class SalesListComponent {
         return { border: "none", cursor: "pointer" };
       },
     },
-    
-
     {
       field: "salesOrderDate",
       headerName: "Sales Order Date",

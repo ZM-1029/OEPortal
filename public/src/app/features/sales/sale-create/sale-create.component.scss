@@ -229,9 +229,6 @@ mat-label {
   cursor: pointer;
 }
 
-
-/* Table container with scroll */
-/* Make the table container scrollable */
 .table-responsive {
   max-height: 500px; 
   max-width: 100%;  
@@ -241,13 +238,10 @@ mat-label {
   border-radius: 4px;
   margin-top: 20px;
 }
-
-/* General Table Styling */
 table {
   width: 100%;
   border-collapse: collapse;
 }
-
 th,
 td {
   padding: 12px;
@@ -264,8 +258,6 @@ th {
 tr:nth-child(even) {
   background-color: #f9f9f9;
 }
-
-/* Hide scrollbar for WebKit browsers */
 .table-responsive::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -288,44 +280,6 @@ tr:nth-child(even) {
   width: 18px;
   height: 18px;
 }
-
-// .table-container {
-//   min-height: 470px;
-//   max-width: 300px;
-//   overflow-x: scroll;
-//   overflow-y: auto;
-//   border: 1px solid #ddd;
-//   border-radius: 4px;
-//   margin-top: 20px;
-// }
-
-// /* General Table Styling */
-// table {
-//   width: 100%;
-//   border-collapse: collapse;
-// }
-
-// th,
-// td {
-//   padding: 12px;
-//   text-align: left;
-//   border: 1px solid #ddd;
-//   font-size: 14px;
-// }
-
-// th {
-//   background-color: #f1f1f1;
-//   font-weight: 600;
-// }
-
-// tr:nth-child(even) {
-//   background-color: #f9f9f9;
-// }
-
-
-
-
-/* Styling for Input Fields */
 input[type="number"]{
   width: 100%;
   padding: 8px;
@@ -350,7 +304,6 @@ select {
   width: 100%;
 }
 
-// summary-container start
 .summary-container {
   background: white;
   border-radius: 8px;
@@ -429,8 +382,6 @@ select {
   border-radius: 4px;
   font-size: 14px;
 }
-
-// summary-container end
 .form {
   width: 100%;
 }
@@ -438,9 +389,3 @@ select {
 .form .Address {
   width: 100%;
 }
-
-
-
-// @media () {
-
-// }

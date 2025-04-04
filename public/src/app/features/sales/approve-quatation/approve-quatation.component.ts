@@ -28,7 +28,6 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrl: './approve-quatation.component.scss'
 })
 export class ApproveQuatationComponent {
-
   approveForm!: FormGroup;
   selectedFile: File | null = null;
   errorMessage: string = '';
