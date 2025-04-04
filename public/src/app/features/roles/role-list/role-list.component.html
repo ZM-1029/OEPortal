@@ -43,7 +43,7 @@
     @defer {
     <div class="d-flex align-items-center justify-content-center">
       <div class="container-fluid p-0">
-        <ag-grid-angular #agGrid style="width: 100%; height: 78vh !important; padding-bottom: 10px"
+        <ag-grid-angular #agGrid style="width: 100%; height: calc(100vh - 12rem) !important; padding-bottom: 10px"
           class="ag-theme-alpine" [rowData]="rowData" [columnDefs]="columnDefs" 
           [defaultColDef]="defaultColDef" [animateRows]="true" [paginationPageSize]="15" [pagination]="true"
           [paginationPageSizeSelector]="paginationPageSizeSelector" (gridReady)="onGridReady($event)"

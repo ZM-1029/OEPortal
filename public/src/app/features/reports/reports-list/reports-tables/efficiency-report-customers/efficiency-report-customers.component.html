@@ -1,6 +1,6 @@
 <div class=" customer-efficiency-report ">
     <div class="multi-select-dropdown ">
-        <div class="dropdown-year  ">
+        <div class="dropdown-year  ps-3">
             @if(yearDropdown.length!=0){
                 <app-single-select-dropdown [dropdownHeading]="'Select Year'" [defaultValue]="selectedValueYear"
                 [dataList]="yearDropdown" (selectedOutput)="selectedYear($event)">
@@ -56,8 +56,8 @@
             }
         </ul>
     </div>
-<div class="container-fluid p-0 py-4">
-    <ag-grid-angular #agGrid style="width: 100%; height: 70vh" class="ag-theme-alpine" [rowData]="rowData"
+<div class="container-fluid p-0">
+    <ag-grid-angular #agGrid style="width: 100%; height: calc(100vh - 14.5rem)" class="ag-theme-alpine" [rowData]="rowData"
     [columnDefs]="columnDefs" [defaultColDef]="defaultColDef" [animateRows]="true" [paginationPageSize]="15"
     [paginationPageSizeSelector]="paginationPageSizeSelector" [pagination]="true" (gridReady)="onGridReady($event)"
     (paginationChanged)="onPaginationChanged($event)"></ag-grid-angular>

@@ -66,8 +66,9 @@
     }
 
 .Permission-container{
-    // max-height: 100vh;
-    height: 100%;
+    // max-height: calc(100vh );
+    // height: calc(100vh - 42rem);
+   
 }
 .container-fluid{
     height: 100%;
@@ -102,4 +103,6 @@
   background-color: white;
   margin-bottom: 20px;
   border-radius: 8px;
+  max-height: calc(100vh - 15rem);
+  overflow-y: auto;
 }
