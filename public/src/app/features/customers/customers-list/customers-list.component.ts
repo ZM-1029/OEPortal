@@ -9,7 +9,6 @@ import {
 import { AgGridAngular } from "ag-grid-angular";
 import { AllCommunityModule, GridApi, GridReadyEvent, ModuleRegistry } from "ag-grid-community";
 import {
-  customerDetailsI,
   customerListI,
   customerI,
 } from "../../../shared/types/customer.type";
@@ -24,7 +23,6 @@ import { CustomerCreateComponent } from "../customer-create/customer-create.comp
 import { MatDialog } from "@angular/material/dialog";
 import { DeleteModalComponent } from "../../../shared/components/UI/delete-modal/delete-modal.component";
 import { Subject } from "rxjs";
-import { ActivatedRoute, Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { SuccessModalComponent } from "src/app/shared/components/UI/success-modal/success-modal.component";
 import { RolePermissionService } from "../../role-permissions/role-permission.service";
@@ -92,6 +90,7 @@ export class CustomersListComponent implements OnInit, OnDestroy {
       maxWidth: 100,
       cellClass: "hover-effect-cell",
       pinned: "right",
+      lockPinned: true,
       sortable: false,
       filter: false,
       cellStyle: () => {
