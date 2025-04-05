@@ -166,8 +166,9 @@ export class ApproveQuatationComponent {
       formData.append('QuotationId', this.Id.toString());
       // formData.append('IsSelfApproved', this.approveForm.value.selfApprove ? 'true' : 'false');
       // formData.append('IsApprovedByAccountant', this.approveForm.value.approveByAccountant ? 'true' : 'false');
+      debugger;
       formData.append('IsSelfApproved', this.approveForm.value.selfApprove);
-      formData.append('IsApprovedByAccountant', this.approveForm.value.approveByAccountant);
+      formData.append('IsApprovedByAccountant', this.approveForm.value.approveByAccountant==undefined?'false':'true');
 
       // formData.append('Invoice', this.selectedFile ? this.selectedFile : '');
       if (this.selectedFile) {
