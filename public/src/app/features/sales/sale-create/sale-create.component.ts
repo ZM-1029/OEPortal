@@ -11,7 +11,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { CdkTextareaAutosize } from "@angular/cdk/text-field";
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { SalesService } from "../sales.service";
-import { AddressData, Branch, Company, Country, Customer, PaymentTerm, PaymentTermsI, Product, QuotationResponse, selectedProduct, Tax } from "src/app/shared/types/sales.type";
+import { AddressData, Branch, Company, Country, Customer, PaymentTerm, Product, QuotationResponse, selectedProduct, Tax } from "src/app/shared/types/sales.type";
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
@@ -179,6 +179,10 @@ export class SaleCreateComponent {
             if (res.success) this.Taxes = res.data;
             this._changeDetetction.detectChanges();
           });
+          this._salesService.getCompany(this.selectedCountryId).subscribe((res) => {
+            if (res.success) this.Companies = res.data;
+            this._changeDetetction.detectChanges();
+          });
           this._salesService.getCustomerAddressByCoustomerId(this.selectedCustomerId).subscribe((res) => {
             if (res.success) this.Address = res.data;
             this._changeDetetction.detectChanges();
@@ -204,7 +208,21 @@ export class SaleCreateComponent {
   }
   createUpdate() {
     this.submitted = true;
+    this.items.controls.forEach((control, index) => {
+      if (!control.get('productId')?.value) {
+        control.get('productId')?.setErrors({ required: true });
+        control.get('productId')?.markAsTouched();
+        this.submitted = false;
+      }
+    });
+    if (this.productForm.invalid || !this.submitted) {
+      this.productForm.markAllAsTouched();
+      return;
+    }
     if (!this.productForm.valid) {
+      
+      console.log(this.productForm.controls,'this.productForm.controls');
+      
       this.productForm.markAllAsTouched();
       return;
     }
@@ -356,8 +374,20 @@ export class SaleCreateComponent {
     });
   }
   selectedProductId: number = 0;
+  isProductSelected: boolean = false;
   onProductSelect(event: any, index: number) {
     this.selectedProductId = event.value;
+    const productControl = this.items.at(index).get('productId');
+
+    if (!this.selectedProductId) {
+      this.isProductSelected = false;
+      productControl?.setErrors({ required: true });
+      productControl?.markAsTouched();  // Mark as touched to show error
+      return;
+    } else {
+      this.isProductSelected = true;
+      productControl?.setErrors(null);
+    } 
     this.currentRowIndex = index;
     this._salesService.getProductById(this.selectedProductId).subscribe((res) => {
       if (res.success && res.data.length > 0) {
@@ -485,9 +515,6 @@ export class SaleCreateComponent {
   }
   ngOnDestroy(): void {
     this.resetForm();
-    this._unsubscribeAll$.next(
-      this._salesService.getProductByProductId(this.Id),
-    );
     this._unsubscribeAll$.complete();
   }
 }

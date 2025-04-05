@@ -5,8 +5,6 @@ import { CommonModule } from "@angular/common";
 import { PageHeaderComponent } from "../../../shared/components/UI/page-header/page-header.component";
 import { LoaderComponent } from "../../../shared/components/UI/loader/loader.component";
 import { SideDrawerComponent } from "../../../shared/components/UI/side-drawer/side-drawer.component";
-import { MatDialog } from "@angular/material/dialog";
-import { DeleteModalComponent } from "../../../shared/components/UI/delete-modal/delete-modal.component";
 import { Subject } from "rxjs";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { SuccessModalComponent } from "src/app/shared/components/UI/success-modal/success-modal.component";
@@ -121,7 +119,6 @@ export class SalesListComponent {
   constructor(
     private _salesService: SalesService,
     private _changeDetectorRef: ChangeDetectorRef,
-    private dialog: MatDialog,
     private _successMessage: MatSnackBar,
   ) { }
 
@@ -144,14 +141,9 @@ export class SalesListComponent {
       } else {
         this.rowData = [];
         this.showErrorOverlay('Data is not found');
-        console.log('No product data returned from API.');
       }
     });
   }
-  export(event: Event) {
-    alert("export");
-  }
-
   formClose(event: any) {
     this.sideDrawer();
     if (event) {
@@ -169,76 +161,39 @@ export class SalesListComponent {
       this._changeDetectorRef.detectChanges();
     }
   }
-  // updateQuotation(event: any): void {
-  //   if (event.event.target.closest(".edit-icon")) {
-  //     const quotationId = event.event.target.closest(".edit-icon").getAttribute("data-id");
-  //     console.log(quotationId, 'quotationId')
-  //     this.quotationId = Number(quotationId);
-  //     this.isSideDrawerOpen = true;
-  //   }
-  //   if (event.event.target.closest(".delete-icon")) {
-  //     const quotationId = event.event.target.closest(".delete-icon").getAttribute("data-id");
-  //     this.openDeleteModal(Number(quotationId));
-  //   }
-
-  // }
   updateQuotation(event: any): void {
     const target = event.event.target;
-  
     if (target.closest(".edit-icon")) {
       const quotationId = target.closest(".edit-icon").getAttribute("data-id");
       this.quotationId = Number(quotationId);
       this.isSideDrawerOpen = true;
     }
-  
+
     if (target.closest(".download-icon")) {
       const quotationId = target.closest(".download-icon").getAttribute("data-id");
       this.downloadPDF(Number(quotationId));
     }
-  
-    if (target.closest(".delete-icon")) {
-      const quotationId = target.closest(".delete-icon").getAttribute("data-id");
-      this.openDeleteModal(Number(quotationId));
-    }
-  
+
     if (target.closest(".approve-icon")) {
       const quotationId = target.closest(".approve-icon").getAttribute("data-id");
       this.quotationId = Number(quotationId);
       this.isApprovePopupOpen = true;
     }
-  
+
     if (target.closest(".download-invoice-icon")) {
       const invoiceURL = target.closest(".download-invoice-icon").getAttribute("data-url");
       this.downloadInvoice(invoiceURL);
     }
   }
-  
+
   downloadInvoice(url: string) {
     const link = document.createElement('a');
     link.href = url;
-    link.target = '_blank'; // Optional: To open in a new tab if needed
-    link.download = url.split('/').pop() || 'download'; // Ensure the file name is set
-    document.body.appendChild(link); // Append link to the DOM
-    link.click(); // Trigger the download
-    document.body.removeChild(link); // Clean up the DOM
-  }
-  
-
-  openDeleteModal(quotationId: number): void {
-    const dialogRef = this.dialog.open(DeleteModalComponent, {
-      width: "400px",
-      height: "175px",
-      disableClose: true,
-      data: "Quotation",
-    });
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result == true) {
-        console.log("Delete confirmed");
-        // this.deleteRow(quotationId);
-      } else {
-        console.log("Delete action canceled");
-      }
-    });
+    link.target = '_blank';
+    link.download = url.split('/').pop() || 'download';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   }
   onPaginationChanged(params: any) {
     const currentPage = params.api.paginationGetCurrentPage();
@@ -280,8 +235,6 @@ export class SalesListComponent {
     this.gridApi.hideOverlay();
     this.getQuotationList();
   }
-
-  
   showErrorOverlay(message: string) {
     if (this.gridApi) {
       this.gridApi.showNoRowsOverlay();
@@ -294,18 +247,17 @@ export class SalesListComponent {
       }, 100);
     }
   }
-  
+
   renderActionIcons(params: any): string {
     const statusId = params.data.statusId;
-    const invoiceURL = params.data.invoiceURL; // Assuming invoiceURL exists in the data
+    const invoiceURL = params.data.invoiceURL;
   
-    const approveIcon = statusId !== 4 
-      ? `<span class="icon-container text-success approve-icon" data-id="${params.data.id}" style="display: block; width: 20px; height: 20px; cursor: pointer;">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-          </svg>
-        </span>`
-      : '';
+    
+    const approveIcon = `<span class="icon-container text-success approve-icon" data-id="${params.data.id}" style="display: block; width: 20px; height: 20px; cursor: pointer;">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+      </svg>
+    </span>`;
   
     const downloadInvoiceIcon = statusId === 4 && invoiceURL
       ? `<span class="icon-container text-info download-invoice-icon" data-url="${invoiceURL}" style="display: block; width: 20px; height: 20px; cursor: pointer;">
@@ -323,14 +275,13 @@ export class SalesListComponent {
           </svg>
         </span>
   
-  
-        ${approveIcon}
+        ${approveIcon}  <!-- Always visible -->
         ${downloadInvoiceIcon}
       </div>
     `;
   }
   
-  
+
 
 
   private showSuccessMessage(message: string) {
@@ -343,8 +294,6 @@ export class SalesListComponent {
     });
   }
   private handleError(err: any) {
-    console.error("Error Status:", err.status);
-    console.error("Error Message:", err.error);
     this._successMessage.open(err.error.message, "Close", {
       duration: 4000,
       panelClass: ["error-toast"],
@@ -364,8 +313,7 @@ export class SalesListComponent {
         window.URL.revokeObjectURL(url);
       },
       error: (error) => {
-        console.error('PDF download error:', error);
-        this._successMessage.open('Failed to download PDF.', 'Close', {
+        this._successMessage.open(error, 'Close', {
           duration: 3000,
           panelClass: ['error-toast'],
         });

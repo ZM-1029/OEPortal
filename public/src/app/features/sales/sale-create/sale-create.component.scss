@@ -441,3 +441,6 @@ select {
   width: 100%;
 }
 
+.mat-form-field-invalid .mat-form-field-control {
+  border: 1px solid red !important;
+}

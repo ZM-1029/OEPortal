@@ -1,8 +1,4 @@
-export interface itemReturnI {
-  success: boolean;
-  message: string;
-  data: Item;
-}
+
 export interface productDetailsI {
   success: boolean;
   message: string;

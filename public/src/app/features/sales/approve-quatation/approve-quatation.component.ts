@@ -11,6 +11,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { SafePipe } from "../safe.pipe";
 
 @Component({
   selector: 'app-approve-quatation',
@@ -21,9 +22,7 @@ import { MatIconModule } from '@angular/material/icon';
     MatSelectModule,
     MatInputModule,
     MatButtonModule,
-    MatIconModule,
-    
-  ],
+    MatIconModule, SafePipe],
   templateUrl: './approve-quatation.component.html',
   styleUrl: './approve-quatation.component.scss'
 })
@@ -32,17 +31,26 @@ export class ApproveQuatationComponent {
   selectedFile: File | null = null;
   errorMessage: string = '';
   showFileUpload: boolean = false;
-  quotationStatus:any[]=[];
+  quotationStatus: any[] = [];
+  pdfUrl: string | null = null;
   @Input() isApprovePopupOpen: boolean = false;
   @Input() Id: number = 0;
   @Output() formClose = new EventEmitter<boolean>();
-
   constructor(private fb: FormBuilder, private _salesService: SalesService, private _successMessage: MatSnackBar, private cdr: ChangeDetectorRef) {
     this.createForm();
   }
   ngOnInit(): void {
+    this.loadPDF();
     this.getQuotationDetails(this.Id);
     this.getQuotationStatus(this.Id);
+  }
+  private handleError(err: any) {
+    this._successMessage.open(err.error.message, "Close", {
+      duration: 4000,
+      panelClass: ["error-toast"],
+      verticalPosition: "top",
+      horizontalPosition: "right",
+    });
   }
   getQuotationDetails(quotationId: number) {
     this._salesService.getQuotationStatusDetails(quotationId).subscribe({
@@ -50,12 +58,16 @@ export class ApproveQuatationComponent {
         if (response && response.success) {
           const isSelfApproved = response.data.isSelfApproved || false;
           const isApprovedByAccountant = response.data.isApprovedByAccountant || false;
-
+          const invoice = response.data.invoice || null;
           this.approveForm.patchValue({
             selfApprove: isSelfApproved,
             approveByAccountant: isApprovedByAccountant,
-            invoice: response.data.invoice || null
           });
+          if (invoice) {
+            this.selectedFile = invoice;
+            console.log(this.selectedFile, 'this.selectedFile');
+
+          }
           const approveByAccountantControl = this.approveForm.get('approveByAccountant');
           if (isSelfApproved) {
             approveByAccountantControl?.enable();
@@ -66,25 +78,25 @@ export class ApproveQuatationComponent {
         }
       },
       error: (error) => {
-        console.error('Error fetching quotation details:', error);
-      }
-    });
-  }
-  getQuotationStatus(quotationId: number) {
-    this._salesService.getQuotationStatus(quotationId).subscribe({
-      next: (response: any) => {
-        if (response && response.success) {
-           this.quotationStatus = response.data;
-           this.cdr.detectChanges();
-           console.log(this.quotationStatus ,'this.quotationStatus ')
-        }
-      },
-      error: (error) => {
-        console.error('Error fetching quotation details:', error);
+        this.handleError(error);
       }
     });
   }
 
+  getQuotationStatus(quotationId: number) {
+    this._salesService.getQuotationStatus(quotationId).subscribe({
+      next: (response: any) => {
+        if (response && response.success) {
+          this.quotationStatus = response.data;
+          this.cdr.detectChanges();
+          console.log(this.quotationStatus, 'this.quotationStatus ')
+        }
+      },
+      error: (error) => {
+        this.handleError(error);
+      }
+    });
+  }
   createForm() {
     this.approveForm = this.fb.group({
       selfApprove: [false],
@@ -92,15 +104,13 @@ export class ApproveQuatationComponent {
       file: [null]
     });
   }
-
   onFileChange(event: any) {
     const file = event.target.files[0];
-
     if (file) {
       const allowedTypes = ['image/jpeg', 'image/png', 'application/pdf'];
-
       if (allowedTypes.includes(file.type)) {
         this.selectedFile = file;
+        this.approveForm.patchValue({ file: file });
         this.errorMessage = '';
       } else {
         this.selectedFile = null;
@@ -109,26 +119,8 @@ export class ApproveQuatationComponent {
       }
     }
   }
-  downloadPDF(): void {
-    this._salesService.downloadPDF(this.Id).subscribe({
-      next: (response: any) => {
-        const blob = new Blob([response], { type: 'application/pdf' });
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = `Quotation_${this.Id}.pdf`;
-        link.click();
-        window.URL.revokeObjectURL(url);
-      },
-      error: (error) => {
-        console.error('PDF download error:', error);
-        this._successMessage.open('Failed to download PDF.', 'Close', {
-          duration: 3000,
-          panelClass: ['error-toast'],
-        });
-      },
-    });
-  }
+
+
   reset() {
     this.approveForm.reset();
     this.selectedFile = null;
@@ -138,10 +130,15 @@ export class ApproveQuatationComponent {
     if (this.approveForm.valid) {
       const formData = new FormData();
       formData.append('QuotationId', this.Id.toString());
-      formData.append('IsSelfApproved', this.approveForm.value.selfApprove ? 'true' : 'false');
-      formData.append('IsApprovedByAccountant', this.approveForm.value.approveByAccountant ? 'true' : 'false');
-      formData.append('Invoice', this.selectedFile ? this.selectedFile : '');
+      // formData.append('IsSelfApproved', this.approveForm.value.selfApprove ? 'true' : 'false');
+      // formData.append('IsApprovedByAccountant', this.approveForm.value.approveByAccountant ? 'true' : 'false');
+      formData.append('IsSelfApproved', this.approveForm.value.selfApprove);
+      formData.append('IsApprovedByAccountant', this.approveForm.value.approveByAccountant);
 
+      // formData.append('Invoice', this.selectedFile ? this.selectedFile : '');
+      if (this.selectedFile) {
+        formData.append('Invoice', this.selectedFile);
+      }
       this._salesService.approveQuotation(formData).subscribe({
         next: (response: any) => {
           if (response && response.success) {
@@ -152,9 +149,7 @@ export class ApproveQuatationComponent {
           this.formClose.emit(true);
         },
         error: (error: HttpErrorResponse) => {
-          this._successMessage.open('Submission failed.', 'Close', {
-            duration: 3000,
-          });
+          this.handleError(error);
         }
       });
     } else {
@@ -168,5 +163,37 @@ export class ApproveQuatationComponent {
   }
   closePopup() {
     this.formClose.emit();
+  }
+  downloadPDF(): void {
+    this._salesService.downloadPDF(this.Id).subscribe({
+      next: (response: any) => {
+        const blob = new Blob([response], { type: 'application/pdf' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `Quotation_${this.Id}.pdf`;
+        link.click();
+        this.pdfUrl = url;
+      },
+      error: (error) => {
+        this.handleError(error);
+      }
+    });
+  }
+
+  loadPDF(): void {
+    if (this.pdfUrl) {
+      return;
+    }
+    this._salesService.downloadPDF(this.Id).subscribe({
+      next: (response: any) => {
+        const blob = new Blob([response], { type: 'application/pdf' });
+        this.pdfUrl = URL.createObjectURL(blob);
+        this.cdr.detectChanges();
+      },
+      error: (error) => {
+        this.handleError(error);
+      }
+    });
   }
 }
