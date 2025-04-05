@@ -11,6 +11,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-approve-quatation',
@@ -28,7 +29,7 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrl: './approve-quatation.component.scss'
 })
 export class ApproveQuatationComponent {
-
+  isLoading:boolean = false; 
   approveForm!: FormGroup;
   selectedFile: File | null = null;
   errorMessage: string = '';
@@ -38,12 +39,16 @@ export class ApproveQuatationComponent {
   @Input() Id: number = 0;
   @Output() formClose = new EventEmitter<boolean>();
 
-  constructor(private fb: FormBuilder, private _salesService: SalesService, private _successMessage: MatSnackBar, private cdr: ChangeDetectorRef) {
+  constructor( private sanitizer: DomSanitizer ,private fb: FormBuilder, private _salesService: SalesService, private _successMessage: MatSnackBar, private cdr: ChangeDetectorRef) {
     this.createForm();
+   
   }
   ngOnInit(): void {
+    this.isLoading=true;
     this.getQuotationDetails(this.Id);
     this.getQuotationStatus(this.Id);
+    this.downloadPDF()
+
   }
   getQuotationDetails(quotationId: number) {
     this._salesService.getQuotationStatusDetails(quotationId).subscribe({
@@ -113,20 +118,28 @@ export class ApproveQuatationComponent {
   downloadPDF(): void {
     this._salesService.downloadPDF(this.Id).subscribe({
       next: (response: any) => {
+        // Create a Blob from the response
         const blob = new Blob([response], { type: 'application/pdf' });
+
+        // Create an Object URL for the Blob
         const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = `Quotation_${this.Id}.pdf`;
-        link.click();
-        window.URL.revokeObjectURL(url);
+
+        // Sanitize the Object URL and assign it to pdfSrc
+        this.pdfSrc = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+        console.log(this.pdfSrc)
+
+        // Optionally, revoke the URL after some time
+  
+      this.isLoading=false;
+      this.cdr.detectChanges()
       },
       error: (error) => {
         console.error('PDF download error:', error);
-        this._successMessage.open('Failed to download PDF.', 'Close', {
+        this._successMessage.open('Failed to load PDF.', 'Close', {
           duration: 3000,
           panelClass: ['error-toast'],
         });
+        this.isLoading=false;
       },
     });
   }
@@ -170,4 +183,7 @@ export class ApproveQuatationComponent {
   closePopup() {
     this.formClose.emit();
   }
+  pdfSrc: SafeResourceUrl | undefined;
+
+
 }

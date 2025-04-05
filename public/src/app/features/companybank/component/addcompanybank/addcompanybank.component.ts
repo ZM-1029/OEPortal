@@ -16,6 +16,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { ReactiveFormsModule } from '@angular/forms';
 import { OnlyNumbersDirective } from 'src/app/shared/directive/only-numbers.directive';
 import { CompanybanklistService } from '../../companybanklist.service';
+import { ConfirmationDialogService } from 'src/app/shared/services/confimation.service';
+import { ConfirmationDialogComponent } from 'src/app/shared/components/confirmation-dialog/confirmation-dialog.component';
 
 
 @Component({
@@ -30,8 +32,10 @@ import { CompanybanklistService } from '../../companybanklist.service';
         MatButtonModule,
         MatIconModule,
         ReactiveFormsModule,
-        OnlyNumbersDirective
+        OnlyNumbersDirective,
+        
   ],
+  providers:[ConfirmationDialogService],
   templateUrl: './addcompanybank.component.html',
   styleUrl: './addcompanybank.component.scss'
 })
@@ -43,7 +47,7 @@ companyForm!: FormGroup;
   @Input() isSideDrawerOpen: boolean = false; 
  
  @Output() formClose: EventEmitter<boolean> = new EventEmitter<boolean>();
-  constructor(private fb: FormBuilder,private companyservice:CompanybanklistService,private apiservice:BussinessService,private activate:ActivatedRoute,private _successMessage:MatSnackBar,private cdr:ChangeDetectorRef) {
+  constructor(private confirmationDialogService: ConfirmationDialogService,private fb: FormBuilder,private companyservice:CompanybanklistService,private apiservice:BussinessService,private activate:ActivatedRoute,private _successMessage:MatSnackBar,private cdr:ChangeDetectorRef) {
     this.companyservice.getAllCompany().subscribe({next:(data:any)=>{
       this.countries = [{ value: '0', label: 'Select a Company' }];  // Add the default option
       data.data.forEach((country:any) => {
@@ -83,15 +87,17 @@ companyForm!: FormGroup;
       accountNumber: ['', [Validators.required]],
     
       swissCode: ['', ],
-      isPrimary:['1']
+      isPrimary:['false']
       
    
     });
+    this.companyForm.get('isPrimary')?.setValue(0);
 if(this.Id>0)
 {
   this.heading="Update"
   this.patchValue()
 }
+
     
   }
  
@@ -111,6 +117,43 @@ if(this.Id>0)
       })
       this.companyForm.get('companyId')?.setValue(data.data.companyId.toString());
     }})
+  }
+  
+  toggle(event:any)
+  {
+    if(this.Id>0)
+      return;
+    debugger
+    if(event.checked){
+      if(this.companyForm.value.companyId==0)
+      {
+        alert("please select a company")
+        this.companyForm.get('isPrimary')?.setValue(0);
+        return;
+      }
+      else{
+        if(event.checked==true)
+        {
+          this.companyservice.checkIfprimarybankexists(this.companyForm.value.companyId).subscribe({next:(data:any)=>{
+           if(data==true)
+           {
+           
+
+
+    this.confirmationDialogService.confirm('Please confirm..', 'Do you really want to make this account primary ... ?')
+    .then((confirmed) => {
+      if(confirmed==false){
+        this.companyForm.get('isPrimary')?.setValue(0);
+        return;
+      }
+    })
+    .catch(() => console.log('User dismissed the dialog (e.g., by using ESC, clicking the cross icon, or clicking outside the dialog)'));
+  }
+           
+          }})
+        }
+      }
+    }
   }
   closePopup() {
     this.formClose.emit();

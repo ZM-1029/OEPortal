@@ -83,7 +83,7 @@
        
           <div class="d-flex  ps-4">
             <mat-label class="outer-mat-label">Is Primary</mat-label>
-            <mat-slide-toggle formControlName="isPrimary"></mat-slide-toggle>
+            <mat-slide-toggle formControlName="isPrimary" (change)="toggle($event)"></mat-slide-toggle>
           </div>
         </div>
   

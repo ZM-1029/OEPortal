@@ -301,21 +301,13 @@ export class SalesListComponent {
     const statusId = params.data.statusId;
     const invoiceURL = params.data.invoiceURL; // Assuming invoiceURL exists in the data
   
-    const approveIcon = statusId !== 4 
-      ? `<span class="icon-container text-success approve-icon" data-id="${params.data.id}" style="display: block; width: 20px; height: 20px; cursor: pointer;">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-          </svg>
-        </span>`
-      : '';
+    const approveIcon = 
+       `<span class="icon-container text-success edit-icon approve-icon" data-id="${params.data.id}" style="display: block; width: 20px; height: 20px; cursor: pointer;">
+      <i style="color: rgba(var(--bs-primary-rgb), var(--bs-text-opacity)) !important;font-size:1rem" class="fa-solid fa-file-pen"></i>
+       </span>`
+      
   
-    const downloadInvoiceIcon = statusId === 4 && invoiceURL
-      ? `<span class="icon-container text-info download-invoice-icon" data-url="${invoiceURL}" style="display: block; width: 20px; height: 20px; cursor: pointer;">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v12m0 0l3-3m-3 3l-3-3m4.5 0A2.25 2.25 0 0 1 15.75 21H8.25A2.25 2.25 0 0 1 6 18.75V8.25A2.25 2.25 0 0 1 8.25 6H15.75A2.25 2.25 0 0 1 18 8.25v4.5" />
-          </svg>
-        </span>`
-      : '';
+  
   
     return `
       <div class="action-icons d-flex align-items-center justify-content-around">
@@ -327,7 +319,7 @@ export class SalesListComponent {
   
   
         ${approveIcon}
-        ${downloadInvoiceIcon}
+       
       </div>
     `;
   }

@@ -26,6 +26,11 @@ export class CompanybanklistService {
      {
        return this._httpclient.get<any>(this.apiurl+"api/CompanyProfile/GetBankDeatilById/"+id)
      }
+
+     checkIfprimarybankexists(id:any):Observable<any>
+     {
+       return this._httpclient.get<any>(this.apiurl+"api/CompanyProfile/check-primary-bank/"+id)
+     }
   
      addCompanyBank(data:any):Observable<any>
      {
