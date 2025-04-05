@@ -1,6 +1,5 @@
 <div class="account-details m-4">
     
-    
     <div class="border-bottom bg-light pb-2">
       <h2 class="formHeading">{{heading}} Account Details</h2>
     </div>
@@ -12,24 +11,23 @@
          
   
           <!-- Country Dropdown -->
-          <div class="form-group row ">
-            <mat-label class="outer-mat-label col-4   text-end">Company</mat-label>
-            <div class="col-8">
-              <mat-form-field appearance="outline" class="col-8">
-                <mat-select formControlName="companyId" (selectionChange)="checkCountry($event)">
-               
-                  <mat-option *ngFor="let country of countries" [value]="country.value">
-                    {{ country.label }}
-                  </mat-option>
-                </mat-select>
-                <div *ngIf="iscountryfail" style="color: red; font-size: 12px;">
-                  Company is required.
-                </div>
-              </mat-form-field>
-            </div>
+          <div class="form-group row">
+            <mat-label class="outer-mat-lable col-4 pt-2">Company</mat-label>
+            <mat-form-field appearance="outline" class="col-8">
+              <mat-select formControlName="companyId" (selectionChange)="checkCountry($event)">
+             
+                <mat-option *ngFor="let country of countries" [value]="country.value">
+                  {{ country.label }}
+                </mat-option>
+              </mat-select>
+              <div *ngIf="iscountryfail" style="color: red; font-size: 12px;">
+                Company is required.
+              </div>
+            </mat-form-field>
           </div>
   
           <!-- Terms & Conditions -->
+          
           <div class="form-group row">
               <mat-label class="outer-mat-lable col-4 pt-2">Bank Name</mat-label>
               <mat-form-field appearance="outline" class="col-8">
