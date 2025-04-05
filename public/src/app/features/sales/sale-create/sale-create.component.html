@@ -166,7 +166,8 @@
             </div>
           </div>
         </div>
-        <h4 class="fw-bold">Item Table</h4>
+
+        <h4 class="fw-bold mb-0">Item Table</h4>
         <div class="container form-group row pe-3 pb-4 mb-4">
           <div class="table-responsive py-4">
             <table formArrayName="items">
@@ -195,12 +196,12 @@
                           <mat-option *ngFor="let product of Products" [value]="product.id">{{ product.name
                             }}</mat-option>
                         </mat-select>
-                        <mat-error class="text-danger"
-                          *ngIf="item.get('productId')?.hasError('required') && item.get('productId')?.touched">
-                          Please select product
-                        </mat-error>
                       </mat-form-field>
+                      <mat-error *ngIf="items.at(i).get('productId')?.hasError('required') && items.at(i).get('productId')?.touched">
+                        Please select a product
+                      </mat-error>
                     </div>
+                    
                   </td>
                   <td><input formControlName="quantity" type="number" class="table-data" min="1"
                       (input)="amountCalculate()" /></td>
@@ -290,15 +291,15 @@
               <span class="summary-value fw-bold">{{ calculationDetails.total || 0 }}</span>
             </div>
           </div>
-          <div class="form-btn d-flex align-items-start justify-content-end p-4 ">
-            <button class="btn btn-secondary mx-2" type="button" (click)="resetForm()">
-              Clear
-            </button>
-            <button class="btn btn-primary" (click)="createUpdate()">
-              {{ formHeading }}
-            </button>
-          </div>
         </div>
+      </div>
+      <div class="form-btn d-flex align-items-start justify-content-end p-4 ">
+        <button class="btn btn-secondary mx-2" type="button" (click)="resetForm()">
+          Clear
+        </button>
+        <button class="btn btn-info-dark " (click)="createUpdate()">
+          {{ formHeading }}
+        </button>
       </div>
     </form>
   </div>
