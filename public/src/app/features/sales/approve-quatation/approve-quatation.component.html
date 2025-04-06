@@ -2,8 +2,14 @@
     <div class="border-bottom bg-light pb-2">
         <h2 class="formHeading">Change Status</h2>
     </div>
+    @if (invoiceUrl) {
+        <button class="btn btn-success" (click)="downloadInvoice()">Download Invoice</button>
+    }
     <div class="d-flex">
-        <iframe [src]="pdfSrc" class="left" width="100%" height="600px"></iframe>
+        <iframe [src]="pdfSrc " class="left" width="100%" height="600px"></iframe>
+    
+        
+
         <div class="right">
             <div class="form-container  d-flex">
                 <form [formGroup]="approveForm" (ngSubmit)="submitForm()">
@@ -61,6 +67,7 @@
                 </table>
             </div>
         </div>
+    
     </div>
 </div>
 

@@ -23,7 +23,9 @@ import { SafePipe } from "../safe.pipe";
     MatSelectModule,
     MatInputModule,
     MatButtonModule,
-    MatIconModule, SafePipe],
+    MatIconModule,
+    SafePipe
+  ],
   templateUrl: './approve-quatation.component.html',
   styleUrl: './approve-quatation.component.scss'
 })
@@ -35,9 +37,11 @@ export class ApproveQuatationComponent {
   showFileUpload: boolean = false;
   quotationStatus: any[] = [];
   pdfUrl: string | null = null;
+  pdfSrc: SafeResourceUrl | undefined;
   @Input() isApprovePopupOpen: boolean = false;
   @Input() Id: number = 0;
   @Output() formClose = new EventEmitter<boolean>();
+  invoiceUrl: string='';
 
   constructor( private sanitizer: DomSanitizer ,private fb: FormBuilder, private _salesService: SalesService, private _successMessage: MatSnackBar, private cdr: ChangeDetectorRef) {
     this.createForm();
@@ -70,8 +74,8 @@ export class ApproveQuatationComponent {
             approveByAccountant: isApprovedByAccountant,
           });
           if (invoice) {
-            this.selectedFile = invoice;
-            console.log(this.selectedFile, 'this.selectedFile');
+            this.invoiceUrl = invoice;
+            console.log(this.invoiceUrl, 'this.invoiceUrl');
 
           }
           const approveByAccountantControl = this.approveForm.get('approveByAccountant');
@@ -164,11 +168,11 @@ export class ApproveQuatationComponent {
     if (this.approveForm.valid) {
       const formData = new FormData();
       formData.append('QuotationId', this.Id.toString());
-      // formData.append('IsSelfApproved', this.approveForm.value.selfApprove ? 'true' : 'false');
-      // formData.append('IsApprovedByAccountant', this.approveForm.value.approveByAccountant ? 'true' : 'false');
-      debugger;
-      formData.append('IsSelfApproved', this.approveForm.value.selfApprove);
-      formData.append('IsApprovedByAccountant', this.approveForm.value.approveByAccountant==undefined?'false':'true');
+      formData.append('IsSelfApproved', this.approveForm.value.selfApprove ? 'true' : 'false');
+      formData.append('IsApprovedByAccountant', this.approveForm.value.approveByAccountant ? 'true' : 'false');
+      // debugger;
+      // formData.append('IsSelfApproved', this.approveForm.value.selfApprove);
+      // formData.append('IsApprovedByAccountant', this.approveForm.value.approveByAccountant==undefined?'false':'true');
 
       // formData.append('Invoice', this.selectedFile ? this.selectedFile : '');
       if (this.selectedFile) {
@@ -199,7 +203,17 @@ export class ApproveQuatationComponent {
   closePopup() {
     this.formClose.emit();
   }
-  pdfSrc: SafeResourceUrl | undefined;
-
+ 
+  downloadInvoice(): void {
+    const link = document.createElement('a');
+    link.href = this.invoiceUrl;
+    link.target = '_blank';
+    link.download = this.invoiceUrl.split('/').pop() || 'invoice.jpg';
+    link.click();
+  }
+  
+  
+  
+  
 
 }
