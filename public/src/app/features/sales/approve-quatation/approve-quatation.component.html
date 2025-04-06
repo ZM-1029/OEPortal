@@ -3,24 +3,24 @@
         <h2 class="formHeading">Change Status</h2>
     </div>
     @if (invoiceUrl) {
-        <button class="btn btn-success" (click)="downloadInvoice()">Download Invoice</button>
+    <button class="btn btn-success" (click)="downloadInvoice()">Download Invoice</button>
     }
     <div class="d-flex">
         <iframe [src]="pdfSrc " class="left" width="100%" height="600px"></iframe>
-    
-        
 
         <div class="right">
             <div class="form-container  d-flex">
                 <form [formGroup]="approveForm" (ngSubmit)="submitForm()">
                     <div class="input-form-container py-3">
                         <div class="row">
-                            <mat-slide-toggle class="col-4"formControlName="selfApprove">Self Approve</mat-slide-toggle>
+                            <mat-slide-toggle class="col-4" formControlName="selfApprove">Self
+                                Approve</mat-slide-toggle>
                             <br>
                             <div class="d-flex" style="align-items: center;">
-                                <mat-slide-toggle formControlName="approveByAccountant" (change)="onToggleChange()">Approve by
+                                <mat-slide-toggle formControlName="approveByAccountant"
+                                    (change)="onToggleChange()">Approve by
                                     Accountant</mat-slide-toggle>
-                            
+
                                 @if(showFileUpload){
                                 <div class="form-group row ">
                                     <mat-label class="outer-mat-label col-4 pt-2">Upload File</mat-label>
@@ -34,7 +34,7 @@
                                 }
                             </div>
                         </div>
-                       
+
                     </div>
                     <div class="form-btn d-flex align-items-start justify-content-end p-4">
                         <button class="btn btn-secondary mx-2" type="button" (click)="reset()">Clear</button>
@@ -42,7 +42,7 @@
                     </div>
                 </form>
             </div>
-    
+
             <div class="table-responsive  py-4">
                 <table>
                     <thead>
@@ -62,16 +62,16 @@
                             <td>{{status.createdByEmail}}</td>
                         </tr>
                         }
-    
+
                     </tbody>
                 </table>
             </div>
         </div>
-    
+
     </div>
 </div>
 
 
 <div *ngIf="isLoading" class="loading-overlay">
     <div class="spinner"></div>
-  </div>
+</div>
