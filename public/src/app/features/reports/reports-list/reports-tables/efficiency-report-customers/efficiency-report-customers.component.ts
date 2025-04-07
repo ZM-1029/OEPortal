@@ -140,7 +140,6 @@ export class EfficiencyReportCustomersComponent {
       this.yearDropdown.push({ value: year.toString(), label: year.toString() });
     }
     this.yearDropdown.reverse();
-    console.log("Generated Years:", this.yearDropdown);
     this._changeDetectorRef.detectChanges();
   }
 
@@ -172,7 +171,6 @@ export class EfficiencyReportCustomersComponent {
           name: `(${obj.customerId}) - ${obj.customerName}`,
         }));
         this._changeDetectorRef.detectChanges();
-        console.log("Employees Loaded:", this.allCustomers);
       },
       error: (err) => {
         console.error("Error fetching employees:", err);
@@ -192,10 +190,14 @@ export class EfficiencyReportCustomersComponent {
             this.rowData = response.customerSummaries;
             this._changeDetectorRef.detectChanges();
           } else {
+            this.rowData=[];
+            this.showErrorOverlay("Data is not found")
             this.handleError(response.message)
           }
         }),
         error: ((err) => {
+          this.rowData=[];
+          this.showErrorOverlay("Data is not found")
           this.handleError(err.error.message)
         })
       }

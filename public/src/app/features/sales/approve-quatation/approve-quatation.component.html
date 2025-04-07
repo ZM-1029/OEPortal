@@ -1,17 +1,49 @@
-<div class="main-content m-4">
+<div class="approve-quatation m-4">
     <div class="border-bottom bg-light pb-2">
         <h2 class="formHeading">Change Status</h2>
+        @if (invoiceUrl) {
+        <div class="downloadInvoice d-block">
+            <button type="button" class="btn btn-light d-flex align-items-center ms-auto me-3 shadow-sm rounded "
+                (click)="downloadInvoice()">
+                <div class="text-primary  ">
+                    <mat-icon svgIcon="download"></mat-icon>
+                </div>
+                Download Invoice
+            </button>
+        </div>
+        }
     </div>
-    @if (invoiceUrl) {
+    <!-- @if (invoiceUrl) {
     <button class="btn btn-success" (click)="downloadInvoice()">Download Invoice</button>
-    }
-    <div class="d-flex">
-        <iframe [src]="pdfSrc " class="left" width="100%" height="600px"></iframe>
-
-        <div class="right">
-            <div class="form-container  d-flex">
+    } -->
+    <div class="pdf-container p-2">
+        <iframe [src]="pdfSrc" class="left" width="100%" height="600px"></iframe>
+        <div class="right ">
+            <div class="table-responsive  py-4">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Status</th>
+                            <th>Created on</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (status of quotationStatus; track $index) {
+                        <tr>
+                            <td>{{status.statusName}}</td>
+                            <td>{{status.createdOn |date}}</td>
+                            <td>{{status.createdByName}}</td>
+                            <td>{{status.createdByEmail}}</td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="form-container d-flex">
                 <form [formGroup]="approveForm" (ngSubmit)="submitForm()">
-                    <div class="input-form-container py-3">
+                    <div class=" py-3">
                         <div class="row">
                             <mat-slide-toggle class="col-4" formControlName="selfApprove">Self
                                 Approve</mat-slide-toggle>
@@ -38,33 +70,9 @@
                     </div>
                     <div class="form-btn d-flex align-items-start justify-content-end p-4">
                         <button class="btn btn-secondary mx-2" type="button" (click)="reset()">Clear</button>
-                        <button class="btn btn-primary" type="submit">Submit</button>
+                        <button class="btn btn-info-dark" type="submit">Submit</button>
                     </div>
                 </form>
-            </div>
-
-            <div class="table-responsive  py-4">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Status</th>
-                            <th>Created on</th>
-                            <th>Name</th>
-                            <th>Email</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @for (status of quotationStatus; track $index) {
-                        <tr>
-                            <td>{{status.statusName}}</td>
-                            <td>{{status.createdOn |date}}</td>
-                            <td>{{status.createdByName}}</td>
-                            <td>{{status.createdByEmail}}</td>
-                        </tr>
-                        }
-
-                    </tbody>
-                </table>
             </div>
         </div>
 

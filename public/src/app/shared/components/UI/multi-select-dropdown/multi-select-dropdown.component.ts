@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgOptionTemplateDirective, NgSelectComponent, NgSelectModule } from '@ng-select/ng-select';
 @Component({
@@ -21,7 +21,8 @@ export class MultiSelectDropdownComponent implements OnInit, OnChanges {
   iscloseDropdown: boolean = false;
   stringArray: string = '';
   private previousSelectedData: string[] = [];
-  selectedValue: string[] = []
+  selectedValue: string[] = [];
+  @ViewChild('selectRef') selectRef!: NgSelectComponent;
   constructor() { }
 
   ngOnInit() {
@@ -78,6 +79,10 @@ export class MultiSelectDropdownComponent implements OnInit, OnChanges {
     if (JSON.stringify(this.previousSelectedData) === JSON.stringify(this.selectedData)) {
       return;
     }
+
+      this.selectRef.searchTerm = '';// ✅ bypass TS check
+  
+
     this.previousSelectedData = [...this.selectedData];
 
     this.selectedValue = [...this.selectedData];

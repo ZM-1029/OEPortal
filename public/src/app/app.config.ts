@@ -17,6 +17,6 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     provideHttpClient(withInterceptors([authInterceptor])),
     provideNgIconsConfig({}, withContentSecurityPolicy()),
-    MatIconRegistry
+    MatIconRegistry,
   ],
 };

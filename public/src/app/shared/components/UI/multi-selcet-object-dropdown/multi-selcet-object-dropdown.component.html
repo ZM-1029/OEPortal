@@ -1,5 +1,6 @@
 
 <ng-select
+#selectRefObj
 class="multiple-select"
   [placeholder]="'Select '+dropdownHeading"
   [items]="transformedDataList"
@@ -21,7 +22,7 @@ class="multiple-select"
 
   <!-- Custom Options with Checkboxes -->
   <ng-template ng-option-tmp let-item="item" let-item$="item$">
-    <input type="checkbox" [disabled]="allSelected" [checked]="item$.selected" />
+    <input type="checkbox"  [checked]="item$.selected" />
     <span class="px-2">{{ item.name }}</span>
   </ng-template>
 

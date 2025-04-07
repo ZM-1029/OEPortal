@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule, NgOptionTemplateDirective, NgSelectComponent } from '@ng-select/ng-select';
 
@@ -22,31 +22,8 @@ export class MultiSelcetObjectDropdownComponent implements OnInit, OnChanges {
   iscloseDropdown: boolean = false;
   stringArray: string = '';
   private previousSelectedData: any[] = [];
+  @ViewChild('selectRefObj') selectRefObj!: NgSelectComponent;
   constructor() { }
-
-  // ngOnInit() {
-  //   if (this.defaultValue) {
-  //     this.selectedData = this.defaultValue;
-  //     this.selectedOutput.emit(this.selectedData);
-  //   }
-  // }
-
-  // ngOnChanges(changes: SimpleChanges): void {
-  //   if (changes['dataList']) {
-  //     this.dataList = changes['dataList'].currentValue;
-  //     this.transformedDataList = this.dataList.map((item: any, index: number) => {
-  //       if (typeof (item) == 'string') {
-  //         this.stringArray = 'string';
-  //         return { id: item, name: item }
-  //       } else {
-  //         this.stringArray = 'object';
-  //         return { id: item.id, name: item.name }
-  //       }
-  //     }
-  //     );
-
-  //   }
-  // }
 
   ngOnInit() {
     // Initialize with default value if provided
@@ -111,17 +88,18 @@ export class MultiSelcetObjectDropdownComponent implements OnInit, OnChanges {
     if (JSON.stringify(this.previousSelectedData) === JSON.stringify(this.selectedData)) {
       return;
     }
+
+    this.selectRefObj.searchTerm = '';// ✅ bypass TS check
+
     this.previousSelectedData = [...this.selectedData];
     this.allSelected = this.selectedData.length === this.transformedDataList.length;
   
     if (this.allSelected) {
       this.selectedOutput.emit(0);
-    } else if (this.selectedData.length !== 0) {
-      console.log(this.selectedData,"updateAllSelected");
-      
+    } else if (this.selectedData.length !== 0) {  
       this.selectedOutput.emit(this.selectedData); // ✅ Emit IDs directly
     } else {
-      // this.selectedOutput.emit(1);
+      this.selectedOutput.emit(1);
     }
   }
 

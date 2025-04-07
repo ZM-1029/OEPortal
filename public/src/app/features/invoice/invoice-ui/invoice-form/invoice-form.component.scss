@@ -54,7 +54,7 @@
     width: max-content;
    
 }
-.invoiceForm mat-label ,.invoiceForm mat-checkbox{
+.invoiceForm-container mat-label ,.invoiceForm-container mat-checkbox{
   font-weight: 500;
 }
 .mat-internal-form-field > label {
@@ -65,4 +65,10 @@
   order: 0;
   width: max-content;
   font-weight: 500;
+}
+
+@media (max-width:1200px) {
+  .invoiceForm-container .invoiceForm{
+    flex-wrap: wrap;
+  }
 }

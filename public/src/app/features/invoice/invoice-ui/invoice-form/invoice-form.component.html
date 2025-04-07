@@ -1,5 +1,5 @@
-<div class="invoiceForm d-flex  flex-wrap ">
-    <form class="d-flex pe-2" [formGroup]="invoiceForm">
+<div class="invoiceForm-container d-flex  flex-wrap ">
+    <form class="d-flex pe-2 invoiceForm" [formGroup]="invoiceForm">
         <div class="form-field  d-flex ms-0">
             <mat-label class="d-flex pt-2 justify-content-end me-2">Invoice No.</mat-label>
             <mat-form-field appearance="outline" class="example-full-width col-8" >
@@ -40,8 +40,8 @@
             </mat-form-field>
         </div>
     </form>
-    <form class="d-flex " [formGroup]="purchaseOrderForm">
-        <div class="form-field d-flex ">
+    <form class="d-flex purchaseOrderForm-container " [formGroup]="purchaseOrderForm">
+        <div class="purchaseOrderForm d-flex ">
             <mat-checkbox  formControlName="po" (click)="getPurchaseOrderList()" class="custom-checkbox mx-2" color="primary">
                 Purchase Order
               </mat-checkbox>

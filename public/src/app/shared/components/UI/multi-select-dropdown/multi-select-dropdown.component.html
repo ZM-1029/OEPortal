@@ -1,16 +1,9 @@
-<ng-select
-  [placeholder]="'Select '+dropdownHeading"
-  [items]="transformedDataList"
-  [multiple]="true"
-  [searchable]="true"
-  bindLabel="name"
-  bindValue="name"
-  groupBy="gender"
-  [selectableGroup]="false"
-  [closeOnSelect]="iscloseDropdown"
-  [(ngModel)]="selectedData"
-  (change)="updateAllSelected()">
-  
+<ng-select #selectRef [placeholder]="'Select '+dropdownHeading" [items]="transformedDataList" [multiple]="true"
+  [searchable]="true" bindLabel="name" bindValue="name" groupBy="gender" [selectableGroup]="false"
+  [closeOnSelect]="iscloseDropdown" [clearSearchOnAdd]="true" [(ngModel)]="selectedData"
+  (ngModelChange)="updateAllSelected()">
+  <!-- (change)="updateAllSelected(selectRef)" -->
+
   <!-- Custom "Select All" Checkbox -->
   <ng-template ng-header-tmp>
     <div class="custom-select-all">
@@ -25,7 +18,7 @@
     <span class="px-2"> {{ item.name }}</span>
   </ng-template>
 
- 
+
   <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
     <div class="ng-value-container p-0">
       <span *ngIf="items.length === 0">Select {{dropdownHeading}}</span>
@@ -35,9 +28,9 @@
         <span *ngIf="items.length > 1" class="plus-count ng-value p-1">+{{items.length - 1}}</span>
       </div>
       }@else{
-        <div class="selected-items-wrapper p-0 pb-1">
-          <span class="selected-item ng-value p-1">All Selected</span>
-        </div>
+      <div class="selected-items-wrapper p-0 pb-1">
+        <span class="selected-item ng-value p-1">All Selected</span>
+      </div>
       }
     </div>
   </ng-template>
