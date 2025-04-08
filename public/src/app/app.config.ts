@@ -9,7 +9,7 @@ import { provideAnimationsAsync } from "@angular/platform-browser/animations/asy
 import { provideHttpClient, withInterceptors } from "@angular/common/http";
 import {  MatIconRegistry } from '@angular/material/icon';
 import { authInterceptor } from "./core/interceptors/auth.interceptor";
-
+import { PdfViewerModule } from 'ng2-pdf-viewer';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
@@ -18,5 +18,6 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptors([authInterceptor])),
     provideNgIconsConfig({}, withContentSecurityPolicy()),
     MatIconRegistry,
+    PdfViewerModule
   ],
 };

@@ -17,7 +17,53 @@
     <button class="btn btn-success" (click)="downloadInvoice()">Download Invoice</button>
     } -->
     <div class="pdf-container p-2">
-        <iframe [src]="pdfSrc" class="left" width="100%" height="600px"></iframe>
+        <!-- <iframe [src]="pdfSrc" class="left" width="100%" height="600px"></iframe> -->
+        <div class=" p-2" *ngIf="pdfSrc">
+            <div class="decline-form position-relative">
+                <ng-container>
+                    <!-- ✅ Zoom Controls -->
+                    <div class="text-end mb-2">
+                        <div class="zoomOut text-secondary mx-2 d-inline"><mat-icon svgIcon="zoomOut"
+                                (click)="zoomOut()"></mat-icon></div>
+                        <div class="zoomIn text-secondary mx-2 d-inline"><mat-icon svgIcon="zoomIn"
+                                (click)="zoomIn()"></mat-icon></div>
+                        <!-- <button class="btn btn-outline-secondary btn-sm me-2" (click)="zoomOut()"></button> -->
+                        <!-- <button class="btn btn-outline-secondary btn-sm" (click)="zoomIn()"><mat-icon svgIcon="zoomIn"></mat-icon></button> -->
+                        <button class="btn btn-outline-secondary btn-sm mx-2" (click)="downloadPdf()">
+                            <mat-icon svgIcon="download"></mat-icon> Download PDF
+                        </button>
+                        <span class="ms-2">Zoom: {{ (zoom * 100) | number:'1.0-0' }}%</span>
+                    </div>
+
+                    <!-- ✅ PDF Viewer -->
+                    <div class="position-relative">
+                        <pdf-viewer [src]="pdfSrc" [page]="page" [render-text]="true" [original-size]="false"
+                            [fit-to-page]="true" [autoresize]="true" [show-borders]="false" [zoom]="zoom"
+                            style="width: 100%; height: calc(100vh - 32rem);" (after-load-complete)="onPdfLoad($event)">
+                        </pdf-viewer>
+
+                        <!-- ✅ Styled Watermark Overlay for Page 1 -->
+                        <div *ngIf="page === 1 "
+                            class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center"
+                            style="z-index: 10; backdrop-filter: blur(1px); pointer-events: none;">
+                            <div class="decline-watermark text-danger">
+                                DECLINE
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- ✅ Page Navigation -->
+                    <div class="mt-3 text-center" *ngIf="totalPages > 1">
+                        <button *ngFor="let p of [].constructor(totalPages); let i = index" class="btn btn-sm mx-1"
+                            [class.active]="page === i + 1" (click)="page = i + 1" style="min-width: 36px;">
+                            {{ i + 1 }}
+                        </button>
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+
         <div class="right ">
             <div class="table-responsive  py-4">
                 <table>
@@ -33,7 +79,8 @@
                         @for (status of quotationStatus; track $index) {
                         <tr>
                             <td>{{status.statusName}}</td>
-                            <td>{{status.createdOn |date}}</td>
+                            <!-- <td>{{status.createdOn |date }}</td> -->
+                            <td>{{ status.createdOn | date: 'MMM dd , yyyy, h:mm a' }}</td>
                             <td>{{status.createdByName}}</td>
                             <td>{{status.createdByEmail}}</td>
                         </tr>
@@ -62,7 +109,7 @@
                                 </div>
                                 @if (errorMessage) {
                                 <p *ngIf="errorMessage" class="text-danger">{{ errorMessage }}</p>
-                                }
+                                  }
                                 }
                             </div>
                         </div>

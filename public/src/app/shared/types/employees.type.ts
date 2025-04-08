@@ -8,10 +8,18 @@ export interface BaseResponse<T> {
 export interface employeeListI {
   success:boolean
   message:string
-  pageNumber: number;
-  pageSize: number;
-  totalCount: number;
+  pageNumber: number
+  pageSize: number
+  totalCount: number
+  statusCount:StatusCount
   employees: employeeType[];
+}
+
+export interface StatusCount {
+  resigned: number
+  active: number
+  terminated: number
+  absconded: number
 }
 
 export interface employeeType {

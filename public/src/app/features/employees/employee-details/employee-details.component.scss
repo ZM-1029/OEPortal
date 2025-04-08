@@ -2,6 +2,7 @@
   overflow: hidden !important;
   height: 100%;
 }
+
 .icon {
   border: 1px solid rgb(212, 210, 210);
   font-size: 14px;
@@ -69,6 +70,7 @@ app-employee-salary {
   overflow-y: scroll;
   height: 100%;
 }
+
 .profile-content {
   max-height: 66vh !important;
   height: 100%;
@@ -82,10 +84,11 @@ app-employee-salary {
   background-color: white;
   box-shadow: 1px 1px 1px rgba(137, 229, 236, 0.349);
 }
+
 .box-1 .row .col-4 .row {
   font-size: 14px;
-  border-bottom: none ;
-  text-align: start ;
+  border-bottom: none;
+  text-align: start;
 }
 
 
@@ -141,8 +144,7 @@ label {
   --bs-nav-tabs-border-radius: var(--bs-border-radius);
   --bs-nav-tabs-link-active-color: var(--bs-emphasis-color);
   --bs-nav-tabs-link-active-bg: var(--bs-body-bg);
-  --bs-nav-tabs-link-active-border-color: var(--bs-border-color)
-    var(--bs-border-color) var(--bs-body-bg);
+  --bs-nav-tabs-link-active-border-color: var(--bs-border-color) var(--bs-border-color) var(--bs-body-bg);
 }
 
 .nav-tabs .nav-item.show .nav-link,
@@ -210,6 +212,7 @@ h5 {
   background-color: green;
   color: white;
 }
+
 .status-text-danger {
   border: 2px solid red;
   width: 100px;
@@ -230,13 +233,12 @@ h5 {
   font-size: 14px;
 }
 
-.profile-container-img .zm-finance-card .row .col-7{
+.profile-container-img .zm-finance-card .row .col-7 {
   font-size: 14px;
 }
 
 @media (max-width: 550px) {
   .profile-content {
-    overflow-x: scroll; 
+    overflow-x: scroll;
   }
 }
-

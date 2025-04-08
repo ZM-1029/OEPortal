@@ -1,5 +1,5 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormGroup, FormsModule } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SalesService } from '../sales.service';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -12,6 +12,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
 
 @Component({
   selector: 'app-approve-quatation',
@@ -22,36 +23,41 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
     MatSelectModule,
     MatInputModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    FormsModule,
+    PdfViewerModule
   ],
   templateUrl: './approve-quatation.component.html',
   styleUrl: './approve-quatation.component.scss'
 })
-export class ApproveQuatationComponent {
+export class ApproveQuatationComponent implements OnInit, OnDestroy {
   isLoading: boolean = false;
   approveForm!: FormGroup;
   selectedFile: File | null = null;
   errorMessage: string = '';
   showFileUpload: boolean = false;
   quotationStatus: any[] = [];
+  quotationStatusId:number=0;
   pdfUrl: string | null = null;
-  pdfSrc: SafeResourceUrl | undefined;
+  pdfSrc: string | undefined;
   @Input() isApprovePopupOpen: boolean = false;
   @Input() Id: number = 0;
   @Output() formClose = new EventEmitter<boolean>();
   invoiceUrl: string = '';
-
+  page: number = 1;         // current page number
+  totalPages: number = 0;   // total pages in the PDF
+  zoom: number = 0.5;
   constructor(private sanitizer: DomSanitizer, private fb: FormBuilder, private _salesService: SalesService, private _successMessage: MatSnackBar, private cdr: ChangeDetectorRef) {
     this.createForm();
-
   }
   ngOnInit(): void {
     this.isLoading = true;
     this.getQuotationDetails(this.Id);
     this.getQuotationStatus(this.Id);
-    this.downloadPDF()
-
+    this.getQuotationById(this.Id);
+    this.downloadPDF();
   }
+
   private handleError(err: any) {
     this._successMessage.open(err.error.message, "Close", {
       duration: 4000,
@@ -60,6 +66,46 @@ export class ApproveQuatationComponent {
       horizontalPosition: "right",
     });
   }
+
+// PDF function  start
+  onPdfLoad(pdf: any): void {
+    this.totalPages = pdf._pdfInfo.numPages;
+  }
+
+  zoomIn(): void {
+    if (this.zoom < 2.5) this.zoom += 0.1;
+  }
+
+  zoomOut(): void {
+    if (this.zoom > 0.3) this.zoom -= 0.1;
+  }
+
+  downloadPdf() {
+    if (this.pdfSrc) {
+      const link = document.createElement('a');
+      link.href = this.pdfSrc;
+      link.download = 'Quotation.pdf';
+      link.click();
+    } else {
+      console.warn('PDF source is undefined');
+    }
+  }
+  
+
+  getQuotationById(quotationId: number) {
+    this._salesService.getQuotationById(quotationId).subscribe(
+      {
+        next:((response)=>{
+          this.quotationStatusId=response.data.statusId;
+        }),error:((error)=>{
+
+        })
+      }
+    )
+  }
+
+  // PDF function  end
+
   getQuotationDetails(quotationId: number) {
     this._salesService.getQuotationStatusDetails(quotationId).subscribe({
       next: (response: any) => {
@@ -127,15 +173,35 @@ export class ApproveQuatationComponent {
       }
     }
   }
+
+  // downloadPDF(): void {
+  //   this._salesService.downloadPDF(this.Id).subscribe({
+  //     next: (response: any) => {
+  //       const blob = new Blob([response], { type: 'application/pdf' });
+  //       const url = window.URL.createObjectURL(blob);
+  //       this.pdfSrc = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+  //       console.log(this.pdfSrc)
+  //       this.isLoading = false;
+  //       this.cdr.detectChanges()
+  //     },
+  //     error: (error) => {
+  //       this._successMessage.open(error, 'Close', {
+  //         duration: 3000,
+  //         panelClass: ['error-toast'],
+  //       });
+  //       this.isLoading = false;
+  //     },
+  //   });
+  // }
+
   downloadPDF(): void {
     this._salesService.downloadPDF(this.Id).subscribe({
       next: (response: any) => {
         const blob = new Blob([response], { type: 'application/pdf' });
         const url = window.URL.createObjectURL(blob);
-        this.pdfSrc = this.sanitizer.bypassSecurityTrustResourceUrl(url);
-        console.log(this.pdfSrc)
+        this.pdfSrc = url; 
         this.isLoading = false;
-        this.cdr.detectChanges()
+        this.cdr.detectChanges();
       },
       error: (error) => {
         this._successMessage.open(error, 'Close', {
@@ -146,6 +212,8 @@ export class ApproveQuatationComponent {
       },
     });
   }
+
+
   reset() {
     this.approveForm.reset();
     this.selectedFile = null;
@@ -197,5 +265,11 @@ export class ApproveQuatationComponent {
     link.target = '_blank';
     link.download = this.invoiceUrl.split('/').pop() || 'invoice.jpg';
     link.click();
+  }
+
+  ngOnDestroy(): void {
+    if (this.pdfSrc) {
+      window.URL.revokeObjectURL(this.pdfSrc);
+    }
   }
 }

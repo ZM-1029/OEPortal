@@ -38,6 +38,20 @@ export class EmployeeAssetsComponent implements OnInit, AfterViewInit {
       },
     },
     {
+      field: "assetId",
+      headerName: "Asset Id",
+      sortable: true,
+      filter: true,
+      minWidth: 100,
+    },
+    {
+      field: "assetTag",
+      headerName: "Asset Tag",
+      sortable: true,
+      filter: true,
+      minWidth: 100,
+    },
+    {
       field: "assetName",
       headerName: "Asset Name",
       sortable: true,
@@ -98,9 +112,6 @@ export class EmployeeAssetsComponent implements OnInit, AfterViewInit {
       error: (err) => {
         this.rowData=[]
         this.showErrorOverlay("Data is not found");
-        console.error("Error Status:", err.status);
-        console.error("Error Message:", err.error);
-        let errorMessage = "An error occurred while fetching data.";
         if (err.status === 404 && err.error.message) {
          
           this.handleError(err.error.message);
@@ -143,17 +154,6 @@ export class EmployeeAssetsComponent implements OnInit, AfterViewInit {
 
   getDate(formatDate: any, format: string = "dd-MMM-YYYY"): string | null {
     return this.datePipe.transform(formatDate, format);
-  }
-
-  //  Function to show success messages
-  private showSuccessMessage(message: string) {
-    this._successMessage.openFromComponent(SuccessModalComponent, {
-      data: { message },
-      duration: 4000,
-      panelClass: ["custom-toast"],
-      verticalPosition: "top",
-      horizontalPosition: "right",
-    });
   }
 
   //  Function to handle API errors

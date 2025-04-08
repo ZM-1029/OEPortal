@@ -46,6 +46,7 @@ export class EmployeeListComponent implements OnInit, OnChanges {
   public activeEmployees: number = 0;
   public terminatedEmployees: number = 0;
   public resignedEmployees: number = 0;
+  public abscondedEmployees: number = 0;
   public employeeId: string = "";
   public currentPageNumber: number = 1;
   public isSideDrawerOpen: boolean = false;
@@ -204,6 +205,7 @@ export class EmployeeListComponent implements OnInit, OnChanges {
               } else {
                 this.rowData = [];
                 this.showErrorOverlay("You have not permission");
+                
               }
               // Hide "Actions" column if `edit` is false
               if (this.gridApi) {
@@ -215,6 +217,7 @@ export class EmployeeListComponent implements OnInit, OnChanges {
           }
         } else {
           this.handleError("please try again leter");
+          
         }
       },
       error: (err) => {
@@ -233,13 +236,17 @@ export class EmployeeListComponent implements OnInit, OnChanges {
             (result: employeeListI) => {
               if (result.success) {
                 this.rowData = result.employees;
-                for (let i of this.rowData) {
-                  i.employeestatus == "Active"
-                    ? this.activeEmployees++
-                    : i.employeestatus == "Terminated"
-                      ? this.terminatedEmployees++
-                      : this.resignedEmployees++;
-                }
+                this.terminatedEmployees=result.statusCount.terminated;
+                this.activeEmployees=result.statusCount.active;
+                this.resignedEmployees=result.statusCount.resigned;
+                this.abscondedEmployees=result.statusCount.absconded;
+                // for (let i of this.rowData) {
+                //   i.employeestatus == "Active"
+                //     ? this.activeEmployees++
+                //     : i.employeestatus == "Terminated"
+                //       ? this.terminatedEmployees++
+                //       : this.resignedEmployees++;
+                // }
                 this.totalCount = result.totalCount;
                 this.currentPageNumber = result.pageNumber;
                 this.currentPageSize = result.pageSize;
@@ -347,6 +354,8 @@ export class EmployeeListComponent implements OnInit, OnChanges {
   navigateToDetails(empId: string) {
     if (empId !== null) {
       this._router.navigateByUrl("/admin/employee/" + empId);
+    }else{
+      alert("yor re not allow")
     }
   }
 

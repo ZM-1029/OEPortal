@@ -94,7 +94,7 @@ export class EmployeeAttendanceComponent implements OnInit {
   selectedMonth: any;
   selectedYear: any;
   years: number[] = [];
-  rowData: attendanceTypeI[]=[] ;
+  rowData: attendanceTypeI[] = [];
   private gridApi!: GridApi<any>;
   public currentPageNumber: number = 1;
   public currentPageSize: number = 50;
@@ -163,7 +163,7 @@ export class EmployeeAttendanceComponent implements OnInit {
     private _attendanceModal: MatDialog,
     private _successMessage: MatSnackBar,
     private datePipe: DatePipe,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     console.log("EmployeeAttendanceComponent");
@@ -215,12 +215,11 @@ export class EmployeeAttendanceComponent implements OnInit {
             }
           },
           error: (err) => {
-            console.error("Error Status:", err.status);
-            console.error("Error Message:", err.error);
             let errorMessage = "An error occurred while fetching data.";
+            this.rowData = [];
+            this.showErrorOverlay('Data is not found');
             if (err.status === 404 && err.error.message) {
               errorMessage = err.error.message;
-              this.showErrorOverlay('Data is not found');
             }
             this.handleError(err.error.message);
           },
@@ -288,7 +287,6 @@ export class EmployeeAttendanceComponent implements OnInit {
       }, 100);
     }
   }
-
 
   //  Function to handle API errors
   private handleError(err: any) {
