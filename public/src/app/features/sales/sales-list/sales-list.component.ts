@@ -14,6 +14,7 @@ import { Quotation, QuotationListI } from "src/app/shared/types/sales.type";
 import moment from 'moment';
 import { ApproveQuatationComponent } from "../approve-quatation/approve-quatation.component";
 import { MatIconModule } from "@angular/material/icon";
+import { ActivatedRoute, Router } from "@angular/router";
 ModuleRegistry.registerModules([AllCommunityModule]);
 @Component({
   selector: 'app-sales-list',
@@ -22,7 +23,7 @@ ModuleRegistry.registerModules([AllCommunityModule]);
     LoaderComponent,
     PageHeaderComponent,
     SideDrawerComponent,
-    SaleCreateComponent, ApproveQuatationComponent, MatIconModule],
+    SaleCreateComponent, ApproveQuatationComponent, MatIconModule,],
   templateUrl: './sales-list.component.html',
   styleUrl: './sales-list.component.scss',
   encapsulation: ViewEncapsulation.None,
@@ -120,6 +121,7 @@ export class SalesListComponent {
     private _salesService: SalesService,
     private _changeDetectorRef: ChangeDetectorRef,
     private _successMessage: MatSnackBar,
+    private router: Router, private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
@@ -161,30 +163,58 @@ export class SalesListComponent {
       this._changeDetectorRef.detectChanges();
     }
   }
+
+  // updateQuotation(event: any): void {
+  //   const target = event.event.target;
+  //   if (target.closest(".edit-icon")) {
+  //     const quotationId = target.closest(".edit-icon").getAttribute("data-id");
+  //     this.quotationId = Number(quotationId);
+  //     this.isSideDrawerOpen = true;
+  //   }
+
+  //   if (target.closest(".download-icon")) {
+  //     const quotationId = target.closest(".download-icon").getAttribute("data-id");
+  //     this.downloadPDF(Number(quotationId));
+  //   }
+
+  //   if (target.closest(".approve-icon")) {
+  //     const quotationId = target.closest(".approve-icon").getAttribute("data-id");
+  //     this.quotationId = Number(quotationId);
+  //     this.isApprovePopupOpen = true;
+  //   }
+
+  //   if (target.closest(".download-invoice-icon")) {
+  //     const invoiceURL = target.closest(".download-invoice-icon").getAttribute("data-url");
+  //     this.downloadInvoice(invoiceURL);
+  //   }
+  // }
+
   updateQuotation(event: any): void {
     const target = event.event.target;
+  
     if (target.closest(".edit-icon")) {
-      const quotationId = target.closest(".edit-icon").getAttribute("data-id");
-      this.quotationId = Number(quotationId);
-      this.isSideDrawerOpen = true;
-    }
-
+          const quotationId = target.closest(".edit-icon").getAttribute("data-id");
+          this.quotationId = Number(quotationId);
+          this.isSideDrawerOpen = true;
+        }
+  
     if (target.closest(".download-icon")) {
       const quotationId = target.closest(".download-icon").getAttribute("data-id");
       this.downloadPDF(Number(quotationId));
     }
-
+  
     if (target.closest(".approve-icon")) {
       const quotationId = target.closest(".approve-icon").getAttribute("data-id");
-      this.quotationId = Number(quotationId);
-      this.isApprovePopupOpen = true;
+      this.router.navigate([quotationId], { relativeTo: this.route });
     }
-
+  
     if (target.closest(".download-invoice-icon")) {
       const invoiceURL = target.closest(".download-invoice-icon").getAttribute("data-url");
       this.downloadInvoice(invoiceURL);
     }
   }
+  
+
 
   downloadInvoice(url: string) {
     const link = document.createElement('a');

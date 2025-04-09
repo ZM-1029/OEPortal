@@ -3,7 +3,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { AgGridAngular } from 'ag-grid-angular';
 import { ModuleRegistry, AllCommunityModule, GridApi, GridReadyEvent } from 'ag-grid-community';
 import { LoaderComponent } from 'src/app/shared/components/UI/loader/loader.component';
-import { SuccessModalComponent } from 'src/app/shared/components/UI/success-modal/success-modal.component';
 import { EmployeesService } from '../employees.service';
 import { DatePipe } from '@angular/common';
 

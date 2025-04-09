@@ -1,9 +1,9 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SalesService } from '../sales.service';
 import { ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgClass } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -13,6 +13,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { Subscription } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-approve-quatation',
@@ -25,10 +28,13 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
     MatButtonModule,
     MatIconModule,
     FormsModule,
-    PdfViewerModule
+    PdfViewerModule,
+    MatCheckboxModule,
+    NgClass
   ],
   templateUrl: './approve-quatation.component.html',
-  styleUrl: './approve-quatation.component.scss'
+  styleUrl: './approve-quatation.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ApproveQuatationComponent implements OnInit, OnDestroy {
   isLoading: boolean = false;
@@ -36,8 +42,9 @@ export class ApproveQuatationComponent implements OnInit, OnDestroy {
   selectedFile: File | null = null;
   errorMessage: string = '';
   showFileUpload: boolean = false;
+  isSelfApproved: boolean = false;
   quotationStatus: any[] = [];
-  quotationStatusId:number=0;
+  quotationStatusId: number = 0;
   pdfUrl: string | null = null;
   pdfSrc: string | undefined;
   @Input() isApprovePopupOpen: boolean = false;
@@ -46,17 +53,35 @@ export class ApproveQuatationComponent implements OnInit, OnDestroy {
   invoiceUrl: string = '';
   page: number = 1;         // current page number
   totalPages: number = 0;   // total pages in the PDF
-  zoom: number = 0.5;
-  constructor(private sanitizer: DomSanitizer, private fb: FormBuilder, private _salesService: SalesService, private _successMessage: MatSnackBar, private cdr: ChangeDetectorRef) {
+  zoom: number = 0.7;
+  private subscriptions = new Subscription();
+  constructor(private sanitizer: DomSanitizer, private fb: FormBuilder, private _salesService: SalesService,
+     private _successMessage: MatSnackBar, private cdr: ChangeDetectorRef,private _router: Router,
+     private activatedRoute: ActivatedRoute) {
     this.createForm();
   }
+
   ngOnInit(): void {
-    this.isLoading = true;
-    this.getQuotationDetails(this.Id);
-    this.getQuotationStatus(this.Id);
-    this.getQuotationById(this.Id);
-    this.downloadPDF();
+    this.activatedRoute.paramMap.subscribe(params => {
+      const id = params.get('id');
+      if (id) {
+        this.Id = +id;
+        this.isLoading = true;
+        this.getQuotationById(this.Id);
+        this.getQuotationStatus(this.Id);
+        this.getQuotationDetails(this.Id);
+        this.downloadPDF();
+      }
+    });
   }
+  
+  // ngOnInit(): void {
+  //   this.isLoading = true;
+  //   this.getQuotationById(this.Id);
+  //   this.getQuotationStatus(this.Id);
+  //   this.getQuotationDetails(this.Id);
+  //   this.downloadPDF();
+  // }
 
   private handleError(err: any) {
     this._successMessage.open(err.error.message, "Close", {
@@ -67,7 +92,7 @@ export class ApproveQuatationComponent implements OnInit, OnDestroy {
     });
   }
 
-// PDF function  start
+  // PDF function  start
   onPdfLoad(pdf: any): void {
     this.totalPages = pdf._pdfInfo.numPages;
   }
@@ -90,14 +115,14 @@ export class ApproveQuatationComponent implements OnInit, OnDestroy {
       console.warn('PDF source is undefined');
     }
   }
-  
+
 
   getQuotationById(quotationId: number) {
     this._salesService.getQuotationById(quotationId).subscribe(
       {
-        next:((response)=>{
-          this.quotationStatusId=response.data.statusId;
-        }),error:((error)=>{
+        next: ((response) => {
+          this.quotationStatusId = response.data.statusId;
+        }), error: ((error) => {
 
         })
       }
@@ -110,20 +135,35 @@ export class ApproveQuatationComponent implements OnInit, OnDestroy {
     this._salesService.getQuotationStatusDetails(quotationId).subscribe({
       next: (response: any) => {
         if (response && response.success) {
-          const isSelfApproved = response.data.isSelfApproved || false;
+          // const isSelfApproved = response.data.isSelfApproved || false;
+          this.isSelfApproved = response.data.isSelfApproved || false;
           const isApprovedByAccountant = response.data.isApprovedByAccountant || false;
           const invoice = response.data.invoice || null;
-          this.approveForm.patchValue({
-            selfApprove: isSelfApproved,
-            approveByAccountant: isApprovedByAccountant,
-          });
+          // this.approveForm.patchValue({
+          //   selfApprove: this.isSelfApproved,
+          //   approveByAccountant: isApprovedByAccountant,
+          // });
+          if (this.quotationStatusId == 5 && this.isSelfApproved ) {
+            this.approveForm.patchValue({
+              selfApprove: this.isSelfApproved,
+              approveByAccountant: isApprovedByAccountant,
+              isSelfApprovelDecline: true,
+            });
+          }
+           else {
+            this.approveForm.patchValue({
+              selfApprove: this.isSelfApproved,
+              approveByAccountant: isApprovedByAccountant,
+              isApproveByAccountantDecline: true,
+            });
+          }
           if (invoice) {
             this.invoiceUrl = invoice;
             console.log(this.invoiceUrl, 'this.invoiceUrl');
 
           }
           const approveByAccountantControl = this.approveForm.get('approveByAccountant');
-          if (isSelfApproved) {
+          if (this.isSelfApproved) {
             approveByAccountantControl?.enable();
           } else {
             approveByAccountantControl?.disable();
@@ -155,8 +195,40 @@ export class ApproveQuatationComponent implements OnInit, OnDestroy {
     this.approveForm = this.fb.group({
       selfApprove: [false],
       approveByAccountant: [false],
+      isSelfApprovelDecline: [false],
+      isApproveByAccountantDecline: [false],
       file: [null]
     });
+
+
+    const sub1 = this.approveForm.get('selfApprove')?.valueChanges.subscribe((approved: boolean) => {
+      if (approved) {
+        this.approveForm.get('isSelfApprovelDecline')?.setValue(false, { emitEvent: false });
+      }
+    });
+
+    const sub2 = this.approveForm.get('isSelfApprovelDecline')?.valueChanges.subscribe((declined: boolean) => {
+      if (declined) {
+        this.approveForm.get('selfApprove')?.setValue(false, { emitEvent: false });
+      }
+    });
+
+    const sub3 = this.approveForm.get('approveByAccountant')?.valueChanges.subscribe((approved: boolean) => {
+      if (approved) {
+        this.approveForm.get('isApproveByAccountantDecline')?.setValue(false, { emitEvent: false });
+      }
+    });
+    const sub4 = this.approveForm.get('isApproveByAccountantDecline')?.valueChanges.subscribe((declined: boolean) => {
+      if (declined) {
+        this.approveForm.get('approveByAccountant')?.setValue(false, { emitEvent: false });
+      }
+    });
+
+    if (sub1) this.subscriptions.add(sub1);
+    if (sub2) this.subscriptions.add(sub2);
+
+    if (sub3) this.subscriptions.add(sub3);
+    if (sub4) this.subscriptions.add(sub4);
   }
   onFileChange(event: any) {
     const file = event.target.files[0];
@@ -199,7 +271,7 @@ export class ApproveQuatationComponent implements OnInit, OnDestroy {
       next: (response: any) => {
         const blob = new Blob([response], { type: 'application/pdf' });
         const url = window.URL.createObjectURL(blob);
-        this.pdfSrc = url; 
+        this.pdfSrc = url;
         this.isLoading = false;
         this.cdr.detectChanges();
       },
@@ -221,34 +293,81 @@ export class ApproveQuatationComponent implements OnInit, OnDestroy {
 
   submitForm() {
     if (this.approveForm.valid) {
-      const formData = new FormData();
-      formData.append('QuotationId', this.Id.toString());
-      formData.append('IsSelfApproved', this.approveForm.value.selfApprove ? 'true' : 'false');
-      formData.append('IsApprovedByAccountant', this.approveForm.value.approveByAccountant ? 'true' : 'false');
+      const formDataSelfApproved = new FormData();
+      const formDataApprovedByAccountant = new FormData();
+
       // debugger;
       // formData.append('IsSelfApproved', this.approveForm.value.selfApprove);
       // formData.append('IsApprovedByAccountant', this.approveForm.value.approveByAccountant==undefined?'false':'true');
 
       // formData.append('Invoice', this.selectedFile ? this.selectedFile : '');
-      if (this.selectedFile) {
-        formData.append('Invoice', this.selectedFile);
+
+      if (this.approveForm.value.isSelfApprovelDecline) {
+        formDataSelfApproved.append('QuotationId', this.Id.toString());
+        formDataSelfApproved.append('IsSelfApproved', 'false');
+        formDataSelfApproved.append('IsApprovedByAccountant', 'false');
+        formDataSelfApproved.append('IsDeclined', this.approveForm.value.isSelfApprovelDecline ? 'true' : 'false');
+        this.approveQuotation(formDataSelfApproved);
       }
-      this._salesService.approveQuotation(formData).subscribe({
-        next: (response: any) => {
-          if (response && response.success) {
-            this._successMessage.open('Approval submitted successfully!', 'Close', {
-              duration: 3000,
-            });
-          }
-          this.formClose.emit(true);
-        },
-        error: (error: HttpErrorResponse) => {
-          this.handleError(error);
-        }
-      });
+       else if (this.approveForm.value.selfApprove) {
+        formDataSelfApproved.append('QuotationId', this.Id.toString());
+        formDataSelfApproved.append('IsSelfApproved', this.approveForm.value.selfApprove ? 'true' : 'false');
+        formDataSelfApproved.append('IsApprovedByAccountant', this.approveForm.value.approveByAccountant ? 'true' : 'false');
+        formDataSelfApproved.append('IsDeclined', 'true');
+        this.approveQuotation(formDataSelfApproved);
+      } 
+       else if (this.approveForm.value.isApproveByAccountantDecline) {
+        formDataSelfApproved.append('QuotationId', this.Id.toString());
+        formDataSelfApproved.append('IsSelfApproved', this.approveForm.value.selfApprove ? 'true' : 'false');
+        formDataSelfApproved.append('IsApprovedByAccountant', this.approveForm.value.approveByAccountant ? 'true' : 'false');
+        formDataSelfApproved.append('IsDeclined', this.approveForm.value.isApproveByAccountantDecline ? 'true' : 'false');
+        this.approveQuotation(formDataSelfApproved);
+      } 
+      else {
+        formDataSelfApproved.append('QuotationId', this.Id.toString());
+        formDataSelfApproved.append('IsSelfApproved', this.approveForm.value.selfApprove ? 'true' : 'false');
+        formDataSelfApproved.append('IsApprovedByAccountant', this.approveForm.value.approveByAccountant ? 'true' : 'false');
+        formDataSelfApproved.append('IsDeclined', this.approveForm.value.isSelfApprovelDecline ? 'true' : 'false');
+        this.approveQuotation(formDataSelfApproved);
+      }
+      if (this.selectedFile) {
+        formDataSelfApproved.append('Invoice', this.selectedFile);
+      }
+
+      // this._salesService.approveQuotation(formData).subscribe({
+      //   next: (response: any) => {
+      //     if (response && response.success) {
+      //       this._successMessage.open('Approval submitted successfully!', 'Close', {
+      //         duration: 3000,
+      //       });
+      //     }
+      //     // this.formClose.emit(true);
+      //   },
+      //   error: (error: HttpErrorResponse) => {
+      //     this.handleError(error);
+      //   }
+      // });
     } else {
       this.approveForm.markAllAsTouched();
     }
+  }
+
+  approveQuotation(formData: FormData) {
+    this._salesService.approveQuotation(formData).subscribe({
+      next: (response: any) => {
+        if (response && response.success) {
+          this._successMessage.open('Approval submitted successfully!', 'Close', {
+            duration: 3000,
+          });
+        }
+        this._router.navigateByUrl("admin/sales-orders");
+        // this.formClose.emit(true);
+        this.approveForm.reset();
+      },
+      error: (error: HttpErrorResponse) => {
+        this.handleError(error);
+      }
+    });
   }
 
   onToggleChange() {
@@ -271,5 +390,6 @@ export class ApproveQuatationComponent implements OnInit, OnDestroy {
     if (this.pdfSrc) {
       window.URL.revokeObjectURL(this.pdfSrc);
     }
+    this.subscriptions.unsubscribe();
   }
 }
