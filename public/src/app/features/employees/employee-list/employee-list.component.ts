@@ -240,13 +240,6 @@ export class EmployeeListComponent implements OnInit, OnChanges {
                 this.activeEmployees=result.statusCount.active;
                 this.resignedEmployees=result.statusCount.resigned;
                 this.abscondedEmployees=result.statusCount.absconded;
-                // for (let i of this.rowData) {
-                //   i.employeestatus == "Active"
-                //     ? this.activeEmployees++
-                //     : i.employeestatus == "Terminated"
-                //       ? this.terminatedEmployees++
-                //       : this.resignedEmployees++;
-                // }
                 this.totalCount = result.totalCount;
                 this.currentPageNumber = result.pageNumber;
                 this.currentPageSize = result.pageSize;
@@ -280,7 +273,7 @@ export class EmployeeListComponent implements OnInit, OnChanges {
   onGridReady(params: GridReadyEvent<any>) {
     this.gridApi = params.api;
     this.gridApi.hideOverlay();
-    this.getPermissionToAccessPage(Number(localStorage.getItem('role')))
+    this.getPermissionToAccessPage(Number(localStorage.getItem('role')));
   }
 
   showErrorOverlay(message: string) {
@@ -354,8 +347,6 @@ export class EmployeeListComponent implements OnInit, OnChanges {
   navigateToDetails(empId: string) {
     if (empId !== null) {
       this._router.navigateByUrl("/admin/employee/" + empId);
-    }else{
-      alert("yor re not allow")
     }
   }
 
@@ -370,22 +361,9 @@ export class EmployeeListComponent implements OnInit, OnChanges {
     `;
   }
 
-  //  Function to show success messages
-  private showSuccessMessage(message: string) {
-    this._successMessage.openFromComponent(SuccessModalComponent, {
-      data: { message },
-      duration: 4000,
-      panelClass: ["custom-toast"],
-      verticalPosition: "top",
-      horizontalPosition: "right",
-    });
-  }
-
   //  Function to handle API errors
-  private handleError(err: any) {
-    console.error("Error Status:", err.status);
-    console.error("Error Message:", err.error);
-    this._successMessage.open(err.error.message, "Close", {
+  private handleError(err: string) {
+    this._successMessage.open(err, "Close", {
       duration: 4000,
       panelClass: ["error-toast"],
       verticalPosition: "top",

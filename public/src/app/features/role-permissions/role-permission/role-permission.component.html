@@ -10,9 +10,11 @@
         <input type="text" matInput [formControl]="roleControl" [matAutocomplete]="autoRole">
         <mat-autocomplete #autoRole="matAutocomplete" [displayWith]="displayRoleFn"
           (optionSelected)="onRoleSelected($event)">
-          <mat-option *ngFor="let role of filteredRoles | async" [value]="role">
-            {{ role.name }}
-          </mat-option>
+          <ng-container *ngFor="let role of filteredRoles | async">
+            <mat-option *ngIf="role.name !== 'Super Admin'" [value]="role">
+              {{ role.name }}
+            </mat-option>
+          </ng-container>
         </mat-autocomplete>
       </mat-form-field>
     </div>

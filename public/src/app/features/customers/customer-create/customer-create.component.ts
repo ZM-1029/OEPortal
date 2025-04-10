@@ -48,15 +48,15 @@ import { MatIconModule } from "@angular/material/icon";
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CustomerCreateComponent implements OnInit, OnChanges, OnDestroy {
+export class CustomerCreateComponent implements OnInit, OnDestroy {
   public customerForm!: FormGroup;
   public submitted = false;
   public logoFile!: File | any;
   public customerLogoUrl!: string | null;
-  public customerName: string='';
-  public customerEmail: string='';
+  public customerName: string = '';
+  public customerEmail: string = '';
   public formHeading: string = "Create";
-  public customerId: string='';
+  public customerId: string = '';
   public editedformData = new FormData();
   private _unsubscribeAll$: Subject<any> = new Subject<any>();
   @ViewChild('fileInput') fileInput!: ElementRef<any>;
@@ -68,11 +68,11 @@ export class CustomerCreateComponent implements OnInit, OnChanges, OnDestroy {
     private _customerService: CustomersService,
     private _changeDetetction: ChangeDetectorRef,
     private _successMessage: MatSnackBar,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.customerForm = this._formBuilder.group({
-      Id:[0],
+      Id: [0],
       CustomerId: [""],
       CustomerName: [
         "",
@@ -84,48 +84,47 @@ export class CustomerCreateComponent implements OnInit, OnChanges, OnDestroy {
       ],
       PrimaryContact: ["", [, Validators.pattern("^[a-z A-Z]*$")]],
       Email: ["", [Validators.required, Validators.email]],
-     
-      
+
+
       Logo: [""],
       LogoFile: [""],
       Country: ["", [Validators.pattern("^[a-zA-Z]*$")]],
       Taxid: ["", [Validators.pattern("^[0-9]*$")]],
-      billingaddressId:[0],
+      billingaddressId: [0],
       BusinessType: ["", Validators.required],
       billingAttention: ['', [Validators.required, Validators.minLength(3)]],
-     
+
 
       billingCity: ['', Validators.required],
       billingState: ['', Validators.required],
       billingPin: ['', [Validators.required, Validators.maxLength(7)]],
-      
-      shippingaddressId:[0],
+
+      shippingaddressId: [0],
       shippingAttention: ['', [Validators.required, Validators.minLength(3)]],
-      sameasbilling:['0'],
-     
+      sameasbilling: ['0'],
+
       shippingCity: ['', Validators.required],
       shippingState: ['', Validators.required],
       shippingPin: ['', [Validators.required, Validators.maxLength(7)]],
-     
+
     });
     this.clearForm();
   }
+
   copyBillingToShipping(event: any) {
     if (event.target.checked) {
       this.customerForm.patchValue({
         shippingAttention: this.customerForm.value.billingAttention,
         shippingCountry: this.customerForm.value.billingCountry,
-       
+
         shippingCity: this.customerForm.value.billingCity,
         shippingState: this.customerForm.value.billingState,
         shippingPin: this.customerForm.value.billingPin,
-      
+
       });
     }
   }
-  ngOnChanges(): void {
-    
-  }
+
   closePopup() {
     this.formClose.emit();
   }
@@ -154,85 +153,84 @@ export class CustomerCreateComponent implements OnInit, OnChanges, OnDestroy {
         .getCustomerByCustomerId(id)
         .pipe(takeUntil(this._unsubscribeAll$))
         .subscribe((response: any) => {
-          console.log(response,':response')
-         
+          console.log(response, ':response')
+
+          this.customerForm.patchValue({
+            Id: this.Id,
+            CustomerId: response.data.customer.id,
+            CustomerName: response.data.customer.customerName,
+            PhoneNumber: response.data.customer.phoneNumber,
+            PrimaryContact: response.data.customer.primaryContact,
+            Email: response.data.customer.email,
+            Logo: response.data.customer.logo,
+
+            Taxid: response.data.customer.taxid,
+            BusinessType: response.data.customer.businessType,
+          });
+          if (response.data.addresses[0].isBillingAddress) {
             this.customerForm.patchValue({
-              Id: this.Id,
-              CustomerId: response.data.customer.id,
-              CustomerName: response.data.customer.customerName,
-              PhoneNumber: response.data.customer.phoneNumber,
-              PrimaryContact: response.data.customer.primaryContact,
-              Email: response.data.customer.email,
-              Logo: response.data.customer.logo,
-             
-              Taxid: response.data.customer.taxid,
-              BusinessType: response.data.customer.businessType,
-            });
-            if(response.data.addresses[0].isBillingAddress)
-            {
-              this.customerForm.patchValue({
-                billingaddressId: response.data.addresses[0].id,
-                billingAttention: response.data.addresses[0].address,
-                
-                billingPin: response.data.addresses[0].postalCode,
-                billingState: response.data.addresses[0].state,
-                billingCity: response.data.addresses[0].city,
-               
-                shippingaddressId: response.data.addresses[1].id,
-                shippingAttention: response.data.addresses[1].address,
-                shippingCity: response.data.addresses[1].city,
-              
-                shippingPin: response.data.addresses[1].postalCode,
-                shippingState: response.data.addresses[1].state,
-              
-               
-               
-                
-              }
-            );
+              billingaddressId: response.data.addresses[0].id,
+              billingAttention: response.data.addresses[0].address,
+
+              billingPin: response.data.addresses[0].postalCode,
+              billingState: response.data.addresses[0].state,
+              billingCity: response.data.addresses[0].city,
+
+              shippingaddressId: response.data.addresses[1].id,
+              shippingAttention: response.data.addresses[1].address,
+              shippingCity: response.data.addresses[1].city,
+
+              shippingPin: response.data.addresses[1].postalCode,
+              shippingState: response.data.addresses[1].state,
+
+
+
+
             }
-            else{
-              this.customerForm.patchValue({
-                billingaddressId: response.data.addresses[1].id,
-                billingAttention: response.data.addresses[1].address,
-                
-                billingPin: response.data.addresses[1].postalCode,
-                billingState: response.data.addresses[1].state,
-                billingCity: response.data.addresses[1].city,
-               
-                shippingaddressId: response.data.addresses[0].id,
-                shippingAttention: response.data.addresses[0].address,
-                shippingCity: response.data.addresses[0].city,
-              
-                shippingPin: response.data.addresses[0].postalCode,
-                shippingState: response.data.addresses[0].state,
-              
-               
-               
-                
-              }
-               
+            );
+          }
+          else {
+            this.customerForm.patchValue({
+              billingaddressId: response.data.addresses[1].id,
+              billingAttention: response.data.addresses[1].address,
+
+              billingPin: response.data.addresses[1].postalCode,
+              billingState: response.data.addresses[1].state,
+              billingCity: response.data.addresses[1].city,
+
+              shippingaddressId: response.data.addresses[0].id,
+              shippingAttention: response.data.addresses[0].address,
+              shippingCity: response.data.addresses[0].city,
+
+              shippingPin: response.data.addresses[0].postalCode,
+              shippingState: response.data.addresses[0].state,
+
+
+
+
+            }
+
 
             );
-            if(response.data.addresses[1].address==response.data.addresses[0].address&&response.data.addresses[1].state==response.data.addresses[0].state&&response.data.addresses[0].city&&response.data.addresses[1].city){
-               this.customerForm.patchValue({
-                sameasbilling:'1'
-               })
+            if (response.data.addresses[1].address == response.data.addresses[0].address && response.data.addresses[1].state == response.data.addresses[0].state && response.data.addresses[0].city && response.data.addresses[1].city) {
+              this.customerForm.patchValue({
+                sameasbilling: '1'
+              })
             }
+          }
+          for (let key in this.customerForm.value) {
+            if (key == "Logo") {
+              this.customerLogoUrl = this.customerForm.value[key];
+
+            } else if (key == "CustomerName") {
+              this.customerName = this.customerForm.value[key];
+            } else if (key == "CustomerId") {
+              this.customerId = this.customerForm.value[key];
+            } else if (key == "Email") {
+              this.customerEmail = this.customerForm.value[key];
             }
-            for (let key in this.customerForm.value) {
-              if (key == "Logo") {
-                this.customerLogoUrl = this.customerForm.value[key];
-                
-              } else if (key == "CustomerName") {
-                this.customerName = this.customerForm.value[key];
-              } else if (key == "CustomerId") {
-                this.customerId = this.customerForm.value[key];
-              } else if (key == "Email") {
-                this.customerEmail = this.customerForm.value[key];
-              }
-            }
-            this._changeDetetction.detectChanges();
+          }
+          this._changeDetetction.detectChanges();
         });
     }
   }
@@ -240,146 +238,137 @@ export class CustomerCreateComponent implements OnInit, OnChanges, OnDestroy {
   // Create Edit Customer
   createUpdate() {
     this.submitted = true;
-    
+
     if (this.customerForm.invalid) {
       this.customerForm.markAllAsTouched();
       return;
     }
-    
-      if (this.Id < 1) {
-        var customer={
-      
-          id: 0,
-          customerName: this.customerForm.get("CustomerName")?.value,
-          phoneNumber: this.customerForm.get("PhoneNumber")?.value,
-          primaryContact: this.customerForm.get("PrimaryContact")?.value,
-          email: this.customerForm.get("Email")?.value,
-          logo: this.customerForm.get("Logo")?.value,
-          logoFile: this.logoFile,
-          status: true,
-          country: this.customerForm.get("Country")?.value,
-          taxid: this.customerForm.get("Taxid")?.value,
-          businessType: this.customerForm.get("BusinessType")?.value
-        }
-        var address=[
-          {
-            id: 0,
-            customerId: 0,
-            postalCode: this.customerForm.get("billingPin")?.value,
-            state: this.customerForm.get("billingState")?.value,
-            city: this.customerForm.get("billingCity")?.value,
-            address: this.customerForm.get("billingAttention")?.value,
-            isBillingAddress: true
-          },
-          {
-            id: 0,
-            customerId: 0,
-            postalCode: this.customerForm.get("shippingPin")?.value,
-            state: this.customerForm.get("shippingState")?.value,
-            city: this.customerForm.get("shippingCity")?.value,
-            address: this.customerForm.get("billingAttention")?.value,
-            isBillingAddress: false
-          }
 
-        ]
-        var request={
-          customer:customer,
-          addresses:address
-        }
-       
-        
-      
-        
-        this._customerService.createCustomer(request).subscribe({
-          next: (response: any) => {
-            if (response.success) {
-              console.log("Success:", response);
-              this.showSuccessMessage(response.message);
-              //this.resetForm();
-              console.log(1);
-              this.formClose.emit(true);
-            } else {
-              this.showSuccessMessage(response.message);
-            }
-          },
-          error: (err) => {
-            this.handleError(err);
-            console.error("Error Status:", err.status);
-            console.error("Error Message:", err.error);
-          },
-        });
-      } else {
+    if (this.Id < 1) {
+      var customer = {
 
-        var customers={
-      
-          id: this.Id.toString(),
-          customerName: this.customerForm.get("CustomerName")?.value,
-          phoneNumber: this.customerForm.get("PhoneNumber")?.value,
-          primaryContact: this.customerForm.get("PrimaryContact")?.value,
-          email: this.customerForm.get("Email")?.value,
-          logo: this.customerForm.get("Logo")?.value,
-          logoFile: this.logoFile,
-          status: true,
-          country: this.customerForm.get("Country")?.value,
-          taxid: this.customerForm.get("Taxid")?.value,
-          businessType: this.customerForm.get("BusinessType")?.value
-        }
-        var addressss=[
-          {
-            id:  this.customerForm.get("billingaddressId")?.value,
-            customerId: this.Id.toString(),
-            postalCode: this.customerForm.get("billingPin")?.value,
-            state: this.customerForm.get("billingState")?.value,
-            city: this.customerForm.get("billingCity")?.value,
-            address: this.customerForm.get("billingAttention")?.value,
-            isBillingAddress: true
-          },
-          {
-            id: this.customerForm.get("shippingaddressId")?.value,
-            customerId: this.Id.toString(),
-            postalCode: this.customerForm.get("shippingPin")?.value,
-            state: this.customerForm.get("shippingState")?.value,
-            city: this.customerForm.get("shippingCity")?.value,
-            address: this.customerForm.get("billingAttention")?.value,
-            isBillingAddress: false
-          }
-
-        ]
-        var requestupdate={
-          customer:customers,
-          addresses:addressss
-        }
-       
-
-      
-        this._customerService.updateCustomer(this.Id, requestupdate).subscribe({
-          next: (response: any) => {
-            if (response.success) {
-              console.log("Success:", response);
-              this.showSuccessMessage(response.message);
-              this.resetForm();
-              console.log(1);
-              this.formClose.emit(true);
-            } else {
-              this.showSuccessMessage(response.message);
-            }
-          },
-          error: (err) => {
-            this.handleError(err);
-            console.error("Error Status:", err.status);
-            console.error("Error Message:", err.error);
-          },
-        });
+        id: 0,
+        customerName: this.customerForm.get("CustomerName")?.value,
+        phoneNumber: this.customerForm.get("PhoneNumber")?.value,
+        primaryContact: this.customerForm.get("PrimaryContact")?.value,
+        email: this.customerForm.get("Email")?.value,
+        logo: this.customerForm.get("Logo")?.value,
+        logoFile: this.logoFile,
+        status: true,
+        country: this.customerForm.get("Country")?.value,
+        taxid: this.customerForm.get("Taxid")?.value,
+        businessType: this.customerForm.get("BusinessType")?.value
       }
-    }
-  
+      var address = [
+        {
+          id: 0,
+          customerId: 0,
+          postalCode: this.customerForm.get("billingPin")?.value,
+          state: this.customerForm.get("billingState")?.value,
+          city: this.customerForm.get("billingCity")?.value,
+          address: this.customerForm.get("billingAttention")?.value,
+          isBillingAddress: true
+        },
+        {
+          id: 0,
+          customerId: 0,
+          postalCode: this.customerForm.get("shippingPin")?.value,
+          state: this.customerForm.get("shippingState")?.value,
+          city: this.customerForm.get("shippingCity")?.value,
+          address: this.customerForm.get("billingAttention")?.value,
+          isBillingAddress: false
+        }
 
-  // reset form
-  // resetForm() {
-  //   this.submitted = false;
-  //   this.customerForm.reset();
-  //   this.deleteImage();
-  // }
+      ]
+      var request = {
+        customer: customer,
+        addresses: address
+      }
+
+
+
+      this._customerService.createCustomer(request).subscribe({
+        next: (response: any) => {
+          if (response.success) {
+            console.log("Success:", response);
+            this.showSuccessMessage(response.message);
+            console.log(1);
+            this.formClose.emit(true);
+          } else {
+            this.showSuccessMessage(response.message);
+          }
+        },
+        error: (err) => {
+          this.handleError(err);
+          console.error("Error Status:", err.status);
+          console.error("Error Message:", err.error);
+        },
+      });
+    } else {
+
+      var customers = {
+
+        id: this.Id.toString(),
+        customerName: this.customerForm.get("CustomerName")?.value,
+        phoneNumber: this.customerForm.get("PhoneNumber")?.value,
+        primaryContact: this.customerForm.get("PrimaryContact")?.value,
+        email: this.customerForm.get("Email")?.value,
+        logo: this.customerForm.get("Logo")?.value,
+        logoFile: this.logoFile,
+        status: true,
+        country: this.customerForm.get("Country")?.value,
+        taxid: this.customerForm.get("Taxid")?.value,
+        businessType: this.customerForm.get("BusinessType")?.value
+      }
+      var addressss = [
+        {
+          id: this.customerForm.get("billingaddressId")?.value,
+          customerId: this.Id.toString(),
+          postalCode: this.customerForm.get("billingPin")?.value,
+          state: this.customerForm.get("billingState")?.value,
+          city: this.customerForm.get("billingCity")?.value,
+          address: this.customerForm.get("billingAttention")?.value,
+          isBillingAddress: true
+        },
+        {
+          id: this.customerForm.get("shippingaddressId")?.value,
+          customerId: this.Id.toString(),
+          postalCode: this.customerForm.get("shippingPin")?.value,
+          state: this.customerForm.get("shippingState")?.value,
+          city: this.customerForm.get("shippingCity")?.value,
+          address: this.customerForm.get("billingAttention")?.value,
+          isBillingAddress: false
+        }
+
+      ]
+      var requestupdate = {
+        customer: customers,
+        addresses: addressss
+      }
+
+
+
+      this._customerService.updateCustomer(this.Id, requestupdate).subscribe({
+        next: (response: any) => {
+          if (response.success) {
+            console.log("Success:", response);
+            this.showSuccessMessage(response.message);
+            this.resetForm();
+            console.log(1);
+            this.formClose.emit(true);
+          } else {
+            this.showSuccessMessage(response.message);
+          }
+        },
+        error: (err) => {
+          this.handleError(err);
+          console.error("Error Status:", err.status);
+          console.error("Error Message:", err.error);
+        },
+      });
+    }
+  }
+
   resetForm() {
     this.submitted = false;
     this.customerForm.reset();
@@ -387,7 +376,7 @@ export class CustomerCreateComponent implements OnInit, OnChanges, OnDestroy {
     this.customerForm.markAsUntouched();
     this.deleteImage();
   }
-  
+
 
   // Handles image upload
   uploadCustomerLogo(event: any) {
@@ -407,9 +396,9 @@ export class CustomerCreateComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   // 
-triggerCustomerFileInput() {
-  this.fileInput.nativeElement.click(); 
-}
+  triggerCustomerFileInput() {
+    this.fileInput.nativeElement.click();
+  }
   // 
 
   //  Function to show success messages

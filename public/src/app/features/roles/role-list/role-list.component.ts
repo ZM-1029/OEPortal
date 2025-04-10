@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -30,7 +30,7 @@ ModuleRegistry.registerModules([AllCommunityModule]);
   templateUrl: './role-list.component.html',
   styleUrl: './role-list.component.scss'
 })
-export class RoleListComponent {
+export class RoleListComponent implements OnInit{
   public currentPageNumber: number = 1;
   public currentPageSize: number = 15;
   public paginationPageSize = this.currentPageSize;
@@ -79,10 +79,6 @@ export class RoleListComponent {
   
   ngOnInit(): void {
     this.pageHeader_employee(this.HeadingName);
-    
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
     
   }
 

@@ -70,7 +70,7 @@ export class EmployeeDetailsComponent implements OnInit {
     this.setActiveTab(this.activeTab);
   }
 
-  // active tab load..
+ 
   setActiveTab(tabName: string) {
     this.activeTab = tabName;
     this._changeDetetction.detectChanges();

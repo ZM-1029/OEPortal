@@ -26,7 +26,6 @@ import {
   FormsModule,
   ReactiveFormsModule,
 } from "@angular/forms";
-import { SuccessModalComponent } from "src/app/shared/components/UI/success-modal/success-modal.component";
 import { CommonModule, DatePipe} from "@angular/common";
 import {
   MomentDateAdapter,
@@ -46,7 +45,7 @@ import moment, { Moment } from "moment";
 import { MY_FORMATS } from "../employee-attendance/employee-attendance.component";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
-import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
+import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatSelectModule } from "@angular/material/select";
 import { MultiSelectDropdownComponent } from "src/app/shared/components/UI/multi-select-dropdown/multi-select-dropdown.component";
 
@@ -176,18 +175,6 @@ export class EmployeeTimesheetComponent implements OnInit, AfterViewInit {
     }else{
       this.selectedProject = event;
     }
-    // if (selectedProject.length == 0) {
-    //   this.selectedProject = 1
-    // } else {
-    //   for (const project of selectedProject) {
-    //     if (typeof (project) == 'number') {
-    //       this.selectedProject = 1;
-    //     } else {
-    //       console.log(project, typeof (project), "type");
-    //       this.selectedProject = selectedProject;
-    //     }
-    //   }
-    // }
     this.getTimesheetByEmail();
   }
   // dropdown selected Output
@@ -248,18 +235,16 @@ export class EmployeeTimesheetComponent implements OnInit, AfterViewInit {
               this._changeDetectorRef.detectChanges();
             } else {
               this.rowData = [];
-              this.showSuccessMessage(response.message);
+              this.showErrorOverlay('Data is not found');
             }
           },
           error: (err) => {
-            // this.handleError(err);
+            this.rowData = [];
+            this.showErrorOverlay('Data is not found');
             let errorMessage = "An error occurred while fetching data.";
             if (err.status === 404 && err.error.message) {
-              this.rowData = [];
               errorMessage = err.error.message;
-              this.showErrorOverlay('Data is not found');
             }
-            // this.handleError(err.error.message);
           },
         });
     }
@@ -267,7 +252,7 @@ export class EmployeeTimesheetComponent implements OnInit, AfterViewInit {
 
   processRowDataForRowSpan(data: any[]): any[] {
     let countMap: { [key: string]: number } = {};
-    let serialCounter = 1; // Unique counter for S. No
+    let serialCounter = 1; 
 
     // Count occurrences of each date
     data.forEach((row) => {
@@ -328,26 +313,5 @@ export class EmployeeTimesheetComponent implements OnInit, AfterViewInit {
     this.getTimesheetByEmail();
   }
 
-  //  Function to show success messages
-  private showSuccessMessage(message: string) {
-    this._successMessage.openFromComponent(SuccessModalComponent, {
-      data: { message },
-      duration: 4000,
-      panelClass: ["custom-toast"],
-      verticalPosition: "top",
-      horizontalPosition: "right",
-    });
-  }
 
-  //  Function to handle API errors
-  private handleError(err: any) {
-    console.error("Error Status:", err.status);
-    console.error("Error Message:", err.error);
-    this._successMessage.open(err.error.message, "Close", {
-      duration: 4000,
-      panelClass: ["error-toast"],
-      verticalPosition: "top",
-      horizontalPosition: "right",
-    });
-  }
 }

@@ -1,9 +1,8 @@
-import { ChangeDetectorRef, Component, Input } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AgGridAngular } from 'ag-grid-angular';
 import { ModuleRegistry, AllCommunityModule, GridApi, GridReadyEvent } from 'ag-grid-community';
 import { LoaderComponent } from 'src/app/shared/components/UI/loader/loader.component';
-import { SuccessModalComponent } from 'src/app/shared/components/UI/success-modal/success-modal.component';
 import { EmployeesService } from '../employees.service';
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -13,7 +12,7 @@ ModuleRegistry.registerModules([AllCommunityModule]);
   templateUrl: './employee-invoice.component.html',
   styleUrl: './employee-invoice.component.scss'
 })
-export class EmployeeInvoiceComponent {
+export class EmployeeInvoiceComponent implements AfterViewInit{
   @Input() employeeId!: string;
   public currentPageNumber: number = 1;
   public currentPageSize: number = 15;
@@ -87,8 +86,6 @@ export class EmployeeInvoiceComponent {
     private _changeDetectorRef: ChangeDetectorRef,
   ) { }
 
-  ngOnInit(): void {
-  }
 
   ngAfterViewInit() {
     this._changeDetectorRef.detectChanges();
@@ -147,16 +144,6 @@ export class EmployeeInvoiceComponent {
     this.currentPageSize = pageSize;
   }
 
-  //  Function to show success messages
-  private showSuccessMessage(message: string) {
-    this._successMessage.openFromComponent(SuccessModalComponent, {
-      data: { message },
-      duration: 4000,
-      panelClass: ["custom-toast"],
-      verticalPosition: "top",
-      horizontalPosition: "right",
-    });
-  }
 
   //  Function to handle API errors
   private handleError(err: any) {

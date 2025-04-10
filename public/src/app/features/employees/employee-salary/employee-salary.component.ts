@@ -4,7 +4,6 @@ import {
   Component,
   Input,
   OnInit,
-  ViewChild,
 } from "@angular/core";
 import { AgGridAngular } from "ag-grid-angular";
 import { LoaderComponent } from "../../../shared/components/UI/loader/loader.component";
@@ -119,13 +118,11 @@ export class EmployeeSalaryComponent implements OnInit, AfterViewInit {
         }
       },
       error: (err) => {
-        console.error("Error Status:", err.status);
-        console.error("Error Message:", err.error);
-        let errorMessage = "An error occurred while fetching data.";
+        this.rowData=[];
+        this.showErrorOverlay("Data is not found");
         if (err.status === 404 && err.error.message) {
-          this.showErrorOverlay("Data is not found");
+          this.handleError(err.error.message);
         }
-        this.handleError(err.error.message);
       },
     });
   }
@@ -160,17 +157,6 @@ export class EmployeeSalaryComponent implements OnInit, AfterViewInit {
     const pageSize = params.api.paginationGetPageSize();
     this.currentPageNumber = currentPage + 1;
     this.currentPageSize = pageSize;
-  }
-
-  //  Function to show success messages
-  private showSuccessMessage(message: string) {
-    this._successMessage.openFromComponent(SuccessModalComponent, {
-      data: { message },
-      duration: 4000,
-      panelClass: ["custom-toast"],
-      verticalPosition: "top",
-      horizontalPosition: "right",
-    });
   }
 
   //  Function to handle API errors

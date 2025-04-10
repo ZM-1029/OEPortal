@@ -1,11 +1,8 @@
-import { NgClass, NgFor } from "@angular/common";
 import { AfterViewInit, ChangeDetectorRef, Component, Input, OnChanges, OnInit, ViewChild } from "@angular/core";
 import { FormGroup } from "@angular/forms";
-import { MatSnackBar } from "@angular/material/snack-bar";
 import { AgGridAngular } from "ag-grid-angular";
 import { ModuleRegistry, AllCommunityModule, GridApi, GridReadyEvent } from "ag-grid-community";
-import { SuccessModalComponent } from "src/app/shared/components/UI/success-modal/success-modal.component";
-import { ncTypeCountsI, nonComplianceI } from "src/app/shared/types/nonCompliance.type";
+import { nonComplianceI } from "src/app/shared/types/nonCompliance.type";
 
 // Register AG Grid modules
 ModuleRegistry.registerModules([AllCommunityModule]);
@@ -19,7 +16,7 @@ export class NonComplianceAttendanceComponent implements OnInit, OnChanges, Afte
   @Input() attendanceRowData: nonComplianceI[] = [];
   @Input() ncTypeCounts: any;
   attendanceNcTypeCounts: any;
-  rowData: any
+  rowData: nonComplianceI[]=[]
   public currentPageNumber: number = 1;
   public currentPageSize: number = 15;
   public paginationPageSize = this.currentPageSize;

@@ -5,7 +5,6 @@ import {
   OnChanges,
   OnDestroy,
   Output,
-  SimpleChanges,
 } from "@angular/core";
 import { MatSidenavModule } from "@angular/material/sidenav";
 import { MatButtonModule } from "@angular/material/button";
@@ -35,7 +34,7 @@ export class SideDrawerComponent implements OnChanges, OnDestroy {
   @Input() isSideDrawerOpen!: boolean;
   @Output() sideDrawer: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(): void {
     this.drawerOpen(this.isSideDrawerOpen);
   }
 

@@ -10,9 +10,8 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { Router, ActivatedRoute, RouterLink } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
 import { AuthenticationService } from "src/app/core/auth/authentication.service";
-import { SuccessModalComponent } from "src/app/shared/components/UI/success-modal/success-modal.component";
 
 @Component({
   selector: "app-sign-in",

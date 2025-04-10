@@ -35,9 +35,8 @@ import { MatInputModule } from "@angular/material/input";
 import { MatRadioModule } from "@angular/material/radio";
 import { MatSelectModule } from "@angular/material/select";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { LoaderComponent } from "src/app/shared/components/UI/loader/loader.component";
 import { SuccessModalComponent } from "src/app/shared/components/UI/success-modal/success-modal.component";
-import { customerI, customerListI } from "src/app/shared/types/customer.type";
+import { customerI } from "src/app/shared/types/customer.type";
 import { currency, createSalaryI } from "src/app/shared/types/salary.type";
 import { CustomersService } from "../../customers/customers.service";
 import { SalaryService } from "../../salary/salary.service";
@@ -109,7 +108,7 @@ export const MY_FORMATS = {
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PurchaseOrderCreateComponent implements OnInit, OnChanges, AfterViewInit {
+export class PurchaseOrderCreateComponent implements OnInit, OnChanges {
   @Input() formHeading: string = "";
   @Input() PurchaseOrderRowId!: number;
   @Input() isSideDrawerOpen!: boolean;
@@ -129,7 +128,6 @@ export class PurchaseOrderCreateComponent implements OnInit, OnChanges, AfterVie
     private snackBar: MatSnackBar,
     private customerService: CustomersService,
     private salaryService: SalaryService,
-    private datePipe: DatePipe,
     private _changeDetectorRef: ChangeDetectorRef,
     private purchaseOrdersService: PurchaseOrdersService,
   ) { }
@@ -152,11 +150,6 @@ export class PurchaseOrderCreateComponent implements OnInit, OnChanges, AfterVie
     this.filteredCustomers = [...this.allCustomers];
     this._changeDetectorRef.detectChanges();
   }
-
-  ngAfterViewInit(): void {
-
-  }
-
 
   filter(): void {
     const filterValue = this.input.nativeElement.value.toLowerCase();
@@ -329,14 +322,14 @@ export class PurchaseOrderCreateComponent implements OnInit, OnChanges, AfterVie
   }
 
   // amount value in comma separator start
-  formattedAmount = ''; // Display value
+  formattedAmount = ''; 
 
   onAmountChange(event: any) {
-    let inputValue = event.target.value.replace(/,/g, ''); // Remove commas
-    if (!/^\d*$/.test(inputValue)) return; // Ensure only numbers
+    let inputValue = event.target.value.replace(/,/g, ''); 
+    if (!/^\d*$/.test(inputValue)) return; 
 
-    this.formattedAmount = Number(inputValue).toLocaleString(); // Add commas
-    this.purchaseOrderForm.controls['amount'].setValue(inputValue); // Store raw value
+    this.formattedAmount = Number(inputValue).toLocaleString(); 
+    this.purchaseOrderForm.controls['amount'].setValue(inputValue); 
   }
 
   // amount value in comma separator end

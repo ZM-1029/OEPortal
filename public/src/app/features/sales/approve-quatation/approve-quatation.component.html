@@ -1,64 +1,24 @@
 <div class="approve-quatation p-2 pt-4">
     <div class="border-bottom  pb-2 pt-3">
         <h2 class="formHeading">Change Status</h2>
-       
+
     </div>
     <!-- @if (invoiceUrl) {
     <button class="btn btn-success" (click)="downloadInvoice()">Download Invoice</button>
     } -->
     <div class="pdf-container p-2">
         @if (invoiceUrl) {
-            <div class="downloadInvoice d-block">
-                <button type="button" class="btn btn-light d-flex align-items-center me-3 shadow-sm rounded "
-                    (click)="downloadInvoice()">
-                    <div class="text-primary  ">
-                        <mat-icon svgIcon="download"></mat-icon>
-                    </div>
-                    Download Invoice
-                </button>
-            </div>
-            }
+        <div class="downloadInvoice d-block">
+            <button type="button" class="btn btn-light d-flex align-items-center me-3 shadow-sm rounded "
+                (click)="downloadInvoice()">
+                <div class="text-primary  ">
+                    <mat-icon svgIcon="download"></mat-icon>
+                </div>
+                Download Invoice
+            </button>
+        </div>
+        }
         <!-- <iframe [src]="pdfSrc" class="left" width="100%" height="600px"></iframe> -->
-        <!-- <div class=" p-2" *ngIf="pdfSrc">
-            <div class="decline-form position-relative">
-                <ng-container>
-                    
-                    <div class="text-end mb-2">
-                        <div class="zoomOut text-secondary mx-2 d-inline"><mat-icon svgIcon="zoomOut"
-                                (click)="zoomOut()"></mat-icon></div>
-                        <div class="zoomIn text-secondary mx-2 d-inline"><mat-icon svgIcon="zoomIn"
-                                (click)="zoomIn()"></mat-icon></div>
-                        <button class="btn btn-outline-secondary btn-sm mx-2" (click)="downloadPdf()">
-                            <mat-icon svgIcon="download"></mat-icon> Download PDF
-                        </button>
-                        <span class="ms-2">Zoom: {{ (zoom * 100) | number:'1.0-0' }}%</span>
-                    </div>
-
-                  
-                    <div class="position-relative">
-                        <pdf-viewer [src]="pdfSrc" [page]="page" [render-text]="true" [original-size]="false"
-                            [fit-to-page]="true" [autoresize]="true" [show-borders]="false" [zoom]="zoom" [show-all]="false"
-                            style="width: 100%; height: calc(100vh - 22rem);" (after-load-complete)="onPdfLoad($event)">
-                        </pdf-viewer>
-
-                        
-                        <div *ngIf="page === 1 "
-                            class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center"
-                            style="z-index: 10; backdrop-filter: blur(1px); pointer-events: none;">
-                            <div class="decline-watermark text-danger">
-                                DECLINE
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mt-3 text-center" *ngIf="totalPages > 1">
-                        <button *ngFor="let p of [].constructor(totalPages); let i = index" class="btn btn-sm mx-1"
-                            [class.active]="page === i + 1" (click)="page = i + 1" style="min-width: 36px;">
-                            {{ i + 1 }}
-                        </button>
-                    </div>
-                </ng-container>
-            </div>
-        </div> -->
         <div class=" p-2" style="height: 100vh; overflow: hidden;">
             <div class="decline-form d-flex flex-column h-100 position-relative">
                 <div class="text-end mb-2">
@@ -100,88 +60,106 @@
 
 
         <div class="right ">
-            <div class="table-responsive  py-4">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Status</th>
-                            <th>Created on</th>
-                            <th>Name</th>
-                            <th>Email</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @for (status of quotationStatus; track $index) {
-                        <tr>
-                            <td>{{status.statusName}}</td>
-                            <!-- <td>{{status.createdOn |date }}</td> -->
-                            <td>{{ status.createdOn | date: 'MMM dd , yyyy, h:mm a' }}</td>
-                            <td>{{status.createdByName}}</td>
-                            <td>{{status.createdByEmail}}</td>
-                        </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
             <div class="form-container d-flex">
                 <form [formGroup]="approveForm" (ngSubmit)="submitForm()">
-                    <div class=" py-3">
-                        <div class="row">
-                            <section class="example-section">
-                                <mat-label class="outer-mat-lable ">Self Approved</mat-label>
-                                <mat-checkbox formControlName="selfApprove"
-                                    class="example-margin mx-2">Approved</mat-checkbox>
-                                <mat-checkbox [disabled]="true" formControlName="isSelfApprovelDecline"
-                                    class="example-margin mx-2">Decline</mat-checkbox>
-                                <!-- <mat-checkbox class="example-margin" [disabled]="true">Disabled</mat-checkbox> -->
-                            </section>
-                            <section [ngClass]="isSelfApproved!==true?'d-none':''" class="example-section">
-                                <mat-label class="outer-mat-lable ">Approved by Accountant</mat-label>
-                                <mat-checkbox (change)="onToggleChange()" formControlName="approveByAccountant"
-                                    class="example-margin mx-2">Approved</mat-checkbox>
-                                <mat-checkbox formControlName="isApproveByAccountantDecline"
-                                    class="example-margin mx-2">Decline</mat-checkbox>
-                                <!-- <mat-checkbox class="example-margin" [disabled]="true">Disabled</mat-checkbox> -->
-                                <div class="d-flex" style="align-items: center;">
-                                    <!-- <mat-slide-toggle formControlName="approveByAccountant"
-                                        (change)="onToggleChange()">Approve by
-                                        Accountant</mat-slide-toggle>
-     -->
-                                    @if(showFileUpload){
-                                    <div class="form-group row ">
-                                        <mat-label class="outer-mat-label col-4 pt-2">Upload File</mat-label>
-                                        <div class="col-8">
-                                            <input type="file" (change)="onFileChange($event)" />
-                                        </div>
-                                    </div>
-                                    @if (errorMessage) {
-                                    <p *ngIf="errorMessage" class="text-danger">{{ errorMessage }}</p>
-                                      }
-                                    }
-                                </div>
-                            </section>
-                            <!-- <mat-slide-toggle class="col-4" formControlName="selfApprove">Self
-                                Approve</mat-slide-toggle>
-                            <br>
-                            <div class="d-flex" style="align-items: center;">
-                                <mat-slide-toggle formControlName="approveByAccountant"
-                                    (change)="onToggleChange()">Approve by
-                                    Accountant</mat-slide-toggle>
+                    <div class="">
+                        <div class="d-flex justify-content-center">
+                            <mat-card class="approval-card mx-3">
+                                <mat-card-header>
+                                    <mat-card-title>Self Approved</mat-card-title>
+                                </mat-card-header>
 
-                                @if(showFileUpload){
-                                <div class="form-group row ">
-                                    <mat-label class="outer-mat-label col-4 pt-2">Upload File</mat-label>
-                                    <div class="col-8">
-                                        <input type="file" (change)="onFileChange($event)" />
+                                <mat-card-content>
+                                    <div class="btn-group-toggle d-flex gap-2">
+                                        <button type="button" mat-raised-button
+                                            [disabled]="approveForm.get('selfApprove')?.value || roleId==8"
+                                            class="approved-btn"
+                                            (click)="toggleApproval('selfApprove', 'isSelfApprovelDecline')">
+                                            Approve <mat-icon
+                                                [ngClass]="!approveForm.get('selfApprove')?.value ? 'd-none': ''"
+                                                svgIcon="correct"></mat-icon>
+                                        </button>
+
+                                        <button type="button" mat-raised-button
+                                            [disabled]="approveForm.get('isSelfApprovelDecline')?.value || roleId==8"
+                                            color="{{ approveForm.get('isSelfApprovelDecline')?.value ? 'warn' : '' }}"
+                                            class="decline-btn"
+                                            (click)="toggleApproval('isSelfApprovelDecline', 'selfApprove')">
+                                            Decline <mat-icon
+                                                [ngClass]="!approveForm.get('isSelfApprovelDecline')?.value ? 'd-none': ''"
+                                                svgIcon="correct"></mat-icon>
+                                        </button>
                                     </div>
-                                </div>
-                                @if (errorMessage) {
-                                <p *ngIf="errorMessage" class="text-danger">{{ errorMessage }}</p>
-                                  }
-                                }
-                            </div> -->
+                                </mat-card-content>
+                            </mat-card>
+                            <mat-card [ngClass]="isSelfApproved?'approval-card':'d-none'"  class="approval-card mx-3">
+                                <mat-card-header>
+                                    <mat-card-title>Approved by Accountant</mat-card-title>
+                                </mat-card-header>
+
+                                <mat-card-content>
+                                    <div class="btn-group-toggle d-flex gap-2 ">
+                                        <button type="button" mat-raised-button
+                                            [disabled]="approveForm.get('approveByAccountant')?.value ||  roleId !== 8"
+                                            color="{{ approveForm.get('approveByAccountant')?.value ? 'primary' : '' }}"
+                                            class="approved-btn"
+                                            (click)="toggleApproval('approveByAccountant', 'isApproveByAccountantDecline')">
+                                            Approve <mat-icon
+                                                [ngClass]="!approveForm.get('approveByAccountant')?.value ? 'd-none': ''"
+                                                svgIcon="correct"></mat-icon>
+                                        </button>
+
+                                        <button type="button" mat-raised-button
+                                            [disabled]="approveForm.get('isApproveByAccountantDecline')?.value || roleId !== 8 "
+                                            color="{{ approveForm.get('isApproveByAccountantDecline')?.value ? 'warn' : '' }}"
+                                            class="decline-btn"
+                                            (click)="toggleApproval('isApproveByAccountantDecline', 'approveByAccountant')">
+                                            Decline <mat-icon
+                                                [ngClass]="!approveForm.get('isApproveByAccountantDecline')?.value ? 'd-none': ''"
+                                                svgIcon="correct"></mat-icon>
+                                        </button>
+                                    </div>
+                                    @if(approveForm.get('approveByAccountant')?.value){
+                                            <div class="d-flex my-2 justify-content-start" >
+                                        <div class="form-group row ">
+                                            <mat-label class="outer-mat-label col-3 pt-2">Upload File</mat-label>
+                                            <div class="col-6">
+                                                <input type="file" (change)="onFileChange($event)" />
+                                            </div>
+                                        </div>
+                                        @if (errorMessage) {
+                                        <p *ngIf="errorMessage" class="text-danger">{{ errorMessage }}</p>
+                                        }
+                                    </div>
+                                        }
+                                </mat-card-content>
+                            </mat-card>
                         </div>
 
+                        <div class=" container py-4">
+                            <div class="table-responsive ">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Status</th>
+                                            <th>Created on</th>
+                                            <th>Name</th>
+                                            <th>Email</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @for (status of quotationStatus; track $index) {
+                                        <tr>
+                                            <td>{{status.statusName}}</td>
+                                            <td>{{ status.createdOn | date: 'MMM dd , yyyy, h:mm a' }}</td>
+                                            <td>{{status.createdByName}}</td>
+                                            <td>{{status.createdByEmail}}</td>
+                                        </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                     <div class="form-btn d-flex align-items-start justify-content-end p-4">
                         <button class="btn btn-secondary mx-2" type="button" (click)="reset()">Clear</button>

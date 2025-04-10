@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AgGridAngular } from 'ag-grid-angular';
@@ -16,7 +16,7 @@ ModuleRegistry.registerModules([AllCommunityModule]);
   templateUrl: './efficiency-report-customers.component.html',
   styleUrl: './efficiency-report-customers.component.scss'
 })
-export class EfficiencyReportCustomersComponent {
+export class EfficiencyReportCustomersComponent implements OnInit,AfterViewInit {
   @ViewChild(AgGridAngular) agGrid!: AgGridAngular;
   rowData: CustomerReportsSummary[] = [];
   public currentPageNumber: number = 1;
@@ -126,10 +126,6 @@ export class EfficiencyReportCustomersComponent {
     this.GetAllCustomersForDropdown();
   }
 
-
-  ngOnChanges() {
-
-  }
 
   ngAfterViewInit() {
     this._changeDetectorRef.detectChanges();

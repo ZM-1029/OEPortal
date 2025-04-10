@@ -7,20 +7,14 @@ import {
   OnInit,
 } from "@angular/core";
 import {
-  FormControl,
   FormGroup,
   ReactiveFormsModule,
-  Validators,
 } from "@angular/forms";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { SuccessModalComponent } from "src/app/shared/components/UI/success-modal/success-modal.component";
 import { EmployeesService } from "../employees.service";
-import { LoaderComponent } from "src/app/shared/components/UI/loader/loader.component";
-import { AgGridAngular } from "ag-grid-angular";
 import {
   AllCommunityModule,
   GridApi,
-  GridReadyEvent,
   ModuleRegistry,
 } from "ag-grid-community";
 import { MatFormFieldModule } from "@angular/material/form-field";
@@ -30,9 +24,8 @@ import {
 } from "@angular/material/datepicker";
 import { provideNativeDateAdapter } from "@angular/material/core";
 import {
-  ncTypeCountsI,
   nonComplianceHistoryI,
-  nonComplianceI,
+
 } from "src/app/shared/types/nonCompliance.type";
 import { NonComplianceAttendanceComponent } from "./non-compliance-attendance/non-compliance-attendance.component";
 import { NonComplianceTimesheetComponent } from "./non-compliance-timesheet/non-compliance-timesheet.component";
@@ -129,7 +122,6 @@ export class NonComplianceHistoryComponent implements OnInit {
   getEndDate(event: MatDatepickerInputEvent<Date> | any) {
     if (event.value) {
       const selectedEndDate = event.value;
-      // Ensure the end date is not before the start date
       if (selectedEndDate < new Date(this.startDate)) {
         return;
       }
@@ -138,8 +130,6 @@ export class NonComplianceHistoryComponent implements OnInit {
       this.checkAndFetchAttendance();
     }
   }
-
-
   // date piker end
 
   GetNCHistoryLogs() {
@@ -175,18 +165,6 @@ export class NonComplianceHistoryComponent implements OnInit {
       });
   }
 
-
-
-  //  Function to show success messages
-  private showSuccessMessage(message: string) {
-    this._successMessage.openFromComponent(SuccessModalComponent, {
-      data: { message },
-      duration: 4000,
-      panelClass: ["custom-toast"],
-      verticalPosition: "top",
-      horizontalPosition: "right",
-    });
-  }
 
   //  Function to handle API errors
   private handleError(err: string) {

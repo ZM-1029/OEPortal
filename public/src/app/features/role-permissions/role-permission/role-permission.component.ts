@@ -14,6 +14,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SuccessModalComponent } from 'src/app/shared/components/UI/success-modal/success-modal.component';
 import { RolePermissionService } from '../role-permission.service';
+import { Router } from '@angular/router';
 
 interface Role {
   id: number;
@@ -55,7 +56,7 @@ interface RolePermissionResponse {
     MatAutocompleteModule,
     AsyncPipe,
     MatInputModule,
-    MatListModule, MatTabsModule, NgFor
+    MatListModule, MatTabsModule, NgFor,NgIf
   ],
   templateUrl: './role-permission.component.html',
   styleUrl: './role-permission.component.scss',
@@ -82,7 +83,8 @@ export class RolePermissionComponent implements OnInit {
     { form: 'Reports', view: false, edit: false, add: false }
   ];
 
-  constructor(private rolePermissionService: RolePermissionService, private _changeDetectorRef: ChangeDetectorRef, private _successMessage: MatSnackBar,) { }
+  constructor(private rolePermissionService: RolePermissionService, private _changeDetectorRef: ChangeDetectorRef,  private _router: Router,
+    private _successMessage: MatSnackBar,) { }
 
   ngOnInit(): void {
     this.roleId = Number(localStorage.getItem('role'));
@@ -188,6 +190,7 @@ export class RolePermissionComponent implements OnInit {
           next: ((response: any) => {
             if (response.success) {
               this.showSuccessMessage(response.message);
+              this._router.navigateByUrl("admin/permissions");
             } else {
               this.handleError(response.message)
             }

@@ -157,8 +157,6 @@ export class EmployeeAssetsComponent implements OnInit, AfterViewInit {
 
   //  Function to handle API errors
   private handleError(err: any) {
-    console.error("Error Status:", err.status);
-    console.error("Error Message:", err.error);
     this._successMessage.open(err.error.message, "Close", {
       duration: 4000,
       panelClass: ["error-toast"],

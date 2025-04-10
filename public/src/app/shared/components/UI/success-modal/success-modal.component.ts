@@ -3,10 +3,7 @@ import {
   Inject,
   OnChanges,
   OnInit,
-  Optional,
-  SimpleChanges,
 } from "@angular/core";
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { MatIconModule } from "@angular/material/icon";
 import {
   MatSnackBarRef,
@@ -35,7 +32,7 @@ export class SuccessModalComponent implements OnInit, OnChanges {
   close() {
     this.snackBarRef.dismiss();
   }
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(): void {
     this.close();
   }
 }

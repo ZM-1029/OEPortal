@@ -134,11 +134,9 @@ export class InvoiceCreateTableComponent implements OnInit, OnChanges {
     if(this.editedInvoicedata!=undefined){
       if (changes['editedInvoicedata']) {
           this.rowData=this.editedInvoicedata?.employeeInvoices;
-          console.log(this.rowData,"row datat");
           this._changeDetectorRef.detectChanges()
       }
     }
-    
   }
 
   getCellStyleBilledAmount(params: any) {

@@ -80,9 +80,11 @@ export class ItemCreateComponent {
     });
     this.clearForm();
   }
+
   ngOnChanges(): void {
     this.loadDropdownData();
   }
+
   clearForm() {
     if (this.isSideDrawerOpen) {
       if (this.Id < 1) {
@@ -94,6 +96,7 @@ export class ItemCreateComponent {
       }
     }
   }
+
   getProductDetails(id: number) {
     if (id !== 0) {
       this.Id = id;
@@ -126,6 +129,7 @@ export class ItemCreateComponent {
         });
     }
   }
+
   createUpdate() {
     this.submitted = true;
     if (!this.productForm.valid) {
@@ -176,6 +180,7 @@ export class ItemCreateComponent {
       });
     }
   }
+  
   resetForm() {
     this.submitted = false;
     this.productForm.reset();

@@ -3,7 +3,6 @@ import {
   Component,
   OnDestroy,
   OnInit,
-  SimpleChanges,
 } from "@angular/core";
 import { Router } from "@angular/router";
 import { Subject, takeUntil } from "rxjs";

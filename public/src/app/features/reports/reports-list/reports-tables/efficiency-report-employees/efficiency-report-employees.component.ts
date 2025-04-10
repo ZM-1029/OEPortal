@@ -1,14 +1,12 @@
-import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AgGridAngular } from 'ag-grid-angular';
-import { Select2, Select2Data } from "ng-select2-component";
 import { ModuleRegistry, AllCommunityModule, GridApi, GridReadyEvent } from 'ag-grid-community';
 import { MultiSelectDropdownComponent } from 'src/app/shared/components/UI/multi-select-dropdown/multi-select-dropdown.component';
 import { employeesDropdownI, efficiencyReportsEmployeeDetailI } from 'src/app/shared/types/reports.type';
 import { ReportsService } from '../../../reports.service';
 import { SingleSelectDropdownComponent } from 'src/app/shared/components/UI/single-select-dropdown/single-select-dropdown.component';
-import { MultiSelcetObjectDropdownComponent } from 'src/app/shared/components/UI/multi-selcet-object-dropdown/multi-selcet-object-dropdown.component';
 import { MonthMultiSelectDropdownComponent } from 'src/app/shared/components/UI/month-multi-select-dropdown/month-multi-select-dropdown.component';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
@@ -18,7 +16,7 @@ ModuleRegistry.registerModules([AllCommunityModule]);
   templateUrl: './efficiency-report-employees.component.html',
   styleUrl: './efficiency-report-employees.component.scss'
 })
-export class EfficiencyReportEmployeesComponent {
+export class EfficiencyReportEmployeesComponent implements OnInit,AfterViewInit {
   @ViewChild(AgGridAngular) agGrid!: AgGridAngular;
   rowData: efficiencyReportsEmployeeDetailI[] = [];
   public currentPageNumber: number = 1;
@@ -143,9 +141,6 @@ export class EfficiencyReportEmployeesComponent {
     this.GetEmployeesForDropdown();
   }
 
-  ngOnChanges() {
-
-  }
 
   ngAfterViewInit() {
     this._changeDetectorRef.detectChanges();

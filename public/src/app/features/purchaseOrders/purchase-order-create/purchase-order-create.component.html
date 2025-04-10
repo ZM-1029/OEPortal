@@ -12,7 +12,6 @@
             <input #input type="text" placeholder="Select customer" matInput formControlName="customerName"
               [matAutocomplete]="auto" (input)="filter()" />
 
-            <!-- Dropdown Icon (Clickable) -->
             <mat-icon matSuffix (click)="input.focus()">arrow_drop_down</mat-icon>
 
             <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onSelectCustomer($event)">

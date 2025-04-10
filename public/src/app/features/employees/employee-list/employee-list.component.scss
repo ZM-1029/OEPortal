@@ -23,7 +23,7 @@
   appearance: none;
   width: 18px ;
   height: 18px ;
-  border: 2px solid #3b82f6; /* Blue border */
+  border: 2px solid #3b82f6; 
   border-radius: 4px;
   display: flex;
   align-items: center;
@@ -68,19 +68,6 @@
   z-index: 9 !important;
 }
 
-// .table-footer {
-//   font-size: 14px;
-//   z-index: 1 !important;
-// }
-
-// .table-footer .row {
-//   position: absolute;
-//   width: 60%;
-//   top: -40px;
-//   left: 20px;
-//   z-index: 2;
-// }
-
 .ag-root-wrapper {
   border: var(--ag-wrapper-border);
   border-radius: 0 !important;
@@ -111,13 +98,13 @@
 
 .table-footer .row {
   position: absolute;
-  width: 80%; /* Increased width to accommodate all items */
+  width: 80%; 
   top: -40px;
   left: 20px;
   z-index: 2;
   display: flex;
-  flex-wrap: nowrap; /* Prevent wrapping */
-  overflow-x: auto; /* Add horizontal scroll if needed */
+  flex-wrap: nowrap; 
+  overflow-x: auto; 
 }
 
 

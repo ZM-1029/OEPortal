@@ -21,9 +21,11 @@ export class SalaryBulkUploadComponent implements OnChanges {
   fileProcessHeading: string = "Upload";
   salaryList: salaryOfEmployeeI[] = [];
   constructor(private _router: Router) {}
+
   ngOnChanges(changes: SimpleChanges): void {
     this.reciveSalaryList(this.salaryList);
   }
+
   reciveSalaryList(list: any) {
     if (list) {
       this.fileProcessHeading = "Edit";
@@ -31,6 +33,7 @@ export class SalaryBulkUploadComponent implements OnChanges {
       console.log(this.salaryList, "getBulkSalaryUpload");
     }
   }
+  
   fileSubmissionSuccessfully() {
     this.fileProcessHeading = "Submission Successfully";
   }
