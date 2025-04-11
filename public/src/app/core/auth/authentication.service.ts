@@ -23,7 +23,7 @@ get accessToken(): string {
 }
 
 private loadUserFromStorage() {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('accessToken');
   if (token) {
     this._authenticated = true;
   }
@@ -53,7 +53,7 @@ login(values: any) {
 }
 
 logout() {
-  localStorage.removeItem('token');
+  localStorage.removeItem('accessToken');
   localStorage.removeItem('userId');
   localStorage.removeItem('role');
   localStorage.removeItem('name');

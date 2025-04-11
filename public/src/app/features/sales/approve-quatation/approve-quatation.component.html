@@ -11,7 +11,7 @@
         <div class="downloadInvoice d-block">
             <button type="button" class="btn btn-light d-flex align-items-center me-3 shadow-sm rounded "
                 (click)="downloadInvoice()">
-                <div class="text-primary  ">
+                <div class="text-primary">
                     <mat-icon svgIcon="download"></mat-icon>
                 </div>
                 Download Invoice
@@ -21,15 +21,15 @@
         <!-- <iframe [src]="pdfSrc" class="left" width="100%" height="600px"></iframe> -->
         <div class=" p-2" style="height: 100vh; overflow: hidden;">
             <div class="decline-form d-flex flex-column h-100 position-relative">
-                <div class="text-end mb-2">
-                    <div class="zoomOut text-secondary mx-2 d-inline">
+                <div class="text-end d-flex justify-content-end align-items-center">
+                    <div class="zoomOut text-secondary mx-2 d-inline ">
                         <mat-icon svgIcon="zoomOut" (click)="zoomOut()"></mat-icon>
                     </div>
                     <div class="zoomIn text-secondary mx-2 d-inline">
                         <mat-icon svgIcon="zoomIn" (click)="zoomIn()"></mat-icon>
                     </div>
-                    <button class="btn btn-outline-secondary btn-sm mx-2" (click)="downloadPdf()">
-                        <mat-icon svgIcon="download"></mat-icon> Download PDF
+                    <button class="btn btn-outline-secondary btn-sm mx-2" (click)="downloadQuotationPdf()">
+                         Download PDF
                     </button>
                     <span class="ms-2">Zoom: {{ (zoom * 100) | number:'1.0-0' }}%</span>
                 </div>
@@ -75,7 +75,7 @@
                                             [disabled]="approveForm.get('selfApprove')?.value || roleId==8"
                                             class="approved-btn"
                                             (click)="toggleApproval('selfApprove', 'isSelfApprovelDecline')">
-                                            Approve <mat-icon
+                                            {{ approveForm.get('selfApprove')?.value ? 'Approved' : 'Approve' }} <mat-icon
                                                 [ngClass]="!approveForm.get('selfApprove')?.value ? 'd-none': ''"
                                                 svgIcon="correct"></mat-icon>
                                         </button>
@@ -85,14 +85,14 @@
                                             color="{{ approveForm.get('isSelfApprovelDecline')?.value ? 'warn' : '' }}"
                                             class="decline-btn"
                                             (click)="toggleApproval('isSelfApprovelDecline', 'selfApprove')">
-                                            Decline <mat-icon
+                                            {{ approveForm.get('isSelfApprovelDecline')?.value ? 'Declined' : 'Decline' }}  <mat-icon
                                                 [ngClass]="!approveForm.get('isSelfApprovelDecline')?.value ? 'd-none': ''"
                                                 svgIcon="correct"></mat-icon>
                                         </button>
                                     </div>
                                 </mat-card-content>
                             </mat-card>
-                            <mat-card [ngClass]="isSelfApproved?'approval-card':'d-none'"  class="approval-card mx-3">
+                            <mat-card [ngClass]="isSelfApproved?'approval-card':'d-none'" class="approval-card mx-3">
                                 <mat-card-header>
                                     <mat-card-title>Approved by Accountant</mat-card-title>
                                 </mat-card-header>
@@ -104,7 +104,7 @@
                                             color="{{ approveForm.get('approveByAccountant')?.value ? 'primary' : '' }}"
                                             class="approved-btn"
                                             (click)="toggleApproval('approveByAccountant', 'isApproveByAccountantDecline')">
-                                            Approve <mat-icon
+                                            {{ approveForm.get('approveByAccountant')?.value ? 'Approved' : 'Approve' }} <mat-icon
                                                 [ngClass]="!approveForm.get('approveByAccountant')?.value ? 'd-none': ''"
                                                 svgIcon="correct"></mat-icon>
                                         </button>
@@ -114,55 +114,56 @@
                                             color="{{ approveForm.get('isApproveByAccountantDecline')?.value ? 'warn' : '' }}"
                                             class="decline-btn"
                                             (click)="toggleApproval('isApproveByAccountantDecline', 'approveByAccountant')">
-                                            Decline <mat-icon
+                                            {{ approveForm.get('isApproveByAccountantDecline')?.value ? 'Declined' : 'Decline' }}  <mat-icon
                                                 [ngClass]="!approveForm.get('isApproveByAccountantDecline')?.value ? 'd-none': ''"
                                                 svgIcon="correct"></mat-icon>
                                         </button>
                                     </div>
-                                    @if(approveForm.get('approveByAccountant')?.value){
-                                            <div class="d-flex my-2 justify-content-start" >
-                                        <div class="form-group row ">
-                                            <mat-label class="outer-mat-label col-3 pt-2">Upload File</mat-label>
-                                            <div class="col-6">
-                                                <input type="file" (change)="onFileChange($event)" />
-                                            </div>
-                                        </div>
-                                        @if (errorMessage) {
-                                        <p *ngIf="errorMessage" class="text-danger">{{ errorMessage }}</p>
-                                        }
+                                    @if(approveForm.get('approveByAccountant')?.value ){
+                                    <div [ngClass]="roleId == 8 ?'':'d-none'" class="d-flex my-2 justify-content-start flex-column">
+                                        <div class="form-group d-flex py-2 align-items-center">
+                                            <label class="custom-file-upload">
+                                              <input type="file" (change)="onFileChange($event)" />
+                                              Upload File
+                                            </label>
+                                            <span class="file-name ms-2">{{ selectedFileName || 'No file chosen' }}</span>
+                                          </div>
+                                          
+                                        <p *ngIf="errorMessage" class="text-danger pt-2 mb-1">{{ errorMessage }}</p>
+                                        <p *ngIf="fileUploadError" class="text-danger mb-1">{{ fileUploadError }}</p>
                                     </div>
-                                        }
+                                    }
                                 </mat-card-content>
                             </mat-card>
                         </div>
-
-                        <div class=" container py-4">
-                            <div class="table-responsive ">
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>Status</th>
-                                            <th>Created on</th>
-                                            <th>Name</th>
-                                            <th>Email</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @for (status of quotationStatus; track $index) {
-                                        <tr>
-                                            <td>{{status.statusName}}</td>
-                                            <td>{{ status.createdOn | date: 'MMM dd , yyyy, h:mm a' }}</td>
-                                            <td>{{status.createdByName}}</td>
-                                            <td>{{status.createdByEmail}}</td>
-                                        </tr>
-                                        }
-                                    </tbody>
-                                </table>
+                        <div class="container d-flex justify-content-center py-4">
+                            <div class="table-wrapper">
+                              <table>
+                                <thead>
+                                  <tr>
+                                    <th>Status</th>
+                                    <th>Created on</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  @for (status of quotationStatus; track $index) {
+                                  <tr>
+                                    <td>{{ status.statusName }}</td>
+                                    <td>{{ status.createdOn | date: 'MMM dd, yyyy, h:mm a' }}</td>
+                                    <td>{{ status.createdByName }}</td>
+                                    <td>{{ status.createdByEmail }}</td>
+                                  </tr>
+                                  }
+                                </tbody>
+                              </table>
                             </div>
-                        </div>
+                          </div>
+                          
                     </div>
                     <div class="form-btn d-flex align-items-start justify-content-end p-4">
-                        <button class="btn btn-secondary mx-2" type="button" (click)="reset()">Clear</button>
+                        <!-- <button class="btn btn-secondary mx-2" type="button" (click)="reset()">Clear</button> -->
                         <button class="btn btn-info-dark" type="submit">Submit</button>
                     </div>
                 </form>

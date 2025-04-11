@@ -15,6 +15,8 @@ import moment from 'moment';
 import { ApproveQuatationComponent } from "../approve-quatation/approve-quatation.component";
 import { MatIconModule } from "@angular/material/icon";
 import { ActivatedRoute, Router } from "@angular/router";
+import { RolePermissionService } from "../../role-permissions/role-permission.service";
+import { rolePermissionListI } from "src/app/shared/types/roles.type";
 ModuleRegistry.registerModules([AllCommunityModule]);
 @Component({
   selector: 'app-sales-list',
@@ -116,24 +118,69 @@ export class SalesListComponent {
   private _unsubscribeAll$: Subject<any> = new Subject<any>();
   selectedQuotationId: number | null = null;
   isApprovePopupOpen: boolean = false;
+  quotationAccess: rolePermissionListI = {
+    id: 0,
+    formId: 0,
+    form: '',
+    view: false,
+    add: false,
+    edit: false
+  };
 
   constructor(
     private _salesService: SalesService,
     private _changeDetectorRef: ChangeDetectorRef,
     private _successMessage: MatSnackBar,
-    private router: Router, private route: ActivatedRoute
+    private router: Router, private route: ActivatedRoute,
+     private rolePermissionService: RolePermissionService,
   ) { }
 
   ngOnInit(): void {
     this.pageHeader_quotation(this.HeadingName);
   }
+
+ 
+  getPermissionToAccessPage(roleId: any) {
+    this.rolePermissionService.getPermissionsByRoleId(roleId).subscribe({
+      next: (response) => {
+        if (response.success) {
+          for (const quotationAccess of response.data) {
+            if (quotationAccess.form === "Sales Order") {
+              this.quotationAccess = quotationAccess;
+              if (this.quotationAccess.view) {
+                this.getQuotationList();
+              } else {
+                this.rowData = [];
+                this.showErrorOverlay("You have not permission");
+              }
+              // Hide "Actions" column if `edit` is false
+              if (this.gridApi) {
+                this.gridApi.setColumnsVisible(["actions"], this.quotationAccess.edit);
+              }
+
+              this._changeDetectorRef.detectChanges();
+            }
+          }
+        } else {
+          this.handleError("please try again leter");
+        }
+      },
+      error: (err) => {
+        this.handleError("please try again leter");
+      },
+    });
+  }
+
+
   addQuotation(event: Event) {
     this.quotationId = 0;
     this.isSideDrawerOpen = true;
   }
+
   pageHeader_quotation(quotationHeadingName: string) {
     this.HeadingName = quotationHeadingName;
   }
+
   getQuotationList() {
     this._salesService.getQuotationList().subscribe((result: QuotationListI) => {
       if (result.success) {
@@ -263,7 +310,7 @@ export class SalesListComponent {
   onGridReady(params: GridReadyEvent<any>) {
     this.gridApi = params.api;
     this.gridApi.hideOverlay();
-    this.getQuotationList();
+    this.getPermissionToAccessPage(Number(localStorage.getItem('role')));
   }
   showErrorOverlay(message: string) {
     if (this.gridApi) {

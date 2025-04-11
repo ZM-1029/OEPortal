@@ -335,3 +335,21 @@
     padding: 15px;
   }
 }
+
+textarea[matInput] {
+  max-height: 150px; 
+  overflow-y: auto !important;
+  resize: vertical; 
+}
+
+mat-form-field textarea[matInput] {
+  display: block;
+  max-height: 150px;
+  overflow-y: auto;
+  font-size: 14px;
+}
+
+.description-textarea {
+  font-size: 14px !important;
+}
+

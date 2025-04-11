@@ -1,9 +1,11 @@
 <div class="main-content mt-2 p-2">
     <app-page-header [HeadingName]="HeadingName">
       <div class="d-flex" pageHeaderBtn>
-        <button class="btn btn-info-dark btn-wave mx-2 text-white text-capitalize" (click)="addProduct($event)">
+        @if(this.productAccess.add){
+        <button  class="btn btn-info-dark btn-wave mx-2 text-white text-capitalize" (click)="addProduct($event)">
           <i class="fa-solid fa-plus me-2"></i>Create
         </button>
+      }
       </div>
     </app-page-header>
     @defer {

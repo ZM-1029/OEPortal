@@ -49,7 +49,7 @@ export class ApproveQuatationComponent implements OnInit, OnDestroy {
   quotationStatusId: number = 0;
   pdfUrl: string | null = null;
   pdfSrc: string | undefined;
-  roleId:number=0;
+  roleId: number = 0;
   @Input() isApprovePopupOpen: boolean = false;
   @Input() Id: number = 0;
   @Output() formClose = new EventEmitter<boolean>();
@@ -57,6 +57,8 @@ export class ApproveQuatationComponent implements OnInit, OnDestroy {
   page: number = 1;         // current page number
   totalPages: number = 0;   // total pages in the PDF
   zoom: number = 0.7;
+  fileUploadError: string = '';
+  selectedFileName: string = '';
   private subscriptions = new Subscription();
   constructor(private sanitizer: DomSanitizer, private fb: FormBuilder, private _salesService: SalesService,
     private _successMessage: MatSnackBar, private cdr: ChangeDetectorRef, private _router: Router,
@@ -76,7 +78,7 @@ export class ApproveQuatationComponent implements OnInit, OnDestroy {
         this.downloadPDF();
       }
     });
-    this.roleId=Number(localStorage.getItem('role'));
+    this.roleId = Number(localStorage.getItem('role'));
   }
 
   // ngOnInit(): void {
@@ -88,15 +90,15 @@ export class ApproveQuatationComponent implements OnInit, OnDestroy {
   // }
 
   // for btn ui start
-toggleApproval(primaryKey: string, oppositeKey: string): void {
-  const currentVal = this.approveForm.get(primaryKey)?.value;
-  this.approveForm.get(primaryKey)?.setValue(!currentVal);
-  if (!currentVal) {
-    this.approveForm.get(oppositeKey)?.setValue(false, { emitEvent: false });
+  toggleApproval(primaryKey: string, oppositeKey: string): void {
+    const currentVal = this.approveForm.get(primaryKey)?.value;
+    this.approveForm.get(primaryKey)?.setValue(!currentVal);
+    if (!currentVal) {
+      this.approveForm.get(oppositeKey)?.setValue(false, { emitEvent: false });
+    }
   }
-}
 
-// for btn ui end
+  // for btn ui end
 
   private handleError(err: any) {
     this._successMessage.open(err.error.message, "Close", {
@@ -120,7 +122,7 @@ toggleApproval(primaryKey: string, oppositeKey: string): void {
     if (this.zoom > 0.3) this.zoom -= 0.1;
   }
 
-  downloadPdf() {
+  downloadQuotationPdf() {
     if (this.pdfSrc) {
       const link = document.createElement('a');
       link.href = this.pdfSrc;
@@ -138,7 +140,7 @@ toggleApproval(primaryKey: string, oppositeKey: string): void {
         next: ((response) => {
           this.quotationStatusId = response.data.statusId;
         }), error: ((error) => {
-
+          console.warn('quotationStatusId is undefined');
         })
       }
     )
@@ -165,14 +167,14 @@ toggleApproval(primaryKey: string, oppositeKey: string): void {
                 approveByAccountant: isApprovedByAccountant,
                 isApproveByAccountantDecline: false,
                 isSelfApprovelDecline: true,
-              },{ emitEvent: false });
+              }, { emitEvent: false });
             } else if (this.isSelfApproved && !isApprovedByAccountant) {
               this.approveForm.patchValue({
                 selfApprove: this.isSelfApproved,
                 approveByAccountant: isApprovedByAccountant,
                 isSelfApprovelDecline: false,
                 isApproveByAccountantDecline: true,
-              },{ emitEvent: false });
+              }, { emitEvent: false });
             }
             else {
               this.approveForm.patchValue({
@@ -180,19 +182,18 @@ toggleApproval(primaryKey: string, oppositeKey: string): void {
                 approveByAccountant: isApprovedByAccountant,
                 isSelfApprovelDecline: false,
                 isApproveByAccountantDecline: true,
-              },{ emitEvent: false });
+              }, { emitEvent: false });
             }
           } else {
             this.approveForm.patchValue({
               selfApprove: this.isSelfApproved,
               approveByAccountant: isApprovedByAccountant,
-            },{ emitEvent: false });
+            }, { emitEvent: false });
           }
 
           if (invoice) {
             this.invoiceUrl = invoice;
             console.log(this.invoiceUrl, 'this.invoiceUrl');
-
           }
           const approveByAccountantControl = this.approveForm.get('approveByAccountant');
           if (this.isSelfApproved) {
@@ -215,7 +216,6 @@ toggleApproval(primaryKey: string, oppositeKey: string): void {
         if (response && response.success) {
           this.quotationStatus = response.data;
           this.cdr.detectChanges();
-          console.log(this.quotationStatus, 'this.quotationStatus ')
         }
       },
       error: (error) => {
@@ -223,6 +223,7 @@ toggleApproval(primaryKey: string, oppositeKey: string): void {
       }
     });
   }
+
   createForm() {
     this.approveForm = this.fb.group({
       selfApprove: [false],
@@ -264,21 +265,51 @@ toggleApproval(primaryKey: string, oppositeKey: string): void {
   }
 
 
+  // onFileChange(event: any) {
+  //   const file = event.target.files[0];
+  //   if (file) {
+  //     const allowedTypes = ['image/jpeg', 'image/png', 'application/pdf'];
+  //     if (allowedTypes.includes(file.type)) {
+  //       this.selectedFile = file;
+  //       this.approveForm.patchValue({ file: file });
+  //       this.errorMessage = '';
+  //     } else {
+  //       this.selectedFile = null;
+  //       this.errorMessage = 'Only PDF and image files (JPEG, PNG) are allowed.';
+  //       event.target.value = '';
+  //     }
+  //   }
+  // }
+
+
   onFileChange(event: any) {
     const file = event.target.files[0];
+    const allowedTypes = ['image/jpeg', 'image/png', 'application/pdf'];
+    const fullName = file.name;
+    const maxLength = 10;
+    this.selectedFileName = fullName.length > maxLength
+      ? fullName.substring(0, maxLength) + '...'
+      : fullName;
     if (file) {
-      const allowedTypes = ['image/jpeg', 'image/png', 'application/pdf'];
       if (allowedTypes.includes(file.type)) {
         this.selectedFile = file;
         this.approveForm.patchValue({ file: file });
         this.errorMessage = '';
+
+        // Clear required error if file is now uploaded
+        if (this.approveForm.value.approveByAccountant) {
+          this.fileUploadError = '';
+        }
       } else {
         this.selectedFile = null;
+        this.approveForm.patchValue({ file: null });
         this.errorMessage = 'Only PDF and image files (JPEG, PNG) are allowed.';
+        this.fileUploadError = '';
         event.target.value = '';
       }
     }
   }
+
 
   // downloadPDF(): void {
   //   this._salesService.downloadPDF(this.Id).subscribe({
@@ -350,13 +381,18 @@ toggleApproval(primaryKey: string, oppositeKey: string): void {
         this.approveQuotation(formDataApprovedByAccountant);
       }
       else if (this.approveForm.value.approveByAccountant) {
+        if (!this.selectedFile) {
+          this.fileUploadError = 'Please upload a valid file before approval.';
+          return;
+        }
+
+        this.fileUploadError = '';
+
         formDataApprovedByAccountant.append('QuotationId', this.Id.toString());
         formDataApprovedByAccountant.append('IsSelfApproved', this.approveForm.value.selfApprove ? 'true' : 'false');
-        formDataApprovedByAccountant.append('IsApprovedByAccountant', this.approveForm.value.approveByAccountant ? 'true' : 'false');
+        formDataApprovedByAccountant.append('IsApprovedByAccountant', 'true');
         formDataApprovedByAccountant.append('IsDeclined', 'false');
-        if (this.selectedFile) {
-          formDataApprovedByAccountant.append('Invoice', this.selectedFile);
-        }
+        formDataApprovedByAccountant.append('Invoice', this.selectedFile);
 
         this.approveQuotation(formDataApprovedByAccountant);
       }

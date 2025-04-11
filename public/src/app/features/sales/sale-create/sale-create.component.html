@@ -28,15 +28,18 @@
           </div>
           @if(Address){
           <div class="Address mb-2 ">
-            <div class="row  my-2">
-              <div class="col-6 text-center ">
-                <h4 class="text-primary">Billing Address</h4>
-                <p>{{Address.billingAddress}}</p>
+            <div class="container w-70">
+              <div class="d-flex justify-content-evenly  ">
+                <div class="text-start ms-4">
+                  <h4 class="text-primary">Billing Address</h4>
+                  <p>{{Address.billingAddress}}</p>
+                </div>
+                <div class="text-start  me-4">
+                  <h4 class="text-primary">Shipping Address</h4>
+                  <p>{{Address.shippingAddress}}</p>
+                </div>
               </div>
-              <div class="col-6 text-center">
-                <h4 class="text-primary">Shipping Address</h4>
-                <p>{{Address.shippingAddress}}</p>
-              </div>
+              
             </div>
           </div>
           }

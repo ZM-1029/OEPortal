@@ -55,6 +55,10 @@ export class SignInComponent implements OnInit, AfterContentChecked {
   }
 
   onSubmit() {
+    if(!this.loginForm.valid){
+      this.loginForm.markAllAsTouched();
+      return
+    }
     if (this.loginForm.valid) {
       this.authenticationService.login(this.loginForm.value)
         .subscribe(

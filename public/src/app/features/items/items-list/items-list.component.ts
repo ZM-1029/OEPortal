@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewEncapsulation } from "@angular/core";
 import { AgGridAngular } from "ag-grid-angular";
 import { AllCommunityModule, GridApi, GridReadyEvent, ModuleRegistry } from "ag-grid-community";
-import { CommonModule } from "@angular/common";
+import { CommonModule, NgClass } from "@angular/common";
 import { PageHeaderComponent } from "../../../shared/components/UI/page-header/page-header.component";
 import { LoaderComponent } from "../../../shared/components/UI/loader/loader.component";
 import { SideDrawerComponent } from "../../../shared/components/UI/side-drawer/side-drawer.component";
@@ -13,6 +13,8 @@ import { SuccessModalComponent } from "src/app/shared/components/UI/success-moda
 import { ItemsService } from "../items.service";
 import { ItemCreateComponent } from "../item-create/item-create.component";
 import { Item, ItemsListI } from "src/app/shared/types/items.type";
+import { rolePermissionListI } from "src/app/shared/types/roles.type";
+import { RolePermissionService } from "../../role-permissions/role-permission.service";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 @Component({
@@ -31,6 +33,26 @@ ModuleRegistry.registerModules([AllCommunityModule]);
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ItemsListComponent {
+  public totalCount: number = 0;
+  public currentPageNumber: number = 1;
+  public currentPageSize: number = 15;
+  public productId: number = 0;
+  public isSideDrawerOpen: boolean = false;
+  public paginationPageSize = this.currentPageSize;
+  public paginationPageSizeSelector: number[] = [15, 25, 50, 100];
+  HeadingName: string = "Product";
+  rowData: Item[] = [];
+  private gridApi!: GridApi<any>;
+  private _unsubscribeAll$: Subject<any> = new Subject<any>();
+  productAccess: rolePermissionListI = {
+    id: 0,
+    formId: 0,
+    form: '',
+    view: false,
+    add: false,
+    edit: false
+  };
+
   columnDefs: any = [
     {
       headerName: "S. No",
@@ -139,34 +161,61 @@ export class ItemsListComponent {
     flex: 1,
   };
 
-  public totalCount: number = 0;
-  public currentPageNumber: number = 1;
-  public currentPageSize: number = 15;
-  public productId: number = 0;
-  public isSideDrawerOpen: boolean = false;
-  public paginationPageSize = this.currentPageSize;
-  public paginationPageSizeSelector: number[] = [15, 25, 50, 100];
-  HeadingName: string = "Product";
-  rowData: Item[] = [];
-  private gridApi!: GridApi<any>;
-  private _unsubscribeAll$: Subject<any> = new Subject<any>();
   constructor(
     private _itemService: ItemsService,
     private _changeDetectorRef: ChangeDetectorRef,
     private dialog: MatDialog,
     private _successMessage: MatSnackBar,
+    private rolePermissionService: RolePermissionService,
+    
   ) { }
 
   ngOnInit(): void {
     this.pageHeader_product(this.HeadingName);
   }
+
+  getPermissionToAccessPage(roleId: any) {
+    this.rolePermissionService.getPermissionsByRoleId(roleId).subscribe({
+      next: (response) => {
+        if (response.success) {
+          for (const productAccess of response.data) {
+            if (productAccess.form === "Product") {
+              this.productAccess = productAccess;
+              if (this.productAccess.view) {
+                this.getProductList();
+              } else {
+                this.rowData = [];
+                this.showErrorOverlay("You have not permission");
+              }
+              // Hide "Actions" column if `edit` is false
+              if (this.gridApi) {
+                this.gridApi.setColumnsVisible(["actions"], this.productAccess.edit);
+              }
+
+              this._changeDetectorRef.detectChanges();
+            }
+          }
+        } else {
+          this.handleError("please try again leter");
+        }
+      },
+      error: (err) => {
+        this.handleError("please try again leter");
+      },
+    });
+  }
+
+
   addProduct(event: Event) {
     this.productId = 0;
     this.isSideDrawerOpen = true;
   }
+
   pageHeader_product(productHeadingName: string) {
     this.HeadingName = productHeadingName;
   }
+
+
   getProductList() {
     this._itemService.getProductList().subscribe((result: ItemsListI) => {
       if (result.success) {
@@ -275,8 +324,9 @@ export class ItemsListComponent {
   onGridReady(params: GridReadyEvent<any>) {
     this.gridApi = params.api;
     this.gridApi.hideOverlay();
-    this.getProductList();
+    this.getPermissionToAccessPage(Number(localStorage.getItem('role')));
   }
+
   showErrorOverlay(message: string) {
     if (this.gridApi) {
       this.gridApi.showNoRowsOverlay();
