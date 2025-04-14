@@ -1,4 +1,4 @@
-import { Component, OnChanges, SimpleChanges } from "@angular/core";
+import { Component, OnChanges } from "@angular/core";
 import { SalaryUploadComponent } from "./salary-upload/salary-upload.component";
 import { UploadInstructionsComponent } from "./upload-instructions/upload-instructions.component";
 import { NgClass } from "@angular/common";
@@ -22,7 +22,7 @@ export class SalaryBulkUploadComponent implements OnChanges {
   salaryList: salaryOfEmployeeI[] = [];
   constructor(private _router: Router) {}
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(): void {
     this.reciveSalaryList(this.salaryList);
   }
 

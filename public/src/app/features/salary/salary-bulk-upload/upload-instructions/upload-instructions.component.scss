@@ -1,7 +1,4 @@
-.checklist{
-  max-height: 800px;
-  overflow-y: scroll;
-}
+
 .checklist h3 {
   font-size: 16px;
   margin-bottom: 10px;
@@ -31,7 +28,7 @@
 }
 
 .checklist {
-  max-height: 800px;
+  max-height:  calc(100vh - 13rem);
   overflow-y: auto; /* Enables scrolling when content exceeds max-height */
 }
 
@@ -46,9 +43,3 @@
   scrollbar-width: none;
 }
 
-/* Media query for mid-sized screens */
-@media (max-width: 1024px) {
-  .checklist {
-    max-height: 600px;
-  }
-}

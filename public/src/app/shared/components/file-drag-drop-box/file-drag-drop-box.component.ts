@@ -4,10 +4,8 @@ import {
   ChangeDetectorRef,
   Component,
   EventEmitter,
-  OnChanges,
   OnInit,
   Output,
-  SimpleChanges,
   ViewEncapsulation,
 } from "@angular/core";
 import { FormControl } from "@angular/forms";

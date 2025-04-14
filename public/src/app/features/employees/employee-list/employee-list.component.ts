@@ -143,7 +143,7 @@ export class EmployeeListComponent implements OnInit, OnChanges {
       },
       sortable: true,
       filter: true,
-      minWidth: 180,
+      minWidth: 200,
     },
     {
       field: "dateofjoining",

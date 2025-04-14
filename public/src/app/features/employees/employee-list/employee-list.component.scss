@@ -94,6 +94,7 @@
 .table-footer {
   font-size: 14px;
   z-index: 1 !important;
+  width: calc(100% - 20%);
 }
 
 .table-footer .row {
@@ -109,6 +110,12 @@
 
 
 @media (max-width: 1544px) {
+  .table-footer {
+    font-size: 14px;
+    z-index: 1 !important;
+    width: 100%;
+  }
+  
   .table-footer .row {
     position: absolute;
     width: 100%;

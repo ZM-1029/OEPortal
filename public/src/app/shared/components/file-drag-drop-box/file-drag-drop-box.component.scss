@@ -1,6 +1,6 @@
 ngx-file-drag-drop {
-  min-height: 300px !important;
-  min-width: 400px;
+  min-height: calc(100vh - 42rem) !important;
+  min-width: calc(100vh - 32rem);
   background-color: white;
 }
 ngx-file-drag-drop .placeholder {

@@ -49,7 +49,7 @@
           <mat-label class="outer-mat-lable col-4  ">Customer Name </mat-label>
           <mat-form-field appearance="outline" class="col-8">
             <input formControlName="CustomerName" matInput placeholder="Enter Customer Name" />
-            <mat-error class="text-danger">
+            <mat-error >
               @if (customerForm.controls["CustomerName"].errors?.["required"]) {
               <span>Customer Name is required.</span>
               } @else if (customerForm.controls["CustomerName"].errors?.["pattern"]) {
@@ -78,11 +78,11 @@
             (customerForm.controls["BusinessType"].dirty ||
             customerForm.controls["BusinessType"].touched)
             ) {
-            <mat-error class="text-danger">
+            <mat-error >
               @if (
               customerForm.controls["BusinessType"].errors?.["required"]
               ) {
-              <span class="ms-1">Business Type is required!</span>
+              <span class="ms-1 errors">Business Type is required!</span>
               }
             </mat-error>
             }
@@ -159,7 +159,7 @@
           <div class="form-group row">
             <mat-label class="outer-mat-lable col-4 ">Address</mat-label>
             <mat-form-field appearance="outline" class="col-8">
-              <input formControlName="billingAttention" matInput placeholder="Enter Attention" />
+              <input formControlName="billingAttention" matInput placeholder="Enter Address" />
               <mat-error *ngIf="customerForm.controls['billingAttention'].hasError('required')">
                 Address is required
               </mat-error>
@@ -220,7 +220,7 @@
           <div class="form-group row">
             <mat-label class="outer-mat-lable col-4 ">Address</mat-label>
             <mat-form-field appearance="outline" class="col-8">
-              <input formControlName="shippingAttention" matInput placeholder="Enter Attention" />
+              <input formControlName="shippingAttention" matInput placeholder="Enter Address" />
               <mat-error *ngIf="customerForm.controls['shippingAttention'].hasError('required')">
                 Address is required
               </mat-error>

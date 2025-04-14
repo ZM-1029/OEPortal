@@ -110,7 +110,7 @@ export class CustomersListComponent implements OnInit, OnDestroy {
       },
     },
     {
-      field: "id",
+      field: "customerId",
       headerName: "Customer Id",
       sortable: true,
       filter: true,
