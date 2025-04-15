@@ -9,6 +9,12 @@
   font-style: normal;
 }
 
+* {
+  caret-color: transparent; /* hide blinking cursor */
+  outline: none !important; /* remove focus outlines */
+}
+
+
 body {
   margin: 0;
   font-family: "Poppins" !important;

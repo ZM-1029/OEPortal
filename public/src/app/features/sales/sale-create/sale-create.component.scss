@@ -277,10 +277,6 @@ tr:nth-child(even) {
   background: #555;
 }
 
-.mat-icon{
-  width: 18px;
-  height: 18px;
-}
 
 // Form buttons
 .form-btn {
@@ -442,4 +438,16 @@ select {
 
 .mat-form-field-invalid .mat-form-field-control {
   border: 1px solid red !important;
+}
+
+.product_name mat-form-field{
+  width: 235px;
+}
+
+.wrap-amount {
+  // display: block;
+  // word-break: break-word;
+  // white-space: normal;
+  // text-align: right;
+  // min-width: 300px;
 }

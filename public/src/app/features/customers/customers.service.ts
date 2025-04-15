@@ -34,6 +34,13 @@ export class CustomersService {
     );
   }
 
+  UploadLogo(logo:FormData) {
+    return this.http.post(
+      `${environment.apiUrl}api/Customer/UploadLogo`,
+      logo,
+    );
+  }
+
   getCustomerByCustomerId(id: number | string) {
     return this.http.get<customerDetailsI>(
       `${environment.apiUrl}api/Customer/GetCustomerById/${id}`,

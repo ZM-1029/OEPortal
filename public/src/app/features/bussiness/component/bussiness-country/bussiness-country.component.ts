@@ -131,7 +131,6 @@ export class BussinessCountryComponent {
 
 
   updateBussiness(event: any): void {
-    debugger
     const bussinesid = event.data.id;
  
       this.isSideDrawerOpen = true;

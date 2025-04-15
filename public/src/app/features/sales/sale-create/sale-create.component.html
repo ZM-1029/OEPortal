@@ -191,7 +191,7 @@
                   (click)="setCurrentRowIndex(i)">
                   <td>{{ i + 1 }}</td>
                   <td>
-                    <div class="d-flex justify-content-center align-items-center mt-3">
+                    <div class="product_name d-flex justify-content-center align-items-center mt-3">
                       <mat-form-field appearance="outline" class="col-8 py-0">
                         <mat-select formControlName="productId" (selectionChange)="onProductSelect($event, i)"
                           placeholder="Select Product">
@@ -234,8 +234,9 @@
                   </td>
                   <td><input formControlName="subTotal" type="number" class="table-data" readonly /></td>
                   <td class="text-center">
-                    <button (click)="deleteRow(i)" class="btn delete-btn text-danger">
-                      <mat-icon>delete</mat-icon>
+                    <button (click)="deleteRow(i)" class="btn delete-btn text-danger ">
+                      <!-- <mat-icon>delete</mat-icon> -->
+                      <mat-icon  svgIcon="delete"></mat-icon>
                     </button>
                   </td>
                 </tr>
@@ -258,26 +259,26 @@
             </div>
             <div class="summary-row row">
               <span class="summary-title col-5 fw-bold">Shipping Charges</span>
-              <div class="col-6 d-flex">
+              <div class="col-6 d-flex pe-0">
                 <input type="text" placeholder="0.00" class="adjustment-label" formControlName="shippingCharges"
                   (input)="onShippingChargesChange($event)" />
                 <mat-icon class="mat-icon mx-2" svgIcon="question"></mat-icon>
               </div>
-              <div *ngIf="invalidShippingChargesInput" style="color: red;">
+              <div class="text-danger" *ngIf="invalidShippingChargesInput" >
                 Only numbers (including decimals) are allowed.
               </div>
-              <span class="summary-value col-1 text-end">{{ productForm.value.shippingCharges || 0 }}</span>
+              <span [ngClass]="(productForm.value.shippingCharges > 2) ?'w-auto px-3 ': 'ps-0 '" class="summary-value col-1 text-end ">{{ productForm.value.shippingCharges || 0 | number:'1.2-2'  }}</span>
             </div>
             <div class="summary-row row">
               <span class="summary-title col-5 fw-bold">Adjustment</span>
-              <div class="col-6 d-flex">
+              <div class="col-6 d-flex pe-0">
                 <input type="text" placeholder="0.00" class="adjustment-label" formControlName="adjustment"
                   (input)="onAdjustmentChange($event)" />
               </div>
               <div *ngIf="invalidAdjustmentInput" class="text-danger col-12">
                 Only numbers (including decimals) are allowed.
               </div>
-              <span class="summary-value col-1 text-end">{{ productForm.value.adjustment || 0 }}</span>
+              <span [ngClass]="(productForm.value.adjustment.length > 2) ?'w-auto px-3': 'ps-0'" class="  summary-value col-1 text-end  ">{{ productForm.value.adjustment || 0 | number:'1.2-2' }}</span>
             </div>
             <div class="summary-row row">
               @for (tax of calculationDetails.taxes; track $index) {

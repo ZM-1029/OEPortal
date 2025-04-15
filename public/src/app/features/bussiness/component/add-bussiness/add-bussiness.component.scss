@@ -2,14 +2,14 @@
 @import "quill/dist/quill.snow.css";
 
 
-  .main-content{
+  .businessForm{
     background-color: white !important; 
     border-radius: 16px;
     max-height: calc(100vh - 6rem);
     overflow: hidden;
   }
   
-  .main-content .bg-light{
+  .businessForm .bg-light{
     padding: 10px 0;
     border-radius: 16px 16px 0 0;
   }
@@ -93,14 +93,12 @@
   .form-group,
   mat-form-field {
     background-color: transparent;
-    // margin-bottom: 10px;
     padding-bottom: 5px ;
   
   }
   
   label,
   mat-label {
-    padding-left: 0;
    text-align: end;
     font-size: 14px;
   }

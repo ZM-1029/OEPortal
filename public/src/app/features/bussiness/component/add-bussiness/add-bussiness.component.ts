@@ -60,7 +60,6 @@ export class AddBussinessComponent {
       });
     }
     reset(){
-      debugger
       this.businessForm.reset()
       this.businessForm.get('Country')?.setValue('0');
     }
@@ -98,7 +97,7 @@ if(this.Id>0)
   };
   patchValue()
   {
-    debugger
+
     this.apiservice.GetCountryTermsConditionById(this.Id).subscribe({next:(data:any)=>{
       this.businessForm.patchValue({
         
@@ -123,7 +122,7 @@ if(this.Id>0)
     }
   }
   submitForm() {
-    debugger
+
     if(Number(this.businessForm.value.Country)>0)
       {
         this.iscountryfail=false
@@ -138,7 +137,7 @@ if(this.Id>0)
       console.log('Form Data:', this.businessForm.value);
       if(this.Id<=0)
         {
-          debugger
+      
            var request={
             
               id: 0,
@@ -157,7 +156,7 @@ if(this.Id>0)
            }})
         }
         else{
-          debugger;
+      ;
           var request={
             
             id: this.Id,

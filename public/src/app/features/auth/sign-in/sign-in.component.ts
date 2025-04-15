@@ -1,3 +1,4 @@
+import { NgIf } from "@angular/common";
 import { AfterContentChecked, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewEncapsulation } from "@angular/core";
 import { FormGroup, FormControl, Validators, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
@@ -24,7 +25,7 @@ import { AuthenticationService } from "src/app/core/auth/authentication.service"
     FormsModule,
     MatAutocompleteModule,
     ReactiveFormsModule,
-    MatCheckboxModule, MatIconModule],
+    MatCheckboxModule, MatIconModule,NgIf],
   templateUrl: "./sign-in.component.html",
   styleUrl: "./sign-in.component.scss",
   encapsulation: ViewEncapsulation.None,
