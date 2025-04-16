@@ -56,7 +56,7 @@ interface RolePermissionResponse {
     MatAutocompleteModule,
     AsyncPipe,
     MatInputModule,
-    MatListModule, MatTabsModule, NgFor,NgIf
+    MatListModule, MatTabsModule, NgFor, NgIf
   ],
   templateUrl: './role-permission.component.html',
   styleUrl: './role-permission.component.scss',
@@ -83,7 +83,7 @@ export class RolePermissionComponent implements OnInit {
     { form: 'Reports', view: false, edit: false, add: false }
   ];
 
-  constructor(private rolePermissionService: RolePermissionService, private _changeDetectorRef: ChangeDetectorRef,  private _router: Router,
+  constructor(private rolePermissionService: RolePermissionService, private _changeDetectorRef: ChangeDetectorRef, private _router: Router,
     private _successMessage: MatSnackBar,) { }
 
   ngOnInit(): void {
@@ -190,7 +190,18 @@ export class RolePermissionComponent implements OnInit {
           next: ((response: any) => {
             if (response.success) {
               this.showSuccessMessage(response.message);
-              this._router.navigateByUrl("admin/permissions");
+              // Reset all checkboxes
+              this.menuData = this.menuData.map(item => ({
+                ...item,
+                view: false,
+                add: false,
+                edit: false
+              }));
+
+              // Clear selected role
+              this.selectedRole = 0;
+              this.roleControl.setValue('');
+              this._changeDetectorRef.detectChanges(); 
             } else {
               this.handleError(response.message)
             }

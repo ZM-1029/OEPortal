@@ -8,15 +8,16 @@ import { ReportsService } from '../../../reports.service';
 import { SingleSelectDropdownComponent } from 'src/app/shared/components/UI/single-select-dropdown/single-select-dropdown.component';
 import { MultiSelcetObjectDropdownComponent } from 'src/app/shared/components/UI/multi-selcet-object-dropdown/multi-selcet-object-dropdown.component';
 import { MonthMultiSelectDropdownComponent } from 'src/app/shared/components/UI/month-multi-select-dropdown/month-multi-select-dropdown.component';
+import { NgClass } from '@angular/common';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 @Component({
   selector: 'app-efficiency-report-customers',
-  imports: [AgGridAngular, SingleSelectDropdownComponent, MultiSelcetObjectDropdownComponent, MonthMultiSelectDropdownComponent],
+  imports: [AgGridAngular, SingleSelectDropdownComponent, MultiSelcetObjectDropdownComponent, MonthMultiSelectDropdownComponent,NgClass],
   templateUrl: './efficiency-report-customers.component.html',
   styleUrl: './efficiency-report-customers.component.scss'
 })
-export class EfficiencyReportCustomersComponent implements OnInit,AfterViewInit {
+export class EfficiencyReportCustomersComponent implements OnInit, AfterViewInit {
   @ViewChild(AgGridAngular) agGrid!: AgGridAngular;
   rowData: CustomerReportsSummary[] = [];
   public currentPageNumber: number = 1;
@@ -186,13 +187,13 @@ export class EfficiencyReportCustomersComponent implements OnInit,AfterViewInit 
             this.rowData = response.customerSummaries;
             this._changeDetectorRef.detectChanges();
           } else {
-            this.rowData=[];
+            this.rowData = [];
             this.showErrorOverlay("Data is not found")
             this.handleError(response.message)
           }
         }),
         error: ((err) => {
-          this.rowData=[];
+          this.rowData = [];
           this.showErrorOverlay("Data is not found")
           this.handleError(err.error.message)
         })
@@ -241,6 +242,7 @@ export class EfficiencyReportCustomersComponent implements OnInit,AfterViewInit 
   allColumns = [...this.columnDefs];
   displayedColumns = [...this.columnDefs];
 
+  // Toggle column selection
   toggleColumn(column: any) {
     const columnIndex = this.displayedColumns.findIndex(
       (col) => col.field === column.field,
@@ -258,10 +260,15 @@ export class EfficiencyReportCustomersComponent implements OnInit,AfterViewInit 
     this.columnDefs = [...this.displayedColumns];
   }
 
+  // Check if column is displayed
   isColumnDisplayed(column: any): boolean {
     return this.displayedColumns.some((col) => col.field === column.field);
   }
 
+  // Prevent dropdown from closing while allowing checkbox toggle
+  preventClose(event: MouseEvent) {
+    event.stopPropagation();
+  }
   // for Manage Columns end
 
   //  Function to handle API errors

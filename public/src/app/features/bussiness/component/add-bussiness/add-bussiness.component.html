@@ -12,11 +12,14 @@
 
 
         <!-- Country Dropdown -->
-        <div class="form-group row ">
-          <mat-label class="outer-mat-label col-4 px-1 pt-2">Country</mat-label>
-          <mat-form-field appearance="outline" class="col-8">
+        <div class="form-group row d-flex justify-content-center ">
+          <mat-label class="outer-mat-label col-2 px-1 pt-2">Country</mat-label>
+          <mat-form-field appearance="outline" class="col-10">
             <mat-select formControlName="Country" (selectionChange)="checkCountry($event)">
 
+              <mat-option disabled selected value="">
+                Select a country
+              </mat-option>
               <mat-option *ngFor="let country of countries" [value]="country.value">
                 {{ country.label }}
               </mat-option>
@@ -28,13 +31,10 @@
         </div>
 
         <!-- Terms & Conditions -->
-        <div class="form-group row d-flex" style="justify-content: left;">
-          <mat-label class="outer-mat-label col-1 pt-2 w-70">T & C</mat-label>
-          <div class="col-8">
-
+        <div class="form-group row d-flex justify-content-center" >
+          <mat-label class="outer-mat-label col-2 pt-2 w-70">T & C</mat-label>
+          <div class="col-10">
             <quill-editor formControlName="Terms" [modules]="editorModules" theme="snow"></quill-editor>
-
-
             <mat-error
               *ngIf="businessForm.controls['Terms'].errors?.['required']&&businessForm.controls['Terms'].touched">
               Terms & Conditions are required.

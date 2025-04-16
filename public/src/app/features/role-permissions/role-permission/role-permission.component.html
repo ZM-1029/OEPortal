@@ -20,8 +20,6 @@
     </div>
   </div>
 
- 
-
   <!-- Permissions List -->
 <div class="p-4 Permissions-List">
   <div class="row">
@@ -33,7 +31,8 @@
   </div>
 
   @for(menu of menuData;track menu){
-    @if(menu.form!='User' && menu.form!='Role' && menu.form!='User Permission' && menu.form!='Dashboard'){
+    @if(menu.form!='User' && menu.form!='Role' && menu.form!='User Permission' && menu.form!='Dashboard' && menu.form!='Country'
+     && menu.form!='Business Lines' && menu.form!='Company' && menu.form!='Company Branch' && menu.form!='Company Account'){
       <div class="row border-bottom py-2 align-items-center">
         <!-- Module Name -->
         <div class="col-md-3">{{ menu.form }}</div>

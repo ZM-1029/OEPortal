@@ -1,3 +1,4 @@
+import { NgClass } from '@angular/common';
 import { AfterViewInit, ChangeDetectorRef, Component, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { AgGridModule, AgGridAngular } from 'ag-grid-angular';
@@ -7,7 +8,7 @@ import { ncTypeCountsI, nonComplianceI } from 'src/app/shared/types/nonComplianc
 ModuleRegistry.registerModules([AllCommunityModule]);
 @Component({
   selector: 'app-timesheet-non-compliance',
-  imports: [AgGridModule],
+  imports: [AgGridModule,NgClass],
   templateUrl: './timesheet-non-compliance.component.html',
   styleUrl: './timesheet-non-compliance.component.scss'
 })
@@ -221,31 +222,36 @@ export class TimesheetNonComplianceComponent implements OnInit, OnChanges, After
     this.currentPageSize = pageSize;
   }
 
-  // for Manage Columns start
-  allColumns = [...this.columnDefs];
-  displayedColumns = [...this.columnDefs];
-
-  toggleColumn(column: any) {
-    const columnIndex = this.displayedColumns.findIndex(
-      (col) => col.field === column.field,
-    );
-    if (columnIndex >= 0) {
-      this.displayedColumns.splice(columnIndex, 1);
-    } else {
-      const colToAdd = this.allColumns.find(
-        (col) => col.field === column.field,
-      );
-      if (colToAdd) {
-        this.displayedColumns.push(colToAdd);
-      }
-    }
-    this.columnDefs = [...this.displayedColumns];
-  }
-
-  isColumnDisplayed(column: any): boolean {
-    return this.displayedColumns.some((col) => col.field === column.field);
-  }
-
-  // for Manage Columns end
+   // for Manage Columns start
+   allColumns = [...this.columnDefs];
+   displayedColumns = [...this.columnDefs];
+ 
+   toggleColumn(column: any) {
+     const columnIndex = this.displayedColumns.findIndex(
+       (col) => col.field === column.field,
+     );
+     if (columnIndex >= 0) {
+       this.displayedColumns.splice(columnIndex, 1);
+     } else {
+       const colToAdd = this.allColumns.find(
+         (col) => col.field === column.field,
+       );
+       if (colToAdd) {
+         this.displayedColumns.push(colToAdd);
+       }
+     }
+     this.columnDefs = [...this.displayedColumns];
+   }
+ 
+   // Check if column is displayed
+   isColumnDisplayed(column: any): boolean {
+     return this.displayedColumns.some((col) => col.field === column.field);
+   }
+ 
+   // Prevent dropdown from closing while allowing checkbox toggle
+   preventClose(event: MouseEvent) {
+     event.stopPropagation();
+   }
+   // for Manage Columns end
 
 }

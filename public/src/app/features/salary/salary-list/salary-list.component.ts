@@ -141,11 +141,11 @@ export class SalaryListComponent implements OnInit, AfterViewInit {
       minWidth: 240,
       valueFormatter: (params: { value: any; }) => {
         if (params.value) {
-          return Number(params.value).toLocaleString(); 
+          return Number(params.value).toLocaleString();
         }
         return params.value;
       },
-    }, 
+    },
   ];
 
   defaultColDef = {
@@ -345,10 +345,12 @@ export class SalaryListComponent implements OnInit, AfterViewInit {
     });
   }
 
-  // for Manage Columns
+
+  // for Manage Columns start
   allColumns = [...this.columnDefs];
   displayedColumns = [...this.columnDefs];
 
+  // Toggle column selection
   toggleColumn(column: any) {
     const columnIndex = this.displayedColumns.findIndex(
       (col) => col.field === column.field,
@@ -366,9 +368,16 @@ export class SalaryListComponent implements OnInit, AfterViewInit {
     this.columnDefs = [...this.displayedColumns];
   }
 
+  // Check if column is displayed
   isColumnDisplayed(column: any): boolean {
     return this.displayedColumns.some((col) => col.field === column.field);
   }
+
+  // Prevent dropdown from closing while allowing checkbox toggle
+  preventClose(event: MouseEvent) {
+    event.stopPropagation();
+  }
+  // for Manage Columns end
 
   renderActionIcons(params: any): string {
     return `

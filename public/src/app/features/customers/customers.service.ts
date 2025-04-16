@@ -48,7 +48,7 @@ export class CustomersService {
   }
 
   updateCustomer(id: number | string, updateCustomer: any) {
-    return this.http.post<any>(
+    return this.http.put<any>(
       `${environment.apiUrl}api/Customer/EditCustomer/${id}`,
       updateCustomer,
     );

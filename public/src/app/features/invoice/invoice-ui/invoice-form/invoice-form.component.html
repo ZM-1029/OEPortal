@@ -63,6 +63,7 @@
             </div>
         </div>
         <div class="d-block ms-4">
+            <!-- [disabled]="isDesableViewBtn && getPurchaseOrderDataLength() > 0"   -->
             <button 
             [disabled]="isDesableViewBtn && getPurchaseOrderDataLength() > 0"  
             (click)="viewPurchaseOrder()" 

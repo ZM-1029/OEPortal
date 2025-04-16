@@ -51,7 +51,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
   public customerForm!: FormGroup;
   public submitted = false;
   public logoFile!: File | any;
-  logoUrl:FormData|any;
+  logoUrl: any;
   public customerLogoUrl!: string | null;
   public customerName: string = '';
   public customerEmail: string = '';
@@ -153,7 +153,6 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
         .getCustomerByCustomerId(id)
         .pipe(takeUntil(this._unsubscribeAll$))
         .subscribe((response: any) => {
-          console.log(response, ':response')
 
           this.customerForm.patchValue({
             Id: this.Id,
@@ -232,7 +231,8 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
     }
   }
 
-  // Create Edit Customer
+  // create and update start
+
   createUpdate() {
     this.submitted = true;
 
@@ -241,25 +241,25 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (this.Id < 1) {
-      var customer = {
-        id: 0,
-        customerId:'',
+    const proceedWithCustomerRequest = () => {
+      const commonData = {
+        id: this.Id || 0,
+        customerId: this.customerForm.get("CustomerId")?.value || '',
         customerName: this.customerForm.get("CustomerName")?.value,
         phoneNumber: this.customerForm.get("PhoneNumber")?.value,
         primaryContact: this.customerForm.get("PrimaryContact")?.value,
         email: this.customerForm.get("Email")?.value,
-        logo: this.customerForm.get("Logo")?.value,
-        logoFile: this.logoFile,
+        logo: this.logoUrl || "",
         status: true,
         country: this.customerForm.get("Country")?.value,
         taxid: this.customerForm.get("Taxid")?.value,
         businessType: this.customerForm.get("BusinessType")?.value
-      }
-      var address = [
+      };
+
+      const addresses = [
         {
-          id: 0,
-          customerId: 0,
+          id: this.customerForm.get("billingaddressId")?.value || 0,
+          customerId: commonData.id,
           postalCode: this.customerForm.get("billingPin")?.value,
           state: this.customerForm.get("billingState")?.value,
           city: this.customerForm.get("billingCity")?.value,
@@ -267,91 +267,40 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
           isBillingAddress: true
         },
         {
-          id: 0,
-          customerId: 0,
+          id: this.customerForm.get("shippingaddressId")?.value || 0,
+          customerId: commonData.id,
           postalCode: this.customerForm.get("shippingPin")?.value,
           state: this.customerForm.get("shippingState")?.value,
           city: this.customerForm.get("shippingCity")?.value,
           address: this.customerForm.get("billingAttention")?.value,
           isBillingAddress: false
         }
+      ];
 
-      ]
-      var request = {
-        customer: customer,
-        addresses: address
+      let requestPayload: any;
+      let requestObservable;
+
+      if (this.Id < 1) {
+        // Create
+        requestPayload = {
+          ...commonData,
+          addresses: addresses
+        };
+        requestObservable = this._customerService.createCustomer(requestPayload);
+      } else {
+        // Update
+        requestPayload = {
+          customer: commonData,
+          addresses: addresses
+        };
+        requestObservable = this._customerService.updateCustomer(this.Id, requestPayload);
       }
 
-
-
-      this._customerService.createCustomer(request).subscribe({
+      requestObservable.subscribe({
         next: (response: any) => {
           if (response.success) {
-            console.log("Success:", response);
-            this.showSuccessMessage(response.message);
-            console.log(1);
-            this.formClose.emit(true);
-          } else {
-            this.showSuccessMessage(response.message);
-          }
-        },
-        error: (err) => {
-          this.handleError(err);
-          console.error("Error Status:", err.status);
-          console.error("Error Message:", err.error);
-        },
-      });
-    } else {
-
-      var customers = {
-        id: this.Id.toString(),
-        customerId:this.customerForm.get("CustomerId")?.value,
-        customerName: this.customerForm.get("CustomerName")?.value,
-        phoneNumber: this.customerForm.get("PhoneNumber")?.value,
-        primaryContact: this.customerForm.get("PrimaryContact")?.value,
-        email: this.customerForm.get("Email")?.value,
-        logo: this.customerForm.get("Logo")?.value,
-        logoFile: this.logoFile,
-        status: true,
-        country: this.customerForm.get("Country")?.value,
-        taxid: this.customerForm.get("Taxid")?.value,
-        businessType: this.customerForm.get("BusinessType")?.value
-      }
-      var addressss = [
-        {
-          id: this.customerForm.get("billingaddressId")?.value,
-          customerId: this.Id.toString(),
-          postalCode: this.customerForm.get("billingPin")?.value,
-          state: this.customerForm.get("billingState")?.value,
-          city: this.customerForm.get("billingCity")?.value,
-          address: this.customerForm.get("billingAttention")?.value,
-          isBillingAddress: true
-        },
-        {
-          id: this.customerForm.get("shippingaddressId")?.value,
-          customerId: this.Id.toString(),
-          postalCode: this.customerForm.get("shippingPin")?.value,
-          state: this.customerForm.get("shippingState")?.value,
-          city: this.customerForm.get("shippingCity")?.value,
-          address: this.customerForm.get("billingAttention")?.value,
-          isBillingAddress: false
-        }
-
-      ]
-      var requestupdate = {
-        customer: customers,
-        addresses: addressss
-      }
-
-
-
-      this._customerService.updateCustomer(this.Id, requestupdate).subscribe({
-        next: (response: any) => {
-          if (response.success) {
-            console.log("Success:", response);
             this.showSuccessMessage(response.message);
             this.resetForm();
-            console.log(1);
             this.formClose.emit(true);
           } else {
             this.showSuccessMessage(response.message);
@@ -361,90 +310,34 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
           this.handleError(err);
           console.error("Error Status:", err.status);
           console.error("Error Message:", err.error);
-        },
+        }
       });
+    };
+
+    // Handle logo upload if provided
+    if (this.logoFile) {
+      const formData = new FormData();
+      formData.append("LogoFile", this.logoFile, this.logoFile.name);
+
+      this._customerService.UploadLogo(formData).subscribe({
+        next: (response: any) => {
+          if (response.success) {
+            this.logoUrl = response.logoUrl;
+            this._changeDetetction.detectChanges();
+            proceedWithCustomerRequest();
+          } else {
+            this.handleError(response.message);
+          }
+        },
+        error: (error) => {
+          this.handleError(error.error?.message || "Logo upload failed");
+        }
+      });
+    } else {
+      proceedWithCustomerRequest();
     }
   }
-
-//   createUpdate() {
-//     if (this.customerForm.invalid) {
-//       this.customerForm.markAllAsTouched();
-//       return;
-//     }
-  
-//     const formData = new FormData();
-
-//     // Logo File - only add if it's valid
-//     if (this.logoFile instanceof File && this.logoFile.size > 0) {
-//       formData.append("LogoFile", this.logoFile, this.logoFile.name);
-//     } else {
-//       console.warn("No valid logo file selected.");
-//     }
-
-//     // Append scalar fields
-//     formData.append("CustomerName", this.customerForm.get("CustomerName")?.value || "");
-//     formData.append("PhoneNumber", this.customerForm.get("PhoneNumber")?.value || "");
-//     formData.append("PrimaryContact", this.customerForm.get("PrimaryContact")?.value || "");
-//     formData.append("Email", this.customerForm.get("Email")?.value || "");
-//     formData.append("Taxid", this.customerForm.get("Taxid")?.value || "");
-//     formData.append("BusinessType", this.customerForm.get("BusinessType")?.value?.toString() || "0");
-//     formData.append("Country", "India");
-//     formData.append("Status", "true");
-
-//     // Address objects (as JSON)
-//     const billingAddress = {
-//       id: 0,
-//       postalCode: this.customerForm.get("billingPin")?.value,
-//       customerId: 0,
-//       state: this.customerForm.get("billingState")?.value,
-//       city: this.customerForm.get("billingCity")?.value,
-//       address: this.customerForm.get("billingAttention")?.value,
-//       isBillingAddress: true,
-//     };
-
-//     const shippingAddress = {
-//       id: 0,
-//       postalCode: this.customerForm.get("shippingPin")?.value,
-//       customerId: 0,
-//       state: this.customerForm.get("shippingState")?.value,
-//       city: this.customerForm.get("shippingCity")?.value,
-//       address: this.customerForm.get("shippingAttention")?.value,
-//       isBillingAddress: false,
-//     };
-//     const address=[billingAddress,shippingAddress]
-
-
-//     formData.append("Addresses[0]", JSON.stringify(billingAddress));
-//     formData.append("Addresses[1]", JSON.stringify(shippingAddress));
-
-
-
-//     for (let pair of formData.entries()) {
-//       console.log(`${pair[0]}:`, pair[1]);
-//     }
-// // return
-//     // API call
-//     this._customerService.createCustomer(formData).subscribe({
-//       next: (response: any) => {
-//         if (response.success) {
-//           console.log("Success:", response);
-//           this.showSuccessMessage(response.message);
-//           console.log(1);
-//           this.formClose.emit(true);
-//         } else {
-//           this.showSuccessMessage(response.message);
-//         }
-//       },
-//       error: (err) => {
-//         this.handleError(err);
-//         console.error("Error Status:", err.status);
-//         console.error("Error Message:", err.error);
-//       },
-//     });
-//   }
-
-
-
+  // create and update end
 
 
   resetForm() {
@@ -465,24 +358,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
       this._changeDetetction.detectChanges();
     };
     reader.readAsDataURL(this.logoFile);
-    if(this.logoFile){
-      const formData = new FormData();
-      formData.append("LogoFile", this.logoFile, this.logoFile.name);
-      this._customerService.UploadLogo(formData).subscribe(
-        {
-          next:((response:any)=>{
-            if(response.success){
-              this.logoUrl=response.logoUrl
-            }else{
-              this.handleError(response.message)
-            }
-          }),
-          error:((error)=>{
-            this.handleError(error.error.message)
-          })
-        }
-      )
-    }
+
   }
 
   // Deletes the current image

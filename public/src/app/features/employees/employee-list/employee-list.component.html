@@ -9,7 +9,8 @@
           data-bs-toggle="dropdown" aria-expanded="false">
           Manage Column
         </button>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+
+        <ul class="dropdown-menu py-0" aria-labelledby="dropdownMenuButton1">
           @for (column of allColumns; track column) {
           <li>
             @if (
@@ -18,19 +19,17 @@
             column.field == "firstName"
             ) {
             <div class="dropdown-item d-none checkbox-container">
-              <input type="checkbox" [checked]="isColumnDisplayed(column)" (change)="toggleColumn(column)"
-                id="{{ column.field }}" />
-              <label for="{{ column.field }}">{{
-                column.headerName
-                }}</label>
+              <input type="checkbox" [checked]="isColumnDisplayed(column)" disabled id="{{ column.field }}" />
+              <label for="{{ column.field }}">{{ column.headerName }}</label>
             </div>
             } @else {
-            <div class="dropdown-item checkbox-container">
+            <div class="dropdown-item checkbox-container pt-1 px-3" [ngClass]="{
+              'checked': isColumnDisplayed(column),
+              'unchecked': !isColumnDisplayed(column)
+            }" (click)="preventClose($event)">
               <input type="checkbox" [checked]="isColumnDisplayed(column)" (change)="toggleColumn(column)"
                 id="{{ column.field }}" />
-              <label for="{{ column.field }}">{{
-                column.headerName
-                }}</label>
+              <label for="{{ column.field }}">{{ column.headerName }}</label>
             </div>
             }
           </li>

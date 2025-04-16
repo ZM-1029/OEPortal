@@ -317,33 +317,7 @@ export class EmployeeListComponent implements OnInit, OnChanges {
     }
   }
 
-  // for Manage Columns start
-  allColumns = [...this.columnDefs];
-  displayedColumns = [...this.columnDefs];
-
-  toggleColumn(column: any) {
-    const columnIndex = this.displayedColumns.findIndex(
-      (col) => col.field === column.field,
-    );
-    if (columnIndex >= 0) {
-      this.displayedColumns.splice(columnIndex, 1);
-    } else {
-      const colToAdd = this.allColumns.find(
-        (col) => col.field === column.field,
-      );
-      if (colToAdd) {
-        this.displayedColumns.push(colToAdd);
-      }
-    }
-    this.columnDefs = [...this.displayedColumns];
-  }
-
-  isColumnDisplayed(column: any): boolean {
-    return this.displayedColumns.some((col) => col.field === column.field);
-  }
-
-  // for Manage Columns end
-
+ 
   navigateToDetails(empId: string) {
     if (empId !== null) {
       this._router.navigateByUrl("/admin/employee/" + empId);
@@ -360,6 +334,37 @@ export class EmployeeListComponent implements OnInit, OnChanges {
       </div>
     `;
   }
+
+   // for Manage Columns start
+   allColumns = [...this.columnDefs];
+   displayedColumns = [...this.columnDefs];
+ 
+   // Toggle column selection
+   toggleColumn(column: any) {
+     const columnIndex = this.displayedColumns.findIndex(
+       (col) => col.field === column.field,
+     );
+     if (columnIndex >= 0) {
+       this.displayedColumns.splice(columnIndex, 1);
+     } else {
+       const colToAdd = this.allColumns.find(
+         (col) => col.field === column.field,
+       );
+       if (colToAdd) {
+         this.displayedColumns.push(colToAdd);
+       }
+     }
+     this.columnDefs = [...this.displayedColumns];
+   }
+ 
+   isColumnDisplayed(column: any): boolean {
+     return this.displayedColumns.some((col) => col.field === column.field);
+   }
+ 
+   preventClose(event: MouseEvent) {
+     event.stopPropagation();
+   }
+   // for Manage Columns end
 
   //  Function to handle API errors
   private handleError(err: string) {

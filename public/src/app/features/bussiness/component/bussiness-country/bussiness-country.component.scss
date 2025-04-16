@@ -1,13 +1,67 @@
 .mat-select:focus {
-    outline: none !important;
-    box-shadow: none !important;
-  }
+  outline: none !important;
+  box-shadow: none !important;
+}
 
-  
-  select{
-    border: none;
-  }
 
-  .btn{
-    background-color: #2e3b64!important;
-    }
+select {
+  border: none;
+}
+
+.btn {
+  background-color: #2e3b64 !important;
+}
+
+
+:host ::ng-deep app-side-drawer .drawer {
+  position: absolute;
+  z-index: 999 !important;
+  width: calc(100% - 40%);
+  height: 100%;
+  box-sizing: border-box;
+  background-color: transparent;
+}
+
+// .bussiness-listing app-side-drawer .drawer .mat-drawer-inner-container {
+//   width: 100%;
+//   height: 100%;
+//   overflow: hidden;
+// }
+
+// @media (max-width: 1344px) {
+//   .table-footer .row {
+//     position: absolute;
+//     width: 100%;
+//     top: -40px;
+//     left: 20px;
+//     z-index: 2;
+//   }
+// }
+
+// @media (max-width:1500px) {
+//   .bussiness-listing app-side-drawer .drawer {
+//     position: absolute;
+//     z-index: 999 !important;
+//     width: 70rem !important;
+//     height: 100%;
+//     box-sizing: border-box;
+//     background-color: transparent;
+//   }
+// }
+
+// @media (max-width:1260px) {
+//   .bussiness-listing app-side-drawer .drawer {
+//     position: absolute;
+//     z-index: 999 !important;
+//     width: 50rem !important;
+//     height: 100%;
+//     box-sizing: border-box;
+//     background-color: transparent;
+//   }
+
+//   // .bussiness-listing app-side-drawer .drawer .table-container {
+//   //   min-width: 500px;
+//   //   overflow-x: auto;
+//   // }
+
+// }

@@ -281,32 +281,6 @@ export class InvoiceListComponent implements OnInit, AfterViewInit {
   }
 
 
-  // for Manage Columns
-  allColumns = [...this.columnDefs];
-  displayedColumns = [...this.columnDefs];
-
-  toggleColumn(column: any) {
-    const columnIndex = this.displayedColumns.findIndex(
-      (col) => col.field === column.field,
-    );
-    if (columnIndex >= 0) {
-      this.displayedColumns.splice(columnIndex, 1);
-    } else {
-      const colToAdd = this.allColumns.find(
-        (col) => col.field === column.field,
-      );
-      if (colToAdd) {
-        this.displayedColumns.push(colToAdd);
-      }
-    }
-    this.columnDefs = [...this.displayedColumns];
-  }
-
-  isColumnDisplayed(column: any): boolean {
-    return this.displayedColumns.some((col) => col.field === column.field);
-  }
-
-
   // show message in table if api is false.. start
   gridOptions = {
     noRowsOverlayComponentParams: {
@@ -360,6 +334,38 @@ export class InvoiceListComponent implements OnInit, AfterViewInit {
       `;
   }
 
+  // for Manage Columns start
+  allColumns = [...this.columnDefs];
+  displayedColumns = [...this.columnDefs];
+
+  // Toggle column selection
+  toggleColumn(column: any) {
+    const columnIndex = this.displayedColumns.findIndex(
+      (col) => col.field === column.field,
+    );
+    if (columnIndex >= 0) {
+      this.displayedColumns.splice(columnIndex, 1);
+    } else {
+      const colToAdd = this.allColumns.find(
+        (col) => col.field === column.field,
+      );
+      if (colToAdd) {
+        this.displayedColumns.push(colToAdd);
+      }
+    }
+    this.columnDefs = [...this.displayedColumns];
+  }
+
+  // Check if column is displayed
+  isColumnDisplayed(column: any): boolean {
+    return this.displayedColumns.some((col) => col.field === column.field);
+  }
+
+  // Prevent dropdown from closing while allowing checkbox toggle
+  preventClose(event: MouseEvent) {
+    event.stopPropagation();
+  }
+  // for Manage Columns end
 
   //  Function to show success messages
   private showSuccessMessage(message: string) {

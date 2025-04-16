@@ -357,44 +357,78 @@ export class AttendanceNonComplianceHistoryComponent implements OnInit, OnChange
     this.currentPageSize = pageSize;
   }
 
-  // for Manage Columns start
-  allColumns = [...this.columnDefs];
-  displayedColumns = [...this.columnDefs];
+  // // for Manage Columns start
+  // allColumns = [...this.columnDefs];
+  // displayedColumns = [...this.columnDefs];
 
-  toggleColumn(column: any) {
-    const columnIndex = this.displayedColumns.findIndex(
+  // toggleColumn(column: any) {
+  //   const columnIndex = this.displayedColumns.findIndex(
+  //     (col) => col.field === column.field,
+  //   );
+  //   if (columnIndex >= 0) {
+  //     this.displayedColumns.splice(columnIndex, 1);
+  //   } else {
+  //     const colToAdd = this.allColumns.find(
+  //       (col) => col.field === column.field,
+  //     );
+  //     if (colToAdd) {
+  //       this.displayedColumns.push(colToAdd);
+  //     }
+  //   }
+  //   this.columnDefs = [...this.displayedColumns];
+  // }
+
+  // isColumnDisplayed(column: any): boolean {
+  //   return this.displayedColumns.some((col) => col.field === column.field);
+  // }
+
+  // // In your component class
+  // preventClose(event: MouseEvent) {
+  //   event.stopPropagation();
+  //   // If you need to manually handle the checkbox toggle:
+  //   const checkbox = event.target as HTMLInputElement;
+  //   if (checkbox.tagName === 'INPUT' && checkbox.type === 'checkbox') {
+  //     // The (change) event will handle the toggle
+  //     return;
+  //   }
+  //   event.preventDefault();
+  // }
+
+  // // for Manage Columns end
+
+// for Manage Columns start
+allColumns = [...this.columnDefs];
+displayedColumns = [...this.columnDefs];
+
+// Toggle column selection
+toggleColumn(column: any) {
+  const columnIndex = this.displayedColumns.findIndex(
+    (col) => col.field === column.field,
+  );
+  if (columnIndex >= 0) {
+    this.displayedColumns.splice(columnIndex, 1);
+  } else {
+    const colToAdd = this.allColumns.find(
       (col) => col.field === column.field,
     );
-    if (columnIndex >= 0) {
-      this.displayedColumns.splice(columnIndex, 1);
-    } else {
-      const colToAdd = this.allColumns.find(
-        (col) => col.field === column.field,
-      );
-      if (colToAdd) {
-        this.displayedColumns.push(colToAdd);
-      }
+    if (colToAdd) {
+      this.displayedColumns.push(colToAdd);
     }
-    this.columnDefs = [...this.displayedColumns];
   }
+  this.columnDefs = [...this.displayedColumns];
+}
 
-  isColumnDisplayed(column: any): boolean {
-    return this.displayedColumns.some((col) => col.field === column.field);
-  }
+// Check if column is displayed
+isColumnDisplayed(column: any): boolean {
+  return this.displayedColumns.some((col) => col.field === column.field);
+}
 
-  // In your component class
-  preventClose(event: MouseEvent) {
-    event.stopPropagation();
-    // If you need to manually handle the checkbox toggle:
-    const checkbox = event.target as HTMLInputElement;
-    if (checkbox.tagName === 'INPUT' && checkbox.type === 'checkbox') {
-      // The (change) event will handle the toggle
-      return;
-    }
-    event.preventDefault();
-  }
+// Prevent dropdown from closing while allowing checkbox toggle
+preventClose(event: MouseEvent) {
+  event.stopPropagation(); 
+}
+// for Manage Columns end
 
-  // for Manage Columns end
 
   //  Function to show success messages
   private showSuccessMessage(message: string) {

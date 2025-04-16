@@ -8,15 +8,16 @@ import { employeesDropdownI, efficiencyReportsEmployeeDetailI } from 'src/app/sh
 import { ReportsService } from '../../../reports.service';
 import { SingleSelectDropdownComponent } from 'src/app/shared/components/UI/single-select-dropdown/single-select-dropdown.component';
 import { MonthMultiSelectDropdownComponent } from 'src/app/shared/components/UI/month-multi-select-dropdown/month-multi-select-dropdown.component';
+import { NgClass } from '@angular/common';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 @Component({
   selector: 'app-efficiency-report-employees',
-  imports: [AgGridAngular, MultiSelectDropdownComponent, SingleSelectDropdownComponent, MonthMultiSelectDropdownComponent],
+  imports: [AgGridAngular, MultiSelectDropdownComponent, SingleSelectDropdownComponent, MonthMultiSelectDropdownComponent,NgClass],
   templateUrl: './efficiency-report-employees.component.html',
   styleUrl: './efficiency-report-employees.component.scss'
 })
-export class EfficiencyReportEmployeesComponent implements OnInit,AfterViewInit {
+export class EfficiencyReportEmployeesComponent implements OnInit, AfterViewInit {
   @ViewChild(AgGridAngular) agGrid!: AgGridAngular;
   rowData: efficiencyReportsEmployeeDetailI[] = [];
   public currentPageNumber: number = 1;
@@ -267,10 +268,15 @@ export class EfficiencyReportEmployeesComponent implements OnInit,AfterViewInit 
     this.columnDefs = [...this.displayedColumns];
   }
 
+  // Check if column is displayed
   isColumnDisplayed(column: any): boolean {
     return this.displayedColumns.some((col) => col.field === column.field);
   }
 
+  // Prevent dropdown from closing while allowing checkbox toggle
+  preventClose(event: MouseEvent) {
+    event.stopPropagation();
+  }
   // for Manage Columns end
 
   //  Function to handle API errors

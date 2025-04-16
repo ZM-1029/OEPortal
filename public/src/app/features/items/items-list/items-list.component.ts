@@ -132,7 +132,7 @@ export class ItemsListComponent {
       minWidth: 270,
       valueFormatter: (params: { value: any; }) => {
         if (params.value) {
-          return Number(params.value).toLocaleString(); 
+          return Number(params.value).toLocaleString();
         }
         return params.value;
       },
@@ -145,7 +145,7 @@ export class ItemsListComponent {
       minWidth: 270,
       valueFormatter: (params: { value: any; }) => {
         if (params.value) {
-          return Number(params.value).toLocaleString(); 
+          return Number(params.value).toLocaleString();
         }
         return params.value;
       },
@@ -167,7 +167,7 @@ export class ItemsListComponent {
     private dialog: MatDialog,
     private _successMessage: MatSnackBar,
     private rolePermissionService: RolePermissionService,
-    
+
   ) { }
 
   ngOnInit(): void {
@@ -292,29 +292,7 @@ export class ItemsListComponent {
     this.currentPageNumber = currentPage + 1;
     this.currentPageSize = pageSize;
   }
-  allColumns = [...this.columnDefs];
-  displayedColumns = [...this.columnDefs];
 
-  toggleColumn(column: any) {
-    const columnIndex = this.displayedColumns.findIndex(
-      (col) => col.field === column.field,
-    );
-    if (columnIndex >= 0) {
-      this.displayedColumns.splice(columnIndex, 1);
-    } else {
-      const colToAdd = this.allColumns.find(
-        (col) => col.field === column.field,
-      );
-      if (colToAdd) {
-        this.displayedColumns.push(colToAdd);
-      }
-    }
-    this.columnDefs = [...this.displayedColumns];
-  }
-
-  isColumnDisplayed(column: any): boolean {
-    return this.displayedColumns.some((col) => col.field === column.field);
-  }
   gridOptions = {
     noRowsOverlayComponentParams: {
       noRowsMessageFunc: () => "Data is not found",
@@ -369,6 +347,39 @@ export class ItemsListComponent {
       horizontalPosition: "right",
     });
   }
+
+  // for Manage Columns start
+  allColumns = [...this.columnDefs];
+  displayedColumns = [...this.columnDefs];
+
+  // Toggle column selection
+  toggleColumn(column: any) {
+    const columnIndex = this.displayedColumns.findIndex(
+      (col) => col.field === column.field,
+    );
+    if (columnIndex >= 0) {
+      this.displayedColumns.splice(columnIndex, 1);
+    } else {
+      const colToAdd = this.allColumns.find(
+        (col) => col.field === column.field,
+      );
+      if (colToAdd) {
+        this.displayedColumns.push(colToAdd);
+      }
+    }
+    this.columnDefs = [...this.displayedColumns];
+  }
+
+  // Check if column is displayed
+  isColumnDisplayed(column: any): boolean {
+    return this.displayedColumns.some((col) => col.field === column.field);
+  }
+
+  // Prevent dropdown from closing while allowing checkbox toggle
+  preventClose(event: MouseEvent) {
+    event.stopPropagation();
+  }
+  // for Manage Columns end
 
   ngOnDestroy(): void {
     this._unsubscribeAll$.next(this._itemService);

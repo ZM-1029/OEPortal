@@ -25,8 +25,8 @@ ModuleRegistry.registerModules([AllCommunityModule]);
     CommonModule,
     AgGridAngular,
     MatButtonModule,
-    AddBussinessComponent,
-    SideDrawerComponent,
+    // AddBussinessComponent,
+    // SideDrawerComponent,
     PageHeaderComponent,
     
   ],
@@ -35,21 +35,6 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 })
 export class BussinessLineComponent {
   
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   columnDefs: ColDef[] = [
     { headerName: "S. No", valueGetter: "node.rowIndex + 1", pinned: "left" },

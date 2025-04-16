@@ -30,57 +30,44 @@
   overflow-y: auto;
 }
 
-// checkbox style start
+// for Manage Columns start
 .checkbox-container {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 8px;
-}
-
-.checkbox-container input[type="checkbox"] {
-  appearance: none;
-  width: 18px ;
-  height: 18px ;
-  border: 2px solid #3b82f6; /* Blue border */
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  gap: 12px;
+  padding: 6px 12px;
+  margin-bottom: 0;
+  background-color: white;
+  transition: background-color 0.2s ease;
+  width: 100%;
   cursor: pointer;
-  transition: 0.2s;
 }
 
-.checkbox-container input[type="checkbox"]:checked {
-  background-color: #3b82f6;
-  border: none;
-  position: relative;
+.checkbox-container.unchecked:hover {
+  background-color: rgb(244, 249, 255) !important;
 }
 
-.checkbox-container input[type="checkbox"]:checked::after {
-  content: "✔";
-  color: white;
-  font-size: 14px;
-  font-weight: 200;
+.checkbox-container.checked {
+  background-color: rgb(234, 244, 255); 
+  color: #000;
+}
+
+.checkbox-container input {
+  cursor: pointer;
 }
 
 .checkbox-container label {
-  font-size: 16px;
+  font-size: 14px;
   color: #333;
-}
-
-// checkbox style end
-
-.dropdown-item {
-  display: flex;
-  align-items: center;
-  padding: 10px 15px;
-}
-
-.dropdown-item label {
-  margin-left: 10px;
+  flex-grow: 1;
+  margin: 0;
+  font-weight: 400;
+  padding: 4px 0;
+  letter-spacing: 0.6px;
   cursor: pointer;
 }
+
+// for Manage Columns end
 
 .cstm_height_btn {
   height: 40px;

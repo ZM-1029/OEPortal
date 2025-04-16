@@ -7,6 +7,7 @@
     border-radius: 16px;
     max-height: calc(100vh - 6rem);
     overflow: hidden;
+    height: calc(100vh - 6rem);
   }
   
   .businessForm .bg-light{
@@ -20,17 +21,21 @@
     padding: 10px 20px;
   }
   
-  .form-container {
-    padding: 20px;
-    font-size: 13px;
-    border-radius: 8px;
-    // background: #fff;
-  }
-  
+.form-container {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  height: 90%;
+  overflow: hidden;
+
   form {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
     width: 100%;
   }
-  
+}
+
   .form-control {
     display: block;
     width: 100%;
@@ -298,14 +303,18 @@
   
   
  .businessForm ::ng-deep .ql-container {
-    width: 387px; /* Adjust width as needed */
-    min-height: 100px; /* Optional: Set height */
-    // max-height: 500px;
+    width: 100%; 
     max-height:calc(100vh - 30rem) ;
     overflow-y: auto;
   }
   
   ::ng-deep .ql-editor {
-    width: 100%; /* Ensures the editor content area fills the container */
+    width: 100%;
+  }
+  
+  @media (min-width: 1500px) {
+    .col-2 {
+      width: 10% !important;
+    }
   }
   

@@ -8,14 +8,10 @@ import { AgGridAngular } from 'ag-grid-angular';
 import { ModuleRegistry, AllCommunityModule, GridApi, GridReadyEvent } from 'ag-grid-community';
 import { LoaderComponent } from 'src/app/shared/components/UI/loader/loader.component';
 import { PageHeaderComponent } from 'src/app/shared/components/UI/page-header/page-header.component';
-import { SideDrawerComponent } from 'src/app/shared/components/UI/side-drawer/side-drawer.component';
 import { SuccessModalComponent } from 'src/app/shared/components/UI/success-modal/success-modal.component';
-import { employeeType, employeeListI } from 'src/app/shared/types/employees.type';
-import { EmployeeSideDrawerComponent } from '../../employees/employee-side-drawer/employee-side-drawer.component';
-import { EmployeesService } from '../../employees/employees.service';
+import { employeeType } from 'src/app/shared/types/employees.type';
 import { RoleService } from '../role.service';
 import { MatDialog } from '@angular/material/dialog';
-import { DeleteModalComponent } from 'src/app/shared/components/UI/delete-modal/delete-modal.component';
 import { RoleCreateComponent } from '../role-create/role-create.component';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
@@ -119,6 +115,7 @@ export class RoleListComponent implements OnInit{
       dialogRef.afterClosed().subscribe((result) => {
         if (result == true) {
           console.log("create role");
+          this.getActiveRoles();
         } else {
           console.log("not create  role");
         }

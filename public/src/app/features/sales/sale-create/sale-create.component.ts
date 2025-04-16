@@ -117,16 +117,21 @@ export class SaleCreateComponent {
       subTotal: [0]
     });
   }
+
   addRow() {
     this.items.push(this.createItem());
   }
+
   deleteRow(index: number) {
     this.items.removeAt(index);
     this.onTaxChange();
   }
+
   get items(): FormArray {
     return this.productForm.get('items') as FormArray;
   }
+
+  
   clearForm() {
     if (this.isSideDrawerOpen) {
       if (this.Id < 1) {
@@ -289,9 +294,13 @@ export class SaleCreateComponent {
   resetForm() {
     this.submitted = false;
     this.productForm.reset();
+    this.productForm.reset({
+      companyBranchId: 0 
+    });
     this.productForm.markAsPristine();
     this.productForm.markAsUntouched();
   }
+
   private showSuccessMessage(message: string) {
     this._successMessage.openFromComponent(SuccessModalComponent, {
       data: { message },

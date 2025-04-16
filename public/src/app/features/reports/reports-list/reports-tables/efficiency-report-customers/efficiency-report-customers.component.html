@@ -25,36 +25,37 @@
     </div>
     <div class="dropdown-manage-column ">
         <button class="btn btn-info-dark text-white btn-wave dropdown-toggle" type="button" id="dropdownMenuButton1"
-            data-bs-toggle="dropdown" aria-expanded="false">
-            Manage Column
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-            @for (column of allColumns; track column) {
-            <li>
-                @if (
-                column.headerName == "S. No" ||
-                column.field == "employeeID" ||
-                column.field == "firstName"
-                ) {
-                <div class="dropdown-item d-none checkbox-container">
-                    <input type="checkbox" [checked]="isColumnDisplayed(column)" (change)="toggleColumn(column)"
-                        id="{{ column.field }}" />
-                    <label for="{{ column.field }}">{{
-                        column.headerName
-                        }}</label>
-                </div>
-                } @else {
-                <div class="dropdown-item checkbox-container">
-                    <input type="checkbox" [checked]="isColumnDisplayed(column)" (change)="toggleColumn(column)"
-                        id="{{ column.field }}" />
-                    <label for="{{ column.field }}">{{
-                        column.headerName
-                        }}</label>
-                </div>
-                }
-            </li>
-            }
-        </ul>
+        data-bs-toggle="dropdown" aria-expanded="false">
+        Manage Column
+      </button>
+  
+      <ul class="dropdown-menu py-0" aria-labelledby="dropdownMenuButton1">
+        @for (column of allColumns; track column) {
+        <li>
+          @if (
+          column.headerName == 'S. No' ||
+          column.field == 'employeeID' ||
+          column.field == 'firstName'
+          ) {
+          <!-- Hidden fixed columns -->
+          <div class="dropdown-item d-none checkbox-container">
+            <input type="checkbox" [checked]="isColumnDisplayed(column)" disabled id="{{ column.field }}" />
+            <label for="{{ column.field }}">{{ column.headerName }}</label>
+          </div>
+          } @else {
+          <!-- Togglable columns -->
+          <div class="dropdown-item checkbox-container pt-1 px-3" [ngClass]="{
+                  'checked': isColumnDisplayed(column),
+                  'unchecked': !isColumnDisplayed(column)
+                }" (click)="preventClose($event)">
+            <input type="checkbox" [checked]="isColumnDisplayed(column)" (change)="toggleColumn(column)"
+              id="{{ column.field }}" />
+            <label for="{{ column.field }}">{{ column.headerName }}</label>
+          </div>
+          }
+        </li>
+        }
+      </ul>
     </div>
 <div class="container-fluid p-0">
     <ag-grid-angular #agGrid style="width: 100%; height: calc(100vh - 14.5rem)" class="ag-theme-alpine" [rowData]="rowData"

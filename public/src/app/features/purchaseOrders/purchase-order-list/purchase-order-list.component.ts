@@ -125,11 +125,11 @@ export class PurchaseOrderListComponent implements OnInit {
       minWidth: 240,
       valueFormatter: (params: { value: any; }) => {
         if (params.value) {
-          return Number(params.value).toLocaleString(); 
+          return Number(params.value).toLocaleString();
         }
         return params.value;
       },
-    },    
+    },
     {
       field: "currencyCode",
       headerName: "Currency Code",
@@ -165,7 +165,7 @@ export class PurchaseOrderListComponent implements OnInit {
 
   }
 
-  
+
   ngAfterViewInit() {
     this._changeDetectorRef.detectChanges();
   }
@@ -344,33 +344,6 @@ export class PurchaseOrderListComponent implements OnInit {
     });
   }
 
-  // for Manage Columns start
-  allColumns = [...this.columnDefs];
-  displayedColumns = [...this.columnDefs];
-
-  toggleColumn(column: any) {
-    const columnIndex = this.displayedColumns.findIndex(
-      (col) => col.field === column.field,
-    );
-    if (columnIndex >= 0) {
-      this.displayedColumns.splice(columnIndex, 1);
-    } else {
-      const colToAdd = this.allColumns.find(
-        (col) => col.field === column.field,
-      );
-      if (colToAdd) {
-        this.displayedColumns.push(colToAdd);
-      }
-    }
-    this.columnDefs = [...this.displayedColumns];
-  }
-
-  isColumnDisplayed(column: any): boolean {
-    return this.displayedColumns.some((col) => col.field === column.field);
-  }
-
-  // for Manage Columns end
-
   // show message in table if api is false.. start
   gridOptions = {
     noRowsOverlayComponentParams: {
@@ -397,7 +370,36 @@ export class PurchaseOrderListComponent implements OnInit {
   }
   // show message in table if api is false.. end
 
-  
+  // for Manage Columns start
+  allColumns = [...this.columnDefs];
+  displayedColumns = [...this.columnDefs];
+
+  // Toggle column selection
+  toggleColumn(column: any) {
+    const columnIndex = this.displayedColumns.findIndex(
+      (col) => col.field === column.field,
+    );
+    if (columnIndex >= 0) {
+      this.displayedColumns.splice(columnIndex, 1);
+    } else {
+      const colToAdd = this.allColumns.find(
+        (col) => col.field === column.field,
+      );
+      if (colToAdd) {
+        this.displayedColumns.push(colToAdd);
+      }
+    }
+    this.columnDefs = [...this.displayedColumns];
+  }
+
+  isColumnDisplayed(column: any): boolean {
+    return this.displayedColumns.some((col) => col.field === column.field);
+  }
+
+  preventClose(event: MouseEvent) {
+    event.stopPropagation();
+  }
+  // for Manage Columns end
 
   renderActionIcons(params: any): string {
     return ` 

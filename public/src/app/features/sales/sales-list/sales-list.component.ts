@@ -132,14 +132,14 @@ export class SalesListComponent {
     private _changeDetectorRef: ChangeDetectorRef,
     private _successMessage: MatSnackBar,
     private router: Router, private route: ActivatedRoute,
-     private rolePermissionService: RolePermissionService,
+    private rolePermissionService: RolePermissionService,
   ) { }
 
   ngOnInit(): void {
     this.pageHeader_quotation(this.HeadingName);
   }
 
- 
+
   getPermissionToAccessPage(roleId: any) {
     this.rolePermissionService.getPermissionsByRoleId(roleId).subscribe({
       next: (response) => {
@@ -238,29 +238,29 @@ export class SalesListComponent {
 
   updateQuotation(event: any): void {
     const target = event.event.target;
-  
+
     if (target.closest(".edit-icon")) {
-          const quotationId = target.closest(".edit-icon").getAttribute("data-id");
-          this.quotationId = Number(quotationId);
-          this.isSideDrawerOpen = true;
-        }
-  
+      const quotationId = target.closest(".edit-icon").getAttribute("data-id");
+      this.quotationId = Number(quotationId);
+      this.isSideDrawerOpen = true;
+    }
+
     if (target.closest(".download-icon")) {
       const quotationId = target.closest(".download-icon").getAttribute("data-id");
       this.downloadPDF(Number(quotationId));
     }
-  
+
     if (target.closest(".approve-icon")) {
       const quotationId = target.closest(".approve-icon").getAttribute("data-id");
       this.router.navigate([quotationId], { relativeTo: this.route });
     }
-  
+
     if (target.closest(".download-invoice-icon")) {
       const invoiceURL = target.closest(".download-invoice-icon").getAttribute("data-url");
       this.downloadInvoice(invoiceURL);
     }
   }
-  
+
 
 
   downloadInvoice(url: string) {
@@ -278,29 +278,7 @@ export class SalesListComponent {
     this.currentPageNumber = currentPage + 1;
     this.currentPageSize = pageSize;
   }
-  allColumns = [...this.columnDefs];
-  displayedColumns = [...this.columnDefs];
 
-  toggleColumn(column: any) {
-    const columnIndex = this.displayedColumns.findIndex(
-      (col) => col.field === column.field,
-    );
-    if (columnIndex >= 0) {
-      this.displayedColumns.splice(columnIndex, 1);
-    } else {
-      const colToAdd = this.allColumns.find(
-        (col) => col.field === column.field,
-      );
-      if (colToAdd) {
-        this.displayedColumns.push(colToAdd);
-      }
-    }
-    this.columnDefs = [...this.displayedColumns];
-  }
-
-  isColumnDisplayed(column: any): boolean {
-    return this.displayedColumns.some((col) => col.field === column.field);
-  }
   gridOptions = {
     noRowsOverlayComponentParams: {
       noRowsMessageFunc: () => "Data is not found",
@@ -340,10 +318,10 @@ export class SalesListComponent {
   //           <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
   //         </svg>
   //       </span>
-  
-  
+
+
   //       ${approveIcon}
-       
+
   //     </div>
   //   `;
   // }
@@ -398,6 +376,39 @@ export class SalesListComponent {
       },
     });
   }
+
+  // for Manage Columns start
+  allColumns = [...this.columnDefs];
+  displayedColumns = [...this.columnDefs];
+
+  // Toggle column selection
+  toggleColumn(column: any) {
+    const columnIndex = this.displayedColumns.findIndex(
+      (col) => col.field === column.field,
+    );
+    if (columnIndex >= 0) {
+      this.displayedColumns.splice(columnIndex, 1);
+    } else {
+      const colToAdd = this.allColumns.find(
+        (col) => col.field === column.field,
+      );
+      if (colToAdd) {
+        this.displayedColumns.push(colToAdd);
+      }
+    }
+    this.columnDefs = [...this.displayedColumns];
+  }
+
+  // Check if column is displayed
+  isColumnDisplayed(column: any): boolean {
+    return this.displayedColumns.some((col) => col.field === column.field);
+  }
+
+  // Prevent dropdown from closing while allowing checkbox toggle
+  preventClose(event: MouseEvent) {
+    event.stopPropagation();
+  }
+  // for Manage Columns end
 
   ngOnDestroy(): void {
     this._unsubscribeAll$.next(this._salesService);
