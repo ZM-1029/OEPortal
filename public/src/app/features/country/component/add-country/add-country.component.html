@@ -16,9 +16,8 @@
         <div class="form-group row">
           <!-- <div style="display: flex; align-items: center; width: 80%;"> <button class="btn " (click)="addTax()">+
             Add More Tax</button></div> -->
-          
-          <mat-label class="outer-mat-label col-3 pt-4">Taxes</mat-label>
-          <div class="col-9 ">
+          <mat-label class="outer-mat-label col-2 pt-4">Taxes</mat-label>
+          <div class="col-10 ">
             <div class="w100" formArrayName="Taxes">
               <div class="d-flex my-3" *ngFor="let tax of taxes.controls; let i = index" [formGroupName]="i">
                 <mat-form-field appearance="outline" class="me-2">
@@ -38,9 +37,10 @@
                   <mat-error *ngIf="tax.get('TaxRate')?.hasError('max') && tax.get('TaxRate')?.touched">Tax Rate cannot
                     exceed 100%</mat-error>
                 </mat-form-field>
-                <button mat-icon-button color="warn" (click)="removeTax(i)">
-                  <mat-icon>delete</mat-icon>
+                <button (click)="removeTax(i)" class="btn delete-btn text-danger d-flex justify-content-center align-items-start ms-2">
+                  <mat-icon  svgIcon="delete"></mat-icon>
                 </button>
+                
               </div>
             </div>
           </div>

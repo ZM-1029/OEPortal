@@ -1,0 +1,64 @@
+<div class="marketing">
+    <div class="pdf-container">
+        <div class=" top-bar">
+            <h1 class="page-title fw-medium fs-18 mb-0 text-capitalize">Marketing</h1>
+            <div class="d-flex justify-content-between">
+                <button class="btn">Company Page</button>
+                <button class="btn">Full Screen</button>
+                <button class="btn">ASC</button>
+                <button class="btn">PDF</button>
+            </div>
+        </div>
+        <div class="top-bar">
+          <div class="left-btns">
+            <button class="btn">Full Screen</button>
+          </div>
+          <div class="right-btns">
+            <button class="btn">Download</button>
+          </div>
+        </div>
+    
+        <div class="preview-screen">
+          <owl-carousel-o [options]="customOptions">
+            <ng-template carouselSlide>
+              <div class="slide-content">
+                <div class="container-fluid pe-0" >
+                  <div class="row h-100 align-items-center">
+                      <div class="col-6">
+                          <img src="./logo_zouma.png" alt="" class="px-5 py-5" style="width: 700px;">
+                      </div>
+                      <div class="col-6 h-100">
+                          <img src="./page1-right.png" alt="" style="height: 100svh;">
+                      </div>
+                  </div>
+              </div>
+              </div>
+            </ng-template>
+        
+            <ng-template carouselSlide>
+              <div class="slide-content">
+                <h2>Slide 2 Title</h2>
+                <p>Second slide with different content.</p>
+              </div>
+            </ng-template>
+        
+            <ng-template carouselSlide>
+              <div class="slide-content">
+                <h2>Another Slide</h2>
+                <ul>
+                  <li>Point One</li>
+                  <li>Point Two</li>
+                  <li>Point Three</li>
+                </ul>
+              </div>
+            </ng-template>
+          </owl-carousel-o>
+        </div>
+        
+    
+        <!-- <div class="nav-arrows">
+            <span class="arrow" (click)="previousSlide()">&lt;</span>
+            <span class="arrow" (click)="nextSlide()">&gt;</span>
+        </div> -->
+      </div>
+</div>

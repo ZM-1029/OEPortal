@@ -153,6 +153,13 @@ export const routes: Routes = [
             (m) => m.SALES_ROUTES,
           ),
       },
+      {
+        path: "marketing",
+        loadChildren: () =>
+          import("./features/marketing/marketing.routes").then(
+            (m) => m.MARKETING_ROUTES,
+          ),
+      },
     ],
   },
 ];

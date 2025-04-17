@@ -5398,6 +5398,13 @@ ngx-infinite-scroll@>=19.0.0:
   dependencies:
     tslib "^2.3.0"
 
+ngx-owl-carousel-o@^19.0.2:
+  version "19.0.2"
+  resolved "https://registry.npmjs.org/ngx-owl-carousel-o/-/ngx-owl-carousel-o-19.0.2.tgz"
+  integrity sha512-k5JNHTKzOa8I+gf6qq9pxcxItsLgPw5XpTe7C3ZnP1jtjg7Vie9OTwhbQzoAqoiqRePyRZ8GfU7mktDaE1602w==
+  dependencies:
+    tslib "^2.3.0"
+
 ngx-quill@^27.0.1:
   version "27.0.1"
   resolved "https://registry.npmjs.org/ngx-quill/-/ngx-quill-27.0.1.tgz"

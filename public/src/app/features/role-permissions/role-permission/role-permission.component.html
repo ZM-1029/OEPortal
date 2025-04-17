@@ -47,7 +47,7 @@
 
         <!-- Edit Checkbox (Visible if not 'Reports' or 'Employees') -->
         <div class="col-md-3">
-          @if(menu.form!='Reports' && menu.form!='Employees'){
+          @if(menu.form!='Reports' && menu.form!='Employees' && menu.form!='Marketing'){
             <mat-checkbox class="checkbox fs-6" (change)="onCheckboxChange($event, menu, 'edit')"
               [checked]="menu.edit">
               Edit
@@ -57,7 +57,7 @@
 
         <!-- Add Checkbox (Visible if not 'Reports' or 'Employees') -->
         <div class="col-md-3">
-          @if(menu.form!='Reports' && menu.form!='Employees'){
+          @if(menu.form!='Reports' && menu.form!='Marketing'){
             <mat-checkbox class="checkbox fs-6" (change)="onCheckboxChange($event, menu, 'add')"
               [checked]="menu.add">
               Add
