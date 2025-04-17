@@ -21,53 +21,76 @@
   </div>
 
   <!-- Permissions List -->
-<div class="p-4 Permissions-List">
-  <div class="row">
-    <!-- Column Headers -->
-    <div class="col-md-3 fw-bold">Module</div>
-    <div class="col-md-3 fw-bold">View</div>
-    <div class="col-md-3 fw-bold">Edit</div>
-    <div class="col-md-3 fw-bold">Add</div>
-  </div>
+  <div class="p-4 Permissions-List">
+    <div class="row">
+      <!-- Column Headers -->
+      <div class="col-md-3 fw-bold">Module</div>
+      <div class="col-md-3 fw-bold">View</div>
+      <div class="col-md-3 fw-bold">Edit</div>
+      <div class="col-md-3 fw-bold">Add</div>
+    </div>
 
-  @for(menu of menuData;track menu){
-    @if(menu.form!='User' && menu.form!='Role' && menu.form!='User Permission' && menu.form!='Dashboard' && menu.form!='Country'
-     && menu.form!='Business Lines' && menu.form!='Company' && menu.form!='Company Branch' && menu.form!='Company Account'){
-      <div class="row border-bottom py-2 align-items-center">
-        <!-- Module Name -->
-        <div class="col-md-3">{{ menu.form }}</div>
+    @for(menu of menuData;track menu){
+    @if(menu.form!='User' && menu.form!='Role' && menu.form!='User Permission' && menu.form!='Dashboard' &&
+    menu.form!='Country'
+    && menu.form!='Business Lines' && menu.form!='Company' && menu.form!='Company Branch' && menu.form!='Company
+    Account'){
+    <div class="row border-bottom py-2 align-items-center">
+      <!-- Module Name -->
+      <div class="col-md-3">{{ menu.form }}</div>
 
-        <!-- View Checkbox -->
+      @if(menu.form =='Marketing' || menu.form =='PDF1' || menu.form =='PDF2' || menu.form =='PDF3'){
+      @if(menu.form =='Marketing' ){
+      <!-- View Checkbox -->
+      <div class="col-md-3">
+        <mat-checkbox class="checkbox fs-6" (change)="onCheckboxChange($event, menu, 'view')" [checked]="menu.view">
+          View
+        </mat-checkbox>
+      </div>
+      }@else{
         <div class="col-md-3">
-          <mat-checkbox class="checkbox fs-6" (change)="onCheckboxChange($event, menu, 'view')"
-            [checked]="menu.view">
+          <mat-checkbox class="checkbox fs-6" (change)="onCheckboxChange($event, menu, 'view')" [checked]="menu.view">
             View
           </mat-checkbox>
         </div>
 
-        <!-- Edit Checkbox (Visible if not 'Reports' or 'Employees') -->
-        <div class="col-md-3">
-          @if(menu.form!='Reports' && menu.form!='Employees' && menu.form!='Marketing'){
-            <mat-checkbox class="checkbox fs-6" (change)="onCheckboxChange($event, menu, 'edit')"
-              [checked]="menu.edit">
-              Edit
-            </mat-checkbox>
-          }
-        </div>
-
-        <!-- Add Checkbox (Visible if not 'Reports' or 'Employees') -->
-        <div class="col-md-3">
-          @if(menu.form!='Reports' && menu.form!='Marketing'){
-            <mat-checkbox class="checkbox fs-6" (change)="onCheckboxChange($event, menu, 'add')"
-              [checked]="menu.add">
-              Add
-            </mat-checkbox>
-          }
-        </div>
+      <div class="col-md-3">
+        <mat-checkbox class="checkbox fs-6" (change)="onCheckboxChange($event, menu, 'isDownload')" [checked]="menu.isDownload">
+          Download
+        </mat-checkbox>
       </div>
+      }
+      }@else{
+      <!-- View Checkbox -->
+      <div class="col-md-3">
+        <mat-checkbox class="checkbox fs-6" (change)="onCheckboxChange($event, menu, 'view')" [checked]="menu.view">
+          View
+        </mat-checkbox>
+      </div>
+
+      <!-- Edit Checkbox (Visible if not 'Reports' or 'Employees') -->
+      <div class="col-md-3">
+        @if(menu.form!='Reports' && menu.form!='Employees' && menu.form!='Marketing'){
+        <mat-checkbox class="checkbox fs-6" (change)="onCheckboxChange($event, menu, 'edit')" [checked]="menu.edit">
+          Edit
+        </mat-checkbox>
+        }
+      </div>
+
+      <!-- Add Checkbox (Visible if not 'Reports' or 'Employees') -->
+      <div class="col-md-3">
+        @if(menu.form!='Reports' && menu.form!='Marketing' && menu.form!='Employees'){
+        <mat-checkbox class="checkbox fs-6" (change)="onCheckboxChange($event, menu, 'add')" [checked]="menu.add">
+          Add
+        </mat-checkbox>
+        }
+      </div>
+      }
+
+    </div>
     }
-  }
-</div>
+    }
+  </div>
 
 
   <div class="col-12 col-md-12 mt-lg-0 mt-3 text-end">

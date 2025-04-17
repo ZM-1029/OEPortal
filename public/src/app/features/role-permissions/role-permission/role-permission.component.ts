@@ -21,12 +21,6 @@ interface Role {
   name: string;
 }
 
-interface Menu {
-  form: string;
-  view: boolean;
-  edit: boolean;
-  add: boolean;
-}
 
 interface RolePermission {
   id: number;
@@ -35,6 +29,7 @@ interface RolePermission {
   view: boolean;
   add: boolean;
   edit: boolean;
+  isDownload:boolean
 }
 
 interface RolePermissionResponse {
@@ -77,11 +72,11 @@ export class RolePermissionComponent implements OnInit {
   selectedRole: number = 0;
   roleId: number = 0;
   private permissions: RolePermission[] = [];
-  menuChackbox: Menu[] = [
-    { form: 'Dashboard', view: false, edit: false, add: false },
-    { form: 'Users', view: false, edit: false, add: false },
-    { form: 'Reports', view: false, edit: false, add: false }
-  ];
+  // menuChackbox: Menu[] = [
+  //   { form: 'Dashboard', view: false, edit: false, add: false },
+  //   { form: 'Users', view: false, edit: false, add: false },
+  //   { form: 'Reports', view: false, edit: false, add: false }
+  // ];
 
   constructor(private rolePermissionService: RolePermissionService, private _changeDetectorRef: ChangeDetectorRef, private _router: Router,
     private _successMessage: MatSnackBar,) { }
@@ -181,7 +176,8 @@ export class RolePermissionComponent implements OnInit {
       isActive: true,
       view: menu.view,
       add: menu.add,
-      edit: menu.edit
+      edit: menu.edit,
+      isDownload:menu.edit
     }));
 
     if (this.selectedRole > 1) {
