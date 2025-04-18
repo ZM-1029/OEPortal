@@ -1,0 +1,42 @@
+<div mat-dialog-content class="dialog-content px-3 py-2">
+    <h3>Add Pdf</h3>
+    <form [formGroup]="cardForm" (ngSubmit)="onSubmit()" class="w-100">
+  
+      <mat-form-field appearance="outline" class="w-100 mb-3">
+        <mat-label>Title</mat-label>
+        <input matInput formControlName="title" placeholder="Enter title" />
+      </mat-form-field>
+  
+      <mat-form-field appearance="outline" class="w-100 mb-3">
+        <mat-label>Subtitle</mat-label>
+        <input matInput formControlName="subtitle" placeholder="Enter subtitle" />
+        <mat-error *ngIf="cardForm.get('subtitle')?.invalid">Subtitle is required</mat-error>
+      </mat-form-field>
+  
+      <!-- Logo Upload -->
+      <div class="mb-3">
+        <label class="mb-1 fw-semibold">Logo Image</label>
+        <input type="file" accept="image/png, image/jpeg, image/jpg" (change)="onImageChange($event)" class="form-control" />
+        <img *ngIf="previewImage" [src]="previewImage" alt="Preview" class="preview-img mt-2" />
+      </div>
+  
+      <!-- PDF Upload -->
+      <div class="mb-3">
+        <label class="mb-1 fw-semibold">PDF File (optional)</label>
+        <input accept="application/pdf" type="file" (change)="onPdfChange($event)" class="form-control" />
+      </div>
+  
+      <!-- <mat-slide-toggle formControlName="showButton">Show Button</mat-slide-toggle> -->
+  
+      <div mat-dialog-actions align="end" class="dialog-actions mt-4">
+        <button mat-button (click)="cancel()" class="btn btn-light border rounded-pill me-2">
+          Clear
+        </button>
+        <button mat-flat-button color="primary" type="submit" class="btn btn-primary rounded-pill">
+          Save
+        </button>
+      </div>
+  
+    </form>
+  </div>
+  

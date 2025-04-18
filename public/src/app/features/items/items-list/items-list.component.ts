@@ -82,7 +82,7 @@ export class ItemsListComponent {
       sortable: false,
       filter: false,
       cellStyle: () => {
-        return { border: "none", cursor: "pointer" };
+        return {  cursor: "pointer" };
       },
     },
 

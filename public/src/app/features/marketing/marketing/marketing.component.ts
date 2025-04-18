@@ -1,76 +1,69 @@
-import { NgClass, NgFor, NgIf } from '@angular/common';
+import { CommonModule, NgClass, NgFor, NgIf } from '@angular/common';
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
 import { CarouselModule } from 'ngx-owl-carousel-o';
+import { AddPdfComponent } from './add-pdf/add-pdf.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-marketing',
-  imports: [CarouselModule, 
-    ],
+  imports: [CarouselModule,
+    CommonModule, MatIconModule
+  ],
   templateUrl: './marketing.component.html',
   styleUrls: ['./marketing.component.scss']
 })
-export class MarketingComponent {
+export class MarketingComponent implements OnInit {
+  constructor(private dialog: MatDialog,) { }
 
-  // slides: string[] = ['PDF 1', 'PDF 2', 'PDF 3'];
-  // currentSlideIndex = 0;
-  // autoSlideInterval: any;
-  // fade = false;
+  ngOnInit(): void {
 
-  // ngOnInit() {
-  //   this.startAutoSlide();
-  // }
-
-  // ngOnDestroy() {
-  //   clearInterval(this.autoSlideInterval);
-  // }
-
-  // get currentSlide(): string {
-  //   return this.slides[this.currentSlideIndex];
-  // }
-
-  // startAutoSlide() {
-  //   this.autoSlideInterval = setInterval(() => {
-  //     this.fade = true;
-  //     setTimeout(() => {
-  //       this.nextSlide();
-  //       this.fade = false;
-  //     }, 300); // match animation duration
-  //   }, 2000); // 2 second interval
-  // }
-
-  // nextSlide() {
-  //   this.currentSlideIndex = (this.currentSlideIndex + 1) % this.slides.length;
-  // }
-
-  // previousSlide() {
-  //   this.currentSlideIndex =
-  //     (this.currentSlideIndex - 1 + this.slides.length) % this.slides.length;
-  // }
-
-  // customOptions = {
-  //   loop: true,
-  //   margin: 10,
-  //   nav: false,
-  //   dots: true,
-  //   responsive: {
-  //     0: { items: 1 },
-  //     600: { items: 1 },
-  //     1000: { items: 1 }
-  //   }
-  // };
-  
-  customOptions = {
-    loop: true,
-    nav: true,
-    dots: true,
-    items: 1,
-    autoplay: true,
-    autoplayTimeout: 3000,
-    autoplayHoverPause: true
-  };
-  
-  handleClick() {
-    console.log('Slide button clicked!');
   }
-  
+
+  addPdf() {
+    this.openForm(0);
+  }
+
+  openForm(customerId: number): void {
+    const dialogRef = this.dialog.open(AddPdfComponent, {
+      width: "500px",
+      height: "500px",
+      disableClose: true,
+      data: "Customer",
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result == true) {
+        console.log("Delete confirmed");
+        // this.deleteRow(customerId);
+      } else {
+        console.log("Delete action canceled");
+      }
+    });
+  }
+
+  marketingCards = [
+    { id: 1, title: 'Company Overview', subtitle: 'Innovative solutions for evolving needs.', showButton: false },
+    { id: 2, title: 'Company Overview', subtitle: 'Innovative solutions for evolving needs.', showButton: false },
+    { id: 3, title: 'Company Overview', subtitle: 'Innovative solutions for evolving needs.', showButton: true },
+    { id: 4, title: 'Company Overview', subtitle: 'Innovative solutions for evolving needs.', showButton: false }
+  ];
+
+  carouselOptions = {
+    loop: false,
+    margin: 10,
+    nav: false,
+    dots: true,
+    responsive: {
+      0: {
+        items: 1
+      },
+      600: {
+        items: 2
+      },
+      1000: {
+        items: 4
+      }
+    }
+  };
+
 }

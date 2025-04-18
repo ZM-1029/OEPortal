@@ -96,12 +96,14 @@ export class SaleCreateComponent {
     });
     this.clearForm();
   }
+
   noPastDates = (date: Date | null): boolean => {
     if (!date) return false;
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     return date >= today;
   };
+  
   ngOnChanges(): void {
     this.loadDropdownData();
   }
@@ -211,6 +213,8 @@ export class SaleCreateComponent {
         });
     }
   }
+
+
   createUpdate() {
     this.submitted = true;
     this.items.controls.forEach((control, index) => {
@@ -291,16 +295,47 @@ export class SaleCreateComponent {
     }
   }
 
+  // resetForm() {
+  //   this.submitted = false;
+  //   this.productForm.reset();
+  //   this.productForm.reset({
+  //     companyBranchId: 0 
+  //   });
+  //   this.productForm.markAsPristine();
+  //   this.productForm.markAsUntouched();
+  // }
+
   resetForm() {
     this.submitted = false;
-    this.productForm.reset();
+  
+    // Reset the form with default values
     this.productForm.reset({
-      companyBranchId: 0 
+      quotationNumber: '',
+      customerId: '',
+      companyId: '',
+      companyBranchId: 0,  
+      countryId: '',
+      salesOrderDate: new Date(),
+      expectedShipmentDate: '',
+      paymentTermId: '',
+      deliveryMethod: '',
+      salesPerson: '',
+      items: this.fb.array([]),  
+      shippingCharges: '',
+      adjustment: ''
     });
+    this.calculationDetails.taxes=[];
+    this.calculationDetails.total=0;
+    this.calculationDetails.subTotal=0;
+    this.Address=null;
+    // Mark the form as pristine and untouched
     this.productForm.markAsPristine();
     this.productForm.markAsUntouched();
+  
+    // Optionally, trigger change detection if needed
+    this._changeDetetction.detectChanges();
   }
-
+  
   private showSuccessMessage(message: string) {
     this._successMessage.openFromComponent(SuccessModalComponent, {
       data: { message },
@@ -382,6 +417,7 @@ export class SaleCreateComponent {
       }
     });
   }
+
   selectedProductId: number = 0;
   isProductSelected: boolean = false;
   onProductSelect(event: any, index: number) {
@@ -444,9 +480,11 @@ export class SaleCreateComponent {
       },
     });
   }
+
   setCurrentRowIndex(index: number) {
     this.currentRowIndex = index;
   }
+
   onDiscountTypeChange(event: any, index: number) {
     const selectedType = event.target.value;
     const isFixedDiscount = selectedType === 'rupee';
@@ -498,6 +536,7 @@ export class SaleCreateComponent {
       },
     });
   }
+
   invalidShippingChargesInput: boolean = false;
   onShippingChargesChange(event: any): void {
     const value = event.target.value;

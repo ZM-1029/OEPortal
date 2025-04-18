@@ -71,6 +71,7 @@ export class RolePermissionComponent implements OnInit {
   private selectedRoleId?: number;
   selectedRole: number = 0;
   roleId: number = 0;
+  isPDFDownloadOptionShow:boolean=false;
   private permissions: RolePermission[] = [];
   // menuChackbox: Menu[] = [
   //   { form: 'Dashboard', view: false, edit: false, add: false },
@@ -135,7 +136,8 @@ export class RolePermissionComponent implements OnInit {
             ...item,
             view: false,
             add: false,
-            edit: false
+            edit: false,
+            isDownload:false
           }));
           this.permissions = response.data
           this._changeDetectorRef.detectChanges();
@@ -166,6 +168,11 @@ export class RolePermissionComponent implements OnInit {
   // Function to handle checkbox changes
   onCheckboxChange(event: any, menu: any, permissionType: string) {
     menu[permissionType] = event.checked;
+    if(menu.form=='Marketing'){
+      this.isPDFDownloadOptionShow=true;
+    }else{
+      this.isPDFDownloadOptionShow=false;
+    }
     console.log(`${permissionType} permission changed for ${menu.form}:`, menu[permissionType]);
   }
 
@@ -177,7 +184,7 @@ export class RolePermissionComponent implements OnInit {
       view: menu.view,
       add: menu.add,
       edit: menu.edit,
-      isDownload:menu.edit
+      isDownload:menu.isDownload
     }));
 
     if (this.selectedRole > 1) {
@@ -191,7 +198,8 @@ export class RolePermissionComponent implements OnInit {
                 ...item,
                 view: false,
                 add: false,
-                edit: false
+                edit: false,
+                isDownload:false
               }));
 
               // Clear selected role

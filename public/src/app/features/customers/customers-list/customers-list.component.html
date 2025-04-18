@@ -43,39 +43,6 @@
         </li>
         }
       </ul>
-
-        <!-- <button class="btn btn-info-dark text-white btn-wave dropdown-toggle" type="button" id="dropdownMenuButton1"
-          data-bs-toggle="dropdown" aria-expanded="false">
-          Manage Column
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-          @for (column of allColumns; track column) {
-          <li>
-            @if (
-            column.field == "actions" ||
-            column.field == "delete" ||
-            column.field == "customerName" ||
-            column.headerName == "S. No"
-            ) {
-            <div class="dropdown-item d-none checkbox-container">
-              <input type="checkbox" [checked]="isColumnDisplayed(column)" (change)="toggleColumn(column)"
-                id="{{ column.field }}" />
-              <label for="{{ column.field }}">{{
-                column.headerName
-                }}</label>
-            </div>
-            } @else {
-            <div class="dropdown-item checkbox-container">
-              <input type="checkbox" [checked]="isColumnDisplayed(column)" (change)="toggleColumn(column)"
-                id="{{ column.field }}" />
-              <label for="{{ column.field }}">{{
-                column.headerName
-                }}</label>
-            </div>
-            }
-          </li>
-          }
-        </ul> -->
       </div>
     </div>
   </app-page-header>

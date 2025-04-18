@@ -37,30 +37,41 @@
     Account'){
     <div class="row border-bottom py-2 align-items-center">
       <!-- Module Name -->
-      <div class="col-md-3">{{ menu.form }}</div>
+      <!-- <div class="col-md-3">{{ menu.form }}</div> -->
 
       @if(menu.form =='Marketing' || menu.form =='PDF1' || menu.form =='PDF2' || menu.form =='PDF3'){
       @if(menu.form =='Marketing' ){
+       <!-- <h3 class="fw-bold mb-0 my-2">{{ menu.form }}</h3> -->
+       <div class="row">
+        <!-- Column Headers -->
+        <div class="col-md-3 fw-bold my-2 ms-2 ps-0">{{ menu.form }}</div>
+        <div class="col-md-3 fw-bold my-2 ms-2">View</div>
+        <div class="col-md-3 fw-bold my-2 ms-2">Download</div>
+      </div>
       <!-- View Checkbox -->
-      <div class="col-md-3">
+      <!-- <div class="col-md-3">
         <mat-checkbox class="checkbox fs-6" (change)="onCheckboxChange($event, menu, 'view')" [checked]="menu.view">
           View
         </mat-checkbox>
-      </div>
+      </div> -->
       }@else{
+        <div class="col-md-3">{{ menu.form }}</div>
+        <!-- @if(isPDFDownloadOptionShow){ -->
+          <div class="col-md-3">
+            <mat-checkbox class="checkbox fs-6" (change)="onCheckboxChange($event, menu, 'view')" [checked]="menu.view">
+              View
+            </mat-checkbox>
+          </div>
+  
         <div class="col-md-3">
-          <mat-checkbox class="checkbox fs-6" (change)="onCheckboxChange($event, menu, 'view')" [checked]="menu.view">
-            View
+          <mat-checkbox class="checkbox fs-6" (change)="onCheckboxChange($event, menu, 'isDownload')" [checked]="menu.isDownload">
+            Download
           </mat-checkbox>
         </div>
-
-      <div class="col-md-3">
-        <mat-checkbox class="checkbox fs-6" (change)="onCheckboxChange($event, menu, 'isDownload')" [checked]="menu.isDownload">
-          Download
-        </mat-checkbox>
-      </div>
+        <!-- } -->
       }
       }@else{
+        <div class="col-md-3">{{ menu.form }}</div>
       <!-- View Checkbox -->
       <div class="col-md-3">
         <mat-checkbox class="checkbox fs-6" (change)="onCheckboxChange($event, menu, 'view')" [checked]="menu.view">
@@ -86,9 +97,8 @@
         }
       </div>
       }
-
     </div>
-    }
+     }
     }
   </div>
 
