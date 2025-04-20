@@ -10,6 +10,8 @@ import { DeleteModalComponent } from 'src/app/shared/components/UI/delete-modal/
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SuccessModalComponent } from 'src/app/shared/components/UI/success-modal/success-modal.component';
 import { PdfSliderViewerComponent } from 'src/app/shared/components/UI/pdf-slider-viewer/pdf-slider-viewer.component';
+import { ViewPdfComponent } from '../view-pdf/view-pdf.component';
+import { ViewSliderComponent } from '../view-slider/view-slider.component';
 
 @Component({
   selector: 'app-marketing',
@@ -39,7 +41,7 @@ export class MarketingComponent implements OnInit {
   //   window.open(pdfUrl, '_blank');
   // }
   viewPdf(id: number) {
-    this.dialog.open(PdfSliderViewerComponent, {
+    this.dialog.open(ViewSliderComponent, {
       width: '100vw',
       height: '100vh',
       maxWidth: '100vw',

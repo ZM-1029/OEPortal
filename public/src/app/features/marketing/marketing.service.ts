@@ -47,10 +47,22 @@ export class MarketingService {
     //    );
     //  }
 
-    downloadPdf(id: number): Observable<Blob> {
-      return this.http.get(`${environment.apiUrl}api/Marketing/DownloadPdf/download-pdf/${id}`, {
-        responseType: 'blob', // IMPORTANT: This tells Angular it's a binary file
-      });
-    }
+    // downloadPdf(id: number): Observable<Blob> {
+    //   return this.http.get(`${environment.apiUrl}api/Marketing/DownloadPdf/download-pdf/${id}`, {
+    //     responseType: 'blob',
+    //     headers: {
+    //       'Accept': 'application/pdf'
+    //     }
+    //   });
+    // }
     
+    // In your service
+downloadPdf(id: number) {
+  return this.http.get(`${environment.apiUrl}api/Marketing/DownloadPdf/download-pdf/${id}`, {
+    responseType: 'blob',
+    headers: {
+      'Accept': 'application/pdf'
+    }
+  });
+}
 }

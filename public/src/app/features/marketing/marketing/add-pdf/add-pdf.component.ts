@@ -114,8 +114,6 @@ export class AddPdfComponent {
     }
   }
 
-
-
   createMarketing(formdata: FormData) {
     this.marketingService.createMarketing(formdata).subscribe(
       {
