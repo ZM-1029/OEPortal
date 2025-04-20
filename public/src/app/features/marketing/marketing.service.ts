@@ -1,5 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { MarketingResponse } from 'src/app/shared/types/marketing.type';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -7,4 +10,47 @@ import { Injectable } from '@angular/core';
 export class MarketingService {
 
    constructor(private http: HttpClient) {}
+
+     createMarketing(formdata:FormData) {
+       return this.http.post<any>(
+         `${environment.apiUrl}api/Marketing/Add`,formdata,
+       );
+     }
+
+     updateMarketingById(id:number ,formdata:FormData) {
+       return this.http.put<any>(
+         `${environment.apiUrl}api/Marketing/Update/${id}`,formdata,
+       );
+     }
+   
+     deleteMarketingById(id:number ) {
+       return this.http.delete<any>(
+         `${environment.apiUrl}api/Marketing/Delete/${id}`,
+       );
+     }
+   
+     getMarketingList() {
+       return this.http.get<MarketingResponse>(
+         `${environment.apiUrl}api/Marketing/GetAll`,
+       );
+     }
+
+     getMarketingById(id:number) {
+       return this.http.get<MarketingResponse>(
+         `${environment.apiUrl}api/Marketing/GetById/${id}`,
+       );
+     }
+
+    //  downloadPdf(id:number) {
+    //    return this.http.get<any>(
+    //      `${environment.apiUrl}api/Marketing/DownloadPdf/download-pdf/${id}`,
+    //    );
+    //  }
+
+    downloadPdf(id: number): Observable<Blob> {
+      return this.http.get(`${environment.apiUrl}api/Marketing/DownloadPdf/download-pdf/${id}`, {
+        responseType: 'blob', // IMPORTANT: This tells Angular it's a binary file
+      });
+    }
+    
 }

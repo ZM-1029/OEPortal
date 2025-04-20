@@ -1,5 +1,8 @@
 <div mat-dialog-content class="dialog-content px-3 py-2">
-    <h3>Add Pdf</h3>
+  <div class="d-flex">
+    <h3 class="fw-bold">Add Pdf</h3>
+    <mat-icon class="text-danger float-end pb-2 ms-auto" (click)="cancel()" svgIcon="cross"></mat-icon>
+  </div>
     <form [formGroup]="cardForm" (ngSubmit)="onSubmit()" class="w-100">
   
       <mat-form-field appearance="outline" class="w-100 mb-3">
@@ -19,17 +22,16 @@
         <input type="file" accept="image/png, image/jpeg, image/jpg" (change)="onImageChange($event)" class="form-control" />
         <img *ngIf="previewImage" [src]="previewImage" alt="Preview" class="preview-img mt-2" />
       </div>
-  
+      
       <!-- PDF Upload -->
       <div class="mb-3">
-        <label class="mb-1 fw-semibold">PDF File (optional)</label>
+        <label class="mb-1 fw-semibold">PDF File </label>
         <input accept="application/pdf" type="file" (change)="onPdfChange($event)" class="form-control" />
+        <img *ngIf="previewImage" [src]="previewImage" alt="Preview" class="preview-img mt-2" />
       </div>
   
-      <!-- <mat-slide-toggle formControlName="showButton">Show Button</mat-slide-toggle> -->
-  
       <div mat-dialog-actions align="end" class="dialog-actions mt-4">
-        <button mat-button (click)="cancel()" class="btn btn-light border rounded-pill me-2">
+        <button type="button" mat-button (click)="clearForm()" class="btn btn-light border rounded-pill me-2">
           Clear
         </button>
         <button mat-flat-button color="primary" type="submit" class="btn btn-primary rounded-pill">

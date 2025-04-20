@@ -54,7 +54,9 @@
     align-items: center;
     justify-content: center;
     position: relative;
-
+    max-height: calc(100vh - 8rem);
+    flex-wrap: wrap;
+    overflow-y: auto;
     .no-preview {
         color: #999;
         font-size: 20px;
@@ -118,39 +120,18 @@
   filter: drop-shadow(0 4px 8px rgba(13, 110, 253, 0.24));
 }
 
-// .nav-arrows {
-//     display: flex;
-//     justify-content: center;
-//     margin-top: 12px;
 
-//     .arrow {
-//         font-size: 24px;
-//         color: #555;
-//         margin: 0 20px;
-//         cursor: pointer;
-//         transition: color 0.3s;
+.preview-screen {
+  height: calc(100vh - 8rem);
+  border-radius: 8px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 1rem;
+}
 
-//         &:hover {
-//             color: #000;
-//         }
-//     }
-// }
-
-// .slide-content {
-//     width: 100%;
-//     padding: 2rem;
-//     text-align: center;
-//   position: relative;
-//     h2, p, button, ul {
-//       color: #e01c1c; // Or whatever you prefer
-//     }
-//   }
-// //   owl-carousel-o {
-// //     width: 100%;
-// //     min-height: 300px;
-// //     background: #fff;
-// //   }
-  
-
-
-
+.card-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+}

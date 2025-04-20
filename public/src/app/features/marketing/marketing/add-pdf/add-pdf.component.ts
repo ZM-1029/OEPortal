@@ -1,76 +1,3 @@
-// import { Component, Inject, Optional } from '@angular/core';
-// import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-// import { MatButtonModule } from '@angular/material/button';
-// import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-// import { MatIconModule } from '@angular/material/icon';
-// import { DeleteModalComponent } from 'src/app/shared/components/UI/delete-modal/delete-modal.component';
-
-// @Component({
-//   selector: 'app-add-pdf',
-//   imports: [MatButtonModule, MatIconModule],
-//   templateUrl: './add-pdf.component.html',
-//   styleUrl: './add-pdf.component.scss'
-// })
-// export class AddPdfComponent {
-//   constructor(private fb: FormBuilder,
-//     public dialogRef: MatDialogRef<DeleteModalComponent>,
-//     @Optional() @Inject(MAT_DIALOG_DATA) public data: string,
-//   ) {}
-//   deleteData: string = "";
-//   ngOnInit(): void {
-//     this.deleteData = this.data;
-//     this.cardForm = this.fb.group({
-//       title: ['', Validators.required],
-//       subtitle: ['', Validators.required],
-//       showButton: [false],
-//       image: [null, Validators.required]
-//     });
-//   }
-  
-//   confirmDelete(): void {
-//     this.dialogRef.close(true);
-//   }
-
-//   cancel(): void {
-//     this.dialogRef.close(false);
-//   }
-//   marketingCards = [
-//     { id: 1, title: 'Company Overview', subtitle: 'Innovative solutions for evolving needs.', image: 'assets/images/company.jpg', showButton: false },
-//     { id: 2, title: 'Consulting & Technology', subtitle: 'Innovative solutions for evolving needs.', image: 'assets/images/consulting.jpg', showButton: false },
-//     { id: 3, title: 'Data Protection', subtitle: 'Innovative solutions for evolving needs.', image: 'assets/images/data-protection.jpg', showButton: true },
-//   ];
-
-//   cardForm: FormGroup|any;
-//   previewImage: string | ArrayBuffer | null = null;
-//   showForm = false;
-
-//   onImageChange(event: Event) {
-//     const file = (event.target as HTMLInputElement).files?.[0];
-//     if (file) {
-//       this.cardForm.patchValue({ image: file });
-//       const reader = new FileReader();
-//       reader.onload = () => this.previewImage = reader.result;
-//       reader.readAsDataURL(file);
-//     }
-//   }
-
-//   onSubmit() {
-//     if (this.cardForm.valid) {
-//       const newCard = {
-//         id: this.marketingCards.length + 1,
-//         title: this.cardForm.value.title,
-//         subtitle: this.cardForm.value.subtitle,
-//         showButton: this.cardForm.value.showButton,
-//         image: this.previewImage
-//       };
-//       // this.marketingCards.push(newCard);
-//       this.cardForm.reset();
-//       this.previewImage = null;
-//       this.showForm = false;
-//     }
-//   }
-// }
-
 import { Component, Inject, Optional } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -80,11 +7,14 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MarketingService } from '../../marketing.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { SuccessModalComponent } from 'src/app/shared/components/UI/success-modal/success-modal.component';
 
 @Component({
   selector: 'app-add-pdf',
   standalone: true,
-  imports: [MatButtonModule, MatIconModule,CommonModule,
+  imports: [MatButtonModule, MatIconModule, CommonModule,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
@@ -96,26 +26,50 @@ import { MatInputModule } from '@angular/material/input';
 export class AddPdfComponent {
   cardForm!: FormGroup;
   previewImage: string | ArrayBuffer | null = null;
+  previewPdf: string | ArrayBuffer | null = null;
   showForm = true;
   logoFile: File | null = null;
   pdfFile: File | null = null;
-
+  id: number = 0;
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
+    private marketingService: MarketingService,
     public dialogRef: MatDialogRef<AddPdfComponent>,
-    @Optional() @Inject(MAT_DIALOG_DATA) public data: string
-  ) {}
+    private _successMessage: MatSnackBar,
+
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: number
+  ) { }
 
   ngOnInit(): void {
+    this.id = this.data;
     this.cardForm = this.fb.group({
       title: ['', Validators.required],
       subtitle: ['', Validators.required],
       showButton: [false],
-      image: [null, Validators.required],
+      image: [null],
       pdf: [null],
     });
+
+    if (this.id) {
+      this.marketingService.getMarketingById(this.id).subscribe({
+        next: (res: any) => {
+          const marketing = res.data;
+          this.cardForm.patchValue({
+            title: marketing.heading,
+            subtitle: marketing.description,
+          });
+
+          this.previewImage = marketing.logoUrl;
+          this.pdfFile = marketing.pdf;
+        },
+        error: () => {
+          alert('Failed to load marketing data.');
+        },
+      });
+    }
   }
+
 
   onImageChange(event: Event) {
     const file = (event.target as HTMLInputElement).files?.[0];
@@ -138,37 +92,97 @@ export class AddPdfComponent {
   }
 
   onSubmit() {
-    if (this.cardForm.valid && this.logoFile) {
+    if (this.cardForm.valid) {
       const formData = new FormData();
       formData.append('Heading', this.cardForm.value.title);
       formData.append('Description', this.cardForm.value.subtitle);
-      formData.append('Logo', this.logoFile);
-      if (this.pdfFile) {
+
+      if (this.logoFile) {
+        formData.append('Logo', this.logoFile);
+      }
+
+      if (this.pdfFile instanceof File) {
         formData.append('Pdf', this.pdfFile);
       }
 
-      // const headers = new HttpHeaders({
-      //   Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...` // Truncated
-      // });
-
-      // this.http
-      //   .post('http://122.160.133.107:99/api/Marketing/Add', formData, {
-      //     headers,
-      //   })
-      //   .subscribe({
-      //     next: (res) => {
-      //       alert('Marketing card uploaded!');
-      //       this.dialogRef.close(true);
-      //     },
-      //     error: (err) => {
-      //       console.error('Upload failed', err);
-      //       alert('Failed to upload marketing card.');
-      //     },
-      //   });
+      if (this.id > 0) {
+        formData.append('id', this.id.toString());
+        this.updateMarketing(this.id, formData);
+      } else {
+        this.createMarketing(formData);
+      }
     }
   }
 
+
+
+  createMarketing(formdata: FormData) {
+    this.marketingService.createMarketing(formdata).subscribe(
+      {
+        next: ((response) => {
+          if (response.success) {
+            this.showSuccessMessage(response.message);
+            this.dialogRef.close(true);
+          } else {
+            this.handleError(response.message);
+            this.dialogRef.close(false);
+          }
+        }), error: ((err) => {
+          this.handleError(err.error.message);
+          this.dialogRef.close(false);
+        })
+      }
+    )
+  }
+
+  updateMarketing(id: number, formData: FormData) {
+    this.marketingService.updateMarketingById(id, formData).subscribe({
+      next: ((response) => {
+        if (response.success) {
+          this.showSuccessMessage(response.message);
+          this.dialogRef.close(true);
+        } else {
+          this.handleError(response.message);
+          this.dialogRef.close(false);
+        }
+      }), error: ((err) => {
+        this.handleError(err.error.message);
+        this.dialogRef.close(false);
+      })
+    });
+  }
+
+
   cancel(): void {
     this.dialogRef.close(false);
+  }
+
+  clearForm(): void {
+    this.cardForm.reset();
+    this.previewImage = null;
+    this.logoFile = null;
+    this.pdfFile = null;
+  }
+
+
+  //  Function to show success messages
+  private showSuccessMessage(message: string) {
+    this._successMessage.openFromComponent(SuccessModalComponent, {
+      data: { message },
+      duration: 4000,
+      panelClass: ["custom-toast"],
+      verticalPosition: "top",
+      horizontalPosition: "right",
+    });
+  }
+
+  //  Function to handle API errors
+  private handleError(err: any) {
+    this._successMessage.open(err, "Close", {
+      duration: 4000,
+      panelClass: ["error-toast"],
+      verticalPosition: "top",
+      horizontalPosition: "right",
+    });
   }
 }

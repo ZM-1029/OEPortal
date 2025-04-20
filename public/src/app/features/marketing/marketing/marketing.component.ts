@@ -1,22 +1,33 @@
 import { CommonModule, NgClass, NgFor, NgIf } from '@angular/common';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { CarouselModule } from 'ngx-owl-carousel-o';
 import { AddPdfComponent } from './add-pdf/add-pdf.component';
 import { MatDialog } from '@angular/material/dialog';
+import { MarketingService } from '../marketing.service';
+import { MarketingList } from 'src/app/shared/types/marketing.type';
+import { DeleteModalComponent } from 'src/app/shared/components/UI/delete-modal/delete-modal.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { SuccessModalComponent } from 'src/app/shared/components/UI/success-modal/success-modal.component';
+import { PdfSliderViewerComponent } from 'src/app/shared/components/UI/pdf-slider-viewer/pdf-slider-viewer.component';
 
 @Component({
   selector: 'app-marketing',
-  imports: [CarouselModule,
-    CommonModule, MatIconModule
+  imports: [
+    CommonModule, MatIconModule,CarouselModule
   ],
   templateUrl: './marketing.component.html',
   styleUrls: ['./marketing.component.scss']
 })
 export class MarketingComponent implements OnInit {
-  constructor(private dialog: MatDialog,) { }
+  marketingList: MarketingList[] = []
+  logoUrl: any;
+  constructor(private dialog: MatDialog, private marketingService: MarketingService,
+    private _successMessage: MatSnackBar, private changeDetectorRef: ChangeDetectorRef
+  ) { }
 
   ngOnInit(): void {
+    this.getMarketingList();
 
   }
 
@@ -24,46 +35,112 @@ export class MarketingComponent implements OnInit {
     this.openForm(0);
   }
 
-  openForm(customerId: number): void {
+   // viewPdf(pdfUrl: string) {
+  //   window.open(pdfUrl, '_blank');
+  // }
+  viewPdf(id: number) {
+    this.dialog.open(PdfSliderViewerComponent, {
+      width: '100vw',
+      height: '100vh',
+      maxWidth: '100vw',
+      panelClass: 'full-screen-dialog',
+      data: id,
+    });
+  }
+ 
+  
+
+  editCard(card: MarketingList) {
+    console.log('Edit card', card);
+    this.openForm(card.id);
+  }
+
+  getMarketingList() {
+    this.marketingService.getMarketingList().subscribe({
+      next: (response) => {
+        this.marketingList = response.data;
+        this.logoUrl = response.data;
+        this.changeDetectorRef.detectChanges();
+      },
+      error: (err) => {
+        console.error('Error fetching marketing list', err);
+      },
+    });
+  }
+
+
+  openForm(id: number): void {
     const dialogRef = this.dialog.open(AddPdfComponent, {
       width: "500px",
       height: "500px",
       disableClose: true,
-      data: "Customer",
+      data: id,
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result == true) {
+        setTimeout(() => {
+          this.getMarketingList();
+        }, 1000);
+      } else {
+        console.log("canceled");
+      }
+    });
+  }
+
+  DeleteModal(id: number) {
+    const dialogRef = this.dialog.open(DeleteModalComponent, {
+      width: "400px",
+      height: "175px",
+      disableClose: true,
+      data: "Marketing",
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result == true) {
         console.log("Delete confirmed");
-        // this.deleteRow(customerId);
+        this.delete(id);
       } else {
         console.log("Delete action canceled");
       }
     });
   }
 
-  marketingCards = [
-    { id: 1, title: 'Company Overview', subtitle: 'Innovative solutions for evolving needs.', showButton: false },
-    { id: 2, title: 'Company Overview', subtitle: 'Innovative solutions for evolving needs.', showButton: false },
-    { id: 3, title: 'Company Overview', subtitle: 'Innovative solutions for evolving needs.', showButton: true },
-    { id: 4, title: 'Company Overview', subtitle: 'Innovative solutions for evolving needs.', showButton: false }
-  ];
-
-  carouselOptions = {
-    loop: false,
-    margin: 10,
-    nav: false,
-    dots: true,
-    responsive: {
-      0: {
-        items: 1
-      },
-      600: {
-        items: 2
-      },
-      1000: {
-        items: 4
+  delete(id: number) {
+    this.marketingService.deleteMarketingById(id).subscribe(
+      {
+        next: ((response) => {
+          if (response.success) {
+            this.showSuccessMessage(response.message);
+            this.getMarketingList();
+          } else {
+            this.handleError(response.message);
+          }
+        }),
+        error: ((err) => {
+          this.handleError(err.error.message);
+        })
       }
-    }
-  };
+    )
+  }
+
+  //  Function to show success messages
+  private showSuccessMessage(message: string) {
+    this._successMessage.openFromComponent(SuccessModalComponent, {
+      data: { message },
+      duration: 4000,
+      panelClass: ["custom-toast"],
+      verticalPosition: "top",
+      horizontalPosition: "right",
+    });
+  }
+
+  //  Function to handle API errors
+  private handleError(err: any) {
+    this._successMessage.open(err, "Close", {
+      duration: 4000,
+      panelClass: ["error-toast"],
+      verticalPosition: "top",
+      horizontalPosition: "right",
+    });
+  }
 
 }
