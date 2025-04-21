@@ -12,6 +12,7 @@ import { SuccessModalComponent } from 'src/app/shared/components/UI/success-moda
 import { PdfSliderViewerComponent } from 'src/app/shared/components/UI/pdf-slider-viewer/pdf-slider-viewer.component';
 import { ViewPdfComponent } from '../view-pdf/view-pdf.component';
 import { ViewSliderComponent } from '../view-slider/view-slider.component';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-marketing',
@@ -24,7 +25,7 @@ import { ViewSliderComponent } from '../view-slider/view-slider.component';
 export class MarketingComponent implements OnInit {
   marketingList: MarketingList[] = []
   logoUrl: any;
-  constructor(private dialog: MatDialog, private marketingService: MarketingService,
+  constructor(private dialog: MatDialog,private router: Router, private route: ActivatedRoute, private marketingService: MarketingService,
     private _successMessage: MatSnackBar, private changeDetectorRef: ChangeDetectorRef
   ) { }
 
@@ -37,20 +38,20 @@ export class MarketingComponent implements OnInit {
     this.openForm(0);
   }
 
-   // viewPdf(pdfUrl: string) {
-  //   window.open(pdfUrl, '_blank');
-  // }
+  
   viewPdf(id: number) {
-    this.dialog.open(ViewSliderComponent, {
-      width: '100vw',
-      height: '100vh',
-      maxWidth: '100vw',
-      panelClass: 'full-screen-dialog',
-      data: id,
-    });
+    this.router.navigateByUrl("/admin/marketing/" + id);
   }
  
-  
+  // viewPdf(id: number) {
+  //   this.dialog.open(ViewSliderComponent, {
+  //     width: '100vw',
+  //     height: '100vh',
+  //     maxWidth: '100vw',
+  //     panelClass: 'full-screen-dialog',
+  //     data: id,
+  //   });
+  // }
 
   editCard(card: MarketingList) {
     console.log('Edit card', card);

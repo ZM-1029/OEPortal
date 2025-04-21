@@ -65,4 +65,5 @@ downloadPdf(id: number) {
     }
   });
 }
+
 }
