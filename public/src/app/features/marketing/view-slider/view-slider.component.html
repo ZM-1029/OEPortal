@@ -8,7 +8,7 @@
   </div>
 
   <!-- PDF Viewer UI -->
-  <div class="p-2" style="height: 100vh;" *ngIf="!loading">
+  <div class="p-2" *ngIf="!loading">
     <div class="d-flex flex-column h-100 position-relative">
 
       <!-- Top Controls -->
@@ -33,93 +33,93 @@
           <div class="small text-center mt-1">{{ page }} / {{ totalPages }}</div>
         </div>
 
-        <div class="flex-grow-1 position-relative overflow-hidden">
+        <!-- <div class="flex-grow-1 position-relative overflow-hidden">
           <pdf-viewer [src]="pdfSrc" [page]="page" [render-text]="true" [original-size]="false" [fit-to-page]="true"
             [autoresize]="true" [show-borders]="false" [zoom]="zoom" [show-all]="false"
             style="width: 100%; height: 100%;" (after-load-complete)="onPdfLoad($event)">
+          </pdf-viewer> -->
+
+        <!-- Watermark on Page 1 -->
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="pdf-viewer-overlay">
+  <div class="pdf-viewer-container">
+    <!-- Close Button (Top Right) -->
+    <button class="close-btn" (click)="closeDialog()">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <path d="M18 6L6 18M6 6l12 12" stroke-width="2" stroke-linecap="round" />
+      </svg>
+    </button>
+
+
+
+    <div *ngIf="loading" class="d-flex justify-content-center align-items-center h-100">
+      <div class="text-center">
+        <!-- <mat-spinner></mat-spinner> -->
+        <app-loader></app-loader>
+      </div>
+    </div>
+
+    <!-- PDF Content -->
+    <div *ngIf="!loading" class="pdf-content mt-2">
+      <!-- Header with Title and Download -->
+      <div class="pdf-header pe-4 me-4 py-0 mt-5">
+        <h3 class="pdf-title">Marketing</h3>
+        <div class="d-flex my-2 justify-content-between mb-4">
+          <button class="download-btn" (click)="downloadPdf()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            Download
+          </button>
+          <button class="download-btn" (click)="viewFullScreen()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3">
+              </path>
+            </svg>
+            View Full Screen
+          </button>
+        </div>
+      </div>
+      <!-- PDF Pages with Navigation -->
+      <div class="pdf-pages-container">
+        <button class="page-nav left" (click)="previousPage()">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M15 18l-6-6 6-6"></path>
+          </svg>
+        </button>
+
+        <div class="pdf-pages">
+
+          <pdf-viewer [src]="pdfSrc" [page]="page" [render-text]="true" [original-size]="false" [fit-to-page]="true"
+            [autoresize]="true" [show-all]="false" [zoom]="zoom" style="width: 100%; height: 100%;"
+            (after-load-complete)="onPdfLoad($event)" (error)="onPdfError($event)">
           </pdf-viewer>
-
-          <!-- Watermark on Page 1 -->
-
-
         </div>
+
+        <button class="page-nav right" (click)="nextPage()">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M9 18l6-6-6-6"></path>
+          </svg>
+        </button>
       </div>
+
+      <!-- Page Indicator -->
+      <div class="page-indicator">
+        <span>{{ page }} / {{ totalPages }}</span>
+      </div>
+
+      <!-- Watermark -->
+      <div class="pdf-watermark ">Z <span class="text-info">O</span> uma...</div>
     </div>
   </div>
-
-
-
-  <div class="pdf-viewer-overlay">
-    <div class="pdf-viewer-container">
-      <!-- Close Button (Top Right) -->
-      <button class="close-btn" (click)="closeDialog()">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <path d="M18 6L6 18M6 6l12 12" stroke-width="2" stroke-linecap="round" />
-        </svg>
-      </button>
-
-
-
-      <div *ngIf="loading" class="d-flex justify-content-center align-items-center h-100">
-        <div class="text-center">
-          <!-- <mat-spinner></mat-spinner> -->
-          <app-loader></app-loader>
-        </div>
-      </div>
-
-      <!-- PDF Content -->
-      <div *ngIf="!loading" class="pdf-content">
-        <!-- Header with Title and Download -->
-        <div class="pdf-header pe-4 me-4 py-0">
-          <h3 class="pdf-title">Marketing</h3>
-          <div class="d-flex my-2 justify-content-between">
-            <button class="download-btn" (click)="downloadPdf()">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                <polyline points="7 10 12 15 17 10"></polyline>
-                <line x1="12" y1="15" x2="12" y2="3"></line>
-              </svg>
-              Download
-            </button>
-            <button class="download-btn" (click)="viewFullScreen()">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3">
-                </path>
-              </svg>
-              view full screen
-            </button>
-          </div>
-        </div>
-        <!-- PDF Pages with Navigation -->
-        <div class="pdf-pages-container">
-          <button class="page-nav left" (click)="previousPage()">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <path d="M15 18l-6-6 6-6"></path>
-            </svg>
-          </button>
-
-          <div class="pdf-pages">
-
-            <pdf-viewer [src]="pdfSrc" [page]="page" [render-text]="true" [original-size]="false" [fit-to-page]="true"
-              [autoresize]="true" [show-all]="false" [zoom]="zoom" style="width: 100%; height: 100%;"
-              (after-load-complete)="onPdfLoad($event)" (error)="onPdfError($event)">
-            </pdf-viewer>
-          </div>
-
-          <button class="page-nav right" (click)="nextPage()">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <path d="M9 18l6-6-6-6"></path>
-            </svg>
-          </button>
-        </div>
-
-        <!-- Page Indicator -->
-        <div class="page-indicator">
-          <span>{{ page }} / {{ totalPages }}</span>
-        </div>
-
-        <!-- Watermark -->
-        <div class="pdf-watermark ">Z <span class="text-info">O</span> uma...</div>
-      </div>
-    </div>
-  </div>
+</div>

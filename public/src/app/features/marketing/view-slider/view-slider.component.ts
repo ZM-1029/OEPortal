@@ -1,5 +1,5 @@
 import { CommonModule, NgIf } from '@angular/common';
-import { ChangeDetectorRef, Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
@@ -17,7 +17,9 @@ import { ActivatedRoute } from '@angular/router';
   imports: [CommonModule, CarouselModule, PdfViewerModule,
     FormsModule,  MatIconModule,NgIf,LoaderComponent],
   templateUrl: './view-slider.component.html',
-  styleUrl: './view-slider.component.scss'
+  styleUrl: './view-slider.component.scss',
+    encapsulation: ViewEncapsulation.None // ← change this
+  
 })
 export class ViewSliderComponent implements OnInit,OnDestroy {
   pdfSrc: string | undefined;

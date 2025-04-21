@@ -1,5 +1,5 @@
 import { CommonModule, NgClass, NgFor, NgIf } from '@angular/common';
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewEncapsulation } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { CarouselModule } from 'ngx-owl-carousel-o';
 import { AddPdfComponent } from './add-pdf/add-pdf.component';
@@ -20,7 +20,8 @@ import { Router, ActivatedRoute } from '@angular/router';
     CommonModule, MatIconModule,CarouselModule
   ],
   templateUrl: './marketing.component.html',
-  styleUrls: ['./marketing.component.scss']
+  styleUrls: ['./marketing.component.scss'],
+  encapsulation: ViewEncapsulation.None // ← change this
 })
 export class MarketingComponent implements OnInit {
   marketingList: MarketingList[] = []

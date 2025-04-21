@@ -1,72 +1,71 @@
 .marketing {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding-top: 2.5rem;
-    font-family: "Poppins";
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 2.5rem;
+  font-family: "Poppins";
 }
 
 .pdf-container {
-    width: 100%;
-    height: 100%;
-    background-color: #ffffff;
-    border-radius: 10px;
-    padding: 16px;
-    margin: auto;
+  width: 100%;
+  height: 100%;
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 16px;
+  margin: auto;
 }
 
-
 .top-bar {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 16px;
-    flex-wrap: wrap;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
 
-    h1{
-        font-family: "Poppins";
+  h1 {
+    font-family: "Poppins";
+  }
+
+  .btn {
+    background-color: #2e3b64 !important;
+    outline: #2e3b64 !important;
+    border: #2e3b64;
+    color: white;
+    padding: 8px 16px;
+    margin: 4px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s;
+
+    &:hover {
+      background-color: #1565c0;
     }
-
-    .btn {
-        background-color: #2e3b64 !important;
-        outline: #2e3b64 !important;
-        border: #2e3b64;
-        color: white;
-        padding: 8px 16px;
-        margin: 4px;
-        border-radius: 6px;
-        cursor: pointer;
-        transition: background 0.3s;
-
-        &:hover {
-            background-color: #1565c0;
-        }
-    }
+  }
 }
 
 .preview-screen {
-    height: calc(100vh - 8rem);
-    // background-color: #f0f0f0;
-    // border: 2px dashed #ccc;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    max-height: calc(100vh - 8rem);
-    flex-wrap: wrap;
-    overflow-y: auto;
-    .no-preview {
-        color: #999;
-        font-size: 20px;
-        opacity: 1;
-        transition: opacity 0.3s ease-in-out;
-    
-        &.fade {
-          opacity: 0;
-        }
-      }
+  height: calc(100vh - 8rem);
+  // background-color: #f0f0f0;
+  // border: 2px dashed #ccc;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  max-height: calc(100vh - 8rem);
+  flex-wrap: wrap;
+  overflow-y: auto;
+  .no-preview {
+    color: #999;
+    font-size: 20px;
+    opacity: 1;
+    transition: opacity 0.3s ease-in-out;
+
+    &.fade {
+      opacity: 0;
+    }
+  }
 }
 
 .ppt_card {
@@ -83,7 +82,7 @@
   width: 100%;
   object-position: center;
   object-fit: cover;
-  border-radius: 0 0 140px 140px
+  border-radius: 0 0 140px 140px;
 }
 
 .detailed {
@@ -93,7 +92,7 @@
   height: 100%;
   width: 100%;
   z-index: 2;
-  background-color: #EDF1F5;
+  background-color: #edf1f5;
   left: 0;
   transition: 0.3s linear;
 }
@@ -105,7 +104,6 @@
 .interactions {
   opacity: 0;
   transition: 0.3s linear;
-
 }
 
 .ppt_card:hover .interactions {
@@ -119,7 +117,6 @@
 .ppt_card:hover {
   filter: drop-shadow(0 4px 8px rgba(13, 110, 253, 0.24));
 }
-
 
 .preview-screen {
   height: calc(100vh - 8rem);
