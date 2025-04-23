@@ -1,6 +1,6 @@
 
 import { CommonModule, NgIf } from '@angular/common';
-import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
+import { Component, Inject, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { MarketingService } from 'src/app/features/marketing/marketing.service';
@@ -19,6 +19,8 @@ import * as pdfjsLib from 'pdfjs-dist';
 export class ViewPdfComponent implements OnInit, OnDestroy {
   loading = true;
   pdfSrc: string | undefined;
+  page = 1;
+  totalPages = 0;
 
   constructor(
     public dialogRef: MatDialogRef<ViewPdfComponent>,
@@ -49,8 +51,24 @@ export class ViewPdfComponent implements OnInit, OnDestroy {
     });
   }
 
+  onPdfLoad(pdf: any): void {
+    this.totalPages = pdf.numPages;
+  }
+
+  @HostListener('document:keydown', ['$event'])
+  onKeyDown(event: KeyboardEvent): void {
+    if (event.key === 'ArrowRight') {
+      if (this.page < this.totalPages) this.page++;
+    } else if (event.key === 'ArrowLeft') {
+      if (this.page > 1) this.page--;
+    }
+    // Prevent up/down keys from scrolling
+    if (['ArrowUp', 'ArrowDown'].includes(event.key)) {
+      event.preventDefault();
+    }
+  }
+
   closeDialog(): void {
     this.dialogRef.close();
   }
-  
 }
