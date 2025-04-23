@@ -54,7 +54,7 @@ export class EmployeeListComponent implements OnInit, OnChanges {
   public paginationPageSize = this.currentPageSize;
   public paginationPageSizeSelector: number[] = [15, 25, 50, 100];
   private gridApi!: GridApi<any>;
-  rowData: employeeType[] | undefined;
+  rowData: employeeType[] =[];
   HeadingName: string = "employees";
 
   employeeAccess: rolePermissionListI = {
@@ -274,6 +274,13 @@ export class EmployeeListComponent implements OnInit, OnChanges {
     this.gridApi = params.api;
     this.gridApi.hideOverlay();
     this.getPermissionToAccessPage(Number(localStorage.getItem('role')));
+    if (this.rowData.length == 0) {
+      setTimeout(() => {
+        if (this.gridApi) {
+          this.showErrorOverlay("Data is not found");
+        }
+      });
+    }
   }
 
   showErrorOverlay(message: string) {

@@ -3,23 +3,24 @@ import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angula
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MarketingService } from '../../marketing.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SuccessModalComponent } from 'src/app/shared/components/UI/success-modal/success-modal.component';
+import { finalize } from 'rxjs/operators';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { LoaderComponent } from 'src/app/shared/components/UI/loader/loader.component';
 
 @Component({
   selector: 'app-add-pdf',
-  standalone: true,
   imports: [MatButtonModule, MatIconModule, CommonModule,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatIconModule],
+    MatIconModule,MatProgressSpinnerModule,LoaderComponent],
   templateUrl: './add-pdf.component.html',
   styleUrl: './add-pdf.component.scss',
 })
@@ -31,13 +32,13 @@ export class AddPdfComponent {
   logoFile: File | null = null;
   pdfFile: File | null = null;
   id: number = 0;
+  isSubmitting: boolean = false;
+  isSaveBtnAble:boolean=false;
   constructor(
     private fb: FormBuilder,
-    private http: HttpClient,
     private marketingService: MarketingService,
     public dialogRef: MatDialogRef<AddPdfComponent>,
     private _successMessage: MatSnackBar,
-
     @Optional() @Inject(MAT_DIALOG_DATA) public data: number
   ) { }
 
@@ -47,8 +48,8 @@ export class AddPdfComponent {
       title: ['', Validators.required],
       subtitle: ['', Validators.required],
       showButton: [false],
-      image: [null],
-      pdf: [null],
+      image: [null ],
+      pdf: [null ],
     });
 
     if (this.id) {
@@ -91,20 +92,27 @@ export class AddPdfComponent {
     }
   }
 
+ 
+
   onSubmit() {
     if (this.cardForm.valid) {
+      this.isSubmitting = true; 
       const formData = new FormData();
       formData.append('Heading', this.cardForm.value.title);
       formData.append('Description', this.cardForm.value.subtitle);
-
+  
       if (this.logoFile) {
         formData.append('Logo', this.logoFile);
+      }else{
+        formData.append('Logo', 'null');
       }
-
+  
       if (this.pdfFile instanceof File) {
         formData.append('Pdf', this.pdfFile);
+      }else{
+        formData.append('Pdf', 'null');
       }
-
+  
       if (this.id > 0) {
         formData.append('id', this.id.toString());
         this.updateMarketing(this.id, formData);
@@ -113,29 +121,13 @@ export class AddPdfComponent {
       }
     }
   }
+  
 
   createMarketing(formdata: FormData) {
-    this.marketingService.createMarketing(formdata).subscribe(
-      {
-        next: ((response) => {
-          if (response.success) {
-            this.showSuccessMessage(response.message);
-            this.dialogRef.close(true);
-          } else {
-            this.handleError(response.message);
-            this.dialogRef.close(false);
-          }
-        }), error: ((err) => {
-          this.handleError(err.error.message);
-          this.dialogRef.close(false);
-        })
-      }
-    )
-  }
-
-  updateMarketing(id: number, formData: FormData) {
-    this.marketingService.updateMarketingById(id, formData).subscribe({
-      next: ((response) => {
+    this.marketingService.createMarketing(formdata).pipe(
+      finalize(() => this.isSubmitting = false)
+    ).subscribe({
+      next: (response) => {
         if (response.success) {
           this.showSuccessMessage(response.message);
           this.dialogRef.close(true);
@@ -143,11 +135,51 @@ export class AddPdfComponent {
           this.handleError(response.message);
           this.dialogRef.close(false);
         }
-      }), error: ((err) => {
-        this.handleError(err.error.message);
+      },
+      error: (err) => {
+        if(err.error.errors.Pdf &&  err.error.errors.Logo){
+          this.handleError('The files is required');
+        }else if(err.error.errors.Pdf){
+          this.handleError(err.error.errors.Pdf[0]);
+        }else if(err.error.errors.Logo[0]){
+          this.handleError(err.error.errors.Pdf[0]);
+        }else{
+          this.handleError(err.error.message);
+        }
+        
         this.dialogRef.close(false);
-      })
+      }
     });
+    
+  }
+
+  updateMarketing(id: number, formData: FormData) {
+    this.marketingService.updateMarketingById(id, formData).pipe(
+      finalize(() => this.isSubmitting = false)
+    ).subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.showSuccessMessage(response.message);
+          this.dialogRef.close(true);
+        } else {
+          this.handleError(response.message);
+          this.dialogRef.close(false);
+        }
+      },
+      error: (err) => {
+        if(err.error.errors.Pdf &&  err.error.errors.Logo){
+          this.handleError('The files is required');
+        }else if(err.error.errors.Pdf){
+          this.handleError(err.error.errors.Pdf[0]);
+        }else if(err.error.errors.Logo[0]){
+          this.handleError(err.error.errors.Pdf[0]);
+        }else{
+          this.handleError(err.error.message);
+        }
+        this.dialogRef.close(false);
+      }
+    });
+    
   }
 
 

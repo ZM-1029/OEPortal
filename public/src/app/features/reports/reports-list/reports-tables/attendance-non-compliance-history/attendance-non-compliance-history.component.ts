@@ -347,6 +347,13 @@ export class AttendanceNonComplianceHistoryComponent implements OnInit, OnChange
     this.gridApi = params.api;
     this.gridApi.hideOverlay();
     this.getPermissionToAccessPage(Number(localStorage.getItem('role')));
+    if (this.rowData.length == 0) {
+      setTimeout(() => {
+        if (this.gridApi) {
+          this.showErrorOverlay("Data is not found");
+        }
+      });
+    }
   }
 
   // Pagination start

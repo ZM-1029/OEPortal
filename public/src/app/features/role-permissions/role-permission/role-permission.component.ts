@@ -15,6 +15,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { SuccessModalComponent } from 'src/app/shared/components/UI/success-modal/success-modal.component';
 import { RolePermissionService } from '../role-permission.service';
 import { Router } from '@angular/router';
+import { MarketingService } from '../../marketing/marketing.service';
+import { MarketingList } from 'src/app/shared/types/marketing.type';
 
 interface Role {
   id: number;
@@ -29,7 +31,7 @@ interface RolePermission {
   view: boolean;
   add: boolean;
   edit: boolean;
-  isDownload:boolean
+  isDownload: boolean
 }
 
 interface RolePermissionResponse {
@@ -63,23 +65,19 @@ export class RolePermissionComponent implements OnInit {
   roleControl = new FormControl<string | Role>('');
   rolesList: Role[] = [];
   filteredRoles!: Observable<Role[]>;
+  marketingList: MarketingList[] = []
   // Searchable Dropdown - End
-
   public menuData: any[] = [];
   public roles = new FormControl('');
   public formStates: { formId: number; view: boolean; add: boolean; edit: boolean; roleId: number }[] = [];
   private selectedRoleId?: number;
   selectedRole: number = 0;
   roleId: number = 0;
-  isPDFDownloadOptionShow:boolean=false;
+  isPDFDownloadOptionShow: boolean = false;
   private permissions: RolePermission[] = [];
-  // menuChackbox: Menu[] = [
-  //   { form: 'Dashboard', view: false, edit: false, add: false },
-  //   { form: 'Users', view: false, edit: false, add: false },
-  //   { form: 'Reports', view: false, edit: false, add: false }
-  // ];
 
-  constructor(private rolePermissionService: RolePermissionService, private _changeDetectorRef: ChangeDetectorRef, private _router: Router,
+  constructor(private rolePermissionService: RolePermissionService,
+    private _changeDetectorRef: ChangeDetectorRef, private marketingService: MarketingService,
     private _successMessage: MatSnackBar,) { }
 
   ngOnInit(): void {
@@ -137,7 +135,7 @@ export class RolePermissionComponent implements OnInit {
             view: false,
             add: false,
             edit: false,
-            isDownload:false
+            isDownload: false
           }));
           this.permissions = response.data
           this._changeDetectorRef.detectChanges();
@@ -168,12 +166,24 @@ export class RolePermissionComponent implements OnInit {
   // Function to handle checkbox changes
   onCheckboxChange(event: any, menu: any, permissionType: string) {
     menu[permissionType] = event.checked;
-    if(menu.form=='Marketing'){
-      this.isPDFDownloadOptionShow=true;
-    }else{
-      this.isPDFDownloadOptionShow=false;
+    if (menu.form == 'Marketing') {
+      // this.isPDFDownloadOptionShow=true;
+      if (menu.view) {
+        this.getMarketingList();
+        this.GetPermissionsByRoleIdForMarketing(this.roleId);
+      }
+    } else {
+      // this.isPDFDownloadOptionShow=false;
     }
     console.log(`${permissionType} permission changed for ${menu.form}:`, menu[permissionType]);
+  }
+
+  onCheckboxChangeMarketing(event: any, menu: any, permissionType: string) {
+    console.log(`event${event}, menu${menu}, permissionType${permissionType} sjj`);
+  }
+
+  GetPermissionsByRoleIdForMarketing(roleId:number){
+    this.rolePermissionService.GetPermissionsByRoleIdForMarketing(roleId)
   }
 
   savePermission() {
@@ -184,7 +194,7 @@ export class RolePermissionComponent implements OnInit {
       view: menu.view,
       add: menu.add,
       edit: menu.edit,
-      isDownload:menu.isDownload
+      isDownload: menu.isDownload
     }));
 
     if (this.selectedRole > 1) {
@@ -199,13 +209,13 @@ export class RolePermissionComponent implements OnInit {
                 view: false,
                 add: false,
                 edit: false,
-                isDownload:false
+                isDownload: false
               }));
 
               // Clear selected role
               this.selectedRole = 0;
               this.roleControl.setValue('');
-              this._changeDetectorRef.detectChanges(); 
+              this._changeDetectorRef.detectChanges();
             } else {
               this.handleError(response.message)
             }
@@ -218,6 +228,28 @@ export class RolePermissionComponent implements OnInit {
       )
     }
   }
+
+  // getMarketingList with Permission of marketing view start
+  getMarketingList() {
+    this.marketingService.getMarketingList().subscribe(
+      {
+        next: ((response) => {
+          if (response.success) {
+            this.marketingList = response.data
+            this._changeDetectorRef.detectChanges();
+          } else {
+            this.marketingList = [];
+            this.handleError(response.message);
+          }
+        }),
+        error: ((err) => {
+          this.handleError(err.error);
+
+        })
+      }
+    )
+  }
+  // getMarketingList with Permission of marketing view end
 
 
   //  Function to show success messages

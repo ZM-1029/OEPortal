@@ -1,10 +1,11 @@
-<!-- <div style="position: fixed; inset: 0; background: #fff; z-index: 1000;">
- 
+<div class="pdf-viewer" style="position: fixed; inset: 0; overflow: hidden; background: #fff; z-index: 1000; max-width: 100%; max-height: calc(100vh - 0rem);" (keydown)="onKeyDown($event)" tabindex="0">
+
+
   <div *ngIf="loading" class="d-flex justify-content-center align-items-center h-100">
     <app-loader></app-loader>
   </div>
 
-  <pdf-viewer
+  <pdf-viewer class=""
     *ngIf="!loading"
     [src]="pdfSrc"
     [render-text]="true"
@@ -12,32 +13,10 @@
     [fit-to-page]="true"
     [autoresize]="true"
     [show-borders]="false"
-    [zoom]="1"
-    [show-all]="true"
-    style="width: 100%; height: 100vh;">
-  </pdf-viewer>
-</div> -->
-
-<div style="position: fixed; inset: 0; background: #fff; z-index: 1000;" (keydown)="onKeyDown($event)" tabindex="0">
-
-  <!-- Loader while PDF is loading -->
-  <div *ngIf="loading" class="d-flex justify-content-center align-items-center h-100">
-    <app-loader></app-loader>
-  </div>
-
-  <!-- PDF Viewer: One page at a time -->
-  <pdf-viewer
-    *ngIf="!loading"
-    [src]="pdfSrc"
-    [render-text]="true"
-    [original-size]="false"
-    [fit-to-page]="true"
-    [autoresize]="true"
-    [show-borders]="false"
-    [zoom]="1"
+    [zoom]="0"
     [show-all]="false"
     [page]="page"
     (after-load-complete)="onPdfLoad($event)"
-    style="width: 100%; height: 100vh;">
+    style="width: 100%; height: 100%">
   </pdf-viewer>
 </div>

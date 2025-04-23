@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { rolePermissionResponseI } from 'src/app/shared/types/roles.type';
+import { MarketingPermissionI, rolePermissionResponseI } from 'src/app/shared/types/roles.type';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -27,4 +27,19 @@ export class RolePermissionService {
      );
    }
    // ChangeRolePermission?roleId=1
+
+  //  api/Marketing/ChangePermission/ChangePermission
+   changePermission(data:MarketingPermissionI){
+    return this.http.post(
+      `${environment.apiUrl}api/Marketing/ChangePermission/ChangePermission`,data
+    );
+   }
+
+   GetPermissionsByRoleIdForMarketing(roleId:number){
+    return this.http.get(
+      `${environment.apiUrl}api/Marketing/GetPermissionsByRoleId/GetPermissionsByRoleId/${roleId}`,
+    );
+   }
+
+  //  api/Marketing/GetPermissionsByRoleId/GetPermissionsByRoleId/13
 }

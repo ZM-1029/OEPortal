@@ -13,3 +13,9 @@ export interface rolePermissionResponseI {
     edit: boolean
   }
   
+  export interface MarketingPermissionI {
+    roleId: number
+    marketingId: number
+    isView: boolean
+    isDownload: boolean
+  }

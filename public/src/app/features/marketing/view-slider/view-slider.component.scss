@@ -2,7 +2,8 @@
   position: relative;
   width: 100%;
   inset: 0;
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.749);
+  // background: rgba(255, 255, 255, 0.95);
   z-index: 1000;
   display: flex;
   justify-content: center;
@@ -10,15 +11,16 @@
   backdrop-filter: blur(5px);
   font-family: "Poppins" !important;
 }
+.pdf-viewer-overlay .text-info{
+  color: rgba(13, 202, 240, 0.311) !important;
+}
 
 .pdf-viewer-container {
   position: relative;
   width: 100%;
-  // max-width: ;
   height: calc(100vh - 20rem);
   background: #f8f9fa;
   border-radius: 12px;
-  // box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -34,24 +36,6 @@
   padding: 5px;
   font-size: 12px;
   z-index: 1001;
-}
-
-.close-btn {
-  position: absolute;
-  top: 0px;
-  right: 20px;
-  background: none;
-  border: none;
-  color: #6c757d;
-  cursor: pointer;
-  z-index: 1000;
-  transition: color 0.2s;
-  padding: 8px;
-  font-size: 18px;
-
-  &:hover {
-    color: #dc3545;
-  }
 }
 
 .loading-indicator {
@@ -103,9 +87,6 @@
 }
 
 .pdf-header {
-  // display: flex;
-  // justify-content: space-between;
-  // align-items: center;
   padding: 20px;
   background: #ffffff;
   border-bottom: 1px solid #e9ecef;
@@ -118,7 +99,7 @@
   font-weight: 600;
 }
 
-.download-btn {
+.download-btn,.view-btn ,.back-btn{
   display: flex;
   align-items: center;
   gap: 8px;
@@ -131,11 +112,13 @@
   cursor: pointer;
   transition: all 0.2s;
 
-  &:hover {
-    background: rgba(46, 59, 100, 0.804);
-    border-color: rgba(46, 59, 100, 0.701);
-  }
+  // &:hover {
+  //   background: rgba(46, 59, 100, 0.804);
+  //   border-color: rgba(46, 59, 100, 0.701);
+  // }
 }
+
+
 
 .pdf-controls {
   display: flex;
@@ -156,9 +139,6 @@
   border-radius: 4px;
   transition: background 0.2s;
 
-  &:hover {
-    background: #e9ecef;
-  }
 }
 
 .zoom-level {
@@ -200,10 +180,6 @@
   color: #495057;
   transition: all 0.2s;
 
-  &:hover {
-    background: rgba(0, 0, 0, 0.1);
-  }
-
   &[disabled] {
     opacity: 0.3;
     cursor: not-allowed;
@@ -240,6 +216,7 @@
   pointer-events: none;
 }
 
+
 @keyframes spin {
   to {
     transform: rotate(360deg);
@@ -247,10 +224,6 @@
 }
 
 /* PDF Viewer Customization */
-::ng-deep .pdfViewer .page {
-  // margin: 10px auto;
-  // box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
 
 ::ng-deep .textLayer {
   opacity: 0.8;
@@ -264,10 +237,9 @@
     height: 66vh !important;
   }
   canvas {
-    height: 66vh !important;
-    object-fit: contain;
+    height: calc(100vh - 13.5rem) !important;
+    object-fit:contain;
     object-position: center;
-    background-color: rgba(46, 59, 100, 0.356);
   }
 }
 .ng2-pdf-viewer-container {
@@ -277,4 +249,8 @@
 .page-nav {
   background-color: rgb(46, 59, 100);
   color: white !important;
+}
+
+.hiddenCanvasElement{
+  display: none !important;
 }

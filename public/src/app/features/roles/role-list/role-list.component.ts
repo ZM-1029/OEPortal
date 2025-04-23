@@ -3,13 +3,11 @@ import { ChangeDetectorRef, Component, OnInit, SimpleChanges } from '@angular/co
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
 import { AgGridAngular } from 'ag-grid-angular';
 import { ModuleRegistry, AllCommunityModule, GridApi, GridReadyEvent } from 'ag-grid-community';
 import { LoaderComponent } from 'src/app/shared/components/UI/loader/loader.component';
 import { PageHeaderComponent } from 'src/app/shared/components/UI/page-header/page-header.component';
 import { SuccessModalComponent } from 'src/app/shared/components/UI/success-modal/success-modal.component';
-import { employeeType } from 'src/app/shared/types/employees.type';
 import { RoleService } from '../role.service';
 import { MatDialog } from '@angular/material/dialog';
 import { RoleCreateComponent } from '../role-create/role-create.component';
@@ -32,7 +30,7 @@ export class RoleListComponent implements OnInit{
   public paginationPageSize = this.currentPageSize;
   public paginationPageSizeSelector: number[] = [15, 25, 50, 100];
   private gridApi!: GridApi<any>;
-  rowData: employeeType[] | undefined;
+  rowData: any[]=[];
   HeadingName: string = "Roles";
 
   columnDefs: any = [
@@ -132,6 +130,13 @@ export class RoleListComponent implements OnInit{
     this.gridApi = params.api;
     this.gridApi.hideOverlay();
     this.getActiveRoles();
+    if (this.rowData.length == 0) {
+      setTimeout(() => {
+        if (this.gridApi) {
+          this.showErrorOverlay("Data is not found");
+        }
+      });
+    }
   }
 
   showErrorOverlay(message: string) {

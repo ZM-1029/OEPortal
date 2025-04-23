@@ -4,41 +4,68 @@
     <mat-icon class="text-danger float-end pb-2 ms-auto" (click)="cancel()" svgIcon="cross"></mat-icon>
   </div>
     <form [formGroup]="cardForm" (ngSubmit)="onSubmit()" class="w-100">
-  
+
       <mat-form-field appearance="outline" class="w-100 mb-3">
         <mat-label>Title</mat-label>
         <input matInput formControlName="title" placeholder="Enter title" />
+        <mat-error *ngIf="cardForm.get('title')?.hasError('required')">
+          Title is required
+        </mat-error>
       </mat-form-field>
+      
   
       <mat-form-field appearance="outline" class="w-100 mb-3">
         <mat-label>Subtitle</mat-label>
         <input matInput formControlName="subtitle" placeholder="Enter subtitle" />
         <mat-error *ngIf="cardForm.get('subtitle')?.invalid">Subtitle is required</mat-error>
       </mat-form-field>
-  
-      <!-- Logo Upload -->
+
       <div class="mb-3">
         <label class="mb-1 fw-semibold">Logo Image</label>
-        <input type="file" accept="image/png, image/jpeg, image/jpg" (change)="onImageChange($event)" class="form-control" />
+        <input type="file" accept="image/png, image/jpeg, image/jpg"
+               (change)="onImageChange($event)" class="form-control" />
+        <div class="text-danger mt-1" *ngIf="cardForm.get('image')?.hasError('required') && cardForm.get('image')?.touched">
+          Logo is required
+        </div>
         <img *ngIf="previewImage" [src]="previewImage" alt="Preview" class="preview-img mt-2" />
       </div>
-      
-      <!-- PDF Upload -->
+
+      <!-- <div class="mb-3">
+        <label class="mb-1 fw-semibold">PDF File</label>
+        <input accept="application/pdf" type="file"
+               (change)="onPdfChange($event)" class="form-control" />
+        <div class="text-danger mt-1" *ngIf="cardForm.get('pdf')?.hasError('required') && cardForm.get('pdf')?.touched">
+          PDF is required
+        </div>
+      </div> -->
       <div class="mb-3">
-        <label class="mb-1 fw-semibold">PDF File </label>
-        <input accept="application/pdf" type="file" (change)="onPdfChange($event)" class="form-control" />
-        <!-- <img *ngIf="previewImage" [src]="previewImage" alt="Preview" class="preview-img mt-2" /> -->
+        <label class="mb-1 fw-semibold">PDF File</label>
+        <input accept="application/pdf" type="file"
+               (change)="onPdfChange($event)" class="form-control" />
+        <div class="text-danger mt-1" *ngIf="cardForm.get('pdf')?.hasError('required') && cardForm.get('pdf')?.touched">
+          PDF is required
+        </div>
+      
+        <!-- Show PDF Icon when a PDF is selected -->
+        <div *ngIf="pdfFile" class="mt-2 d-flex align-items-center">
+          <mat-icon class="me-2 text-danger">picture_as_pdf</mat-icon>
+          <span>{{ pdfFile?.name }}</span>
+        </div>
       </div>
-  
+      
+      
       <div mat-dialog-actions align="end" class="dialog-actions mt-4">
-        <button type="button" mat-button (click)="clearForm()" class="btn btn-light border rounded-pill me-2">
+        <!-- <button  type="button" mat-button (click)="clearForm()" class="btn btn-light border rounded-pill me-2" [disabled]="isSubmitting">
           Clear
-        </button>
-        <button mat-flat-button color="primary" type="submit" class="btn btn-primary rounded-pill">
-          Save
+        </button> -->
+        <button    type="submit" class="btn btn-info-dark rounded-pill" [disabled]="isSaveBtnAble">
+          <mat-spinner *ngIf="isSubmitting" diameter="20"></mat-spinner>
+          <span *ngIf="!isSubmitting">Save</span>
         </button>
       </div>
-  
     </form>
+  </div>
+  <div *ngIf="isSubmitting" class="overlay-loader">
+    <app-loader></app-loader>
   </div>
   

@@ -212,6 +212,13 @@ export class TimesheetNonComplianceComponent implements OnInit, OnChanges, After
     this.gridApi = params.api;
     this.gridApi.hideOverlay();
     this.getTimesheetNonCompliance();
+    if (this.rowData.length == 0) {
+      setTimeout(() => {
+        if (this.gridApi) {
+          this.showErrorOverlay("Data is not found");
+        }
+      });
+    }
   }
 
   // Pagination start

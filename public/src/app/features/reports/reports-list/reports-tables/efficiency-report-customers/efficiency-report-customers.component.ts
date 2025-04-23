@@ -226,7 +226,11 @@ export class EfficiencyReportCustomersComponent implements OnInit, AfterViewInit
     this.gridApi.hideOverlay();
     this.getEfficiencyReportsCustomer();
     if (this.rowData.length == 0) {
-      this.showErrorOverlay("Data is not found")
+      setTimeout(() => {
+        if (this.gridApi) {
+          this.showErrorOverlay("Data is not found");
+        }
+      });
     }
   }
 

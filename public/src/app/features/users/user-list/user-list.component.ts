@@ -268,6 +268,13 @@ export class UserListComponent implements OnInit {
     this.gridApi = params.api;
     this.gridApi.hideOverlay();
     this.getUserList();
+    if (this.rowData.length == 0) {
+      setTimeout(() => {
+        if (this.gridApi) {
+          this.showErrorOverlay("Data is not found");
+        }
+      });
+    }
   }
 
   showErrorOverlay(message: string) {

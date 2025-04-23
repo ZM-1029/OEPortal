@@ -10,7 +10,7 @@ import { PdfSliderViewerComponent } from 'src/app/shared/components/UI/pdf-slide
 import { SalesService } from '../../sales/sales.service';
 import { MarketingService } from '../marketing.service';
 import { ViewPdfComponent } from '../view-pdf/view-pdf.component';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-view-slider',
@@ -33,7 +33,8 @@ export class ViewSliderComponent implements OnInit,OnDestroy {
     private route: ActivatedRoute,
     private marketingService: MarketingService,
     private cdr: ChangeDetectorRef,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private _router: Router, private activatedRoute: ActivatedRoute,
   ) {}
 
   ngOnInit(): void {
@@ -114,7 +115,7 @@ export class ViewSliderComponent implements OnInit,OnDestroy {
     });
   }
 
-  closeDialog(): void {
-    // this.dialogRef.close();
+  back(){
+    this._router.navigateByUrl("/admin/marketing");
   }
 }

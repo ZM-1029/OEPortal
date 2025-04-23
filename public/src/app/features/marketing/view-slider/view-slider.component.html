@@ -18,9 +18,6 @@
           <mat-icon svgIcon="zoomIn" class="mx-2 cursor-pointer" (click)="zoomIn()"></mat-icon>
           <span class="ms-3">Zoom: {{ (zoom * 100) | number:'1.0-0' }}%</span>
         </div>
-        <!-- <button class="btn btn-outline-secondary btn-sm" (click)="downloadQuotationPdf()">
-            Download PDF
-          </button> -->
       </div>
 
       <!-- PDF + Vertical Slider -->
@@ -32,16 +29,6 @@
             style="writing-mode: bt-lr; transform: rotate(180deg); height: 100%;" />
           <div class="small text-center mt-1">{{ page }} / {{ totalPages }}</div>
         </div>
-
-        <!-- <div class="flex-grow-1 position-relative overflow-hidden">
-          <pdf-viewer [src]="pdfSrc" [page]="page" [render-text]="true" [original-size]="false" [fit-to-page]="true"
-            [autoresize]="true" [show-borders]="false" [zoom]="zoom" [show-all]="false"
-            style="width: 100%; height: 100%;" (after-load-complete)="onPdfLoad($event)">
-          </pdf-viewer> -->
-
-        <!-- Watermark on Page 1 -->
-
-
       </div>
     </div>
   </div>
@@ -52,17 +39,12 @@
 <div class="pdf-viewer-overlay">
   <div class="pdf-viewer-container">
     <!-- Close Button (Top Right) -->
-    <button class="close-btn" (click)="closeDialog()">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-        <path d="M18 6L6 18M6 6l12 12" stroke-width="2" stroke-linecap="round" />
-      </svg>
-    </button>
+    
 
 
 
     <div *ngIf="loading" class="d-flex justify-content-center align-items-center h-100">
       <div class="text-center">
-        <!-- <mat-spinner></mat-spinner> -->
         <app-loader></app-loader>
       </div>
     </div>
@@ -70,8 +52,8 @@
     <!-- PDF Content -->
     <div *ngIf="!loading" class="pdf-content mt-2">
       <!-- Header with Title and Download -->
-      <div class="pdf-header pe-4 me-4 py-0 mt-5">
-        <h3 class="pdf-title">Marketing</h3>
+      <div class="pdf-header pe-4  py-0 mt-5">
+        <!-- <h3 class="pdf-title">Marketing</h3> -->
         <div class="d-flex my-2 justify-content-between mb-4">
           <button class="download-btn" (click)="downloadPdf()">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
@@ -81,13 +63,18 @@
             </svg>
             Download
           </button>
-          <button class="download-btn" (click)="viewFullScreen()">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3">
-              </path>
-            </svg>
-            View Full Screen
-          </button>
+          <div class="d-flex">
+            <button class="view-btn" (click)="viewFullScreen()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3">
+                </path>
+              </svg>
+              View Full Screen
+            </button>
+            <button class="back-btn text-white ms-2 " (click)="back()">
+              <i class="bi bi-arrow-bar-left"></i> Back
+            </button>
+          </div>
         </div>
       </div>
       <!-- PDF Pages with Navigation -->
@@ -119,7 +106,7 @@
       </div>
 
       <!-- Watermark -->
-      <div class="pdf-watermark ">Z <span class="text-info">O</span> uma...</div>
+      <div class="pdf-watermark ">Z<span class="text-info">o</span>uma...</div>
     </div>
   </div>
 </div>

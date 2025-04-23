@@ -354,6 +354,13 @@ export class PurchaseOrderListComponent implements OnInit {
   onGridReady(params: GridReadyEvent<any>) {
     this.gridApi = params.api;
     this.getPermissionToAccessPage(Number(localStorage.getItem('role')));
+    if (this.rowData.length == 0) {
+      setTimeout(() => {
+        if (this.gridApi) {
+          this.showErrorOverlay("Data is not found");
+        }
+      });
+    }
   }
 
   showErrorOverlay(message: string) {

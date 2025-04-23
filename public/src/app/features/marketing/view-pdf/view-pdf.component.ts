@@ -7,6 +7,7 @@ import { MarketingService } from 'src/app/features/marketing/marketing.service';
 import { LoaderComponent } from 'src/app/shared/components/UI/loader/loader.component';
 
 import * as pdfjsLib from 'pdfjs-dist';
+import { Router } from '@angular/router';
 (pdfjsLib as any).GlobalWorkerOptions.workerSrc =
   `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${(pdfjsLib as any).version}/pdf.worker.min.js`;
 
@@ -21,22 +22,28 @@ export class ViewPdfComponent implements OnInit, OnDestroy {
   pdfSrc: string | undefined;
   page = 1;
   totalPages = 0;
+  lastKeyTime = 0;
 
   constructor(
     public dialogRef: MatDialogRef<ViewPdfComponent>,
     @Inject(MAT_DIALOG_DATA) public data: number,
-    private marketingService: MarketingService
-  ) {}
+    private marketingService: MarketingService,
+    private _router: Router,
+  ) { }
 
   ngOnInit(): void {
     this.loadPdf(this.data);
+    this.enterFullScreen();
+    document.addEventListener('fullscreenchange', this.onFullscreenChange);
   }
 
   ngOnDestroy(): void {
     if (this.pdfSrc) {
       URL.revokeObjectURL(this.pdfSrc);
     }
+    this.exitFullScreen();
   }
+
 
   loadPdf(quotationId: number): void {
     this.marketingService.downloadPdf(quotationId).subscribe({
@@ -55,20 +62,56 @@ export class ViewPdfComponent implements OnInit, OnDestroy {
     this.totalPages = pdf.numPages;
   }
 
+
   @HostListener('document:keydown', ['$event'])
   onKeyDown(event: KeyboardEvent): void {
+    const now = Date.now();
+    // Limit to 1 action per 200ms
+    if (now - this.lastKeyTime < 200) return;
+    this.lastKeyTime = now;
+
     if (event.key === 'ArrowRight') {
       if (this.page < this.totalPages) this.page++;
     } else if (event.key === 'ArrowLeft') {
       if (this.page > 1) this.page--;
+    } else if (event.key === 'Escape') {
+      this.exitFullScreen();
     }
-    // Prevent up/down keys from scrolling
+
     if (['ArrowUp', 'ArrowDown'].includes(event.key)) {
       event.preventDefault();
     }
   }
 
+
   closeDialog(): void {
     this.dialogRef.close();
   }
+
+  enterFullScreen(): void {
+    const elem = document.documentElement;
+    if (elem.requestFullscreen) {
+      elem.requestFullscreen();
+    } else if ((<any>elem).webkitRequestFullscreen) {
+      (<any>elem).webkitRequestFullscreen(); 
+    } else if ((<any>elem).msRequestFullscreen) {
+      (<any>elem).msRequestFullscreen(); 
+    }
+  }
+
+  exitFullScreen(): void {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if ((<any>document).webkitExitFullscreen) {
+      (<any>document).webkitExitFullscreen();
+    } else if ((<any>document).msExitFullscreen) {
+      (<any>document).msExitFullscreen();
+    }
+  }
+
+  onFullscreenChange = (): void => {
+    if (!document.fullscreenElement) {
+      this.closeDialog();
+    }
+  };
 }
