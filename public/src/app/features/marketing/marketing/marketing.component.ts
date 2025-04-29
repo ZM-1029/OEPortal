@@ -1,5 +1,5 @@
-import { CommonModule, NgClass, NgFor, NgIf } from '@angular/common';
-import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewEncapsulation } from '@angular/core';
+import { CommonModule, NgClass } from '@angular/common';
+import { Component, OnInit, ChangeDetectorRef, ViewEncapsulation } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { CarouselModule } from 'ngx-owl-carousel-o';
 import { AddPdfComponent } from './add-pdf/add-pdf.component';
@@ -9,15 +9,14 @@ import { MarketingList } from 'src/app/shared/types/marketing.type';
 import { DeleteModalComponent } from 'src/app/shared/components/UI/delete-modal/delete-modal.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SuccessModalComponent } from 'src/app/shared/components/UI/success-modal/success-modal.component';
-import { PdfSliderViewerComponent } from 'src/app/shared/components/UI/pdf-slider-viewer/pdf-slider-viewer.component';
-import { ViewPdfComponent } from '../view-pdf/view-pdf.component';
-import { ViewSliderComponent } from '../view-slider/view-slider.component';
 import { Router, ActivatedRoute } from '@angular/router';
+import { RolePermissionService } from '../../role-permissions/role-permission.service';
+import { rolePermissionListI } from 'src/app/shared/types/roles.type';
 
 @Component({
   selector: 'app-marketing',
   imports: [
-    CommonModule, MatIconModule,CarouselModule
+    CommonModule, MatIconModule,CarouselModule,NgClass
   ],
   templateUrl: './marketing.component.html',
   styleUrls: ['./marketing.component.scss'],
@@ -26,14 +25,73 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class MarketingComponent implements OnInit {
   marketingList: MarketingList[] = []
   logoUrl: any;
+  marketingAccess: rolePermissionListI = {
+      id: 0,
+      formId: 0,
+      form: '',
+      view: false,
+      add: false,
+      edit: false
+    };
+  
   constructor(private dialog: MatDialog,private router: Router, private route: ActivatedRoute, private marketingService: MarketingService,
-    private _successMessage: MatSnackBar, private changeDetectorRef: ChangeDetectorRef
+    private _successMessage: MatSnackBar, private changeDetectorRef: ChangeDetectorRef,private rolePermissionService:RolePermissionService
   ) { }
 
   ngOnInit(): void {
-    this.getMarketingList();
-
+    this.getPermissionToAccessPage(Number(localStorage.getItem('role')));
   }
+
+  getPermissionToAccessPage(roleId: any) {
+    this.rolePermissionService.getPermissionsByRoleId(roleId).subscribe({
+      next: (response) => {
+        if (response.success) {
+          for (const marketingAccess of response.data) {
+            if (marketingAccess.form === "Marketing") {
+              this.marketingAccess = marketingAccess;
+              this.changeDetectorRef.detectChanges();
+              if (this.marketingAccess.view) {
+                this.getMarketingList();
+                console.log(marketingAccess,"marketingAccess");
+              } else {
+                // this.rowData = [];
+                // this.showErrorOverlay("You have not permission");
+              }
+              // Hide "Actions" column if `edit` is false
+              // if (this.gridApi) {
+              //   this.gridApi.setColumnsVisible(["actions"], this.marketingAccess.edit);
+              // }
+              this.changeDetectorRef.detectChanges();
+            }
+          }
+        } else {
+          this.handleError(response.message);
+        }
+      },
+      error: (err) => {
+        this.handleError("please try again leter");
+      },
+    });
+  }
+
+
+  // getPermissionsByRoleId(roleId:number){
+  //   this.rolePermissionService.getPermissionsByRoleId(roleId).subscribe(
+  //     {
+  //       next:((response)=>{
+  //         if(response.success){
+
+  //         }else{
+  //         }
+          
+  //       }),
+  //       error:((error)=>{
+  //         console.error(error)
+
+  //       })
+  //     }
+  //   )
+  // }
 
   addPdf() {
     this.openForm(0);
@@ -44,18 +102,7 @@ export class MarketingComponent implements OnInit {
     this.router.navigateByUrl("/admin/marketing/" + id);
   }
  
-  // viewPdf(id: number) {
-  //   this.dialog.open(ViewSliderComponent, {
-  //     width: '100vw',
-  //     height: '100vh',
-  //     maxWidth: '100vw',
-  //     panelClass: 'full-screen-dialog',
-  //     data: id,
-  //   });
-  // }
-
   editCard(card: MarketingList) {
-    console.log('Edit card', card);
     this.openForm(card.id);
   }
 

@@ -50,7 +50,7 @@
             ],
             "scripts": [
               "./node_modules/quill/dist/quill.core.js",
-              "./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
+              "./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
                
             ]
           },

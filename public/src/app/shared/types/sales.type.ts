@@ -92,6 +92,7 @@ export interface Tax {
   id: number;
   country: string;
   tax: string;
+  discription:string;
   value: number;
 }
 
@@ -211,6 +212,7 @@ export interface QuotationEditItem {
   id: number;
   productId: number;
   quantity: number;
+  description:string;//sj
   rate: number;
   discount: number;
   taxId: number;

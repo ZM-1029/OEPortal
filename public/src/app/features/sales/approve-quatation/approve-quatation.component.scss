@@ -624,3 +624,11 @@ button.active {
   width: 100% !important;
   overflow: hidden !important;
 }
+
+.btn-info-dark {
+  background-color: #2e3b64 !important;
+  outline: #2e3b64 !important;
+  border: #2e3b64;
+  color: white;
+  font-size: 14px;
+}

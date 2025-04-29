@@ -1,4 +1,3 @@
-
 .sale-create {
   background-color: white;
   border-radius: 16px;
@@ -7,7 +6,7 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  height: calc(100vh - 6rem); 
+  height: calc(100vh - 6rem);
   overflow: hidden;
 
   .bg-light {
@@ -92,7 +91,6 @@ form {
 mat-form-field {
   background-color: transparent;
   padding-bottom: 5px;
-
 }
 
 label,
@@ -231,18 +229,20 @@ mat-label {
 }
 
 .table-responsive {
-  max-height: 500px; 
-  max-width: 100%;  
+  max-height: 500px;
+  max-width: 100%;
   overflow-x: auto;
-  overflow-y: auto; 
+  overflow-y: auto;
   border: 1px solid #ddd;
   border-radius: 4px;
   margin-top: 20px;
 }
+
 table {
   width: 100%;
   border-collapse: collapse;
 }
+
 th,
 td {
   padding: 12px;
@@ -259,6 +259,7 @@ th {
 tr:nth-child(even) {
   background-color: #f9f9f9;
 }
+
 .table-responsive::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -315,7 +316,7 @@ tr:nth-child(even) {
   }
 }
 
-.form-group .row{
+.form-group .row {
   margin-bottom: 10px;
 }
 
@@ -326,7 +327,7 @@ tr:nth-child(even) {
 }
 
 /* Styling for Input Fields */
-input[type="number"]{
+input[type="number"] {
   width: 100%;
   padding: 8px;
   margin: 5px 0;
@@ -428,6 +429,7 @@ select {
   border-radius: 4px;
   font-size: 14px;
 }
+
 .form {
   width: 100%;
 }
@@ -440,7 +442,7 @@ select {
   border: 1px solid red !important;
 }
 
-.product_name mat-form-field{
+.product_name mat-form-field {
   width: 235px;
 }
 
@@ -450,4 +452,26 @@ select {
   // white-space: normal;
   // text-align: right;
   // min-width: 300px;
+}
+
+.mat-mdc-form-field:not(.mat-form-field-disabled) .mat-mdc-floating-label.mdc-floating-label {
+  cursor: inherit;
+  padding-bottom: 0px !important;
+}
+
+.description mat-form-field {
+  background-color: transparent;
+  padding-bottom: 5px;
+
+}
+
+.description mat-form-field textarea {
+  background-color: transparent;
+  padding-bottom: 5px;
+  font-size: 14px;
+}
+
+::ng-deep .description mat-form-field .mat-mdc-form-field:not(.mat-form-field-disabled) .mat-mdc-floating-label.mdc-floating-label {
+  cursor: inherit;
+  padding-bottom: 0px !important; 
 }

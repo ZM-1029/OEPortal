@@ -24,7 +24,7 @@ import {
 } from "@angular/material/core";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatInputModule } from "@angular/material/input";
-import { DatePipe } from "@angular/common";
+import { DatePipe, NgClass } from "@angular/common";
 import { MatSelectModule } from "@angular/material/select";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { SuccessModalComponent } from "../success-modal/success-modal.component";
@@ -45,25 +45,26 @@ import { MultiSelectDropdownComponent } from "../multi-select-dropdown/multi-sel
     MatSelectModule,
     MatInputModule,
     MatAutocompleteModule,
-    MultiSelectDropdownComponent
+    MultiSelectDropdownComponent, 
   ],
   templateUrl: "./download-attendance.component.html",
   styleUrl: "./download-attendance.component.scss",
   encapsulation: ViewEncapsulation.None,
-    changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DownloadAttendanceComponent implements OnInit {
   public attendanceForm!: FormGroup;
   public range!: FormGroup;
   public attandancePdf: any;
   public responseFile!: any[];
+  showMultiSelect: boolean = false;
   comment: string = "";
   employeeId: string = "";
   startDate: string = "";
   endDate: string = "";
   submitted: boolean = false;
   allProjects: any[] = []
-  dropdownHeading:string="Project"
+  dropdownHeading: string = "Project"
   private unsubscribe$ = new Subject<void>();
   constructor(
     private dialogRef: MatDialogRef<DownloadAttendanceComponent>,
@@ -91,20 +92,20 @@ export class DownloadAttendanceComponent implements OnInit {
   }
 
   // dropdown selected Output
-selectedOutput(event:any){
-  let selectedProject 
-  if(event==0){
-     selectedProject = 1;
-  }else{
-    selectedProject=event
+  selectedOutput(event: any) {
+    let selectedProject
+    if (event == 0) {
+      selectedProject = 1;
+    } else {
+      selectedProject = event
+    }
+    this.attendanceForm.patchValue({
+      projectName: selectedProject
+    })
+
   }
-  this.attendanceForm.patchValue({
-    projectName:selectedProject
-  })
-    
-}
-// dropdown selected Output
-  
+  // dropdown selected Output
+
 
   // close dialog box...
   closeDialog(): void {
@@ -145,14 +146,14 @@ selectedOutput(event:any){
             this.endDate,
             this.comment,
             this.attendanceForm.get("istimesheetavailable")?.value,
-            this.attendanceForm.get('projectName')?.value==''? '0': this.attendanceForm.get('projectName')?.value
+            this.attendanceForm.get('projectName')?.value == '' ? '0' : this.attendanceForm.get('projectName')?.value
           )
           .subscribe(
             (result: any) => {
               this.downloadAttendance(result, "xlsx");
             },
             (err) => {
-              console.log("ERR", err);
+              console.error("ERR", err);
               this.handleError(err.message);
             },
           );
@@ -164,14 +165,14 @@ selectedOutput(event:any){
             this.endDate,
             this.comment,
             this.attendanceForm.get("istimesheetavailable")?.value,
-            this.attendanceForm.get('projectName')?.value==''? '0': this.attendanceForm.get('projectName')?.value
+            this.attendanceForm.get('projectName')?.value == '' ? '0' : this.attendanceForm.get('projectName')?.value
           )
           .subscribe(
             (result: any) => {
               this.downloadAttendance(result, "pdf");
             },
             (err) => {
-              console.log("ERR", err);
+              console.error("ERR", err);
               this.handleError(err.message);
             },
           );
@@ -207,6 +208,9 @@ selectedOutput(event:any){
 
   GetDistinctProjects(event: any) {
     console.log("Timesheet Required Changed:", event.value);
+
+    // Set whether to show the multiselect dropdown
+    this.showMultiSelect = event.value === true;
     if (event.value && this.attendanceForm.get('startDate')?.value && this.attendanceForm.get('endDate')?.value) {
       console.log(this.attendanceForm.get('startDate')?.value, this.attendanceForm.get('endDate')?.value, event.value, "down");
       console.log(this.formatDate(this.attendanceForm.get('startDate')?.value), this.formatDate(this.attendanceForm.get('endDate')?.value), event.value, "down");
@@ -215,15 +219,15 @@ selectedOutput(event:any){
           {
             next: ((response) => {
               if (response.success) {
-                this.allProjects = response?.projects
-                this._changeDetectorRef.detectChanges();
+                this.allProjects = response?.projects;
+                // this._changeDetectorRef.detectChanges();
               } else {
                 this.showSuccessMessage(response.message)
-                console.log(response.message);
+                console.error(response.message);
               }
             }), error: ((error) => {
               // this.handleError()
-              console.log(error);
+              console.error(error);
             })
           }
 

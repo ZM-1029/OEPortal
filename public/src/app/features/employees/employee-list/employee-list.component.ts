@@ -182,7 +182,6 @@ export class EmployeeListComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.pageHeader_employee(this.HeadingName);
-    // this.getEmployeesList();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -222,6 +221,8 @@ export class EmployeeListComponent implements OnInit, OnChanges {
       },
       error: (err) => {
         this.handleError("please try again leter");
+        console.error(err);
+        
       },
     });
   }

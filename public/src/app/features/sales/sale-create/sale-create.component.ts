@@ -8,7 +8,7 @@ import { MatSelectModule } from "@angular/material/select";
 import { Subject, takeUntil } from "rxjs";
 import { SuccessModalComponent } from "../../../shared/components/UI/success-modal/success-modal.component";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { CdkTextareaAutosize } from "@angular/cdk/text-field";
+import { CdkTextareaAutosize, TextFieldModule } from "@angular/cdk/text-field";
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { SalesService } from "../sales.service";
 import { AddressData, Branch, Company, Country, Customer, PaymentTerm, Product, QuotationResponse, selectedProduct, Tax } from "src/app/shared/types/sales.type";
@@ -32,6 +32,7 @@ import { CommonModule } from '@angular/common';
     MatNativeDateModule,
     MatIconModule,
     CommonModule,
+    TextFieldModule
   ],
 
   templateUrl: './sale-create.component.html',
@@ -107,12 +108,14 @@ export class SaleCreateComponent {
   ngOnChanges(): void {
     this.loadDropdownData();
   }
+
   createItem(): FormGroup {
     return this.fb.group({
       productId: [0, Validators.required],
       quantity: [1, [Validators.required, Validators.min(1)]],
       rate: [0, [Validators.required, Validators.min(0)]],
       discount: [0],
+      description:[''],
       discountType: ['rupee'],
       taxId: [0, Validators.required],
       isFixedDiscount: [true],
@@ -202,6 +205,7 @@ export class SaleCreateComponent {
               quantity: [item.quantity, Validators.required],
               rate: [item.rate, Validators.required],
               discount: [item.discount],
+              description:[item.description],
               discountType: ['rupee'],
               taxId: [item.taxId, Validators.required],
               subTotal: [item.subTotal]
@@ -260,6 +264,7 @@ export class SaleCreateComponent {
         discount: item.discount || 0,
         taxId: item.taxId || 0,
         subTotal: item.subTotal || 0,
+        description:item.description||''
       })),
     };
     if (this.Id < 1) {
@@ -438,7 +443,8 @@ export class SaleCreateComponent {
       if (res.success && res.data.length > 0) {
         const selectedProduct = res.data[0];
         this.items.at(index).patchValue({
-          rate: selectedProduct.salesPrice
+          rate: selectedProduct.salesPrice,
+          description:selectedProduct.description
         });
         this.items.at(index).get('rate')?.valueChanges.subscribe(() => {
           this.amountCalculate();

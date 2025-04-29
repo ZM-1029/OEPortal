@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { marketingListCheckBoxValueResponse } from 'src/app/shared/types/marketing.type';
 import { MarketingPermissionI, rolePermissionResponseI } from 'src/app/shared/types/roles.type';
 import { environment } from 'src/environments/environment';
 
@@ -29,14 +30,14 @@ export class RolePermissionService {
    // ChangeRolePermission?roleId=1
 
   //  api/Marketing/ChangePermission/ChangePermission
-   changePermission(data:MarketingPermissionI){
+   changePermission(data:MarketingPermissionI[]){
     return this.http.post(
       `${environment.apiUrl}api/Marketing/ChangePermission/ChangePermission`,data
     );
    }
 
    GetPermissionsByRoleIdForMarketing(roleId:number){
-    return this.http.get(
+    return this.http.get<marketingListCheckBoxValueResponse>(
       `${environment.apiUrl}api/Marketing/GetPermissionsByRoleId/GetPermissionsByRoleId/${roleId}`,
     );
    }

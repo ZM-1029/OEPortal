@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
+    "postinstall": "patch-package",
     "start": "npm run lint && ng serve",
     "dev": "ng build --configuration development",
     "prod": "ng build --configuration production",
@@ -48,6 +49,7 @@
     "moment": "^2.30.1",
     "ng-select2-component": "^17.1.1",
     "ng2-pdf-viewer": "^10.4.0",
+    "ngx-extended-pdf-viewer": "^23.1.1",
     "ngx-file-drag-drop": "^11.0.0",
     "ngx-owl-carousel-o": "^19.0.2",
     "ngx-quill": "^27.0.1",

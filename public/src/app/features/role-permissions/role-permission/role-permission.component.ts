@@ -16,7 +16,7 @@ import { SuccessModalComponent } from 'src/app/shared/components/UI/success-moda
 import { RolePermissionService } from '../role-permission.service';
 import { Router } from '@angular/router';
 import { MarketingService } from '../../marketing/marketing.service';
-import { MarketingList } from 'src/app/shared/types/marketing.type';
+import { MarketingList, marketingListCheckBoxValueI } from 'src/app/shared/types/marketing.type';
 
 interface Role {
   id: number;
@@ -66,6 +66,7 @@ export class RolePermissionComponent implements OnInit {
   rolesList: Role[] = [];
   filteredRoles!: Observable<Role[]>;
   marketingList: MarketingList[] = []
+  marketingListCheckBoxValue:marketingListCheckBoxValueI[]=[]
   // Searchable Dropdown - End
   public menuData: any[] = [];
   public roles = new FormControl('');
@@ -124,6 +125,8 @@ export class RolePermissionComponent implements OnInit {
     const selectedRole = event.option.value;
     this.selectedRole = selectedRole.id
     this.fetchRolePermissions(selectedRole.id);
+    this.getMarketingList();
+    this.GetPermissionsByRoleIdForMarketing(this.selectedRole);
   }
 
   fetchRolePermissions(roleId: any) {
@@ -170,20 +173,57 @@ export class RolePermissionComponent implements OnInit {
       // this.isPDFDownloadOptionShow=true;
       if (menu.view) {
         this.getMarketingList();
-        this.GetPermissionsByRoleIdForMarketing(this.roleId);
+        this.GetPermissionsByRoleIdForMarketing(this.selectedRole);
       }
     } else {
+      
       // this.isPDFDownloadOptionShow=false;
     }
     console.log(`${permissionType} permission changed for ${menu.form}:`, menu[permissionType]);
   }
 
-  onCheckboxChangeMarketing(event: any, menu: any, permissionType: string) {
-    console.log(`event${event}, menu${menu}, permissionType${permissionType} sjj`);
+  getMarketingValue(marketingId: number): marketingListCheckBoxValueI | undefined {
+    return this.marketingListCheckBoxValue.find(item => item.marketingId === marketingId);
   }
 
+  onCheckboxChangeMarketing(event: MatCheckboxChange, marketingId: number, permissionType: 'isView' | 'isDownload') {
+    if (!marketingId) return; // ✅ Ignore zero or invalid ids
+  
+    let existing = this.marketingListCheckBoxValue.find(x => x.marketingId === marketingId);
+  
+    if (existing) {
+      existing[permissionType] = event.checked;
+    } else {
+      const newPermission: marketingListCheckBoxValueI = {
+        id: 0,
+        roleId: this.selectedRole,
+        marketingId: marketingId,
+        isView: permissionType === 'isView' ? event.checked : false,
+        isDownload: permissionType === 'isDownload' ? event.checked : false
+      };
+      this.marketingListCheckBoxValue.push(newPermission);
+    }
+  }
+  
+  
+  
+
   GetPermissionsByRoleIdForMarketing(roleId:number){
-    this.rolePermissionService.GetPermissionsByRoleIdForMarketing(roleId)
+    this.rolePermissionService.GetPermissionsByRoleIdForMarketing(roleId).subscribe(
+      {
+        next:((response)=>{
+          if(response.success){
+            this.marketingListCheckBoxValue=response.data;
+            this._changeDetectorRef.detectChanges();
+          }else{
+            this.handleError(response.message)
+          }
+        }),
+        error:((error)=>{
+
+        })
+      }
+    )
   }
 
   savePermission() {
@@ -196,6 +236,36 @@ export class RolePermissionComponent implements OnInit {
       edit: menu.edit,
       isDownload: menu.isDownload
     }));
+
+    const marketingPayload = this.marketingListCheckBoxValue
+    .filter(item => (item.isView || item.isDownload) && item.marketingId !== 0)
+    .map(item => ({
+      roleId: this.selectedRole,
+      marketingId: item.marketingId,
+      isView: item.isView,
+      isDownload: item.isDownload
+    }));
+  
+
+  this.rolePermissionService.changePermission(marketingPayload).subscribe({
+    next: (response:any) => {
+      if (response.success) {
+        this.showSuccessMessage(response.message);
+        this.marketingListCheckBoxValue = this.marketingListCheckBoxValue.map(item => ({
+          ...item,
+          isView: false,
+          isDownload: false
+        }));
+        this._changeDetectorRef.detectChanges();
+  
+      } else {
+        this.handleError(response.message);
+      }
+    },
+    error: (err) => {
+      this.handleError(err?.error?.message || 'Something went wrong.');
+    }
+  });
 
     if (this.selectedRole > 1) {
       this.rolePermissionService.addPermission(this.selectedRole, updatedPermissions).subscribe(

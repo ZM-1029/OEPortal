@@ -2,7 +2,7 @@
   <!-- Roles & Permission Header with Role Selection -->
   <div class="py-md-4 pb-4 mt-4 me-2 row justify-content-between align-items-center">
     <div class="col-md-6 col-auto">
-      <h3 class="ms-2  py-2">Roles & Permission</h3>
+      <h2 class="ms-2  py-2">Roles & Permission</h2>
     </div>
     <div class="col-md-6 col-auto text-md-end">
       <mat-form-field class="w-100 furdeco-custom-field" appearance="outline">
@@ -41,48 +41,50 @@
 
       @if(menu.form =='Marketing' || menu.form =='PDF1' || menu.form =='PDF2' || menu.form =='PDF3'){
       @if(menu.form =='Marketing' ){
-      
-      <div class="col-md-3">{{ menu.form }}</div>
-        
-          <div class="col-md-3">
-            <mat-checkbox class="checkbox fs-6" (change)="onCheckboxChange($event, menu, 'view')" [checked]="menu.view">
-              View
-            </mat-checkbox>
-          </div>
-  
-        <div class="col-md-3">
-          <mat-checkbox class="checkbox fs-6" (change)="onCheckboxChange($event, menu, 'isDownload')" [checked]="menu.isDownload">
-            Edit
-          </mat-checkbox>
-        </div>
 
+      <div class="col-md-3">{{ menu.form }}</div>
+
+      <div class="col-md-3">
+        <mat-checkbox class="checkbox fs-6" (change)="onCheckboxChange($event, menu, 'view')" [checked]="menu.view">
+          View
+        </mat-checkbox>
+      </div>
+
+      <div class="col-md-3">
+        <mat-checkbox class="checkbox fs-6" (change)="onCheckboxChange($event, menu, 'edit')" [checked]="menu.edit">
+          Edit
+        </mat-checkbox>
+      </div>
+
+      <div class="col-md-3">
+        <mat-checkbox class="checkbox fs-6" (change)="onCheckboxChange($event, menu, 'add')" [checked]="menu.add">
+          Add
+        </mat-checkbox>
+      </div>
+
+      <div class="row mb-2 my-2" *ngFor="let list of marketingList; trackBy: trackByMenu">
+        <div class="col-md-3 fw-bold">{{ list.heading }}</div>
+      
         <div class="col-md-3">
-          <mat-checkbox class="checkbox fs-6" (change)="onCheckboxChange($event, menu, 'isDownload')" [checked]="menu.isDownload">
-            Add
+          <mat-checkbox
+            class="checkbox fs-6"
+            (change)="onCheckboxChangeMarketing($event, list.id, 'isView')"
+            [checked]="getMarketingValue(list.id)?.isView || false"
+          >
+            View
           </mat-checkbox>
         </div>
-        
-        <div class="my-2">
-          @if (marketingList.length !== 0) {
-            @for (list of marketingList; track list ) {
-              <div class="row  mb-2 my-2">
-                <div class="col-md-3 fw-bold">{{ list.heading }}</div>
-                <div class="col-md-3">
-                  <mat-checkbox class="checkbox fs-6" (change)="onCheckboxChangeMarketing($event, list, 'view')" [checked]="list">
-                    View
-                  </mat-checkbox>
-                </div>
-                <div class="col-md-3 ">
-                  <mat-checkbox class="checkbox fs-6" (change)="onCheckboxChangeMarketing($event, list, 'isDownload')"
-                    [checked]="list">
-                    Download
-                  </mat-checkbox>
-                </div>
-              </div>
-            }
-          }
+      
+        <div class="col-md-3">
+          <mat-checkbox
+            class="checkbox fs-6"
+            (change)="onCheckboxChangeMarketing($event, list.id, 'isDownload')"
+            [checked]="getMarketingValue(list.id)?.isDownload || false"
+          >
+            Download
+          </mat-checkbox>
         </div>
-        
+      </div>
       }@else{
       <div class="col-md-3">{{ menu.form }}</div>
 

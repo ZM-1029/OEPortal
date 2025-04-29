@@ -132,3 +132,39 @@
   justify-content: center;
   gap: 1rem;
 }
+
+.view-pdf-btn{
+  background-color: #0d6efd;
+  color: white;
+  width: 90px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  border-radius: 20px;
+}
+
+.card-description{
+  color: rgba(0, 0, 0, 0.72);
+  text-align: center;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.card-heading{
+  color: rgba(0, 0, 0, 0.92);
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.card-detailed-content{
+  background-color: #2e3b64;
+  height: 36px;
+  width: 36px;
+  border-radius: 50%;
+  color: white;
+  font-size: 14px;
+  margin-top: -15px;
+}

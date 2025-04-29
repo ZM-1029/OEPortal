@@ -26,6 +26,7 @@ import { LoaderComponent } from 'src/app/shared/components/UI/loader/loader.comp
 })
 export class AddPdfComponent {
   cardForm!: FormGroup;
+  headingPdf:string='Add'
   previewImage: string | ArrayBuffer | null = null;
   previewPdf: string | ArrayBuffer | null = null;
   showForm = true;
@@ -53,6 +54,7 @@ export class AddPdfComponent {
     });
 
     if (this.id) {
+      this.headingPdf='Edit'
       this.marketingService.getMarketingById(this.id).subscribe({
         next: (res: any) => {
           const marketing = res.data;

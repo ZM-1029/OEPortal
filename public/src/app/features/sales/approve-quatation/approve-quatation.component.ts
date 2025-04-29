@@ -17,6 +17,16 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
+import { LoaderComponent } from 'src/app/shared/components/UI/loader/loader.component';
+
+// import * as pdfjsLib from 'pdfjs-dist/build/pdf';
+
+// // Set worker path
+// pdfjsLib.GlobalWorkerOptions.workerSrc = 
+//   'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+
+// // Optional: remove dynamic import warning (older versions only)
+// pdfDefaultOptions.workerSrc = pdfjsLib.GlobalWorkerOptions.workerSrc;
 
 @Component({
   selector: 'app-approve-quatation',
@@ -32,7 +42,7 @@ import { MatCardModule } from '@angular/material/card';
     PdfViewerModule,
     MatCheckboxModule,
     NgClass,
-    MatCardModule
+    MatCardModule,LoaderComponent
   ],
   templateUrl: './approve-quatation.component.html',
   styleUrl: './approve-quatation.component.scss',

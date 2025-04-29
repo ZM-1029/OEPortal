@@ -11,3 +11,18 @@ export interface MarketingList {
   logoUrl: string
   pdf: string
 }
+
+export interface marketingListCheckBoxValueResponse {
+  success: boolean
+  message: string
+  data: marketingListCheckBoxValueI[]
+  errors: any[]
+}
+
+export interface marketingListCheckBoxValueI {
+  id: number
+  roleId: number
+  marketingId: number
+  isView: boolean
+  isDownload: boolean
+}
