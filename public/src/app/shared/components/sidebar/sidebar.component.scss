@@ -10,10 +10,33 @@ aside {
 }
 
 .aside-bar {
-  height: 100%;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
   background-color: #2e3b64 !important;
-  // background-color: white;
+  box-shadow: 0 2px 10px rgba(17, 17, 17, 0.164);
 }
+
+// scroll bar desine start
+.aside-bar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.aside-bar::-webkit-scrollbar-track {
+  background: #2e3b64;
+}
+
+.aside-bar::-webkit-scrollbar-thumb {
+  background-color: #999;
+  border-radius: 10px;
+  border: 2px solid #2e3b64;
+}
+
+.aside-bar::-webkit-scrollbar-thumb:hover {
+  background-color: #bbb;
+}
+
+// scroll bar desine end
 
 .nav-pills .nav-link {
   border: none !important;
@@ -122,12 +145,15 @@ aside {
   justify-content: start;
   align-items: center;
 }
+
 .openMenu {
   transition: all 0.4s;
 }
+
 .closeMenu {
   transition: all 0.4s;
 }
+
 .openMenu .aside-bar .nav-link span {
   display: block !important;
   margin-left: 30px;
@@ -139,4 +165,3 @@ aside {
   justify-content: center;
   align-items: center;
 }
-

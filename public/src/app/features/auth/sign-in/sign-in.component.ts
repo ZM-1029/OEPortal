@@ -72,7 +72,7 @@ export class SignInComponent implements OnInit, AfterContentChecked {
           },
           next: (response) => {
             if(response.success){
-              this.router.navigateByUrl('/admin/employee')
+              this.router.navigateByUrl('/admin/employee');
             }else{
               this.handleError(response.message)
             } 

@@ -58,7 +58,26 @@ logout() {
   localStorage.removeItem('role');
   localStorage.removeItem('name');
   localStorage.removeItem('roleName');
+  localStorage.removeItem('api2Token');
   this._authenticated = false;
   this._router.navigateByUrl("/login");
 }
+
+loginToApi2() {
+  const staticCredentials = {
+    email: 'ay367@gmail.com',
+    password: 'ankit123'
+  };
+
+  return this.http.post<any>(`${environment.apiUrl2}api/Authentication/Login`, staticCredentials).pipe(
+    map((res: any) => {
+      if (res.success) {
+        localStorage.setItem('api2Token', res.data.Token);
+      }
+      return res;
+    })
+  );
+}
+
+
 }

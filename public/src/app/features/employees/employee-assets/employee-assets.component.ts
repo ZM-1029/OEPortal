@@ -5,6 +5,7 @@ import { ModuleRegistry, AllCommunityModule, GridApi, GridReadyEvent } from 'ag-
 import { LoaderComponent } from 'src/app/shared/components/UI/loader/loader.component';
 import { EmployeesService } from '../employees.service';
 import { DatePipe } from '@angular/common';
+import { AuthenticationService } from 'src/app/core/auth/authentication.service';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 @Component({
@@ -87,6 +88,7 @@ export class EmployeeAssetsComponent implements OnInit, AfterViewInit {
     private _successMessage: MatSnackBar,
     private _changeDetectorRef: ChangeDetectorRef,
     private datePipe: DatePipe,
+    private authenticationService:AuthenticationService
   ) {}
 
   ngOnInit(): void {
@@ -95,6 +97,25 @@ export class EmployeeAssetsComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this._changeDetectorRef.detectChanges();
   }
+
+  loginAsset() {
+    this.authenticationService.loginToApi2().subscribe({
+      next: (response) => {
+        if (response?.data?.Token) {
+          console.log("loginToApi2 success");
+          // Wait 100ms just in case storage takes a moment (optional but safe)
+          setTimeout(() => this.employeeAssetsGetById(), 100); 
+        } else {
+          this.handleError("Token missing in API response");
+        }
+      },
+      error: (err) => {
+        console.error("loginToApi2 fail", err);
+        this.handleError("Assigned asset list not found");
+      }
+    });
+  }
+  
 
   employeeAssetsGetById() {
     this._employeeService.employeeAssetsGetById(this.employeeId).subscribe({
@@ -128,7 +149,8 @@ export class EmployeeAssetsComponent implements OnInit, AfterViewInit {
   onGridReady(params: GridReadyEvent<any>) {
     this.gridApi = params.api;
     this.gridApi.hideOverlay();
-    this.employeeAssetsGetById();
+    // this.employeeAssetsGetById();
+    this.loginAsset();
   }
 
   showErrorOverlay(message: string) {

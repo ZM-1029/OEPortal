@@ -1,6 +1,13 @@
-<div class="sale-create  m-4">
+<div class="sale-create pt-4">
   <div class="border-bottom bg-light pb-2">
-    <h2 class="formHeading">{{ formHeading }} Quotation</h2>
+    <div class="d-flex justify-content-between align-items-center pt-2 pe-3">
+      <h2 class="formHeading mb-0">{{ formHeading }} Quotation</h2>
+      <button
+          mat-raised-button
+          class="btn btn-info-dark text-white " (click)="backTosaleListing()">
+          <i class="bi bi-arrow-bar-left me-2"></i> Back
+        </button>
+    </div>
   </div>
   <div class="form-container d-flex justify-content-center">
     <form [formGroup]="productForm">
@@ -171,13 +178,13 @@
           </div>
         </div>
 
-        <h4 class="fw-bold mb-0">Item Table</h4>
+        <h4 class="fw-bold mb-0 ps-2">Item Table</h4>
         <div class="container-fluid form-group row pe-3 pb-4 mb-4">
-          <div class="table-responsive py-4">
+          <div class="table-responsive pb-4">
             <table formArrayName="items">
               <thead>
                 <tr>
-                  <th>S. No.</th>
+                  <th class="w-10 text-nowrap">S. No.</th>
                   <th>Product Name</th>
                   <th>Quantity</th>
                   <th>Rate</th>
@@ -208,14 +215,14 @@
                         Please select a product
                       </mat-error> -->
                     </div>
-                    <div class="description ">
+                    <div class=" ">
                       <!-- <mat-label class="outer-mat-lable col-4 pt-2 ">Sales person </mat-label> -->
                       <!-- <mat-form-field appearance="outline" class="col-8">
                         <input formControlName="description" matInput placeholder="Description" />
                         <mat-error class="text-danger">
                         </mat-error>
                       </mat-form-field> -->
-                      <mat-form-field class="w-100" [style.fontSize]="14">
+                      <mat-form-field appearance="outline" class="w-100 description" [style.fontSize]="14">
                         <mat-label class="pb-0">Description</mat-label>
                         <textarea formControlName="description" matInput
                                   cdkTextareaAutosize
@@ -261,7 +268,7 @@
               </tbody>
             </table>
           </div>
-          <div class="add-row my-2 ps-0">
+          <div class="add-row my-2 ps-2">
             <button type="button" class="btn btn-light d-flex align-items-center px-3 py-2 shadow-sm rounded"
               (click)="addRow()">
               <div class="text-primary me-2 ">

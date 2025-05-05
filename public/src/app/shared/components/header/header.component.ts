@@ -5,7 +5,6 @@ import {
   Input,
   OnInit,
   Output,
-  output,
   ViewChild,
 } from "@angular/core";
 import { MatIconModule } from "@angular/material/icon";

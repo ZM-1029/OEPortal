@@ -10,7 +10,7 @@
       </button>
 
       <div class="collapse navbar-collapse" id="navbarsExample09">
-        <span class="ms-5" (click)="openMenu()">
+        <span class="ms-5 menuBtn" (click)="openMenu()">
           <i class="fa-solid fa-bars"></i></span>
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0 d-flex align-items-center px-2">
           <!-- Notification Icon with Red Dot -->
@@ -31,7 +31,7 @@
 
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="settingsDropdown">
               @for(menu of headerMenuList;track menu){
-                <li><a class="dropdown-item" [routerLink]="[menu.navigateUrl]" >{{ menu.name }}</a></li>
+              <li><a class="dropdown-item" [routerLink]="[menu.navigateUrl]">{{ menu.name }}</a></li>
               }
             </ul>
           </li>

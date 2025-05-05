@@ -11,9 +11,9 @@
             <div class="d-flex align-items-center">
               <mat-radio-group formControlName="isService">
                 <mat-radio-button [value]="true"
-                  [checked]="productForm.get('isService')?.value === true">Good</mat-radio-button>
+                  [checked]="productForm.get('isService')?.value === true" color="primary">Good</mat-radio-button>
                 <mat-radio-button [value]="false"
-                  [checked]="productForm.get('isService')?.value === false">Service</mat-radio-button>
+                  [checked]="productForm.get('isService')?.value === false" color="primary">Service</mat-radio-button>
               </mat-radio-group>
             </div>
             @if (
@@ -81,14 +81,14 @@
         <div class="form-group row ">
           <mat-label class="outer-mat-lable col-4  ">HSN Code </mat-label>
           <mat-form-field appearance="outline" class="col-8">
-            <input formControlName="hsnCode" matInput placeholder="Enter HSN Code" />
+            <input formConappearance="outline" formControlName="hsnCode" matInput placeholder="Enter HSN Code" />
             <mat-error class="text-danger">
             </mat-error>
           </mat-form-field>
         </div>
-        <div class="form-group row">
-          <mat-label class="outer-mat-lable col-4 ">Description </mat-label>
-          <mat-form-field  class="col-8">
+        <div class="form-group row description"> 
+          <mat-label class="outer-mat-lable col-4">Description </mat-label>
+          <mat-form-field appearance="outline" class="col-8">
             <textarea class="description-textarea" formControlName="description" matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize"
               cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"></textarea>
           </mat-form-field>
@@ -125,7 +125,7 @@
         @if (Id > 1) {
           <div class="col-12 mb-2 text-end">
           <mat-label class="outer-mat-lable col-4 ">Active/Inactive</mat-label>
-          <mat-slide-toggle formControlName="isActive" [checked]="productForm.get('isActive')?.value">
+          <mat-slide-toggle color="primary" formControlName="isActive" [checked]="productForm.get('isActive')?.value">
           </mat-slide-toggle>
         </div>
         }

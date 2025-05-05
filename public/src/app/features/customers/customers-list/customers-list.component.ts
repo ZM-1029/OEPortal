@@ -230,11 +230,6 @@ export class CustomersListComponent implements OnInit, OnDestroy {
       });
   }
 
-
-  export(event: Event) {
-    alert("export");
-  }
-
   // Form Close
   formClose(event: any) {
     this.sideDrawer();

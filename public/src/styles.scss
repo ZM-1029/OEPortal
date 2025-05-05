@@ -2213,11 +2213,16 @@ progress {
   padding: 0px !important;
 }
 
+// for normail input field
 .mdc-text-field--outlined {
   height: 36px !important;
   overflow: visible;
-
 }
+.description .mdc-text-field--outlined {
+  height: auto !important;
+  overflow: visible;
+}
+
 .mdc-notched-outline {
   display: flex
 ;
@@ -2284,28 +2289,6 @@ progress {
     display: none;
 }
 
-.mat-mdc-option {
-  -webkit-user-select: none;
-  user-select: none;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
-  display: flex
-;
-  position: relative;
-  align-items: center;
-  justify-content: flex-start;
-  overflow: hidden;
-  min-height: 48px;
-  padding: 0 16px;
-  cursor: pointer;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-  color: var(--mat-option-label-text-color, var(--mat-sys-on-surface));
-  font-family: var(--mat-option-label-text-font, var(--mat-sys-label-large-font));
-  line-height: var(--mat-option-label-text-line-height, var(--mat-sys-label-large-line-height));
-  font-size: 14px !important;
-  letter-spacing: var(--mat-option-label-text-tracking, var(--mat-sys-label-large-tracking));
-  font-weight: var(--mat-option-label-text-weight, var(--mat-sys-body-large-weight));
-}
 
 .mat-mdc-select-value-text {
   white-space: nowrap;
@@ -2388,3 +2371,6 @@ mat-form-field{
 }
 // ag-grid table degine end
 
+.mat-mdc-radio-button .mdc-radio__native-control:enabled:checked+.mdc-radio__background>.mdc-radio__outer-circle, .mat-mdc-radio-button .mdc-radio__native-control:enabled:checked+.mdc-radio__background>.mdc-radio__inner-circle {
+  border-color: #2e3b64 !important;
+}

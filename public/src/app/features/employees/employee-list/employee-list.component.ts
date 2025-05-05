@@ -54,7 +54,7 @@ export class EmployeeListComponent implements OnInit, OnChanges {
   public paginationPageSize = this.currentPageSize;
   public paginationPageSizeSelector: number[] = [15, 25, 50, 100];
   private gridApi!: GridApi<any>;
-  rowData: employeeType[] =[];
+  rowData: employeeType[] = [];
   HeadingName: string = "employees";
 
   employeeAccess: rolePermissionListI = {
@@ -204,7 +204,7 @@ export class EmployeeListComponent implements OnInit, OnChanges {
               } else {
                 this.rowData = [];
                 this.showErrorOverlay("You have not permission");
-                
+
               }
               // Hide "Actions" column if `edit` is false
               if (this.gridApi) {
@@ -216,13 +216,12 @@ export class EmployeeListComponent implements OnInit, OnChanges {
           }
         } else {
           this.handleError("please try again leter");
-          
+          console.error("error", response.message);
         }
       },
       error: (err) => {
         this.handleError("please try again leter");
-        console.error(err);
-        
+        console.error("error", err);
       },
     });
   }
@@ -237,10 +236,10 @@ export class EmployeeListComponent implements OnInit, OnChanges {
             (result: employeeListI) => {
               if (result.success) {
                 this.rowData = result.employees;
-                this.terminatedEmployees=result.statusCount.terminated;
-                this.activeEmployees=result.statusCount.active;
-                this.resignedEmployees=result.statusCount.resigned;
-                this.abscondedEmployees=result.statusCount.absconded;
+                this.terminatedEmployees = result.statusCount.terminated;
+                this.activeEmployees = result.statusCount.active;
+                this.resignedEmployees = result.statusCount.resigned;
+                this.abscondedEmployees = result.statusCount.absconded;
                 this.totalCount = result.totalCount;
                 this.currentPageNumber = result.pageNumber;
                 this.currentPageSize = result.pageSize;
@@ -248,6 +247,7 @@ export class EmployeeListComponent implements OnInit, OnChanges {
                 this._changeDetectorRef.detectChanges();
               } else {
                 this.showErrorOverlay(result.message);
+                console.error("error", result.message);
               }
             }
           ),
@@ -258,6 +258,7 @@ export class EmployeeListComponent implements OnInit, OnChanges {
               this.showErrorOverlay(errorMessage);
             }
             this.handleError(err.error.message);
+            console.error("error", err);
           },
         }
       );
@@ -306,11 +307,6 @@ export class EmployeeListComponent implements OnInit, OnChanges {
     this.currentPageSize = pageSize;
   }
 
-
-  export(event: Event) {
-    alert("export");
-  }
-
   onRowClick(row: any) {
     this.employeeId = row.data.employeeID;
     this._employeeService.sendRowData(row.data);
@@ -325,7 +321,7 @@ export class EmployeeListComponent implements OnInit, OnChanges {
     }
   }
 
- 
+
   navigateToDetails(empId: string) {
     if (empId !== null) {
       this._router.navigateByUrl("/admin/employee/" + empId);
@@ -343,36 +339,36 @@ export class EmployeeListComponent implements OnInit, OnChanges {
     `;
   }
 
-   // for Manage Columns start
-   allColumns = [...this.columnDefs];
-   displayedColumns = [...this.columnDefs];
- 
-   // Toggle column selection
-   toggleColumn(column: any) {
-     const columnIndex = this.displayedColumns.findIndex(
-       (col) => col.field === column.field,
-     );
-     if (columnIndex >= 0) {
-       this.displayedColumns.splice(columnIndex, 1);
-     } else {
-       const colToAdd = this.allColumns.find(
-         (col) => col.field === column.field,
-       );
-       if (colToAdd) {
-         this.displayedColumns.push(colToAdd);
-       }
-     }
-     this.columnDefs = [...this.displayedColumns];
-   }
- 
-   isColumnDisplayed(column: any): boolean {
-     return this.displayedColumns.some((col) => col.field === column.field);
-   }
- 
-   preventClose(event: MouseEvent) {
-     event.stopPropagation();
-   }
-   // for Manage Columns end
+  // for Manage Columns start
+  allColumns = [...this.columnDefs];
+  displayedColumns = [...this.columnDefs];
+
+  // Toggle column selection
+  toggleColumn(column: any) {
+    const columnIndex = this.displayedColumns.findIndex(
+      (col) => col.field === column.field,
+    );
+    if (columnIndex >= 0) {
+      this.displayedColumns.splice(columnIndex, 1);
+    } else {
+      const colToAdd = this.allColumns.find(
+        (col) => col.field === column.field,
+      );
+      if (colToAdd) {
+        this.displayedColumns.push(colToAdd);
+      }
+    }
+    this.columnDefs = [...this.displayedColumns];
+  }
+
+  isColumnDisplayed(column: any): boolean {
+    return this.displayedColumns.some((col) => col.field === column.field);
+  }
+
+  preventClose(event: MouseEvent) {
+    event.stopPropagation();
+  }
+  // for Manage Columns end
 
   //  Function to handle API errors
   private handleError(err: string) {

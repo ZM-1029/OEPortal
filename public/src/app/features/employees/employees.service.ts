@@ -9,7 +9,7 @@ import {
   employeeTimesheetsI,
   employeeInvoiceResponseI,
 } from "../../shared/types/employees.type";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { BehaviorSubject, Subject } from "rxjs";
 import { environment } from "../../../environments/environment";
 import { nonComplianceHistoryI } from "src/app/shared/types/nonCompliance.type";
@@ -43,6 +43,21 @@ export class EmployeesService {
       `${environment.apiUrl2}api/AssetTransactionHistory/AssignedAssetListByEmployee/${employeeId}`,
     );
   }
+
+  // employeeAssetsGetById(employeeId: number | string) {
+  //   const token = localStorage.getItem('api2Token');
+  //   console.log("api2Token:", token); 
+  
+  //   const headers = new HttpHeaders({
+  //     Authorization: `bearer ${token}`
+  //   });
+  
+  //   return this.http.get<any>(
+  //     `${environment.apiUrl2}api/AssetTransactionHistory/AssignedAssetListByEmployee/${employeeId}`,
+  //     { headers }
+  //   );
+  // }
+  
 
   getEmployeeInvoiceById(employeeId: number | string) {
     return this.http.get<employeeInvoiceResponseI>(

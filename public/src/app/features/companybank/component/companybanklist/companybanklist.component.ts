@@ -44,15 +44,11 @@ export class CompanybanklistComponent {
     { headerName: "S. No", valueGetter: "node.rowIndex + 1", pinned: "left" },
     { headerName: "Actions", field: "actions", cellRenderer: (params: any) => this.renderActionIcons(params), pinned: "right" },
     { field: "bankName", headerName: "Bank Name", sortable: true, filter: true },
-    { field: "accountNumber", headerName: "AccounNumber", sortable: true, filter: true },
+    { field: "accountNumber", headerName: "Account Number", sortable: true, filter: true },
     { field: "ifscCode", headerName: "IFSC Code", sortable: true, filter: true },
     { field: "accountType", headerName: "Account Type", sortable: true, filter: true },
     { field: "swissCode", headerName: "Swiss Code", sortable: true, filter: true },
     { field: "sortCode", headerName: "Swift Code", sortable: true, filter: true },
-   
-   
-   
-   
   ];
 
   defaultColDef = { sortable: true, filter: true, resizable: true, flex: 1 };

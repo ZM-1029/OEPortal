@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, Output, ViewChild, inject, Injector, afterNextRender } from "@angular/core";
+import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, Output, ViewChild, inject, Injector, afterNextRender, OnInit, OnChanges } from "@angular/core";
 import { ReactiveFormsModule, FormGroup, FormBuilder, Validators, FormArray } from "@angular/forms";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatFormFieldModule } from "@angular/material/form-field";
@@ -17,6 +17,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute, Router } from "@angular/router";
 
 @Component({
   selector: 'app-sale-create',
@@ -38,7 +39,7 @@ import { CommonModule } from '@angular/common';
   templateUrl: './sale-create.component.html',
   styleUrl: './sale-create.component.scss'
 })
-export class SaleCreateComponent {
+export class SaleCreateComponent implements OnInit, OnChanges {
   private _injector = inject(Injector);
   @ViewChild("autosize") autosize: CdkTextareaAutosize | undefined;
   triggerResize() {
@@ -69,7 +70,7 @@ export class SaleCreateComponent {
   public customerId: string = '';
   private _unsubscribeAll$: Subject<any> = new Subject<any>();
   @ViewChild('fileInput') fileInput!: ElementRef<any>;
-  @Input() Id: number = 0;
+  Id: number = 0;
   @Output() formClose: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Input() isSideDrawerOpen!: boolean;
   constructor(
@@ -77,6 +78,8 @@ export class SaleCreateComponent {
     private _salesService: SalesService,
     private _changeDetetction: ChangeDetectorRef,
     private _successMessage: MatSnackBar,
+    private activatedRoute: ActivatedRoute,
+    private _router: Router
   ) { }
 
   ngOnInit(): void {
@@ -96,6 +99,7 @@ export class SaleCreateComponent {
       adjustment: ['', [Validators.pattern(/^\d*\.?\d*$/)]]
     });
     this.clearForm();
+    this.loadDropdownData();
   }
 
   noPastDates = (date: Date | null): boolean => {
@@ -104,7 +108,7 @@ export class SaleCreateComponent {
     today.setHours(0, 0, 0, 0);
     return date >= today;
   };
-  
+
   ngOnChanges(): void {
     this.loadDropdownData();
   }
@@ -115,7 +119,7 @@ export class SaleCreateComponent {
       quantity: [1, [Validators.required, Validators.min(1)]],
       rate: [0, [Validators.required, Validators.min(0)]],
       discount: [0],
-      description:[''],
+      description: [''],
       discountType: ['rupee'],
       taxId: [0, Validators.required],
       isFixedDiscount: [true],
@@ -136,20 +140,42 @@ export class SaleCreateComponent {
     return this.productForm.get('items') as FormArray;
   }
 
-  
+
+  // clearForm() {
+  //   if (this.isSideDrawerOpen) {
+  //     if (this.Id < 1) {
+  //       this.formHeading = "Create";
+  //       this.addRow();
+  //     } else {
+  //       this.formHeading = "Update";
+  //       this.getQuotationDetails(this.Id);
+  //       this._changeDetetction.detectChanges();
+  //     }
+  //   }
+  // }
+
   clearForm() {
-    if (this.isSideDrawerOpen) {
-      if (this.Id < 1) {
-        this.formHeading = "Create";
-        this.addRow();
-      } else {
+    this.activatedRoute.paramMap.subscribe(params => {
+      const idParam = params.get('id');
+      this.Id = idParam ? +idParam : 0;
+
+      if (this.Id > 0) {
+        // Edit mode
         this.formHeading = "Update";
+        // this.isEditMode = true;
         this.getQuotationDetails(this.Id);
-        this._changeDetetction.detectChanges();
+      } else {
+        // Create mode
+        this.formHeading = "Create";
+        // this.isEditMode = false;
+        this.addRow();
       }
-    }
+
+      this._changeDetetction.detectChanges();
+    });
   }
-  
+
+
   getQuotationDetails(id: number) {
     if (id !== 0) {
       this.Id = id;
@@ -205,7 +231,7 @@ export class SaleCreateComponent {
               quantity: [item.quantity, Validators.required],
               rate: [item.rate, Validators.required],
               discount: [item.discount],
-              description:[item.description],
+              description: [item.description],
               discountType: ['rupee'],
               taxId: [item.taxId, Validators.required],
               subTotal: [item.subTotal]
@@ -233,9 +259,9 @@ export class SaleCreateComponent {
       return;
     }
     if (!this.productForm.valid) {
-      
-      console.log(this.productForm.controls,'this.productForm.controls');
-      
+
+      console.log(this.productForm.controls, 'this.productForm.controls');
+
       this.productForm.markAllAsTouched();
       return;
     }
@@ -264,7 +290,7 @@ export class SaleCreateComponent {
         discount: item.discount || 0,
         taxId: item.taxId || 0,
         subTotal: item.subTotal || 0,
-        description:item.description||''
+        description: item.description || ''
       })),
     };
     if (this.Id < 1) {
@@ -274,6 +300,7 @@ export class SaleCreateComponent {
             this.showSuccessMessage(response.message);
             this.resetForm();
             this.formClose.emit(true);
+            this._router.navigateByUrl("/admin/sales-orders");
           } else {
             this.showSuccessMessage(response.message);
           }
@@ -289,6 +316,7 @@ export class SaleCreateComponent {
             this.showSuccessMessage(response.message);
             this.resetForm();
             this.formClose.emit(true);
+            this._router.navigateByUrl("/admin/sales-orders");
           } else {
             this.showSuccessMessage(response.message);
           }
@@ -312,35 +340,34 @@ export class SaleCreateComponent {
 
   resetForm() {
     this.submitted = false;
-  
     // Reset the form with default values
     this.productForm.reset({
       quotationNumber: '',
       customerId: '',
       companyId: '',
-      companyBranchId: 0,  
+      companyBranchId: 0,
       countryId: '',
       salesOrderDate: new Date(),
       expectedShipmentDate: '',
       paymentTermId: '',
       deliveryMethod: '',
       salesPerson: '',
-      items: this.fb.array([]),  
+      items: this.fb.array([]),
       shippingCharges: '',
       adjustment: ''
     });
-    this.calculationDetails.taxes=[];
-    this.calculationDetails.total=0;
-    this.calculationDetails.subTotal=0;
-    this.Address=null;
+    this.calculationDetails.taxes = [];
+    this.calculationDetails.total = 0;
+    this.calculationDetails.subTotal = 0;
+    this.Address = null;
     // Mark the form as pristine and untouched
     this.productForm.markAsPristine();
     this.productForm.markAsUntouched();
-  
+
     // Optionally, trigger change detection if needed
     this._changeDetetction.detectChanges();
   }
-  
+
   private showSuccessMessage(message: string) {
     this._successMessage.openFromComponent(SuccessModalComponent, {
       data: { message },
@@ -412,13 +439,13 @@ export class SaleCreateComponent {
     this._salesService.getCompany(this.selectedCountryId).subscribe((res) => {
       if (res.success) {
         this.Companies = res.data;
-        if( this.Companies.length==0){
-          this.noCompaniesMessage =res.message;
-          this.showMessage(this.noCompaniesMessage );
+        if (this.Companies.length == 0) {
+          this.noCompaniesMessage = res.message;
+          this.showMessage(this.noCompaniesMessage);
         }
-       
+
       } else {
-        this.noCompaniesMessage = res.message; 
+        this.noCompaniesMessage = res.message;
       }
     });
   }
@@ -437,14 +464,14 @@ export class SaleCreateComponent {
     } else {
       this.isProductSelected = true;
       productControl?.setErrors(null);
-    } 
+    }
     this.currentRowIndex = index;
     this._salesService.getProductById(this.selectedProductId).subscribe((res) => {
       if (res.success && res.data.length > 0) {
         const selectedProduct = res.data[0];
         this.items.at(index).patchValue({
           rate: selectedProduct.salesPrice,
-          description:selectedProduct.description
+          description: selectedProduct.description
         });
         this.items.at(index).get('rate')?.valueChanges.subscribe(() => {
           this.amountCalculate();
@@ -548,14 +575,14 @@ export class SaleCreateComponent {
     const value = event.target.value;
     if (/^\d*\.?\d*$/.test(value)) {
       this.productForm.patchValue({ shippingCharges: value }, { emitEvent: false });
-      this.invalidShippingChargesInput = false; 
+      this.invalidShippingChargesInput = false;
       this.onTaxChange(event, -1);
     } else {
-      this.invalidShippingChargesInput = true; 
+      this.invalidShippingChargesInput = true;
       this.productForm.patchValue({ shippingCharges: value.slice(0, -1) }, { emitEvent: false });
     }
   }
-  invalidAdjustmentInput: boolean = false; 
+  invalidAdjustmentInput: boolean = false;
   onAdjustmentChange(event: any) {
     const value = event.target.value;
     if (/^\d*\.?\d*$/.test(value)) {
@@ -563,10 +590,15 @@ export class SaleCreateComponent {
       this.invalidAdjustmentInput = false;
       this.onTaxChange(event, -1);
     } else {
-      this.invalidAdjustmentInput = true; 
+      this.invalidAdjustmentInput = true;
       this.productForm.patchValue({ adjustment: value.slice(0, -1) }, { emitEvent: false });
     }
   }
+
+  backTosaleListing(){
+    this._router.navigateByUrl("/admin/sales-orders");
+  }
+
   ngOnDestroy(): void {
     this.resetForm();
     this._unsubscribeAll$.complete();

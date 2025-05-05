@@ -36,7 +36,7 @@ export class BussinessCountryComponent {
   columnDefs: ColDef[] = [
     { headerName: "S. No", valueGetter: "node.rowIndex + 1", pinned: "left" },
     { field: 'country', headerName: 'Country', sortable: true, filter: true },
-    { field: 'termCondition', headerName: 'termCondition', sortable: true, filter: true,
+    { field: 'termCondition', headerName: 'Term & Condition', sortable: true, filter: true,
       cellRenderer: (params: any) => {
         return params.value ? `<span>${params.value}</span>` : '';
       }
@@ -103,6 +103,7 @@ export class BussinessCountryComponent {
      }})
     this._changeDetectorRef.detectChanges(); 
   }
+  
   sideDrawer() {
     if (this.isSideDrawerOpen) {
       this.isSideDrawerOpen = false;
@@ -132,15 +133,11 @@ export class BussinessCountryComponent {
 
   updateBussiness(event: any): void {
     const bussinesid = event.data.id;
- 
       this.isSideDrawerOpen = true;
       this.bussinesid = Number(bussinesid);
     
   }
 
- 
-
- 
 
   showSuccessMessage(message: string) {
     this._snackBar.openFromComponent(SuccessModalComponent, {

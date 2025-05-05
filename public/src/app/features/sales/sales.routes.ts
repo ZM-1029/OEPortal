@@ -33,9 +33,18 @@ export const SALES_ROUTES: Routes = [
         component: SalesListComponent,
       },
       {
+        path: "create",
+        component: SaleCreateComponent,
+      },
+      {
+        path: "edit/:id",
+        component: SaleCreateComponent,
+      },
+      {
         path: ":id",
         component: ApproveQuatationComponent,
       },
     ],
   },
 ];
+

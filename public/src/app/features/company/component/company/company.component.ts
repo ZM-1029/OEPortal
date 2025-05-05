@@ -31,7 +31,6 @@ ModuleRegistry.registerModules([AllCommunityModule]);
       AddCompanyComponent,
       PageHeaderComponent,
       SideDrawerComponent
-      
       ],
   templateUrl: './company.component.html',
   styleUrl: './company.component.scss'

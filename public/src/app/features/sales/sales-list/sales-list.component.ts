@@ -23,9 +23,7 @@ ModuleRegistry.registerModules([AllCommunityModule]);
   imports: [AgGridAngular,
     CommonModule,
     LoaderComponent,
-    PageHeaderComponent,
-    SideDrawerComponent,
-    SaleCreateComponent, ApproveQuatationComponent, MatIconModule,],
+    PageHeaderComponent, MatIconModule,],
   templateUrl: './sales-list.component.html',
   styleUrl: './sales-list.component.scss',
   encapsulation: ViewEncapsulation.None,
@@ -174,7 +172,8 @@ export class SalesListComponent {
 
   addQuotation(event: Event) {
     this.quotationId = 0;
-    this.isSideDrawerOpen = true;
+    // this.isSideDrawerOpen = true;
+    this.router.navigate(['create'], { relativeTo: this.route });
   }
 
   pageHeader_quotation(quotationHeadingName: string) {
@@ -244,7 +243,7 @@ export class SalesListComponent {
     if (target.closest(".edit-icon")) {
       const quotationId = target.closest(".edit-icon").getAttribute("data-id");
       this.quotationId = Number(quotationId);
-      this.isSideDrawerOpen = true;
+      this.router.navigate(['edit', quotationId], { relativeTo: this.route });
     }
 
     if (target.closest(".download-icon")) {

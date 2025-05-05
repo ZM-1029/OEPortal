@@ -30,7 +30,7 @@
         <div class="customer-info">
           <h5 class="mb-0 fw-bold">
             {{customerName}}
-            <i [ngClass]="customerName=='' ? 'd-none':'d-inline'" class="material-icons text-primary small">verified</i>
+            <!-- <i [ngClass]="customerName=='' ? 'd-none':'d-inline'" class="material-icons text-primary small">verified</i> -->
           </h5>
           <!-- <p class="text-muted mb-1">example&#64;gmail.com {{customerEmail}}</p> -->
           <p class="text-muted mb-1 ">{{customerEmail}}</p>
@@ -69,8 +69,8 @@
           <div class="col-8 mb-2">
             <div class="d-flex align-items-center ">
               <mat-radio-group formControlName="BusinessType" class="d-flex">
-                <mat-radio-button [value]="1">Business</mat-radio-button>
-                <mat-radio-button [value]="0" class="ms-3">Individual</mat-radio-button>
+                <mat-radio-button color="primary" [value]="1">Business</mat-radio-button>
+                <mat-radio-button color="primary" [value]="0" class="ms-3">Individual</mat-radio-button>
               </mat-radio-group>
             </div>
             @if (

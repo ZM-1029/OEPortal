@@ -90,7 +90,7 @@ export const MY_FORMATS = {
     MatDatepickerModule,
     MatFormFieldModule,
     CommonModule, FormsModule,
-    MatAutocompleteModule,MatIconModule
+    MatAutocompleteModule, MatIconModule
   ],
   templateUrl: "./purchase-order-create.component.html",
   styleUrl: "./purchase-order-create.component.scss",
@@ -163,7 +163,7 @@ export class PurchaseOrderCreateComponent implements OnInit, OnChanges {
     if (this.input && this.input.nativeElement !== event.target && !this.input.nativeElement.contains(event.target)) {
       if (this.autoTrigger && this.autoTrigger.panelOpen) {
         this.autoTrigger.closePanel();
-        this._changeDetectorRef.detectChanges(); // Ensure UI updates
+        this._changeDetectorRef.detectChanges();
       }
     }
   }
@@ -216,7 +216,7 @@ export class PurchaseOrderCreateComponent implements OnInit, OnChanges {
       poid: ["", [Validators.required]],
       poDate: [this.date.value?.format("YYYY-MM-DD")],
       currencyId: ["", [Validators.required]],
-      amount: ["", [Validators.required,Validators.pattern(/^\d+$/)]],
+      amount: ["", [Validators.required, Validators.pattern(/^\d+$/)]],
       description: [""],
     });
   }
@@ -244,45 +244,48 @@ export class PurchaseOrderCreateComponent implements OnInit, OnChanges {
         next: (response: purchaseOrdersResponseI) => {
           if (response.success) {
             const purchaseOrderData: any = response.data;
-  
+
             if (!this.purchaseOrderForm) {
               console.error("Form is not initialized yet!");
               return;
             }
-  
+
             setTimeout(() => {
               // Convert amount to a formatted string with commas
-              const formattedAmount = purchaseOrderData.amount 
-                ? Number(purchaseOrderData.amount).toLocaleString() 
+              const formattedAmount = purchaseOrderData.amount
+                ? Number(purchaseOrderData.amount).toLocaleString()
                 : '';
-  
+
               this.purchaseOrderForm.patchValue({
                 customerId: purchaseOrderData.customerId,
                 customerName: purchaseOrderData.customerName,
                 poid: purchaseOrderData.poid,
                 currencyId: purchaseOrderData.currencyId,
-                amount: purchaseOrderData.amount, 
+                amount: purchaseOrderData.amount,
                 description: purchaseOrderData.description,
               });
-  
+
               // Set the formatted display value (for UI)
-              this.formattedAmount = formattedAmount;  
-  
+              this.formattedAmount = formattedAmount;
+
               // Patch the date field if available
               if (purchaseOrderData.poDate) {
                 this.date.patchValue(moment(purchaseOrderData.poDate));
               } else {
                 console.warn("poDate is missing or invalid:", purchaseOrderData);
               }
-  
+
               this._changeDetectorRef.detectChanges();
             }, 0);
           }
         },
-        error: (err) => this.handleError(err),
+        error: ((err) => {
+          this.handleError(err)
+          console.error("Error", err);
+        })
       });
   }
-  
+
 
   createUpdate(): void {
     for (let key in this.purchaseOrderForm.value) {
@@ -322,14 +325,14 @@ export class PurchaseOrderCreateComponent implements OnInit, OnChanges {
   }
 
   // amount value in comma separator start
-  formattedAmount = ''; 
+  formattedAmount = '';
 
   onAmountChange(event: any) {
-    let inputValue = event.target.value.replace(/,/g, ''); 
-    if (!/^\d*$/.test(inputValue)) return; 
+    let inputValue = event.target.value.replace(/,/g, '');
+    if (!/^\d*$/.test(inputValue)) return;
 
-    this.formattedAmount = Number(inputValue).toLocaleString(); 
-    this.purchaseOrderForm.controls['amount'].setValue(inputValue); 
+    this.formattedAmount = Number(inputValue).toLocaleString();
+    this.purchaseOrderForm.controls['amount'].setValue(inputValue);
   }
 
   // amount value in comma separator end

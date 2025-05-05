@@ -61,16 +61,16 @@
   } @loading (minimum 1000ms) {
   <app-loader></app-loader>
   }
-  @if (isSideDrawerOpen) {
+  <!-- @if (isSideDrawerOpen) {
   <app-side-drawer (sideDrawer)="sideDrawer()" [isSideDrawerOpen]="isSideDrawerOpen">
     <app-sale-create (formClose)="formClose($event)" [isSideDrawerOpen]="isSideDrawerOpen"
       [Id]="quotationId"></app-sale-create>
   </app-side-drawer>
-  }
-  @if (isApprovePopupOpen) {
+  } -->
+  <!-- @if (isApprovePopupOpen) {
   <app-side-drawer (sideDrawer)="sideDrawer()" [isSideDrawerOpen]="isApprovePopupOpen">
     <app-approve-quatation (formClose)="formClose($event)" [isApprovePopupOpen]="isApprovePopupOpen" [Id]="quotationId">
     </app-approve-quatation>
   </app-side-drawer>
-  }
+  } -->
 </div>

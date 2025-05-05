@@ -10,18 +10,17 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
   selector: "app-sidebar",
-  imports: [RouterLink, NgClass, RouterLinkActive,MatIconModule,NgFor],
+  imports: [RouterLink, NgClass, RouterLinkActive, MatIconModule, NgFor],
   templateUrl: "./sidebar.component.html",
   styleUrl: "./sidebar.component.scss",
-  
 })
 export class SidebarComponent implements OnInit {
   @Input() menuClass: string = "closeMenu";
   @Output() headerMenu: EventEmitter<getMenuMasterListI[]> = new EventEmitter<getMenuMasterListI[]>();
-  menuList:getMenuMasterListI[]=[];
-  sideBarMenuList:any[]=[];
-  headerMenuList:any[]=[];
-  constructor( private commonService:CommonService,private _successMessage: MatSnackBar,) {
+  menuList: getMenuMasterListI[] = [];
+  sideBarMenuList: any[] = [];
+  headerMenuList: any[] = [];
+  constructor(private commonService: CommonService, private _successMessage: MatSnackBar,) {
     const iconRegistry = inject(MatIconRegistry);
     const sanitizer = inject(DomSanitizer);
 
@@ -29,29 +28,29 @@ export class SidebarComponent implements OnInit {
     Object.keys(ICONS).forEach((iconName) => {
       iconRegistry.addSvgIconLiteral(
         iconName,
-        sanitizer.bypassSecurityTrustHtml(ICONS[iconName]) 
+        sanitizer.bypassSecurityTrustHtml(ICONS[iconName])
       );
     });
   }
-  
+
   ngOnInit(): void {
-    const roleId=localStorage.getItem('role');
+    const roleId = localStorage.getItem('role');
     console.log(roleId);
     this.commonService.GetMenuMasterList(roleId).subscribe(
       {
-        next:((response)=>{
-          if(response.success){
-            this.menuList=response.data;
-            this.headerMenuList = response.data.filter((value: any) => value.displayArea == 0 );
-            this.sideBarMenuList = response.data.filter((value: any) => value.displayArea == 1 );
-            console.log(this.sideBarMenuList,"sideBarMenuList");
-            
+        next: ((response) => {
+          if (response.success) {
+            this.menuList = response.data;
+            this.headerMenuList = response.data.filter((value: any) => value.displayArea == 0);
+            this.sideBarMenuList = response.data.filter((value: any) => value.displayArea == 1);
+            console.log(this.sideBarMenuList, "sideBarMenuList");
             this.headerMenu.emit(this.headerMenuList)
-          }else{
+          } else {
             this.handleError("Menu list not retrieved from api.")
           }
         }),
-        error:((err)=>{
+        error: ((err) => {
+          console.error('Error in Menu list',err);
           this.handleError("Menu list not retrieved from api.")
         })
       }
@@ -59,17 +58,17 @@ export class SidebarComponent implements OnInit {
   }
 
   trackByFn(index: number, item: any): number {
-  return item.id;
-}
+    return item.id;
+  }
 
 
-    //  Function to handle API errors
-    private handleError(err: any) {
-      this._successMessage.open(err, "Close", {
-        duration: 4000,
-        panelClass: ["error-toast"],
-        verticalPosition: "top",
-        horizontalPosition: "right",
-      });
-    }
+  //  Function to handle API errors
+  private handleError(err: any) {
+    this._successMessage.open(err, "Close", {
+      duration: 4000,
+      panelClass: ["error-toast"],
+      verticalPosition: "top",
+      horizontalPosition: "right",
+    });
+  }
 }
