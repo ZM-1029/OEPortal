@@ -57,8 +57,8 @@ export class ItemsListComponent {
     {
       headerName: "S. No",
       valueGetter: "node.rowIndex + 1",
-      sortable: true,
-      filter: true,
+      sortable: false,
+      filter: false,
       maxWidth: 100,
       minWidth: 100,
       pinned: "left",
@@ -82,7 +82,7 @@ export class ItemsListComponent {
       sortable: false,
       filter: false,
       cellStyle: () => {
-        return {  cursor: "pointer" };
+        return { cursor: "pointer" };
       },
     },
 

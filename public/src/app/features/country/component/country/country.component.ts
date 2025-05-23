@@ -44,7 +44,7 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 export class CountryListComponent implements OnInit, OnDestroy {
 
   columnDefs: any = [
-    { headerName: "S. No", valueGetter: "node.rowIndex + 1", pinned: "left" },
+    { headerName: "S. No", valueGetter: "node.rowIndex + 1", pinned: "left",sortable: false, filter: false },
     { headerName: "Actions", field: "actions", cellRenderer: (params: any) => this.renderActionIcons(params), pinned: "right" },
     { field: "name", headerName: "Country Name", sortable: true, filter: true },
     // { field: "id", headerName: "Country id", sortable: true, filter: true },
@@ -128,7 +128,6 @@ export class CountryListComponent implements OnInit, OnDestroy {
 
 
   updateCountry(event: any): void {
-    debugger
     const countryId = event.data.id;
    
      

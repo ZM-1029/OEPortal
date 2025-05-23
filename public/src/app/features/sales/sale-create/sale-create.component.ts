@@ -233,10 +233,10 @@ export class SaleCreateComponent implements OnInit, OnChanges {
               discount: [item.discount],
               description: [item.description],
               discountType: ['rupee'],
+              isFixedDiscount: [true],
               taxId: [item.taxId, Validators.required],
               subTotal: [item.subTotal]
             }));
-
             this.onTaxChange(null, itemsFormArray.length - 1);
             this._changeDetetction.detectChanges();
           });
@@ -273,8 +273,16 @@ export class SaleCreateComponent implements OnInit, OnChanges {
       companyId: formValues.companyId || 0,
       companyBranchId: formValues.companyBranchId || 0,
       quotationNumber: formValues.quotationNumber || "",
-      salesOrderDate: formValues.salesOrderDate ? formValues.salesOrderDate.toISOString() : new Date().toISOString(),
-      expectedShippingDate: formValues.expectedShipmentDate ? formValues.expectedShipmentDate.toISOString() : new Date().toISOString(),
+      // salesOrderDate: formValues.salesOrderDate ? formValues.salesOrderDate.toISOString() : new Date().toISOString(),
+      // expectedShippingDate: formValues.expectedShipmentDate ? formValues.expectedShipmentDate.toISOString() : new Date().toISOString(),
+      salesOrderDate: formValues.salesOrderDate ?
+        `${formValues.salesOrderDate.getFullYear()}-${(formValues.salesOrderDate.getMonth() + 1).toString().padStart(2, '0')}-${formValues.salesOrderDate.getDate().toString().padStart(2, '0')}` :
+        `${new Date().getFullYear()}-${(new Date().getMonth() + 1).toString().padStart(2, '0')}-${new Date().getDate().toString().padStart(2, '0')}`,
+
+      expectedShippingDate: formValues.expectedShipmentDate ?
+        `${formValues.expectedShipmentDate.getFullYear()}-${(formValues.expectedShipmentDate.getMonth() + 1).toString().padStart(2, '0')}-${formValues.expectedShipmentDate.getDate().toString().padStart(2, '0')}` :
+        `${new Date().getFullYear()}-${(new Date().getMonth() + 1).toString().padStart(2, '0')}-${new Date().getDate().toString().padStart(2, '0')}`,
+
       salesPerson: formValues.salesPerson || "",
       deliveryMethod: formValues.deliveryMethod || "",
       shippingCharges: formValues.shippingCharges || 0,
@@ -436,6 +444,9 @@ export class SaleCreateComponent implements OnInit, OnChanges {
     this._salesService.getCountryCurrency(this.selectedCountryId).subscribe((res) => {
       if (res.success) this.countryCurrency = res.data;
     });
+
+    this.productForm.get('companyBranchId')?.reset();
+
     this._salesService.getCompany(this.selectedCountryId).subscribe((res) => {
       if (res.success) {
         this.Companies = res.data;
@@ -521,7 +532,7 @@ export class SaleCreateComponent implements OnInit, OnChanges {
   onDiscountTypeChange(event: any, index: number) {
     const selectedType = event.target.value;
     const isFixedDiscount = selectedType === 'rupee';
-    this.items.at(index).patchValue({ isFixedDiscount });
+    this.items.at(index).patchValue({ isFixedDiscount: isFixedDiscount });
   }
   selectedTaxId: number = 0;
   subTotal: number = 0;
@@ -595,9 +606,41 @@ export class SaleCreateComponent implements OnInit, OnChanges {
     }
   }
 
-  backTosaleListing(){
+  backTosaleListing() {
     this._router.navigateByUrl("/admin/sales-orders");
   }
+
+  // Add these date filter functions to your component
+
+  // Filter for Sales Order Date - allow dates from past 30 days up to today
+  salesOrderDateFilter = (d: Date | null): boolean => {
+    if (!d) return false;
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(today.getDate() - 30);
+    thirtyDaysAgo.setHours(0, 0, 0, 0);
+
+    return d >= thirtyDaysAgo && d <= today;
+  };
+
+  // Filter for Expected Shipment Date - no past dates and must be after Sales Order Date
+  expectedShipmentDateFilter = (d: Date | null): boolean => {
+    if (!d) return false;
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    // Get the selected sales order date
+    const salesOrderDate = this.productForm.get('salesOrderDate')?.value;
+    const minDate = salesOrderDate ? new Date(salesOrderDate) : today;
+    minDate.setHours(0, 0, 0, 0);
+
+    // Shipment date must be today or later, and after sales order date
+    return d >= minDate;
+  };
 
   ngOnDestroy(): void {
     this.resetForm();

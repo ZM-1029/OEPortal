@@ -20,7 +20,7 @@ import { rolePermissionListI } from 'src/app/shared/types/roles.type';
   ],
   templateUrl: './marketing.component.html',
   styleUrls: ['./marketing.component.scss'],
-  encapsulation: ViewEncapsulation.None // ← change this
+  encapsulation: ViewEncapsulation.None 
 })
 export class MarketingComponent implements OnInit {
   marketingList: MarketingList[] = []
@@ -57,10 +57,6 @@ export class MarketingComponent implements OnInit {
                 // this.rowData = [];
                 // this.showErrorOverlay("You have not permission");
               }
-              // Hide "Actions" column if `edit` is false
-              // if (this.gridApi) {
-              //   this.gridApi.setColumnsVisible(["actions"], this.marketingAccess.edit);
-              // }
               this.changeDetectorRef.detectChanges();
             }
           }
@@ -74,30 +70,10 @@ export class MarketingComponent implements OnInit {
     });
   }
 
-
-  // getPermissionsByRoleId(roleId:number){
-  //   this.rolePermissionService.getPermissionsByRoleId(roleId).subscribe(
-  //     {
-  //       next:((response)=>{
-  //         if(response.success){
-
-  //         }else{
-  //         }
-          
-  //       }),
-  //       error:((error)=>{
-  //         console.error(error)
-
-  //       })
-  //     }
-  //   )
-  // }
-
   addPdf() {
     this.openForm(0);
   }
 
-  
   viewPdf(id: number) {
     this.router.navigateByUrl("/admin/marketing/" + id);
   }
@@ -123,7 +99,7 @@ export class MarketingComponent implements OnInit {
   openForm(id: number): void {
     const dialogRef = this.dialog.open(AddPdfComponent, {
       width: "500px",
-      height: "500px",
+      height: "450px",
       disableClose: true,
       data: id,
     });

@@ -6,31 +6,45 @@
     <form [formGroup]="salaryForm">
       <div class="input-form-container py-3">
         <div class="form-group row">
-          <mat-label class="outer-mat-lable col-4 ">Select Customer</mat-label>
+          <mat-label class="outer-mat-lable col-4 pt-2">Select Customer</mat-label>
           <mat-form-field appearance="outline" class="col-8">
-            <input 
-              #input 
-              type="text" 
-              placeholder="Select customer" 
-              matInput 
-              formControlName="customerName"
-              [matAutocomplete]="auto" 
-              (input)="filter()" 
-               />
-            <mat-icon matSuffix (click)="input.focus()">arrow_drop_down</mat-icon>
-      
+
+            <input matInput #input [matAutocomplete]="auto" formControlName="customerName" (input)="filter()"
+              (click)="toggleAutocomplete()" />
+
+            <mat-icon matSuffix (click)="toggleAutocomplete()">arrow_drop_down</mat-icon>
+
             <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onSelectCustomer($event)">
               @for (customer of filteredCustomers; track customer) {
-                <mat-option [value]="customer.customerName">
-                  {{ customer.customerName }}
-                </mat-option>
+              <mat-option [value]="customer.customerName">
+                {{ customer.customerName }}
+              </mat-option>
               }
-            </mat-autocomplete>  
+            </mat-autocomplete>
             @if (salaryForm.controls["customerName"].hasError("required")) {
-              <mat-error>Customer Name is required</mat-error>
+            <mat-error>Customer Name is required</mat-error>
             }
           </mat-form-field>
         </div>
+        <!-- <div class="form-group row">
+          <mat-label class="outer-mat-lable col-4 ">Select Customer</mat-label>
+          <mat-form-field appearance="outline" class="col-8">
+            <input #input type="text" placeholder="Select customer" matInput formControlName="customerName"
+              [matAutocomplete]="auto" (input)="filter()" />
+            <mat-icon matSuffix (click)="input.focus()">arrow_drop_down</mat-icon>
+
+            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onSelectCustomer($event)">
+              @for (customer of filteredCustomers; track customer) {
+              <mat-option [value]="customer.customerName">
+                {{ customer.customerName }}
+              </mat-option>
+              }
+            </mat-autocomplete>
+            @if (salaryForm.controls["customerName"].hasError("required")) {
+            <mat-error>Customer Name is required</mat-error>
+            }
+          </mat-form-field>
+        </div> -->
         <div class="form-group row">
           <mat-label class="outer-mat-lable col-4  ">Select Currency</mat-label>
           <mat-form-field appearance="outline" class="col-8">

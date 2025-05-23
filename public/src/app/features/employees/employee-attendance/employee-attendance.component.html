@@ -48,6 +48,7 @@
             [paginationPageSize]="50"
             [paginationPageSizeSelector]="paginationPageSizeSelector"
             [pagination]="true"
+            [suppressDragLeaveHidesColumns]="true"
             (gridReady)="onGridReady($event)"
             (paginationChanged)="onPaginationChanged($event)"
           ></ag-grid-angular>

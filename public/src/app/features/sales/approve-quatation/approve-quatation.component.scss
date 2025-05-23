@@ -226,12 +226,81 @@ mat-label {
 }
 
 // responsive table start
+// .table-wrapper {
+//   max-width: 50rem;
+//   margin-top: 20px;
+//   border: 1px solid #ddd;
+//   border-radius: 4px;
+//   overflow: hidden;
+// }
+
+// table {
+//   width: 100%;
+//   border-collapse: collapse;
+//   table-layout: fixed;
+// }
+
+// thead th {
+//   background-color: #f1f1f1;
+//   font-weight: 600;
+//   padding: 12px;
+//   border: 1px solid #ddd;
+//   font-size: 14px;
+//   position: sticky;
+//   top: 0;
+//   z-index: 2;
+// }
+
+// tbody {
+//   display: block;
+//   max-height: 300px;
+//   overflow-y: auto;
+//   width: 100%;
+// }
+
+// thead,
+// tbody tr {
+//   display: table;
+//   width: 100%;
+//   table-layout: fixed;
+// }
+
+// tbody td {
+//   padding: 12px;
+//   border: 1px solid #ddd;
+//   font-size: 14px;
+// }
+
+// tbody tr:nth-child(even) {
+//   background-color: #f9f9f9;
+// }
+
+// tbody::-webkit-scrollbar {
+//   width: 6px;
+// }
+
+// tbody::-webkit-scrollbar-track {
+//   background: #f1f1f1;
+// }
+
+// tbody::-webkit-scrollbar-thumb {
+//   background: #888;
+//   border-radius: 4px;
+// }
+
+// tbody::-webkit-scrollbar-thumb:hover {
+//   background: #555;
+// }
+
+/* Table styling */
 .table-wrapper {
-  max-width: 50rem;
-  margin-top: 20px;
+  width: 100%;
+  max-width: 100%;
+  margin: 20px 0;
   border: 1px solid #ddd;
   border-radius: 4px;
   overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 table {
@@ -249,6 +318,7 @@ thead th {
   position: sticky;
   top: 0;
   z-index: 2;
+  text-align: left;
 }
 
 tbody {
@@ -258,8 +328,7 @@ tbody {
   width: 100%;
 }
 
-thead,
-tbody tr {
+thead, tbody tr {
   display: table;
   width: 100%;
   table-layout: fixed;
@@ -269,12 +338,16 @@ tbody td {
   padding: 12px;
   border: 1px solid #ddd;
   font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 tbody tr:nth-child(even) {
   background-color: #f9f9f9;
 }
 
+/* Scrollbar styling */
 tbody::-webkit-scrollbar {
   width: 6px;
 }
@@ -290,6 +363,36 @@ tbody::-webkit-scrollbar-thumb {
 
 tbody::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
+
+/* Status specific styling */
+td[data-status="Awaiting For Approval"] {
+  color: #FFA500; 
+}
+
+td[data-status="Partial Approved"] {
+  color: #4caf50; 
+}
+
+td[data-status="Closed"] {
+  color: #808080; 
+}
+td[data-status="Declined"] {
+  color: #f44336; 
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .table-wrapper {
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+  }
+  
+  thead th, tbody td {
+    padding: 8px 10px;
+    font-size: 13px;
+  }
 }
 
 // Form buttons

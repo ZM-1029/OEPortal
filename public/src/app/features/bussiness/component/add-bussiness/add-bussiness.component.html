@@ -31,10 +31,16 @@
         </div>
 
         <!-- Terms & Conditions -->
-        <div class="form-group row d-flex justify-content-center" >
+        <div class="form-group row d-flex justify-content-center">
           <mat-label class="outer-mat-label col-2 pt-2 w-70">T & C</mat-label>
           <div class="col-10">
-            <quill-editor formControlName="Terms" [modules]="editorModules" theme="snow"></quill-editor>
+            <!-- <quill-editor  #termsEditor formControlName="Terms" [modules]="editorModules" theme="snow"></quill-editor> -->
+            <div class="editor-container">
+              <quill-editor #termsEditor formControlName="Terms" [modules]="editorModules" theme="snow"
+                (onEditorCreated)="onEditorCreated($event)" [styles]="{'min-height': '150px', 'caret-color': 'black'}">
+              </quill-editor>
+            </div>
+
             <mat-error
               *ngIf="businessForm.controls['Terms'].errors?.['required']&&businessForm.controls['Terms'].touched">
               Terms & Conditions are required.
@@ -49,7 +55,7 @@
       <!-- Form Buttons -->
       <div class="form-btn d-flex align-items-start justify-content-end p-4">
         <button class="btn btn-secondary mx-2" (click)="reset()">Clear</button>
-        <button class="btn btn-info-dark" type="submit">Save</button>
+        <button class="btn btn-info-dark" type="submit">{{heading}}</button>
       </div>
     </form>
   </div>

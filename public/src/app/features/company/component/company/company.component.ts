@@ -37,7 +37,7 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 })
 export class CompanyComponent {
 columnDefs: any = [
-    { headerName: "S. No", valueGetter: "node.rowIndex + 1", pinned: "left" },
+    { headerName: "S. No", valueGetter: "node.rowIndex + 1", pinned: "left",sortable: false, filter: false },
     { headerName: "Actions", field: "actions", cellRenderer: (params: any) => this.renderActionIcons(params), pinned: "right",cellStyle: () => {
       return { border: "none", cursor: "pointer" };
     }, },
@@ -125,7 +125,6 @@ columnDefs: any = [
 
 
   updateCompanyProfile(event: any): void {
-    debugger
     const id = event.data.id;
    
     this.isSideDrawerOpen=true;

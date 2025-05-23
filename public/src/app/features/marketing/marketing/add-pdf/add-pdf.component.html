@@ -8,7 +8,7 @@
       <mat-form-field appearance="outline" class="w-100 mb-3">
         <mat-label>Title</mat-label>
         <input matInput formControlName="title" placeholder="Enter title" />
-        <mat-error *ngIf="cardForm.get('title')?.hasError('required')">
+        <mat-error *ngIf="cardForm.get('title')?.invalid">
           Title is required
         </mat-error>
       </mat-form-field>
@@ -22,22 +22,14 @@
 
       <div class="mb-3">
         <label class="mb-1 fw-semibold">Logo Image</label>
-        <input type="file" accept="image/png, image/jpeg, image/jpg"
+        <input  type="file" accept="image/png, image/jpeg, image/jpg"
                (change)="onImageChange($event)" class="form-control" />
         <div class="text-danger mt-1" *ngIf="cardForm.get('image')?.hasError('required') && cardForm.get('image')?.touched">
           Logo is required
         </div>
         <img *ngIf="previewImage" [src]="previewImage" alt="Preview" class="preview-img mt-2" />
       </div>
-
-      <!-- <div class="mb-3">
-        <label class="mb-1 fw-semibold">PDF File</label>
-        <input accept="application/pdf" type="file"
-               (change)="onPdfChange($event)" class="form-control" />
-        <div class="text-danger mt-1" *ngIf="cardForm.get('pdf')?.hasError('required') && cardForm.get('pdf')?.touched">
-          PDF is required
-        </div>
-      </div> -->
+      
       <div class="mb-3">
         <label class="mb-1 fw-semibold">PDF File</label>
         <input accept="application/pdf" type="file"
@@ -60,7 +52,7 @@
         </button> -->
         <button    type="submit" class="btn btn-info-dark rounded-pill" [disabled]="isSaveBtnAble">
           <mat-spinner *ngIf="isSubmitting" diameter="20"></mat-spinner>
-          <span *ngIf="!isSubmitting">Save</span>
+          <span *ngIf="!isSubmitting">{{headingPdf}}</span>
         </button>
       </div>
     </form>

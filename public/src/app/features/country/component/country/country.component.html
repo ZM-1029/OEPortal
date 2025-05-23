@@ -17,6 +17,7 @@
           [animateRows]="true"
           (cellClicked)="updateCountry($event)"
           [pagination]="true"
+          [suppressDragLeaveHidesColumns]="true"
           (gridReady)="onGridReady($event)">
         </ag-grid-angular>
       </div>

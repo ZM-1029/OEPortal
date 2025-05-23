@@ -24,8 +24,7 @@
                   <input formControlName="TaxName" matInput placeholder="Tax Name (e.g., VAT)" />
                   <mat-error *ngIf="tax.get('TaxName')?.hasError('required') && tax.get('TaxName')?.touched">Tax Name is
                     required</mat-error>
-                  <mat-error *ngIf="tax.get('TaxName')?.hasError('pattern') && tax.get('TaxName')?.touched">Tax Name can
-                    only contain letters and spaces</mat-error>
+                  <mat-error *ngIf="tax.get('TaxName')?.hasError('pattern') && tax.get('TaxName')?.touched">Letters and spaces only</mat-error>
                 </mat-form-field>
 
                 <mat-form-field appearance="outline">
@@ -55,7 +54,7 @@
       <!-- Form Buttons -->
       <div class="form-btn d-flex align-items-start justify-content-end p-4">
         <button class="btn btn-secondary mx-2" type="button" (click)="resetForm()">Clear</button>
-        <button class="btn btn-info-dark text-white" type="submit" (click)="createUpdate()">Save</button>
+        <button class="btn btn-info-dark text-white" type="submit" (click)="createUpdate()">{{ formHeading }}</button>
       </div>
     </form>
   </div>

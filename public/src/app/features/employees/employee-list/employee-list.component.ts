@@ -71,8 +71,8 @@ export class EmployeeListComponent implements OnInit, OnChanges {
     {
       headerName: "S. No",
       valueGetter: "node.rowIndex + 1",
-      sortable: true,
-      filter: true,
+      sortable: false,
+      filter: false,
       maxWidth: 100,
       minWidth: 100,
       pinned: "left",

@@ -90,7 +90,8 @@ export const MY_FORMATS = {
     MatDatepickerModule,
     MatFormFieldModule,
     CommonModule, FormsModule,
-    MatAutocompleteModule, MatIconModule
+    MatAutocompleteModule,
+    MatIconModule,
   ],
   templateUrl: "./purchase-order-create.component.html",
   styleUrl: "./purchase-order-create.component.scss",
@@ -113,8 +114,8 @@ export class PurchaseOrderCreateComponent implements OnInit, OnChanges {
   @Input() PurchaseOrderRowId!: number;
   @Input() isSideDrawerOpen!: boolean;
   @Output() formClose = new EventEmitter<boolean>();
-  @ViewChild("input") input!: ElementRef<any>;
-  @ViewChild('autoTrigger') autoTrigger!: MatAutocompleteTrigger;
+  @ViewChild('input', { read: ElementRef }) input!: ElementRef<HTMLInputElement>;
+  @ViewChild(MatAutocompleteTrigger) autoTrigger!: MatAutocompleteTrigger;
   isDesableAllInput: boolean = false;
   purchaseOrderForm!: FormGroup;
   allCustomers: customerI[] = [];
@@ -130,6 +131,7 @@ export class PurchaseOrderCreateComponent implements OnInit, OnChanges {
     private salaryService: SalaryService,
     private _changeDetectorRef: ChangeDetectorRef,
     private purchaseOrdersService: PurchaseOrdersService,
+    private _eref: ElementRef
   ) { }
   // textarea resize.
   private _injector = inject(Injector);
@@ -147,8 +149,6 @@ export class PurchaseOrderCreateComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    this.filteredCustomers = [...this.allCustomers];
-    this._changeDetectorRef.detectChanges();
   }
 
   filter(): void {
@@ -158,24 +158,43 @@ export class PurchaseOrderCreateComponent implements OnInit, OnChanges {
     );
   }
 
+
   @HostListener('document:click', ['$event'])
-  onClickOutside(event: Event) {
-    if (this.input && this.input.nativeElement !== event.target && !this.input.nativeElement.contains(event.target)) {
-      if (this.autoTrigger && this.autoTrigger.panelOpen) {
+  handleClickOutside(event: Event): void {
+    if (!this._eref.nativeElement.contains(event.target)) {
+      if (this.autoTrigger.panelOpen) {
         this.autoTrigger.closePanel();
         this._changeDetectorRef.detectChanges();
       }
     }
   }
 
-
   onSelectCustomer(event: MatAutocompleteSelectedEvent): void {
     const selectedCustomer = this.allCustomers.find(
       (customer) => customer.customerName === event.option.viewValue
     );
     if (selectedCustomer) {
-      this.purchaseOrderForm.patchValue({ customerId: selectedCustomer.id })
+      this.purchaseOrderForm.patchValue({
+        customerId: selectedCustomer.id,
+        customerName: selectedCustomer.customerName,
+      });
     }
+  }
+
+  toggleAutocomplete(): void {
+    if (this.autoTrigger.panelOpen) {
+      this.autoTrigger.closePanel();
+    } else {
+      this.filteredCustomers = [...this.allCustomers];
+      this.input.nativeElement.focus();
+      this.autoTrigger.openPanel();
+    }
+    this._changeDetectorRef.detectChanges();
+  }
+
+ onCurrencyChange(event: any) {
+    const selectedCurrencyId = event.value;
+    this.purchaseOrderForm.patchValue({currencyId: selectedCurrencyId})
   }
 
   date = new FormControl(moment());
@@ -222,9 +241,16 @@ export class PurchaseOrderCreateComponent implements OnInit, OnChanges {
   }
 
   private loadDropdownData(): void {
+    // this.customerService.getCustomerList().subscribe((response) => {
+    //   if (response.success) this.allCustomers = response.customers;
+    // });
     this.customerService.getCustomerList().subscribe((response) => {
-      if (response.success) this.allCustomers = response.customers;
+      if (response.success) {
+        this.allCustomers = response.customers;
+        this.filteredCustomers = [...this.allCustomers];
+      }
     });
+
 
     this.salaryService.getAllCurrencies().subscribe((response) => {
       if (response.success) this.allCurrencies = response.data;

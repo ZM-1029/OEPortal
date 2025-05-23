@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, Optional } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, OnInit, Optional, ViewEncapsulation } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
@@ -17,22 +17,28 @@ import { SuccessModalComponent } from 'src/app/shared/components/UI/success-moda
     MatFormFieldModule,
     MatInputModule, NgIf],
   templateUrl: './role-create.component.html',
-  styleUrl: './role-create.component.scss'
+  styleUrl: './role-create.component.scss',
+  encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RoleCreateComponent implements OnInit {
   constructor(private roleService: RoleService, private _successMessage: MatSnackBar,
-    public dialogRef: MatDialogRef<DeleteModalComponent>,
+    public dialogRef: MatDialogRef<RoleCreateComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: string,
   ) { }
   roleForm!: FormGroup;
-
+  isSubmitted = false;
   ngOnInit(): void {
     this.roleForm = new FormGroup({
       roleName: new FormControl('', [Validators.required, Validators.minLength(3)])
     });
+    this.dialogRef.backdropClick().subscribe(() => {
+      this.cancel(false); // Close without validating
+    });
   }
 
   createRole(): void {
+    this.isSubmitted = true;
     if (this.roleForm.valid) {
       const roleName = { name: this.roleForm.value.roleName };
       this.roleService.createRole(roleName).subscribe(
@@ -49,10 +55,21 @@ export class RoleCreateComponent implements OnInit {
           })
         }
       );
+    } else {
+      this.roleForm.markAllAsTouched();
     }
   }
 
-  cancel(): void {
+  //   cancel(): void {
+  //   this.isSubmitted = false;
+  //   this.roleForm.reset(); // ✅ Reset form to untouched + empty
+  //   this.dialogRef.close(false);
+  // }
+  cancel(result: boolean = false): void {
+    this.isSubmitted = false;
+    this.roleForm.reset(); // Reset form values
+    this.roleForm.markAsUntouched(); // Explicitly mark as untouched
+    this.roleForm.markAsPristine(); // Mark as pristine
     this.dialogRef.close(false);
   }
 

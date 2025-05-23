@@ -69,6 +69,7 @@
           (paginationChanged)="onPaginationChanged($event)"
           (gridReady)="onGridReady($event)"
           (cellClicked)="updateSalary($event)"
+          [suppressDragLeaveHidesColumns]="true"
         ></ag-grid-angular>
         <div class="table-footer position-relative"></div>
       </div>

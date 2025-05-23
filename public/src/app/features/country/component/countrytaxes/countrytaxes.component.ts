@@ -38,7 +38,7 @@ import { ActivatedRoute } from "@angular/router";
 })
 export class CountrytaxesComponent {
   columnDefs: any = [
-    { headerName: "S. No", valueGetter: "node.rowIndex + 1", pinned: "left" },
+    { headerName: "S. No", valueGetter: "node.rowIndex + 1", pinned: "left",sortable: false, filter: false },
     { headerName: "Actions", field: "actions", cellRenderer: (params: any) => this.renderActionIcons(params),  pinned: "right" ,cellStyle: () => {
       return { border: "none", cursor: "pointer" };
     },},

@@ -7,11 +7,11 @@
     <div class="col-md-6 col-auto text-md-end">
       <mat-form-field class="w-100 furdeco-custom-field" appearance="outline">
         <mat-label>Select Role</mat-label>
-        <input type="text" matInput [formControl]="roleControl" [matAutocomplete]="autoRole">
+        <input  type="text" matInput [formControl]="roleControl" [matAutocomplete]="autoRole">
         <mat-autocomplete #autoRole="matAutocomplete" [displayWith]="displayRoleFn"
           (optionSelected)="onRoleSelected($event)">
           <ng-container *ngFor="let role of filteredRoles | async">
-            <mat-option *ngIf="role.name !== 'Super Admin'" [value]="role">
+            <mat-option *ngIf="role.name !== 'Super Admin'" [value]="role" class="no-check-icon" >
               {{ role.name }}
             </mat-option>
           </ng-container>
@@ -62,29 +62,25 @@
         </mat-checkbox>
       </div>
 
+
       <div class="row mb-2 my-2" *ngFor="let list of marketingList; trackBy: trackByMenu">
         <div class="col-md-3 fw-bold">{{ list.heading }}</div>
-      
-        <div class="col-md-3">
-          <mat-checkbox
-            class="checkbox fs-6"
-            (change)="onCheckboxChangeMarketing($event, list.id, 'isView')"
-            [checked]="getMarketingValue(list.id)?.isView || false"
-          >
+
+        <div class="col-md-3 ps-3">
+          <mat-checkbox class="checkbox fs-6" (change)="onCheckboxChangeMarketing($event, list.id, 'isView')"
+            [checked]="getMarketingValue(list.id,'isView')">
             View
           </mat-checkbox>
         </div>
-      
-        <div class="col-md-3">
-          <mat-checkbox
-            class="checkbox fs-6"
-            (change)="onCheckboxChangeMarketing($event, list.id, 'isDownload')"
-            [checked]="getMarketingValue(list.id)?.isDownload || false"
-          >
+
+        <div class="col-md-3 ps-4">
+          <mat-checkbox class="checkbox fs-6" (change)="onCheckboxChangeMarketing($event, list.id, 'isDownload')"
+            [checked]="getMarketingValue(list.id,'isDownload')">
             Download
           </mat-checkbox>
         </div>
       </div>
+
       }@else{
       <div class="col-md-3">{{ menu.form }}</div>
 

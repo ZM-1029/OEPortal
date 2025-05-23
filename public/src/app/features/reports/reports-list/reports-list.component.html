@@ -7,7 +7,7 @@
     <div [ngClass]="isActiveDropDownShow? '' : 'd-none'" class="matDatepicker-container d-flex gap-3">
       <mat-form-field appearance="outline" class=" ">
         <mat-label>Start Date</mat-label>
-        <input matInput [matDatepicker]="startPicker" placeholder="Select start date"
+        <input matInput [matDatepicker]="startPicker" [matDatepickerFilter]="startDateFilter" placeholder="Select start date"
           (dateChange)="getStartDate($event)" [value]="startDate">
         <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
         <mat-datepicker #startPicker></mat-datepicker>

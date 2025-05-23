@@ -37,7 +37,7 @@ export class BussinessLineComponent {
   
 
   columnDefs: ColDef[] = [
-    { headerName: "S. No", valueGetter: "node.rowIndex + 1", pinned: "left" },
+    { headerName: "S. No", valueGetter: "node.rowIndex + 1", pinned: "left",sortable: false, filter: false },
     { field: 'name', headerName: 'Business', sortable: true, filter: true },
     { field: 'description', headerName: 'Description', sortable: true, filter: true },
     {

@@ -9,10 +9,11 @@
         <div class="form-group row">
           <mat-label class="outer-mat-lable col-4 pt-2">Select Customer</mat-label>
           <mat-form-field appearance="outline" class="col-8">
-            <input #input type="text" placeholder="Select customer" matInput formControlName="customerName"
-              [matAutocomplete]="auto" (input)="filter()" />
 
-            <mat-icon matSuffix (click)="input.focus()">arrow_drop_down</mat-icon>
+            <input matInput #input [matAutocomplete]="auto" formControlName="customerName" (input)="filter()"
+              (click)="toggleAutocomplete()" />
+
+            <mat-icon matSuffix (click)="toggleAutocomplete()">arrow_drop_down</mat-icon>
 
             <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onSelectCustomer($event)">
               @for (customer of filteredCustomers; track customer) {
@@ -26,7 +27,6 @@
             }
           </mat-form-field>
         </div>
-
 
         <div class="form-group row">
           <mat-label class="outer-mat-lable col-4 pt-2">Purchase Order Id</mat-label>
@@ -57,7 +57,7 @@
         <div class="form-group row">
           <mat-label class="outer-mat-lable col-4 pt-2">Select Currency</mat-label>
           <mat-form-field appearance="outline" class="col-8 py-0">
-            <mat-select class="py-0" formControlName="currencyId">
+            <mat-select class="py-0" formControlName="currencyId" (selectionChange)="onCurrencyChange($event)">
               @for (currency of allCurrencies; track currency) {
               <mat-option [value]="currency.currencyId">
                 {{ currency.currencyName }}
@@ -84,8 +84,8 @@
         <div class="form-group row">
           <mat-label class="outer-mat-lable col-4 ">Description</mat-label>
           <mat-form-field appearance="outline" class="col-8 description">
-            <textarea class="description-textarea" formControlName="description" matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize"
-              cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"></textarea>
+            <textarea class="description-textarea" formControlName="description" matInput cdkTextareaAutosize
+              #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"></textarea>
           </mat-form-field>
         </div>
       </div>

@@ -114,5 +114,13 @@ mat-divider {
   background-color: #2e3b64 !important;
   outline: #2e3b64 !important;
   border: #2e3b64;
-  color: white;
+  color: white !important;
+}
+
+.no-check-icon{
+  text-transform: capitalize;
+}
+
+.furdeco-custom-field{
+  text-transform: capitalize;
 }

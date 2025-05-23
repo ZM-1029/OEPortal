@@ -20,13 +20,13 @@ import { LoaderComponent } from 'src/app/shared/components/UI/loader/loader.comp
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatIconModule,MatProgressSpinnerModule,LoaderComponent],
+    MatIconModule, MatProgressSpinnerModule, LoaderComponent],
   templateUrl: './add-pdf.component.html',
   styleUrl: './add-pdf.component.scss',
 })
 export class AddPdfComponent {
   cardForm!: FormGroup;
-  headingPdf:string='Add'
+  headingPdf: string = 'Add'
   previewImage: string | ArrayBuffer | null = null;
   previewPdf: string | ArrayBuffer | null = null;
   showForm = true;
@@ -34,7 +34,11 @@ export class AddPdfComponent {
   pdfFile: File | null = null;
   id: number = 0;
   isSubmitting: boolean = false;
-  isSaveBtnAble:boolean=false;
+  isSaveBtnAble: boolean = false;
+
+  // Error messages
+  pdfError: string | null = null;
+  imageError: string | null = null;
   constructor(
     private fb: FormBuilder,
     private marketingService: MarketingService,
@@ -49,12 +53,12 @@ export class AddPdfComponent {
       title: ['', Validators.required],
       subtitle: ['', Validators.required],
       showButton: [false],
-      image: [null ],
-      pdf: [null ],
+      image: [null],
+      pdf: [null],
     });
 
     if (this.id) {
-      this.headingPdf='Edit'
+      this.headingPdf = 'Update'
       this.marketingService.getMarketingById(this.id).subscribe({
         next: (res: any) => {
           const marketing = res.data;
@@ -74,56 +78,99 @@ export class AddPdfComponent {
   }
 
 
-  onImageChange(event: Event) {
-    const file = (event.target as HTMLInputElement).files?.[0];
-    if (file) {
-      this.logoFile = file;
-      this.cardForm.patchValue({ image: file });
+  // onImageChange(event: Event) {
+  //   const file = (event.target as HTMLInputElement).files?.[0];
+  //   if (file) {
+  //     this.logoFile = file;
+  //     this.cardForm.patchValue({ image: file });
 
-      const reader = new FileReader();
-      reader.onload = () => (this.previewImage = reader.result);
-      reader.readAsDataURL(file);
-    }
-  }
+  //     const reader = new FileReader();
+  //     reader.onload = () => (this.previewImage = reader.result);
+  //     reader.readAsDataURL(file);
+  //   }
+  // }
 
-  onPdfChange(event: Event) {
-    const file = (event.target as HTMLInputElement).files?.[0];
-    if (file) {
-      this.pdfFile = file;
-      this.cardForm.patchValue({ pdf: file });
-    }
-  }
+  // onPdfChange(event: Event) {
+  //   const file = (event.target as HTMLInputElement).files?.[0];
+  //   if (file) {
+  //     this.pdfFile = file;
+  //     this.cardForm.patchValue({ pdf: file });
+  //   }
+  // }
 
- 
+
+
+  // onSubmit() {
+  //   if (this.cardForm.valid) {
+  //     this.isSubmitting = true; 
+  //     const formData = new FormData();
+  //     formData.append('Heading', this.cardForm.value.title);
+  //     formData.append('Description', this.cardForm.value.subtitle);
+
+  //     if (this.logoFile) {
+  //       formData.append('Logo', this.logoFile);
+  //     }else{
+  //       formData.append('Logo', 'null');
+  //     }
+
+  //     if (this.pdfFile instanceof File) {
+  //       formData.append('Pdf', this.pdfFile);
+  //     }else{
+  //       formData.append('Pdf', 'null');
+  //     }
+
+  //     if (this.id > 0) {
+  //       formData.append('id', this.id.toString());
+  //       this.updateMarketing(this.id, formData);
+  //     } else {
+  //       this.createMarketing(formData);
+  //     }
+  //   }
+  // }
 
   onSubmit() {
+    // Check if there are file errors
+    if (this.pdfError || this.imageError) {
+      if (this.pdfError) {
+        this.showSuccessMessage(this.pdfError);
+      } 
+       if (this.imageError) {
+        this.showSuccessMessage(this.imageError);
+      }
+      return; // Prevent submission if errors exist
+    }
+    
+    // if (this.pdfError && this.imageError) {
+    //   this.showSuccessMessage("Only PNG, JPG, or JPEG and PDF are allowed.");
+    //   return
+    // }
+
     if (this.cardForm.valid) {
-      this.isSubmitting = true; 
+      this.isSubmitting = true;
       const formData = new FormData();
       formData.append('Heading', this.cardForm.value.title);
       formData.append('Description', this.cardForm.value.subtitle);
-  
+
       if (this.logoFile) {
         formData.append('Logo', this.logoFile);
-      }else{
+      } else {
         formData.append('Logo', 'null');
       }
-  
+
       if (this.pdfFile instanceof File) {
         formData.append('Pdf', this.pdfFile);
-      }else{
+      } else {
         formData.append('Pdf', 'null');
       }
-  
+
       if (this.id > 0) {
-        formData.append('id', this.id.toString());
         this.updateMarketing(this.id, formData);
       } else {
         this.createMarketing(formData);
       }
     }
   }
-  
+
 
   createMarketing(formdata: FormData) {
     this.marketingService.createMarketing(formdata).pipe(
@@ -139,20 +186,20 @@ export class AddPdfComponent {
         }
       },
       error: (err) => {
-        if(err.error.errors.Pdf &&  err.error.errors.Logo){
+        if (err.error.errors.Pdf && err.error.errors.Logo) {
           this.handleError('The files is required');
-        }else if(err.error.errors.Pdf){
+        } else if (err.error.errors.Pdf) {
           this.handleError(err.error.errors.Pdf[0]);
-        }else if(err.error.errors.Logo[0]){
+        } else if (err.error.errors.Logo[0]) {
           this.handleError(err.error.errors.Pdf[0]);
-        }else{
+        } else {
           this.handleError(err.error.message);
         }
-        
+
         this.dialogRef.close(false);
       }
     });
-    
+
   }
 
   updateMarketing(id: number, formData: FormData) {
@@ -169,19 +216,19 @@ export class AddPdfComponent {
         }
       },
       error: (err) => {
-        if(err.error.errors.Pdf &&  err.error.errors.Logo){
+        if (err.error.errors.Pdf && err.error.errors.Logo) {
           this.handleError('The files is required');
-        }else if(err.error.errors.Pdf){
+        } else if (err.error.errors.Pdf) {
           this.handleError(err.error.errors.Pdf[0]);
-        }else if(err.error.errors.Logo[0]){
+        } else if (err.error.errors.Logo[0]) {
           this.handleError(err.error.errors.Pdf[0]);
-        }else{
+        } else {
           this.handleError(err.error.message);
         }
         this.dialogRef.close(false);
       }
     });
-    
+
   }
 
 
@@ -196,6 +243,69 @@ export class AddPdfComponent {
     this.pdfFile = null;
   }
 
+  // ========== IMAGE VALIDATION ==========
+  onImageChange(event: Event) {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    this.imageError = null;
+
+    if (!file) {
+      this.logoFile = null;
+      this.cardForm.patchValue({ image: null });
+      return;
+    }
+
+    // Check if file is an image (PNG, JPG, JPEG)
+    if (!file.type.match(/image\/(png|jpeg|jpg)/)) {
+      this.imageError = "Only PNG, JPG, or JPEG images are allowed.";
+      return;
+    }
+
+    // Check file size (optional, e.g., max 2MB)
+    const maxSize = 2 * 1024 * 1024; // 2MB
+    if (file.size > maxSize) {
+      this.imageError = "Image size must be less than 2MB.";
+      return;
+    }
+
+    // If valid, proceed
+    this.logoFile = file;
+    this.cardForm.patchValue({ image: file });
+
+    const reader = new FileReader();
+    reader.onload = () => (this.previewImage = reader.result);
+    reader.readAsDataURL(file);
+  }
+
+  // ========== PDF VALIDATION ==========
+  onPdfChange(event: Event) {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    this.pdfError = null;
+
+    if (!file) {
+      this.pdfFile = null;
+      this.cardForm.patchValue({ pdf: null });
+      return;
+    }
+
+    // Check if file is a PDF
+    if (file.type !== "application/pdf") {
+      this.pdfError = "Only PDF files are allowed.";
+      return;
+    }
+
+    // Check file size (optional, e.g., max 5MB)
+    const maxSize = 5 * 1024 * 1024; // 5MB
+    if (file.size > maxSize) {
+      this.pdfError = "PDF size must be less than 5MB.";
+      return;
+    }
+
+    // If valid, proceed
+    this.pdfFile = file;
+    this.cardForm.patchValue({ pdf: file });
+  }
+
+  // ========== FORM SUBMISSION ==========
 
   //  Function to show success messages
   private showSuccessMessage(message: string) {

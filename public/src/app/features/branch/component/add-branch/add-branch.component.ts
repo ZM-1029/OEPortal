@@ -36,7 +36,7 @@ import { OnlyNumbersDirective } from 'src/app/shared/directive/only-numbers.dire
 })
 export class AddBranchComponent {
 companyForm!: FormGroup;
-  heading:string="Add"
+  heading:string="Create"
   countries: { value: string, label: string }[] = []; // Mock data
   @Input() Id: number = 0;
   @Input() isSideDrawerOpen: boolean = false; 
@@ -64,7 +64,6 @@ companyForm!: FormGroup;
       });
     }
     reset(){
-      debugger
       this.companyForm.reset()
       this.companyForm.get('companyId')?.setValue('0');
     }
@@ -95,7 +94,7 @@ if(this.Id>0)
  
   patchValue()
   {
-    debugger
+    
     this.companyservice.getCompanyBranchId(this.Id).subscribe({next:(data:any)=>{
       this.companyForm.patchValue({
         companyId:data.data.companyId,
@@ -127,7 +126,7 @@ if(this.Id>0)
     }
   }
   submitForm() {
-    debugger
+    
     if(Number(this.companyForm.value.companyId)>0)
       {
         this.iscountryfail=false
@@ -142,7 +141,7 @@ if(this.Id>0)
       console.log('Form Data:', this.companyForm.value);
       if(this.Id<=0)
         {
-          debugger
+          
            var request={
               id: 0,
               companyId: this.companyForm.value.companyId,
@@ -164,7 +163,6 @@ if(this.Id>0)
            }})
         }
         else{
-          debugger;
           var request={  
             id: this.Id,   
             companyId: this.companyForm.value.companyId,

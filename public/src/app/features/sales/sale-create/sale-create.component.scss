@@ -1,28 +1,5 @@
 .sale-create {
   background-color: white;
-  // border-radius: 16px;
-  // width: 100%;
-  // // 
-  // margin: 1rem;
-  // display: flex;
-  // flex-direction: column;
-  // height: 100%;
-  // height: calc(100vh - 6rem);
-  // overflow: hidden;
-
-  // .bg-light {
-  //   padding: 10px 0;
-  //   border-radius: 16px 16px 0 0;
-  //   background-color: #f8f9fa !important;
-  // }
-
-  // .formHeading {
-  //   text-align: start;
-  //   font-size: 1.25rem;
-  //   padding: 10px 20px;
-  //   margin: 0;
-  //   color: #333;
-  // }
 }
 
 .sale-create .bg-light {
@@ -308,10 +285,6 @@ tr:nth-child(even) {
   }
 }
 
-.form-group .row {
-  margin-bottom: 10px;
-}
-
 .btn-info-dark {
   background-color: #2e3b64 !important;
   outline: #2e3b64 !important;
@@ -420,6 +393,7 @@ select {
   padding: 5px 10px;
   border-radius: 4px;
   font-size: 14px;
+  cursor: text;
 }
 
 .form {
@@ -429,7 +403,8 @@ select {
 .form .Address {
   width: 100%;
 }
-.form .Address p{
+
+.form .Address p {
   width: 10rem;
 }
 
@@ -439,14 +414,6 @@ select {
 
 .product_name mat-form-field {
   width: 235px;
-}
-
-.wrap-amount {
-  // display: block;
-  // word-break: break-word;
-  // white-space: normal;
-  // text-align: right;
-  // min-width: 300px;
 }
 
 .mat-mdc-form-field:not(.mat-form-field-disabled) .mat-mdc-floating-label.mdc-floating-label {
@@ -468,5 +435,5 @@ select {
 
 ::ng-deep .description mat-form-field .mat-mdc-form-field:not(.mat-form-field-disabled) .mat-mdc-floating-label.mdc-floating-label {
   cursor: inherit;
-  padding-bottom: 0px !important; 
+  padding-bottom: 0px !important;
 }

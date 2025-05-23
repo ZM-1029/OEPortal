@@ -42,7 +42,7 @@ import { LoaderComponent } from 'src/app/shared/components/UI/loader/loader.comp
     PdfViewerModule,
     MatCheckboxModule,
     NgClass,
-    MatCardModule,LoaderComponent
+    MatCardModule, LoaderComponent
   ],
   templateUrl: './approve-quatation.component.html',
   styleUrl: './approve-quatation.component.scss',
@@ -370,8 +370,6 @@ export class ApproveQuatationComponent implements OnInit, OnDestroy {
     if (this.approveForm.valid) {
       const formDataSelfApproved = new FormData();
       const formDataApprovedByAccountant = new FormData();
-
-      // debugger;
       // formData.append('IsSelfApproved', this.approveForm.value.selfApprove);
       // formData.append('IsApprovedByAccountant', this.approveForm.value.approveByAccountant==undefined?'false':'true');
 
@@ -424,6 +422,8 @@ export class ApproveQuatationComponent implements OnInit, OnDestroy {
         if (response && response.success) {
           this._successMessage.open('Approval submitted successfully!', 'Close', {
             duration: 3000,
+            verticalPosition: "top",
+            horizontalPosition: "right",
           });
         }
         this._router.navigateByUrl("admin/sales-orders");
@@ -451,6 +451,10 @@ export class ApproveQuatationComponent implements OnInit, OnDestroy {
     link.target = '_blank';
     link.download = this.invoiceUrl.split('/').pop() || 'invoice.jpg';
     link.click();
+  }
+
+  backTosaleListing() {
+    this._router.navigateByUrl("/admin/sales-orders");
   }
 
   ngOnDestroy(): void {

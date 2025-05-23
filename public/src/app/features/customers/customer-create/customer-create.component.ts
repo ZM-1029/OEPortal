@@ -107,23 +107,45 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
       shippingState: ['', Validators.required],
       shippingPin: ['', [Validators.required, Validators.maxLength(7)]],
 
+      isBillingAndNonBillingSame:[false]
     });
     this.clearForm();
   }
 
+  // copyBillingToShipping(event: any) {
+  //   if (event.target.checked) {
+  //     this.customerForm.patchValue({
+  //       shippingAttention: this.customerForm.value.billingAttention,
+  //       shippingCountry: this.customerForm.value.billingCountry,
+
+  //       shippingCity: this.customerForm.value.billingCity,
+  //       shippingState: this.customerForm.value.billingState,
+  //       shippingPin: this.customerForm.value.billingPin,
+
+  //     });
+  //   }
+  // }
+
   copyBillingToShipping(event: any) {
-    if (event.target.checked) {
-      this.customerForm.patchValue({
-        shippingAttention: this.customerForm.value.billingAttention,
-        shippingCountry: this.customerForm.value.billingCountry,
-
-        shippingCity: this.customerForm.value.billingCity,
-        shippingState: this.customerForm.value.billingState,
-        shippingPin: this.customerForm.value.billingPin,
-
-      });
-    }
+  if (event.checked) {
+    this.customerForm.patchValue({
+      shippingAttention: this.customerForm.value.billingAttention,
+      shippingCountry: this.customerForm.value.billingCountry,
+      shippingCity: this.customerForm.value.billingCity,
+      shippingState: this.customerForm.value.billingState,
+      shippingPin: this.customerForm.value.billingPin,
+    });
+  } else {
+    this.customerForm.patchValue({
+      shippingAttention: '',
+      shippingCountry: '',
+      shippingCity: '',
+      shippingState: '',
+      shippingPin: '',
+    });
   }
+}
+
 
   closePopup() {
     this.formClose.emit();
@@ -165,6 +187,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
 
             Taxid: response.data.customer.taxid,
             BusinessType: response.data.customer.businessType,
+            isBillingAndNonBillingSame:response.data.isBillingAndNonBillingSame
           });
           if (response.data.addresses[0].isBillingAddress) {
             this.customerForm.patchValue({
@@ -181,10 +204,6 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
 
               shippingPin: response.data.addresses[1].postalCode,
               shippingState: response.data.addresses[1].state,
-
-
-
-
             }
             );
           }
@@ -205,7 +224,6 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
               shippingState: response.data.addresses[0].state,
 
             }
-
 
             );
             if (response.data.addresses[1].address == response.data.addresses[0].address && response.data.addresses[1].state == response.data.addresses[0].state && response.data.addresses[0].city && response.data.addresses[1].city) {
@@ -245,7 +263,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
       const commonData = {
         id: this.Id || 0,
         customerId: this.customerForm.get("CustomerId")?.value || '',
-        customerName: this.customerForm.get("CustomerName")?.value,
+        customerName: this.customerForm.get("CustomerName")?.value?.trim() || '',
         phoneNumber: this.customerForm.get("PhoneNumber")?.value,
         primaryContact: this.customerForm.get("PrimaryContact")?.value,
         email: this.customerForm.get("Email")?.value,

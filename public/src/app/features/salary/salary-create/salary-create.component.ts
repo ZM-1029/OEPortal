@@ -106,8 +106,8 @@ export class SalaryCreateComponent implements OnInit, OnChanges {
   @Input() salaryRowId!: number;
   @Input() isSideDrawerOpen!: boolean;
   @Output() formClose = new EventEmitter<boolean>();
-  @ViewChild("input") input!: ElementRef<any>;
-  @ViewChild('autoTrigger') autoTrigger!: MatAutocompleteTrigger;
+  @ViewChild('input', { read: ElementRef }) input!: ElementRef<HTMLInputElement>;
+  @ViewChild(MatAutocompleteTrigger) autoTrigger!: MatAutocompleteTrigger;
   salaryForm!: FormGroup;
   allCustomers: customerI[] = [];
   filteredCustomers: customerI[] = [];
@@ -119,7 +119,8 @@ export class SalaryCreateComponent implements OnInit, OnChanges {
     private snackBar: MatSnackBar,
     private customerService: CustomersService,
     private salaryService: SalaryService,
-    private _changeDetectorRef: ChangeDetectorRef
+    private _changeDetectorRef: ChangeDetectorRef,
+   private _eref: ElementRef
   ) { }
 
   ngOnInit(): void {
@@ -180,15 +181,15 @@ export class SalaryCreateComponent implements OnInit, OnChanges {
   }
 
 // dropdown auto select start
-@HostListener('document:click', ['$event'])
-onClickOutside(event: Event) {
-  if (this.input && this.input.nativeElement !== event.target && !this.input.nativeElement.contains(event.target)) {
-    if (this.autoTrigger && this.autoTrigger.panelOpen) {
-      this.autoTrigger.closePanel();
-      this._changeDetectorRef.detectChanges(); // Ensure UI updates
+ @HostListener('document:click', ['$event'])
+  handleClickOutside(event: Event): void {
+    if (!this._eref.nativeElement.contains(event.target)) {
+      if (this.autoTrigger.panelOpen) {
+        this.autoTrigger.closePanel();
+        this._changeDetectorRef.detectChanges();
+      }
     }
   }
-}
 
 // Ensure dropdown opens when input is focused or user types
 filter(): void {
@@ -212,8 +213,18 @@ onSelectCustomer(event: MatAutocompleteSelectedEvent): void {
     // this.selectedCustomerId = selectedCustomer.id;
     this.salaryForm.patchValue({ customerId: selectedCustomer.id })
   }
-
 }
+
+  toggleAutocomplete(): void {
+    if (this.autoTrigger.panelOpen) {
+      this.autoTrigger.closePanel();
+    } else {
+      this.filteredCustomers = [...this.allCustomers];
+      this.input.nativeElement.focus();
+      this.autoTrigger.openPanel();
+    }
+    this._changeDetectorRef.detectChanges();
+  }
 
 // dropdown auto select end
 

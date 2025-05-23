@@ -20,7 +20,7 @@
             <label for="file-input" class="icon">
               <i class="material-icons">photo_camera</i>
             </label>
-            <i class="material-icons delete-icon text-white" (click)="deleteImage()">delete</i>
+            <i *ngIf="customerLogoUrl" class="material-icons delete-icon text-white" (click)="deleteImage()">delete</i>
           </div>
 
           <!-- Hidden File Input -->
@@ -35,9 +35,9 @@
           <!-- <p class="text-muted mb-1">example&#64;gmail.com {{customerEmail}}</p> -->
           <p class="text-muted mb-1 ">{{customerEmail}}</p>
           <div class="d-flex gap-2">
-            <input type="button" (click)="triggerCustomerFileInput()" value="Edit Photo" placeholder="Edit Photo"
+            <input type="button" (click)="triggerCustomerFileInput()" [value]="customerLogoUrl?'Update Photo':'Add Photo'" placeholder="Add Photo"
               class="btn edit-btn btn-sm ">
-            <input type="button" class="btn edit-btn text-danger btn-sm" value="Remove" placeholder="Remove"
+            <input *ngIf="customerLogoUrl" type="button" class="btn edit-btn text-danger btn-sm" value="Remove" placeholder="Remove"
               (click)="deleteImage()">
           </div>
         </div>
@@ -169,9 +169,6 @@
             </mat-form-field>
           </div>
 
-
-
-
           <div class="form-group row">
             <mat-label class="outer-mat-lable col-4 ">City</mat-label>
             <mat-form-field appearance="outline" class="col-8">
@@ -204,17 +201,16 @@
               </mat-error>
             </mat-form-field>
           </div>
-
+          
           <h4 class="mt-4 mb-3"><b>Shipping Address</b></h4>
 
           <div class="form-group ">
-            <!-- <mat-label class="outer-mat-lable "> -->
-              <input type="checkbox" (change)="copyBillingToShipping($event)" />
-              <span class="ms-2">Same as Billing Address</span>
-            <!-- </mat-label> -->
-            <!-- <section class="example-section">
-              <mat-checkbox (change)="copyBillingToShipping($event)" class="example-margin">Same as Billing Address</mat-checkbox>
-            </section> -->
+              <!-- <input type="checkbox" [checked]="customerForm.get('sameasbilling')?.value" (change)="copyBillingToShipping($event)" />
+              <span class="ms-2">Same as Billing Address</span> -->
+           
+            <section class="example-section">
+              <mat-checkbox (change)="copyBillingToShipping($event)" formControlName="isBillingAndNonBillingSame" class="example-margin">Same as Billing Address</mat-checkbox>
+            </section>
           </div>
 
           <div class="form-group row">

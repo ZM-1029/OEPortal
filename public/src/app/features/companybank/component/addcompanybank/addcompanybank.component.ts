@@ -22,135 +22,129 @@ import { ConfirmationDialogComponent } from 'src/app/shared/components/confirmat
 
 @Component({
   selector: 'app-addcompanybank',
-  standalone:true,
+  standalone: true,
   imports: [
-     CommonModule,
-        MatFormFieldModule,
-        MatSelectModule,
-        MatInputModule,
-        MatSlideToggleModule,
-        MatButtonModule,
-        MatIconModule,
-        ReactiveFormsModule,
-        OnlyNumbersDirective,
-        
+    CommonModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatInputModule,
+    MatSlideToggleModule,
+    MatButtonModule,
+    MatIconModule,
+    ReactiveFormsModule,
+    OnlyNumbersDirective,
+
   ],
-  providers:[ConfirmationDialogService],
+  providers: [ConfirmationDialogService],
   templateUrl: './addcompanybank.component.html',
   styleUrl: './addcompanybank.component.scss'
 })
 export class AddcompanybankComponent {
-companyForm!: FormGroup;
-  heading:string="Add"
+  companyForm!: FormGroup;
+  heading: string = "Create"
   countries: { value: string, label: string }[] = []; // Mock data
   @Input() Id: number = 0;
-  @Input() isSideDrawerOpen: boolean = false; 
- 
- @Output() formClose: EventEmitter<boolean> = new EventEmitter<boolean>();
-  constructor(private confirmationDialogService: ConfirmationDialogService,private fb: FormBuilder,private companyservice:CompanybanklistService,private apiservice:BussinessService,private activate:ActivatedRoute,private _successMessage:MatSnackBar,private cdr:ChangeDetectorRef) {
-    this.companyservice.getAllCompany().subscribe({next:(data:any)=>{
-      this.countries = [{ value: '0', label: 'Select a Company' }];  // Add the default option
-      data.data.forEach((country:any) => {
-        this.countries.push({
-          value: country.id.toString(),  // Make sure the id is a string to bind with value
-          label: country.name
+  @Input() isSideDrawerOpen: boolean = false;
+
+  @Output() formClose: EventEmitter<boolean> = new EventEmitter<boolean>();
+  constructor(private confirmationDialogService: ConfirmationDialogService, private fb: FormBuilder, private companyservice: CompanybanklistService, private apiservice: BussinessService, private activate: ActivatedRoute, private _successMessage: MatSnackBar, private cdr: ChangeDetectorRef) {
+    this.companyservice.getAllCompany().subscribe({
+      next: (data: any) => {
+        this.countries = [{ value: '0', label: 'Select a Company' }];  // Add the default option
+        data.data.forEach((country: any) => {
+          this.countries.push({
+            value: country.id.toString(),  // Make sure the id is a string to bind with value
+            label: country.name
+          });
         });
-      });
-    }})
+      }
+    })
   }
-  
- private showSuccessMessage(message: string) {
-      this._successMessage.openFromComponent(SuccessModalComponent, {
-        data: { message },
-        duration: 4000,
-        panelClass: ["custom-toast"],
-        verticalPosition: "top",
-        horizontalPosition: "right",
-      });
-    }
-    reset(){
-      debugger
-      this.companyForm.reset()
-      this.companyForm.get('companyId')?.setValue('0');
-    }
- async ngOnInit() {
-  
-   
+
+  private showSuccessMessage(message: string) {
+    this._successMessage.openFromComponent(SuccessModalComponent, {
+      data: { message },
+      duration: 4000,
+      panelClass: ["custom-toast"],
+      verticalPosition: "top",
+      horizontalPosition: "right",
+    });
+  }
+  reset() {
+    this.companyForm.reset()
+    this.companyForm.get('companyId')?.setValue('0');
+  }
+  async ngOnInit() {
+
+
     this.companyForm = this.fb.group({
-     
+
 
       companyId: ['0', Validators.required],
       accountType: ['', [Validators.required]],
       ifscCode: ['', [Validators.required]],
-      sortCode: ['', ],
+      sortCode: ['',],
       bankName: ['', [Validators.required]],
       accountNumber: ['', [Validators.required]],
-    
-      swissCode: ['', ],
-      isPrimary:['false']
-      
-   
+
+      swissCode: ['',],
+      isPrimary: ['false']
+
+
     });
     this.companyForm.get('isPrimary')?.setValue(0);
-if(this.Id>0)
-{
-  this.heading="Update"
-  this.patchValue()
-}
+    if (this.Id > 0) {
+      this.heading = "Update"
+      this.patchValue()
+    }
 
-    
+
   }
- 
-  patchValue()
-  {
-    debugger
-    this.companyservice.getCompanyBankId(this.Id).subscribe({next:(data:any)=>{
-      this.companyForm.patchValue({
-        companyId:data.data.companyId,
-        accountType:data.data.accountType,
-        ifscCode:data.data.ifscCode,
-        sortCode:data.data.sortCode,
-        bankName:data.data.bankName,
-        accountNumber:data.data.accountNumber,
-        swissCode:data.data.swissCode, 
-        isPrimary:data.data.isPrimary
-      })
-      this.companyForm.get('companyId')?.setValue(data.data.companyId.toString());
-    }})
+
+  patchValue() {
+    this.companyservice.getCompanyBankId(this.Id).subscribe({
+      next: (data: any) => {
+        this.companyForm.patchValue({
+          companyId: data.data.companyId,
+          accountType: data.data.accountType,
+          ifscCode: data.data.ifscCode,
+          sortCode: data.data.sortCode,
+          bankName: data.data.bankName,
+          accountNumber: data.data.accountNumber,
+          swissCode: data.data.swissCode,
+          isPrimary: data.data.isPrimary
+        })
+        this.companyForm.get('companyId')?.setValue(data.data.companyId.toString());
+      }
+    })
   }
-  
-  toggle(event:any)
-  {
-    if(this.Id>0)
+
+  toggle(event: any) {
+    if (this.Id > 0)
       return;
-    debugger
-    if(event.checked){
-      if(this.companyForm.value.companyId==0)
-      {
+    if (event.checked) {
+      if (this.companyForm.value.companyId == 0) {
         alert("please select a company")
         this.companyForm.get('isPrimary')?.setValue(0);
         return;
       }
-      else{
-        if(event.checked==true)
-        {
-          this.companyservice.checkIfprimarybankexists(this.companyForm.value.companyId).subscribe({next:(data:any)=>{
-           if(data==true)
-           {
-           
+      else {
+        if (event.checked == true) {
+          this.companyservice.checkIfprimarybankexists(this.companyForm.value.companyId).subscribe({
+            next: (data: any) => {
+              if (data == true) {
+                this.confirmationDialogService.confirm('Please confirm..', 'Do you really want to make this account primary . ?')
+                  .then((confirmed) => {
+                    if (confirmed == false) {
+                      this.companyForm.get('isPrimary')?.setValue(0);
+                      return;
+                    }
+                  })
+                  .catch(() => console.log('User dismissed the dialog (e.g., by using ESC, clicking the cross icon, or clicking outside the dialog)'));
+              }
 
-
-    this.confirmationDialogService.confirm('Please confirm..', 'Do you really want to make this account primary ... ?')
-    .then((confirmed) => {
-      if(confirmed==false){
-        this.companyForm.get('isPrimary')?.setValue(0);
-        return;
-      }
-    })
-    .catch(() => console.log('User dismissed the dialog (e.g., by using ESC, clicking the cross icon, or clicking outside the dialog)'));
-  }
-           
-          }})
+            }
+          })
         }
       }
     }
@@ -158,30 +152,26 @@ if(this.Id>0)
   closePopup() {
     this.formClose.emit();
   }
-  iscountryfail:boolean=false;
-  checkCountry(event:any)
-  {
-    if(Number(this.companyForm.value.companyId)>0)
-    {
-      this.iscountryfail=false
+  iscountryfail: boolean = false;
+  checkCountry(event: any) {
+    if (Number(this.companyForm.value.companyId) > 0) {
+      this.iscountryfail = false
 
     }
-    else{
-      this.iscountryfail=true
+    else {
+      this.iscountryfail = true
     }
   }
   submitForm() {
-    debugger
-    if(Number(this.companyForm.value.companyId)>0)
-      {
-        this.iscountryfail=false
-  
-      }
-      else{
-        this.iscountryfail=true
-        this.cdr.detectChanges()
-        return
-      }
+    if (Number(this.companyForm.value.companyId) > 0) {
+      this.iscountryfail = false
+
+    }
+    else {
+      this.iscountryfail = true
+      this.cdr.detectChanges()
+      return
+    }
     if (this.companyForm.valid) {
       const formData = {
         id: this.Id > 0 ? this.Id : 0,
@@ -192,10 +182,10 @@ if(this.Id>0)
         bankName: this.companyForm.get("bankName")?.value,
         accountNumber: this.companyForm.get("accountNumber")?.value,
         swissCode: this.companyForm.get("swissCode")?.value,
-        isPrimary: this.companyForm.value.isPrimary=="0"?false:true
+        isPrimary: this.companyForm.value.isPrimary == "0" ? false : true
       };
 
-      const serviceCall = this.Id > 0 
+      const serviceCall = this.Id > 0
         ? this.companyservice.updateCompanyBank(formData)
         : this.companyservice.addCompanyBank(formData);
 
@@ -208,7 +198,7 @@ if(this.Id>0)
         }
       });
     } else {
-      this.companyForm.markAllAsTouched();      
+      this.companyForm.markAllAsTouched();
     }
   }
 }

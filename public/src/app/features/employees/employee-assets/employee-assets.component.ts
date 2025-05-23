@@ -28,8 +28,8 @@ export class EmployeeAssetsComponent implements OnInit, AfterViewInit {
     {
       headerName: "S. No",
       valueGetter: "node.rowIndex + 1",
-      sortable: true,
-      filter: true,
+      sortable: false,
+      filter: false,
       pinned: "left",
       minWidth: 100,
       maxWidth: 100,

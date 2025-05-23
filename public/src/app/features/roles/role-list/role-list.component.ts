@@ -37,8 +37,8 @@ export class RoleListComponent implements OnInit{
     {
       headerName: "S. No",
       valueGetter: "node.rowIndex + 1",
-      sortable: true,
-      filter: true,
+      sortable: false,
+      filter: false,
       maxWidth: 100,
       pinned: "left",
     },
@@ -106,9 +106,10 @@ export class RoleListComponent implements OnInit{
     createRole(): void {
       const dialogRef = this.dialog.open(RoleCreateComponent, {
         width: "400px",
-        height: "150px",
-        disableClose: true,
+        height: "220px",
+        disableClose: false ,
         data: "role",
+        ariaModal: true,  // Properly manages focus
       });
       dialogRef.afterClosed().subscribe((result) => {
         if (result == true) {

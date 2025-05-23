@@ -46,7 +46,7 @@
     <div class="container-fluid p-0">
       <ag-grid-angular #agGrid style="width: 100%; height: calc(100vh - 12rem) !important; padding-bottom: 10px"
         class="ag-theme-alpine" [rowData]="rowData" [columnDefs]="columnDefs" [defaultColDef]="defaultColDef"
-        [animateRows]="true" [paginationPageSize]="15" [pagination]="true"
+        [animateRows]="true" [paginationPageSize]="15" [pagination]="true" [suppressDragLeaveHidesColumns]="true"
         [paginationPageSizeSelector]="paginationPageSizeSelector" (paginationChanged)="onPaginationChanged($event)"
         (gridReady)="onGridReady($event)" (cellClicked)="getRowId($event)"></ag-grid-angular>
       <div class="table-footer position-relative"></div>

@@ -12,7 +12,7 @@
     <div class="container-fluid p-0">
       <ag-grid-angular #agGrid style="width: 100%; height: calc(100vh - 12rem);" class="ag-theme-alpine"
         [rowData]="rowData" [columnDefs]="columnDefs" [defaultColDef]="defaultColDef" [animateRows]="true"
-        (cellClicked)="updateCompanyProfile($event)" [pagination]="true" (gridReady)="onGridReady($event)">
+        (cellClicked)="updateCompanyProfile($event)" [pagination]="true" [suppressDragLeaveHidesColumns]="true" (gridReady)="onGridReady($event)">
       </ag-grid-angular>
     </div>
   </div>

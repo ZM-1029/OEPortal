@@ -1,20 +1,18 @@
 <div class="sale-create pt-4">
-  <div class="border-bottom bg-light pb-2">
-    <div class="d-flex justify-content-between align-items-center pt-2 pe-3">
+  <div class="border-bottom bg-light pb-2 ">
+    <div class="d-flex justify-content-between align-items-center pt-2 pe-3 ">
       <h2 class="formHeading mb-0">{{ formHeading }} Quotation</h2>
-      <button
-          mat-raised-button
-          class="btn btn-info-dark text-white " (click)="backTosaleListing()">
-          <i class="bi bi-arrow-bar-left me-2"></i> Back
-        </button>
+      <button mat-raised-button class="btn btn-info-dark text-white " (click)="backTosaleListing()">
+        <i class="bi bi-arrow-bar-left me-2"></i> Back
+      </button>
     </div>
   </div>
   <div class="form-container d-flex justify-content-center">
     <form [formGroup]="productForm">
       <div class="input-form-container py-3 mb-4 ">
         <div class="form">
-          <div class="form-group row">
-            <div class="col-6 row pe-0 ms-2">
+          <div class="form-group row ">
+            <div class="col-6 row pe-0 ms-1">
               <mat-label class="outer-mat-lable col-4 pt-2">Customer Name</mat-label>
               <mat-form-field appearance="outline" class="col-8 py-0 ">
                 <mat-select class="py-0" formControlName="customerId" (selectionChange)="onCustomerSelect($event)">
@@ -46,7 +44,7 @@
                   <p>{{Address.shippingAddress}}</p>
                 </div>
               </div>
-              
+
             </div>
           </div>
           }
@@ -120,7 +118,7 @@
                 </mat-form-field>
               </div>
               <div class="form-group row ">
-                <mat-label class="outer-mat-lable col-4 pt-2 ">Sales person </mat-label>
+                <mat-label class="outer-mat-lable col-4 pt-2 ">Sales Person </mat-label>
                 <mat-form-field appearance="outline" class="col-8">
                   <input formControlName="salesPerson" matInput placeholder="Enter Sales person" />
                   <mat-error class="text-danger">
@@ -132,8 +130,8 @@
               <div class="form-group row">
                 <mat-label class="outer-mat-lable col-4 pt-2">Sales Order Date</mat-label>
                 <mat-form-field appearance="outline" class="col-8">
-                  <input matInput [matDatepicker]="picker" formControlName="salesOrderDate"
-                    placeholder="Enter Sales Order Date"  />
+                  <input matInput [matDatepicker]="picker" [matDatepickerFilter]="salesOrderDateFilter" formControlName="salesOrderDate"
+                    placeholder="Enter Sales Order Date" />
                   <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                   <mat-datepicker #picker></mat-datepicker>
                 </mat-form-field>
@@ -141,9 +139,8 @@
               <div class="form-group row">
                 <mat-label class="outer-mat-lable col-4 pt-2">Expected Shipment Date</mat-label>
                 <mat-form-field appearance="outline" class="col-8">
-                  <input matInput [matDatepicker]="pickerShipment" formControlName="expectedShipmentDate"
-                    placeholder="Enter Expected Shipment Date"  />
-                    <!-- [matDatepickerFilter]="noPastDates" -->
+                  <input matInput [matDatepicker]="pickerShipment" [matDatepickerFilter]="expectedShipmentDateFilter" formControlName="expectedShipmentDate"
+                    placeholder="Enter Expected Shipment Date" />
                   <mat-datepicker-toggle matSuffix [for]="pickerShipment"></mat-datepicker-toggle>
                   <mat-datepicker #pickerShipment></mat-datepicker>
                 </mat-form-field>
@@ -207,7 +204,8 @@
                           <mat-option *ngFor="let product of Products" [value]="product.id">{{ product.name
                             }}</mat-option>
                         </mat-select>
-                        <mat-error *ngIf="items.at(i).get('productId')?.hasError('required') && items.at(i).get('productId')?.touched">
+                        <mat-error
+                          *ngIf="items.at(i).get('productId')?.hasError('required') && items.at(i).get('productId')?.touched">
                           Please select a product
                         </mat-error>
                       </mat-form-field>
@@ -224,11 +222,8 @@
                       </mat-form-field> -->
                       <mat-form-field appearance="outline" class="w-100 description" [style.fontSize]="14">
                         <mat-label class="pb-0">Description</mat-label>
-                        <textarea formControlName="description" matInput
-                                  cdkTextareaAutosize
-                                  #autosize="cdkTextareaAutosize"
-                                  cdkAutosizeMinRows="1"
-                                  cdkAutosizeMaxRows="3"></textarea>
+                        <textarea formControlName="description" matInput cdkTextareaAutosize
+                          #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="3"></textarea>
                       </mat-form-field>
                     </div>
                   </td>
@@ -261,7 +256,7 @@
                   <td><input formControlName="subTotal" type="number" class="table-data" readonly /></td>
                   <td class="text-center">
                     <button (click)="deleteRow(i)" class="btn delete-btn text-danger ">
-                      <mat-icon  svgIcon="delete"></mat-icon>
+                      <mat-icon svgIcon="delete"></mat-icon>
                     </button>
                   </td>
                 </tr>
@@ -286,6 +281,33 @@
               <span class="summary-title col-5 fw-bold">Shipping Charges</span>
               <div class="col-6 d-flex pe-0">
                 <input type="text" placeholder="0.00" class="adjustment-label" formControlName="shippingCharges"
+                  (input)="onShippingChargesChange($event)" style="caret-color: auto; outline: none;" />
+                <mat-icon class="mat-icon mx-2" svgIcon="question"></mat-icon>
+              </div>
+              <div class="text-danger" *ngIf="invalidShippingChargesInput">
+                Only numbers (including decimals) are allowed.
+              </div>
+              <span [ngClass]="(productForm.value.shippingCharges > 2) ?'w-auto px-3 ': 'ps-0 '"
+                class="summary-value col-1 text-end ">{{ productForm.value.shippingCharges || 0 | number:'1.2-2'
+                }}</span>
+            </div>
+
+            <div class="summary-row row">
+              <span class="summary-title col-5 fw-bold">Adjustment</span>
+              <div class="col-6 d-flex pe-0">
+                <input type="text" placeholder="0.00" class="adjustment-label" formControlName="adjustment"
+                  (input)="onAdjustmentChange($event)" style="caret-color: auto; outline: none;" />
+              </div>
+              <div *ngIf="invalidAdjustmentInput" class="text-danger col-12">
+                Only numbers (including decimals) are allowed.
+              </div>
+              <span [ngClass]="(productForm.value.adjustment.length > 2) ?'w-auto px-3': 'ps-0'"
+                class="summary-value col-1 text-end">{{ productForm.value.adjustment || 0 | number:'1.2-2' }}</span>
+            </div>
+            <!-- <div class="summary-row row">
+              <span class="summary-title col-5 fw-bold">Shipping Charges</span>
+              <div class="col-6 d-flex pe-0">
+                <input type="text" placeholder="0.00" class="adjustment-label" formControlName="shippingCharges"
                   (input)="onShippingChargesChange($event)" />
                 <mat-icon class="mat-icon mx-2" svgIcon="question"></mat-icon>
               </div>
@@ -304,7 +326,7 @@
                 Only numbers (including decimals) are allowed.
               </div>
               <span [ngClass]="(productForm.value.adjustment.length > 2) ?'w-auto px-3': 'ps-0'" class="  summary-value col-1 text-end  ">{{ productForm.value.adjustment || 0 | number:'1.2-2' }}</span>
-            </div>
+            </div> -->
             <div class="summary-row row">
               @for (tax of calculationDetails.taxes; track $index) {
               <span class="summary-title col-6">{{tax.tax}}</span>

@@ -50,7 +50,7 @@ constructor(private fb: FormBuilder,private apiservice:CountryService,private ro
       
     });
   }
-  @Input() isSideDrawerOpen: boolean = false; // Accept the input
+  @Input() isSideDrawerOpen: boolean = false; 
   @Input() Id: number = 0; // Accept country ID for edit mode
   @Output() formClose: EventEmitter<boolean> = new EventEmitter<boolean>();
 
@@ -95,7 +95,7 @@ patchvalue(id:number)
   // Create a new tax field
   createTaxField(): FormGroup {
     return this.fb.group({
-      TaxName: ['', [Validators.required]], // Only letters and spaces
+      TaxName: ['', [Validators.required,Validators.pattern(/^[A-Za-z\s]+$/)]], // Only letters and spaces
       TaxRate: ['', [Validators.required, Validators.min(0), Validators.max(100)]],
     });
   }
@@ -113,7 +113,7 @@ patchvalue(id:number)
   // Reset the form
   resetForm() {
     this.countryForm.reset();
-    this.initializeForm();
+    // this.initializeForm();
   }
 
   // Submit the form
@@ -131,8 +131,6 @@ patchvalue(id:number)
           name: element.TaxName,
           value: element.TaxRate,
           isFixed:false
-          
-          
         }
         count1++
         if(index==0&&this.Id>0)

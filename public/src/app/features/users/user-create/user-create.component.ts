@@ -1,5 +1,5 @@
 import { AsyncPipe, CommonModule, NgFor } from '@angular/common';
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormsModule, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { MatAutocompleteModule, MatAutocompleteSelectedEvent, MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -36,7 +36,7 @@ interface Role {
    encapsulation: ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UserCreateComponent implements OnInit, OnDestroy  {
+export class UserCreateComponent implements OnInit,OnChanges, OnDestroy  {
   public userForm!: FormGroup;
   public submitted = false;
   public formHeading: string = "Create";
@@ -76,6 +76,15 @@ export class UserCreateComponent implements OnInit, OnDestroy  {
     }
   }
 
+  ngOnChanges(): void {
+    if (this.isSideDrawerOpen) {
+      if (this.Id < 1) {
+        this.formHeading = "Create";
+      } else {
+        this.formHeading = "Update";
+      }
+    }
+  }
 
   getRoles() {
     this.roleService.getActiveRoles().subscribe((response: any) => {
@@ -86,20 +95,6 @@ export class UserCreateComponent implements OnInit, OnDestroy  {
         this._changeDetectorRef.detectChanges();
       }
     });
-  }
-
-
-  clearForm() {
-    if (this.isSideDrawerOpen) {
-      if (this.Id < 1) {
-        this.formHeading = "Create";
-        this.userForm.reset();
-      } else {
-        this.formHeading = "Update";
-        this.getUserDetails(this.Id);
-        this._changeDetectorRef.detectChanges();
-      }
-    }
   }
 
   getUserDetails(id: number) {

@@ -21,8 +21,8 @@ export class NonComplianceTimesheetComponent implements OnInit, OnChanges, After
     {
       headerName: "S. No",
       valueGetter: "node.rowIndex + 1",
-      sortable: true,
-      filter: true,
+      sortable: false,
+      filter: false,
       pinned: "left",
       lockPinned: true,
       minWidth: 100,

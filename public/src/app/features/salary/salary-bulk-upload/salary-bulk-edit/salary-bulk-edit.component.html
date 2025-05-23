@@ -13,6 +13,7 @@
         [paginationPageSizeSelector]="paginationPageSizeSelector"
         (gridReady)="onGridReady($event)"
         (paginationChanged)="onPaginationChanged($event)"
+        [suppressDragLeaveHidesColumns]="true"
       >
       </ag-grid-angular>
     </div>

@@ -41,8 +41,8 @@
       <ag-grid-angular #agGrid style="width: 100%; height: calc(100vh - 12rem)!important; padding-bottom: 10px"
         class="ag-theme-alpine" [rowData]="rowData" [columnDefs]="columnDefs" (rowClicked)="onRowClick($event)"
         [defaultColDef]="defaultColDef" [animateRows]="true" [paginationPageSize]="15" [pagination]="true"
-        [paginationPageSizeSelector]="paginationPageSizeSelector" (gridReady)="onGridReady($event)"
-        (paginationChanged)="onPaginationChanged($event)"></ag-grid-angular>
+        [paginationPageSizeSelector]="paginationPageSizeSelector" (gridReady)="onGridReady($event)" 
+        (paginationChanged)="onPaginationChanged($event)" [suppressDragLeaveHidesColumns]="true"></ag-grid-angular>
       <div class="table-footer position-relative responsive-font">
         <div class="row g-1">
           <div class="col-6 col-sm-3 col-md-2 fw-bold">

@@ -10,9 +10,6 @@ import {
 } from "@angular/core";
 import { AgGridAngular } from "ag-grid-angular";
 import { LoaderComponent } from "../../../../shared/components/UI/loader/loader.component";
-import { ActivatedRoute, Router } from "@angular/router";
-import { MatDialog } from "@angular/material/dialog";
-import { Subject } from "rxjs";
 import { salaryOfEmployeeI } from "../../../../shared/types/salary.type";
 import { SalaryService } from "../../salary.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
@@ -29,8 +26,8 @@ export class SalaryBulkEditComponent implements OnChanges {
     {
       headerName: "S. No",
       valueGetter: "node.rowIndex + 1",
-      sortable: true,
-      filter: true,
+      sortable: false,
+      filter: false,
       pinned: "left",
       minWidth: 100,
       maxWidth: 100,

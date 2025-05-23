@@ -31,7 +31,7 @@ import { MatInputModule } from "@angular/material/input";
     FormsModule,
     PageHeaderComponent,
     MatButtonModule,
-    
+
     TimesheetNonComplianceComponent,
     AttendanceNonComplianceHistoryComponent,
     EfficiencyReportEmployeesComponent,
@@ -54,9 +54,9 @@ export class ReportsListComponent implements OnInit {
   attendanceRowData: nonComplianceI[] = [];
   timesheetRowData: nonComplianceI[] = [];
   ncTypeCounts: ncTypeCountsI | any;
-  employeeId: string='0' 
+  employeeId: string = '0'
   allEmployees: any[] = [];
-  isActiveDropDownShow:boolean=false;
+  isActiveDropDownShow: boolean = false;
 
   dropdownHeading: string = "Select Project"
   activeReport = [
@@ -70,7 +70,7 @@ export class ReportsListComponent implements OnInit {
     private _changeDetectorRef: ChangeDetectorRef, private reportsService: ReportsService
   ) { }
   ngOnInit(): void {
-    this.employeeId='0'
+    this.employeeId = '0'
     this.setDefaultDates();
     this.pageHeader_employee(this.HeadingName);
     this.GetEmployeesForDropdown();
@@ -94,11 +94,11 @@ export class ReportsListComponent implements OnInit {
   }
 
   // Output Emiter From Attendance start
-  isActiveReportsDropDownShow(event:boolean){
-    this.isActiveDropDownShow=event;
+  isActiveReportsDropDownShow(event: boolean) {
+    this.isActiveDropDownShow = event;
   }
   // Output Emiter From Attendance end
-  
+
   GetNCHistoryLogs() {
     this._employeeService
       .GetNCHistoryLogs(this.employeeId, this.startDate, this.endDate)
@@ -152,7 +152,7 @@ export class ReportsListComponent implements OnInit {
     }
   }
 
-   checkAndFetchAttendance() {
+  checkAndFetchAttendance() {
     if (this.startDate && this.endDate) {
       this.GetNCHistoryLogs();
     }
@@ -163,22 +163,40 @@ export class ReportsListComponent implements OnInit {
   }
 
   dateFilter = (d: Date | null): boolean => {
-    if (!this.startDate) return true; 
-    return d! >= new Date(this.startDate); 
+    if (!this.startDate) return true;
+    return d! >= new Date(this.startDate);
   };
-  
+
+  startDateFilter = (d: Date | null): boolean => {
+    if (!d) return false;
+
+    // Disable future dates (optional)
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    if (d > today) return false;
+
+    // If endDate is selected, disable dates after it
+    if (this.endDate) {
+      const endDate = new Date(this.endDate);
+      endDate.setHours(0, 0, 0, 0);
+      return d <= endDate;
+    }
+
+    return true; // Allow selection if no endDate is set
+  };
+
   getEndDate(event: MatDatepickerInputEvent<Date> | any) {
     if (event.value) {
       const selectedEndDate = event.value;
       if (selectedEndDate < new Date(this.startDate)) {
         return;
       }
-  
+
       this.endDate = this.formatDate(selectedEndDate);
       this.checkAndFetchAttendance();
     }
   }
-  
+
 
   // date piker end
 

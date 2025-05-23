@@ -37,11 +37,13 @@
           </li>
           }
           <!-- Profile Section -->
-          <li class="nav-item d-flex align-items-center me-2">
-            <img src="/assets/images/zouma-logo.png" alt="Profile" class="profile-img" />
-            <div class="ms-2" id="profileSection" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <span class="text-light fw-bold">{{name}}</span><br />
-              <span class="text-light small">{{roleName}}</span>
+          <li class="nav-item d-flex align-items-center me-2" >
+            <div class="d-flex align-items-center" id="profileSection" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <img src="/assets/images/zouma-logo.png" alt="Profile" class="profile-img" />
+              <div class="ms-2" >
+                <span class="text-light fw-bold">{{name}}</span><br />
+                <span class="text-light small">{{roleName}}</span>
+              </div>
             </div>
             <ul class="dropdown-menu dropdown-menu-end py-0 bg-white" aria-labelledby="profileSection">
               <div class="profile-info text-center p-3 shadow rounded ">

@@ -63,8 +63,8 @@ export class PurchaseOrderListComponent implements OnInit {
     {
       headerName: "S. No",
       valueGetter: "node.rowIndex + 1",
-      sortable: true,
-      filter: true,
+      sortable: false,
+      filter: false,
       pinned: "left",
       lockPinned: true,
       minWidth: 100,
@@ -282,18 +282,10 @@ export class PurchaseOrderListComponent implements OnInit {
       const PurchaseOrderRowId = event.event.target.closest(".eye-icon").getAttribute("data-id");
       const viewPurchseOrder = this.dialog.open(PurcheseOrdereViewComponent, {
         width: "700px",
-        height: "390px",
+        height: "400px",
         disableClose: true,
         data: PurchaseOrderRowId,
       });
-      viewPurchseOrder.afterClosed().subscribe((result) => {
-        if (result == true) {
-          console.log("Delete confirmed");
-        } else {
-          console.log("Delete action canceled");
-        }
-      });
-      // alert(PurchaseOrderRowId)
     }
     if (event.event.target.closest(".edit-icon")) {
       const PurchaseOrderRowId = event.event.target.closest(".edit-icon").getAttribute("data-id");

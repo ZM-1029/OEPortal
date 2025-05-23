@@ -34,7 +34,7 @@ import { CompanyService } from '../../company.service';
 })
 export class AddCompanyComponent {
  companyForm!: FormGroup;
-  heading:string="Add"
+  heading:string="Create"
   countries: { value: string, label: string }[] = []; // Mock data
   @Input() Id: number = 0;
   @Input() isSideDrawerOpen: boolean = false; 
@@ -62,7 +62,6 @@ export class AddCompanyComponent {
       });
     }
     reset(){
-      debugger
       this.companyForm.reset()
       this.companyForm.get('Country')?.setValue('0');
     }
@@ -74,7 +73,7 @@ export class AddCompanyComponent {
       Country: ['0', Validators.required],
       headquater: ['', [Validators.required]],
       name: ['', [Validators.required]],
-      IsActive:['1']
+      IsActive:[true]
    
     });
 if(this.Id>0)
@@ -87,7 +86,6 @@ if(this.Id>0)
  
   patchValue()
   {
-    debugger
     this.companyservice.getCompanyProfileById(this.Id).subscribe({next:(data:any)=>{
       this.companyForm.patchValue({
         headquater:data.data.headquater,
@@ -114,7 +112,6 @@ if(this.Id>0)
     }
   }
   submitForm() {
-    debugger
     if(Number(this.companyForm.value.Country)>0)
       {
         this.iscountryfail=false
@@ -129,7 +126,6 @@ if(this.Id>0)
       console.log('Form Data:', this.companyForm.value);
       if(this.Id<=0)
         {
-          debugger
            var request={
               id: 0,
               countryId: this.companyForm.value.Country,
@@ -147,7 +143,6 @@ if(this.Id>0)
            }})
         }
         else{
-          debugger;
           var request={  
             id: this.Id,   
               countryId: this.companyForm.value.Country,

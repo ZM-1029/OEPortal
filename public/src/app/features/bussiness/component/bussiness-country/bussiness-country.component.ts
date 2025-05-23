@@ -34,7 +34,7 @@ export class BussinessCountryComponent {
 
 
   columnDefs: ColDef[] = [
-    { headerName: "S. No", valueGetter: "node.rowIndex + 1", pinned: "left" },
+    { headerName: "S. No", valueGetter: "node.rowIndex + 1", pinned: "left" ,sortable: false, filter: false},
     { field: 'country', headerName: 'Country', sortable: true, filter: true },
     { field: 'termCondition', headerName: 'Term & Condition', sortable: true, filter: true,
       cellRenderer: (params: any) => {

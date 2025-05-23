@@ -318,3 +318,22 @@
     }
   }
   
+
+::ng-deep {
+  .editor-container {
+    .ql-container {
+      border: 1px solid #ccc !important;
+      border-radius: 4px;
+      
+      .ql-editor {
+        min-height: 150px;
+        caret-color: #000 !important;
+        
+        &.ql-blank::before {
+          color: rgba(0,0,0,0.6);
+          left: 15px !important;
+        }
+      }
+    }
+  }
+}

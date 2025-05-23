@@ -33,7 +33,7 @@ import { PurchaseOrderSummeryI } from 'src/app/shared/types/purchaseOrder.type';
     FormsModule,
     MatAutocompleteModule,
     ReactiveFormsModule,
-    MatCheckboxModule, PurchaseOrderComponent,NgClass],
+    MatCheckboxModule, PurchaseOrderComponent, NgClass],
   templateUrl: './invoice-form.component.html',
   styleUrl: './invoice-form.component.scss',
   providers: [
@@ -68,17 +68,20 @@ export class InvoiceFormComponent implements OnInit, OnChanges, AfterViewInit {
   invoiceTableData: invoiceCreateTableI[] = [];
   invoiceForm!: FormGroup;
   purchaseOrderForm!: FormGroup;
-  purchaseOrderFormData: any={};
+  purchaseOrderFormData: any = {};
   isVisibalPurchaseOrder: boolean = false;
   isDesableAllInput: boolean = false;
-  isDesableViewBtn:boolean=true;
+  isDesableViewBtn: boolean = true;
   constructor(private customerService: CustomersService, private _successMessage: MatSnackBar, private dialog: MatDialog,
     private invoiceService: InvoiceService, private _changeDetectorRef: ChangeDetectorRef) {
   }
 
   ngOnInit(): void {
     this.invoiceForm = new FormGroup({
-      invoiceNumber: new FormControl('', Validators.required),
+      invoiceNumber: new FormControl('', [
+        Validators.required,
+        Validators.pattern(/^\S+$/)  
+      ]),
       date: new FormControl(moment(), Validators.required),
       customerName: new FormControl('', Validators.required),
       customerId: new FormControl('')
@@ -161,7 +164,7 @@ export class InvoiceFormComponent implements OnInit, OnChanges, AfterViewInit {
 
   onSelectCustomer(event: any): void {
     this.isVisibalPurchaseOrder = false;
-    this.isDesableViewBtn=true;
+    this.isDesableViewBtn = true;
     this.purchaseOrderForm.reset();
     this.purchaseOrderData.emit();
     const selectedCustomer = this.allCustomers.find(
@@ -228,7 +231,7 @@ export class InvoiceFormComponent implements OnInit, OnChanges, AfterViewInit {
     const customerId = this.invoiceForm.get('customerId')?.value;
     this.purchaseOrderData.emit();
     if (isPoChecked && customerId) {
-      this.purchaseOrderFormData={};
+      this.purchaseOrderFormData = {};
       this.invoiceService.getPosByCustomerid(customerId).subscribe({
         next: (response) => {
           if (response.success) {
@@ -237,7 +240,7 @@ export class InvoiceFormComponent implements OnInit, OnChanges, AfterViewInit {
             this.allPO = [];
             this.handleError(response.message);
           }
-          this._changeDetectorRef.detectChanges(); 
+          this._changeDetectorRef.detectChanges();
         },
         error: (error) => {
           console.error("API Error:", error);
@@ -251,7 +254,7 @@ export class InvoiceFormComponent implements OnInit, OnChanges, AfterViewInit {
       this._changeDetectorRef.detectChanges();
     }
   }
-  
+
 
 
   // datepiker start
@@ -290,16 +293,16 @@ export class InvoiceFormComponent implements OnInit, OnChanges, AfterViewInit {
               }
               this.purchaseOrderFormData = { ...purchaseOrderFormData };
               this.getPurchaseOrderForm();
-              this.isDesableViewBtn=false;
+              this.isDesableViewBtn = false;
               this._changeDetectorRef.detectChanges();
-            }else{
-              this.isDesableViewBtn=true;
+            } else {
+              this.isDesableViewBtn = true;
               this.getPurchaseOrderForm();
             }
           }),
           error: ((err) => {
             this.getPurchaseOrderForm();
-            this.isDesableViewBtn=true;
+            this.isDesableViewBtn = true;
             console.log(`getPOSummaryByPoId ${err}`);
           })
         }
@@ -311,7 +314,7 @@ export class InvoiceFormComponent implements OnInit, OnChanges, AfterViewInit {
   getPurchaseOrderDataLength(): number {
     return Object.keys(this.purchaseOrderFormData || {}).length;
   }
-  
+
   // purchaseOrder summery from purchase order... end
 
   //  Function to show success messages

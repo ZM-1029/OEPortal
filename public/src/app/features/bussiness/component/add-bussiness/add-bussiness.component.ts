@@ -1,6 +1,6 @@
-import { ChangeDetectorRef, Component, EventEmitter, inject, Input, Output, signal } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, inject, Input, Output, signal, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgIf } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
@@ -12,7 +12,7 @@ import { BussinessService } from '../../bussiness.service';
 import { ActivatedRoute } from '@angular/router';
 import { SuccessModalComponent } from 'src/app/shared/components/UI/success-modal/success-modal.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { QuillModule } from 'ngx-quill';
+import { QuillEditorComponent, QuillModule } from 'ngx-quill';
 
 @Component({
   selector: 'app-add-bussiness',
@@ -25,17 +25,19 @@ import { QuillModule } from 'ngx-quill';
     MatButtonModule,
     MatIconModule,
     ReactiveFormsModule,
-    QuillModule
+    QuillModule, NgIf
   ],
   templateUrl: './add-bussiness.component.html',
   styleUrl: './add-bussiness.component.scss'
 })
-export class AddBussinessComponent {
+export class AddBussinessComponent implements AfterViewInit {
   businessForm!: FormGroup;
-  heading: string = "Add"
+  heading: string = "Create"
   countries: { value: string, label: string }[] = []; // Mock data
   @Input() Id: number = 0;
   @Input() isSideDrawerOpen: boolean = false;
+  // @ViewChild('termsEditor') termsEditor!: QuillEditorComponent;
+   @ViewChild('termsEditor', { static: true }) termsEditor!: ElementRef;
   serviceid: number = 0
   @Output() formClose: EventEmitter<boolean> = new EventEmitter<boolean>();
   constructor(private fb: FormBuilder, private apiservice: BussinessService, private activate: ActivatedRoute, private _successMessage: MatSnackBar, private cdr: ChangeDetectorRef) {
@@ -51,6 +53,28 @@ export class AddBussinessComponent {
         });
       }
     })
+  }
+
+  ngAfterViewInit(): void {
+    // setTimeout(() => {
+    //   this.termsEditor?.quillEditor?.focus();
+    // }, 500);
+    this.cdr.detectChanges();
+  }
+
+ 
+
+  onEditorCreated(editor: any) {
+    setTimeout(() => {
+      // Focus and set cursor position
+      editor.focus();
+      editor.setSelection(0, 0);
+      
+      // Force cursor visibility
+      const editorContainer = this.termsEditor.nativeElement.querySelector('.ql-editor');
+      editorContainer.style.caretColor = 'black';
+      editorContainer.style.userSelect = 'text';
+    }, 300);
   }
 
   private showSuccessMessage(message: string) {
@@ -178,8 +202,6 @@ export class AddBussinessComponent {
 
     } else {
       this.businessForm.markAllAsTouched();
-
-
     }
   }
 }
