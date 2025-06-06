@@ -162,7 +162,6 @@ export class PurchaseOrderListComponent implements OnInit {
 
   ngOnInit(): void {
     this.pageHeader_customer(this.HeadingName);
-
   }
 
 
@@ -303,7 +302,7 @@ export class PurchaseOrderListComponent implements OnInit {
     const dialogRef = this.dialog.open(DeleteModalComponent, {
       width: "400px",
       height: "175px",
-      disableClose: true,
+      disableClose: false,
       data: "Purchase Order",
     });
     dialogRef.afterClosed().subscribe((result) => {

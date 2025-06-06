@@ -1,0 +1,103 @@
+<!-- <p>project-timesheet works! {{startDate}} and {{endDate}} {{activeTable}}</p> -->
+<div class=" customer-efficiency-report ">
+    <div class="multi-select-dropdown ">
+        <!-- <div class="dropdown-year  ps-3">
+            @if(yearDropdown.length!=0){
+                <app-single-select-dropdown [dropdownHeading]="'Select Year'" [defaultValue]="selectedValueYear"
+                [dataList]="yearDropdown" (selectedOutput)="selectedYear($event)">
+            </app-single-select-dropdown>
+            }
+        </div> -->
+        <!-- <div class="dropdown-month px-3">
+            @if(selectedValueMonth){
+                <app-month-multi-select-dropdown 
+              [dropdownHeading]="'Months'" 
+              [defaultValue]="selectedValueMonth"  
+              [dataList]="Month"
+              (selectedOutput)="selectedMonth($event)">
+            </app-month-multi-select-dropdown>
+            }
+          </div> -->
+        <!-- <div class="customer-dropdown ">
+            <app-multi-selcet-object-dropdown [dropdownHeading]="'Customer'" [defaultValue]="customerId"
+                [dataList]="allCustomers" (selectedOutput)="selectedCustomer($event)">
+            </app-multi-selcet-object-dropdown>
+        </div> -->
+        <div class="customer-dropdown ">
+            <app-multi-select-dropdown class="pb-3" (selectedOutput)="selectedProject($event)"
+                [dropdownHeading]="'Projects'" [defaultValue]="'0'"
+                [dataList]="allProjects"></app-multi-select-dropdown>
+        </div>
+    </div>
+    <div class="dropdown-manage-column ">
+        <mat-form-field appearance="outline" class=" ">
+            <mat-label>Start Date</mat-label>
+            <input matInput [matDatepicker]="startPicker" [matDatepickerFilter]="startDateFilter" [value]="startDate" (dateChange)="getStartDate($event)" placeholder="Select start date">
+            <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
+            <mat-datepicker #startPicker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="mx-2">
+            <mat-label>End Date</mat-label>
+            <input matInput [matDatepicker]="endPicker" [value]="endDate" (dateChange)="getEndDate($event)" placeholder="Select end date">
+            <mat-datepicker-toggle matIconSuffix [for]="endPicker"></mat-datepicker-toggle>
+            <mat-datepicker #endPicker></mat-datepicker>
+        </mat-form-field>
+        <button class="btn btn-info-dark text-white btn-wave dropdown-toggle" type="button" id="dropdownMenuButton1"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            Manage Column
+        </button>
+
+        <ul class="dropdown-menu py-0" aria-labelledby="dropdownMenuButton1">
+            @for (column of allColumns; track column) {
+            <li>
+                @if (
+                column.headerName == 'S. No' ||
+                column.field == 'employeeID' ||
+                column.field == 'firstName'
+                ) {
+                <!-- Hidden fixed columns -->
+                <div class="dropdown-item d-none checkbox-container">
+                    <input type="checkbox" [checked]="isColumnDisplayed(column)" disabled id="{{ column.field }}" />
+                    <label for="{{ column.field }}">{{ column.headerName }}</label>
+                </div>
+                } @else {
+                <!-- Togglable columns -->
+                <div class="dropdown-item checkbox-container pt-1 px-3" [ngClass]="{
+                  'checked': isColumnDisplayed(column),
+                  'unchecked': !isColumnDisplayed(column)
+                }" (click)="preventClose($event)">
+                    <input type="checkbox" [checked]="isColumnDisplayed(column)" (change)="toggleColumn(column)"
+                        id="{{ column.field }}" />
+                    <label for="{{ column.field }}">{{ column.headerName }}</label>
+                </div>
+                }
+            </li>
+            }
+        </ul>
+    </div>
+    <div class="container-fluid p-0">
+        <ag-grid-angular #agGrid style="width: 100%; height: calc(100vh - 14.5rem)" class="ag-theme-alpine"
+            [rowData]="rowData" [columnDefs]="columnDefs" [defaultColDef]="defaultColDef" [animateRows]="true"
+            [paginationPageSize]="15" [paginationPageSizeSelector]="paginationPageSizeSelector" [pagination]="true"
+            (gridReady)="onGridReady($event)" (paginationChanged)="onPaginationChanged($event)"
+            [suppressDragLeaveHidesColumns]="true"></ag-grid-angular>
+        <!-- <div class="table-footer position-relative">
+            <div class="row text-danger">
+                @for(summary of reportsCustomersSummary; track summary){
+                <div class="col-auto fw-bold">
+                    <label class="summary-item text-bold">
+                        @if(summary.key=='_1'){
+                        <span class="text-capitalize">Total Salary</span>: {{ summary.value }}
+                        }@else if(summary.key=='_2'){
+                        <span class="text-capitalize">Total Billed Amount</span>: {{ summary.value }}
+                        }@else if(summary.key=='_3'){
+                        <span class="text-capitalize">Profit Margin</span>: {{ summary.value }}
+                        }
+                    </label>
+                </div>
+                }
+            </div>
+        </div> -->
+    </div>
+</div>

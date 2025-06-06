@@ -37,7 +37,8 @@ export class AddBussinessComponent implements AfterViewInit {
   @Input() Id: number = 0;
   @Input() isSideDrawerOpen: boolean = false;
   // @ViewChild('termsEditor') termsEditor!: QuillEditorComponent;
-   @ViewChild('termsEditor', { static: true }) termsEditor!: ElementRef;
+   @ViewChild('termsEditor') termsEditor!: QuillEditorComponent;
+
   serviceid: number = 0
   @Output() formClose: EventEmitter<boolean> = new EventEmitter<boolean>();
   constructor(private fb: FormBuilder, private apiservice: BussinessService, private activate: ActivatedRoute, private _successMessage: MatSnackBar, private cdr: ChangeDetectorRef) {
@@ -64,18 +65,13 @@ export class AddBussinessComponent implements AfterViewInit {
 
  
 
-  onEditorCreated(editor: any) {
-    setTimeout(() => {
-      // Focus and set cursor position
-      editor.focus();
-      editor.setSelection(0, 0);
-      
-      // Force cursor visibility
-      const editorContainer = this.termsEditor.nativeElement.querySelector('.ql-editor');
-      editorContainer.style.caretColor = 'black';
-      editorContainer.style.userSelect = 'text';
-    }, 300);
-  }
+ onEditorCreated(editor: any) {
+  setTimeout(() => {
+    editor.focus();
+    editor.setSelection(0, 0);
+  }, 500);
+}
+
 
   private showSuccessMessage(message: string) {
     this._successMessage.openFromComponent(SuccessModalComponent, {

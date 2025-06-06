@@ -50,7 +50,7 @@ export class AddPdfComponent {
   ngOnInit(): void {
     this.id = this.data;
     this.cardForm = this.fb.group({
-      title: ['', Validators.required],
+      title: ['',],
       subtitle: ['', Validators.required],
       showButton: [false],
       image: [null],

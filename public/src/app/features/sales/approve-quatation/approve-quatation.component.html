@@ -82,7 +82,7 @@
                                                 svgIcon="correct"></mat-icon>
                                         </button>
 
-                                        <button type="button" mat-raised-button
+                                        <button type="button" mat-raised-button  [ngClass]="approveForm.get('selfApprove')?.value ? 'd-none': ''"
                                             [disabled]="approveForm.get('isSelfApprovelDecline')?.value || roleId==8"
                                             color="{{ approveForm.get('isSelfApprovelDecline')?.value ? 'warn' : '' }}"
                                             class="decline-btn"
@@ -127,7 +127,7 @@
                                     @if(approveForm.get('approveByAccountant')?.value ){
                                     <div [ngClass]="roleId == 8 ?'':'d-none'"
                                         class="d-flex my-2 justify-content-start flex-column">
-                                        <div class="form-group d-flex py-2 align-items-center">
+                                        <div [ngClass]="quotationStatusId!==4  ?'':'d-none'" class="form-group d-flex py-2 align-items-center">
                                             <label class="custom-file-upload">
                                                 <input type="file" (change)="onFileChange($event)" />
                                                 Upload File

@@ -337,3 +337,10 @@
     }
   }
 }
+
+::ng-deep .ql-editor {
+  width: 100%;
+  caret-color: black !important;
+  color: #000 !important;
+  user-select: text;
+}

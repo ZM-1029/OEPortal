@@ -251,7 +251,7 @@ export class EmployeeAttendanceComponent implements OnInit {
       data: {
         employeeId: this.employeeId,
       },
-      disableClose: true,
+      disableClose: false,
     });
   }
 

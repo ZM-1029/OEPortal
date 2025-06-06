@@ -53,6 +53,13 @@ export class EmployeeSalaryComponent implements OnInit, AfterViewInit {
       sortable: true,
       filter: true,
       minWidth: 100,
+       valueFormatter: (params: { value: number; }) => {
+        if (params.value) {
+          const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+          return monthNames[params.value - 1]; // Convert month number (1-12) to name
+        }
+        return "";
+      }
     },
     {
       field: "year",

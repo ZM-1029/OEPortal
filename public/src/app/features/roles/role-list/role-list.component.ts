@@ -80,7 +80,6 @@ export class RoleListComponent implements OnInit{
     this.HeadingName = employeeHeadingName;
   }
 
- 
   getActiveRoles(){
     this.roleService.getActiveRoles().subscribe(
       {
@@ -107,7 +106,7 @@ export class RoleListComponent implements OnInit{
       const dialogRef = this.dialog.open(RoleCreateComponent, {
         width: "400px",
         height: "220px",
-        disableClose: false ,
+        disableClose: false,
         data: "role",
         ariaModal: true,  // Properly manages focus
       });

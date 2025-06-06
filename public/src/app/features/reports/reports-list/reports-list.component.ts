@@ -18,6 +18,7 @@ import { SingleSelectDropdownComponent } from "src/app/shared/components/UI/sing
 import { MultiSelectDropdownComponent } from "src/app/shared/components/UI/multi-select-dropdown/multi-select-dropdown.component";
 import { employeesDropdownI } from "src/app/shared/types/reports.type";
 import { MatInputModule } from "@angular/material/input";
+import { ProjectTimesheetComponent } from "./reports-tables/project-timesheet/project-timesheet.component";
 
 @Component({
   selector: "app-reports-list",
@@ -31,12 +32,12 @@ import { MatInputModule } from "@angular/material/input";
     FormsModule,
     PageHeaderComponent,
     MatButtonModule,
-
     TimesheetNonComplianceComponent,
     AttendanceNonComplianceHistoryComponent,
     EfficiencyReportEmployeesComponent,
     EfficiencyReportCustomersComponent,
-    NgClass, MultiSelectDropdownComponent, SingleSelectDropdownComponent
+    NgClass, MultiSelectDropdownComponent, SingleSelectDropdownComponent,
+    ProjectTimesheetComponent
   ],
   templateUrl: "./reports-list.component.html",
   styleUrl: "./reports-list.component.scss",
@@ -60,10 +61,11 @@ export class ReportsListComponent implements OnInit {
 
   dropdownHeading: string = "Select Project"
   activeReport = [
-    { value: 'attendance', label: 'Attendance' },
-    { value: 'timesheet', label: 'Timesheet' },
+    { value: 'attendance', label: 'Attendance NC' },
+    { value: 'timesheet', label: 'Timesheet NC' },
     { value: 'efficiency-report-employees', label: 'Efficiency Reports Employees' },
     { value: 'efficiency-report-customers', label: 'Efficiency Reports Customers' },
+    { value: 'project-timesheet', label: 'Project Timesheet' },
   ];
 
   constructor(private _employeeService: EmployeesService, private _successMessage: MatSnackBar,
@@ -169,12 +171,10 @@ export class ReportsListComponent implements OnInit {
 
   startDateFilter = (d: Date | null): boolean => {
     if (!d) return false;
-
     // Disable future dates (optional)
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     if (d > today) return false;
-
     // If endDate is selected, disable dates after it
     if (this.endDate) {
       const endDate = new Date(this.endDate);

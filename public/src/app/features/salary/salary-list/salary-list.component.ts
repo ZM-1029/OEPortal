@@ -321,7 +321,7 @@ export class SalaryListComponent implements OnInit, AfterViewInit {
     const dialogRef = this.dialog.open(DeleteModalComponent, {
       width: "400px",
       height: "175px",
-      disableClose: true,
+      disableClose: false,
       data: "Salary",
     });
     dialogRef.afterClosed().subscribe((result) => {

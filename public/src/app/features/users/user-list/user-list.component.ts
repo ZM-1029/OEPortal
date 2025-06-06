@@ -190,7 +190,7 @@ export class UserListComponent implements OnInit {
     const dialogRef = this.dialog.open(DeleteModalComponent, {
       width: "400px",
       height: "175px",
-      disableClose: true,
+      disableClose: false,
       data: "Customer",
     });
     dialogRef.afterClosed().subscribe((result) => {

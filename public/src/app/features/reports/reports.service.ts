@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { EmployeesForDropdownI, getEmployeeProfitDetailI, getEfficiencyReportsEmployeeI, EfficiencyReportsCustomerResponseI } from 'src/app/shared/types/reports.type';
+import { EmployeesForDropdownI, getEmployeeProfitDetailI, getEfficiencyReportsEmployeeI, EfficiencyReportsCustomerResponseI, projectTimesheetResponseI } from 'src/app/shared/types/reports.type';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -33,10 +33,22 @@ export class ReportsService {
       `${environment.apiUrl}api/EmployeeDashboard/GetEmployeeProfitDetailsByCustomer?customerIds=${customerId}&months=${month}&year=${year}`,
     );
   }
+  
+  getTimesheetByDurationAndProject(startDate: any, endDate: any, projects: any) {
+    return this.http.get<projectTimesheetResponseI>(
+      `${environment.apiUrl}api/EmployeeDashboard/GetTimesheetByDurationAndProject?startDate=${startDate}&endDate=${endDate}&project=${projects}`,
+    );
+  }
 
   getAllCustomer() {
     return this.http.get(
       `${environment.apiUrl}api/Customer/GetCustomerForPo`,
+    );
+  }
+
+  getAllProjects() {
+    return this.http.get(
+      `${environment.apiUrl}api/EmployeeDashboard/distinct-projects`,
     );
   }
 

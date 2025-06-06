@@ -12,7 +12,7 @@ ModuleRegistry.registerModules([AllCommunityModule]);
   templateUrl: './employee-invoice.component.html',
   styleUrl: './employee-invoice.component.scss'
 })
-export class EmployeeInvoiceComponent implements AfterViewInit{
+export class EmployeeInvoiceComponent implements AfterViewInit {
   @Input() employeeId!: string;
   public currentPageNumber: number = 1;
   public currentPageSize: number = 15;
@@ -36,14 +36,21 @@ export class EmployeeInvoiceComponent implements AfterViewInit{
       },
     },
     {
-      field: "month",
+      field: "salaryMonth",
       headerName: "Month",
       sortable: true,
       filter: true,
       minWidth: 100,
+      valueFormatter: (params: { value: number; }) => {
+        if (params.value) {
+          const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+          return monthNames[params.value - 1]; // Convert month number (1-12) to name
+        }
+        return "";
+      }
     },
     {
-      field: "year",
+      field: "salaryYear",
       headerName: "Year",
       sortable: true,
       filter: true,

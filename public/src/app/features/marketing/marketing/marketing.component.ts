@@ -100,7 +100,7 @@ export class MarketingComponent implements OnInit {
     const dialogRef = this.dialog.open(AddPdfComponent, {
       width: "500px",
       height: "450px",
-      disableClose: true,
+      disableClose: false,
       data: id,
     });
     dialogRef.afterClosed().subscribe((result) => {
@@ -118,7 +118,7 @@ export class MarketingComponent implements OnInit {
     const dialogRef = this.dialog.open(DeleteModalComponent, {
       width: "400px",
       height: "175px",
-      disableClose: true,
+      disableClose: false,
       data: "Marketing",
     });
     dialogRef.afterClosed().subscribe((result) => {

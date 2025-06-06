@@ -68,7 +68,7 @@ export class InvoiceCreateTableComponent implements OnInit, OnChanges {
       minWidth: 170,
     },
     {
-      field: "salary",
+      field: "salaryAmount",
       headerName: "Salary Amount",
       sortable: true,
       filter: true,

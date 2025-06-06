@@ -30,7 +30,7 @@ export class RoleCreateComponent implements OnInit {
   isSubmitted = false;
   ngOnInit(): void {
     this.roleForm = new FormGroup({
-      roleName: new FormControl('', [Validators.required, Validators.minLength(3)])
+      roleName: new FormControl('', [ Validators.minLength(3)])
     });
     this.dialogRef.backdropClick().subscribe(() => {
       this.cancel(false); // Close without validating

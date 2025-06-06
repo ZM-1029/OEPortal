@@ -22,7 +22,7 @@
     background-color: #2e3b64 !important;
     outline: #2e3b64 !important;
     border: #2e3b64;
-    color: white;
+    color: white !important;
   }
 .role-dialog {
   width: 400px;
@@ -46,6 +46,11 @@
   font-size: 18px;
   font-weight: 600;
   color: #333;
+}
+
+.mat-icon{
+  width: 26px;
+  height: 26px;
 }
 
 

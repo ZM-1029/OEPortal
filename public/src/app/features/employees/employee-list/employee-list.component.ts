@@ -24,6 +24,8 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { SuccessModalComponent } from "src/app/shared/components/UI/success-modal/success-modal.component";
 import { rolePermissionListI } from "src/app/shared/types/roles.type";
 import { RolePermissionService } from "../../role-permissions/role-permission.service";
+import { ManageColumnStateService } from "src/app/shared/services/manage-column-state.service";
+
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 @Component({
@@ -176,13 +178,40 @@ export class EmployeeListComponent implements OnInit, OnChanges {
     private _changeDetectorRef: ChangeDetectorRef,
     private _router: Router,
     private _successMessage: MatSnackBar,
-    private rolePermissionService: RolePermissionService
+    private rolePermissionService: RolePermissionService,
+    private manageColumnStateService: ManageColumnStateService
   ) { }
 
+  // Manage Column start
+  allColumns: any[] = [];
+  displayedColumns: any[] = [];
 
   ngOnInit(): void {
     this.pageHeader_employee(this.HeadingName);
+    this.initializeColumns();
   }
+
+  private initializeColumns() {
+    this.allColumns = [...this.columnDefs];
+    if (this.manageColumnStateService.getAllColumns().length === 0) {
+      this.manageColumnStateService.setAllColumns(this.allColumns);
+      this.manageColumnStateService.setDisplayedColumns(this.allColumns);
+    }
+    this.displayedColumns = this.manageColumnStateService.getDisplayedColumns();
+    this.columnDefs = [...this.displayedColumns];
+  }
+
+  isColumnDisplayed(column: any): boolean {
+    return this.manageColumnStateService.isColumnDisplayed(column);
+  }
+
+  toggleColumn(column: any): void {
+    this.manageColumnStateService.toggleColumn(column);
+    this.displayedColumns = this.manageColumnStateService.getDisplayedColumns();
+    this.columnDefs = [...this.displayedColumns];
+  }
+
+  // Manage Column end
 
   ngOnChanges(changes: SimpleChanges): void {
     this.sideDrawer();
@@ -340,30 +369,30 @@ export class EmployeeListComponent implements OnInit, OnChanges {
   }
 
   // for Manage Columns start
-  allColumns = [...this.columnDefs];
-  displayedColumns = [...this.columnDefs];
+  // allColumns = [...this.columnDefs];
+  // displayedColumns = [...this.columnDefs];
 
-  // Toggle column selection
-  toggleColumn(column: any) {
-    const columnIndex = this.displayedColumns.findIndex(
-      (col) => col.field === column.field,
-    );
-    if (columnIndex >= 0) {
-      this.displayedColumns.splice(columnIndex, 1);
-    } else {
-      const colToAdd = this.allColumns.find(
-        (col) => col.field === column.field,
-      );
-      if (colToAdd) {
-        this.displayedColumns.push(colToAdd);
-      }
-    }
-    this.columnDefs = [...this.displayedColumns];
-  }
+  // // Toggle column selection
+  // toggleColumn(column: any) {
+  //   const columnIndex = this.displayedColumns.findIndex(
+  //     (col) => col.field === column.field,
+  //   );
+  //   if (columnIndex >= 0) {
+  //     this.displayedColumns.splice(columnIndex, 1);
+  //   } else {
+  //     const colToAdd = this.allColumns.find(
+  //       (col) => col.field === column.field,
+  //     );
+  //     if (colToAdd) {
+  //       this.displayedColumns.push(colToAdd);
+  //     }
+  //   }
+  //   this.columnDefs = [...this.displayedColumns];
+  // }
 
-  isColumnDisplayed(column: any): boolean {
-    return this.displayedColumns.some((col) => col.field === column.field);
-  }
+  // isColumnDisplayed(column: any): boolean {
+  //   return this.displayedColumns.some((col) => col.field === column.field);
+  // }
 
   preventClose(event: MouseEvent) {
     event.stopPropagation();

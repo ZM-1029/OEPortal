@@ -69,3 +69,21 @@ export interface Summary {
   _2: number
   _3: number
 }
+
+
+export interface projectTimesheetResponseI {
+  success: boolean
+  message: string
+  data: projectTimesheetI[]
+}
+
+export interface projectTimesheetI {
+  employeeMailId: string
+  dbWorkDate: string
+  projectName: string
+  hours: string
+  jobName: string
+  description: string
+  empId: string
+  employeeName: string
+}

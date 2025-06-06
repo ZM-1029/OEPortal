@@ -9,7 +9,7 @@ import {
   employeeDetailsI,
   employeeType,
 } from "../../../shared/types/employees.type";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { ChangeDetectorRef } from "@angular/core";
 import { EmployeeAttendanceComponent } from "../employee-attendance/employee-attendance.component";
 import { LoaderComponent } from "../../../shared/components/UI/loader/loader.component";
@@ -59,6 +59,7 @@ export class EmployeeDetailsComponent implements OnInit {
     private _employeeService: EmployeesService,
     private route: ActivatedRoute,
     private _changeDetetction: ChangeDetectorRef,
+    private _router: Router
   ) {}
 
   ngOnInit(): void {
@@ -120,6 +121,10 @@ export class EmployeeDetailsComponent implements OnInit {
         this.reportingToUrl = img.imageUrl;
         this._changeDetetction.detectChanges();
       });
+  }
+
+  backToEmployeListing(){
+    this._router.navigateByUrl("/admin/employee");
   }
 
   getReportingManagerId(reporting: string) {

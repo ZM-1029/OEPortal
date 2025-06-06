@@ -133,7 +133,7 @@ export class BussinessLineComponent {
     const dialogRef = this.dialog.open(DeleteModalComponent, {
       width: "400px",
       height: "175px",
-      disableClose: true,
+      disableClose: false,
       data: "Country",
     });
 

@@ -50,7 +50,7 @@
         <!-- <button  type="button" mat-button (click)="clearForm()" class="btn btn-light border rounded-pill me-2" [disabled]="isSubmitting">
           Clear
         </button> -->
-        <button    type="submit" class="btn btn-info-dark rounded-pill" [disabled]="isSaveBtnAble">
+        <button   type="submit" class="btn btn-info-dark rounded-pill" [disabled]="isSubmitting || !cardForm.valid || pdfError || imageError">
           <mat-spinner *ngIf="isSubmitting" diameter="20"></mat-spinner>
           <span *ngIf="!isSubmitting">{{headingPdf}}</span>
         </button>

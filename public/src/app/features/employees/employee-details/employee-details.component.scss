@@ -237,6 +237,16 @@ h5 {
   font-size: 14px;
 }
 
+.btn-info-dark {
+  position: relative;
+  z-index: 1000; /* Ensure it's above other elements */
+  margin: 15px; /* Add some spacing */
+  background-color: #2e3b64 !important;
+  outline: #2e3b64 !important;
+  border: #2e3b64;
+  color: white !important;
+}
+
 @media (max-width: 550px) {
   .profile-content {
     overflow-x: scroll;

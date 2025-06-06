@@ -245,7 +245,7 @@ export class AttendanceNonComplianceHistoryComponent implements OnInit, OnChange
 
   ngOnChanges() {
     if (this.agGrid && this.attendanceRowData.length !== 0) {
-      this.getPermissionToAccessPage(Number(localStorage.getItem('role')));
+      // this.getPermissionToAccessPage(Number(localStorage.getItem('role')));
     } else {
       this.rowData = [];
       this.attendanceNcTypeCounts = {};
@@ -364,44 +364,7 @@ export class AttendanceNonComplianceHistoryComponent implements OnInit, OnChange
     this.currentPageSize = pageSize;
   }
 
-  // // for Manage Columns start
-  // allColumns = [...this.columnDefs];
-  // displayedColumns = [...this.columnDefs];
 
-  // toggleColumn(column: any) {
-  //   const columnIndex = this.displayedColumns.findIndex(
-  //     (col) => col.field === column.field,
-  //   );
-  //   if (columnIndex >= 0) {
-  //     this.displayedColumns.splice(columnIndex, 1);
-  //   } else {
-  //     const colToAdd = this.allColumns.find(
-  //       (col) => col.field === column.field,
-  //     );
-  //     if (colToAdd) {
-  //       this.displayedColumns.push(colToAdd);
-  //     }
-  //   }
-  //   this.columnDefs = [...this.displayedColumns];
-  // }
-
-  // isColumnDisplayed(column: any): boolean {
-  //   return this.displayedColumns.some((col) => col.field === column.field);
-  // }
-
-  // // In your component class
-  // preventClose(event: MouseEvent) {
-  //   event.stopPropagation();
-  //   // If you need to manually handle the checkbox toggle:
-  //   const checkbox = event.target as HTMLInputElement;
-  //   if (checkbox.tagName === 'INPUT' && checkbox.type === 'checkbox') {
-  //     // The (change) event will handle the toggle
-  //     return;
-  //   }
-  //   event.preventDefault();
-  // }
-
-  // // for Manage Columns end
 
 // for Manage Columns start
 allColumns = [...this.columnDefs];

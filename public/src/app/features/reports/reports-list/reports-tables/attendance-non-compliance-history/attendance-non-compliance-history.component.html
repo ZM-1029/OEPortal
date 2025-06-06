@@ -1,53 +1,4 @@
 <div class="container-fluid p-0">
-  <!-- <div [ngClass]="reportAccess.view==true? '' : 'd-none'" class="dropdown-manage-column">
-    <button
-      class="btn btn-info-dark text-white btn-wave dropdown-toggle"
-      type="button"
-      id="dropdownMenuButton1"
-      data-bs-toggle="dropdown"
-      aria-expanded="false"
-    >
-      Manage Column
-    </button>
-    <ul   class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-      @for (column of allColumns; track column) {
-        <li >
-          @if (
-            column.headerName == "S. No" ||
-            column.field == "employeeID" ||
-            column.field == "firstName"
-          ) {
-            <div class="dropdown-item d-none checkbox-container">
-              <input
-                type="checkbox"
-                [checked]="isColumnDisplayed(column)"
-                (change)="toggleColumn(column)"
-                id="{{ column.field }}"
-              />
-              <label for="{{ column.field }}">{{
-                column.headerName
-              }}</label>
-            </div>
-          } @else {
-            <div  [ngClass]="{
-              'checked': isColumnDisplayed(column),
-              'unchecked': !isColumnDisplayed(column)
-            }" class="dropdown-item checkbox-container px-3" (click)="preventClose($event)">
-              <input
-                type="checkbox"
-                [checked]="isColumnDisplayed(column)"
-                (change)="toggleColumn(column)"
-                id="{{ column.field }}"
-              />
-              <label for="{{ column.field }}">{{
-                column.headerName
-              }}</label>
-            </div>
-          }
-        </li>
-      }
-    </ul>
-  </div> -->
   <div [ngClass]="reportAccess.view == true ? '' : 'd-none'" class="dropdown-manage-column">
     <button class="btn btn-info-dark text-white btn-wave dropdown-toggle" type="button" id="dropdownMenuButton1"
       data-bs-toggle="dropdown" aria-expanded="false">
@@ -86,7 +37,8 @@
   <ag-grid-angular #agGrid style="width: 100%; height: calc(100vh - 14.5rem)" class="ag-theme-alpine"
     [rowData]="rowData" [columnDefs]="columnDefs" [defaultColDef]="defaultColDef" [animateRows]="true"
     [paginationPageSize]="15" [paginationPageSizeSelector]="paginationPageSizeSelector" [pagination]="true"
-    (gridReady)="onGridReady($event)" (paginationChanged)="onPaginationChanged($event)" [suppressDragLeaveHidesColumns]="true"></ag-grid-angular>
+    (gridReady)="onGridReady($event)" (paginationChanged)="onPaginationChanged($event)"
+    [suppressDragLeaveHidesColumns]="true"></ag-grid-angular>
   <div class="table-footer position-relative ">
     <div class="total-counts d-flex text-danger">
       @if (this.attendanceRowData.length !== 0) {

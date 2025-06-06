@@ -18,6 +18,7 @@ import { OnlyNumbersDirective } from 'src/app/shared/directive/only-numbers.dire
 import { CompanybanklistService } from '../../companybanklist.service';
 import { ConfirmationDialogService } from 'src/app/shared/services/confimation.service';
 import { ConfirmationDialogComponent } from 'src/app/shared/components/confirmation-dialog/confirmation-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 
 @Component({
@@ -47,7 +48,9 @@ export class AddcompanybankComponent {
   @Input() isSideDrawerOpen: boolean = false;
 
   @Output() formClose: EventEmitter<boolean> = new EventEmitter<boolean>();
-  constructor(private confirmationDialogService: ConfirmationDialogService, private fb: FormBuilder, private companyservice: CompanybanklistService, private apiservice: BussinessService, private activate: ActivatedRoute, private _successMessage: MatSnackBar, private cdr: ChangeDetectorRef) {
+  constructor(private confirmationDialogService: ConfirmationDialogService, private fb: FormBuilder,
+    private companyservice: CompanybanklistService, private apiservice: BussinessService, private activate: ActivatedRoute,
+    private _successMessage: MatSnackBar, private cdr: ChangeDetectorRef) {
     this.companyservice.getAllCompany().subscribe({
       next: (data: any) => {
         this.countries = [{ value: '0', label: 'Select a Company' }];  // Add the default option
@@ -133,7 +136,7 @@ export class AddcompanybankComponent {
           this.companyservice.checkIfprimarybankexists(this.companyForm.value.companyId).subscribe({
             next: (data: any) => {
               if (data == true) {
-                this.confirmationDialogService.confirm('Please confirm..', 'Do you really want to make this account primary . ?')
+                this.confirmationDialogService.confirm('Please confirm..', 'Do you really want to make this account primary ?')
                   .then((confirmed) => {
                     if (confirmed == false) {
                       this.companyForm.get('isPrimary')?.setValue(0);
@@ -142,7 +145,6 @@ export class AddcompanybankComponent {
                   })
                   .catch(() => console.log('User dismissed the dialog (e.g., by using ESC, clicking the cross icon, or clicking outside the dialog)'));
               }
-
             }
           })
         }
@@ -155,11 +157,10 @@ export class AddcompanybankComponent {
   iscountryfail: boolean = false;
   checkCountry(event: any) {
     if (Number(this.companyForm.value.companyId) > 0) {
-      this.iscountryfail = false
-
+      this.iscountryfail = false;
     }
     else {
-      this.iscountryfail = true
+      this.iscountryfail = true;
     }
   }
   submitForm() {

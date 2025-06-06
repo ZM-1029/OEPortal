@@ -169,9 +169,7 @@ export class CustomersListComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.pageHeader_customer(this.HeadingName);
-
   }
-
 
   getPermissionToAccessPage(roleId: any) {
     this.rolePermissionService.getPermissionsByRoleId(roleId).subscribe({
@@ -264,7 +262,7 @@ export class CustomersListComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(DeleteModalComponent, {
       width: "400px",
       height: "175px",
-      disableClose: true,
+      disableClose: false,
       data: "Customer",
     });
     dialogRef.afterClosed().subscribe((result) => {

@@ -16,7 +16,7 @@
             column.field == "firstName"
             ) {
             <div class="dropdown-item d-none checkbox-container">
-              <input type="checkbox" [checked]="isColumnDisplayed(column)" disabled id="{{ column.field }}" />
+              <input type="checkbox" (change)="toggleColumn(column)" [checked]="isColumnDisplayed(column)" disabled id="{{ column.field }}" />
               <label for="{{ column.field }}">{{ column.headerName }}</label>
             </div>
             } @else {

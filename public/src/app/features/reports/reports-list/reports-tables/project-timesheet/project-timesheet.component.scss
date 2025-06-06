@@ -1,0 +1,107 @@
+.table-footer {
+  font-size: 14px;
+  z-index: 1 !important;
+}
+
+
+.dropdown-manage-column {
+  position: absolute;
+  top: -105px;
+  right: 10px;
+}
+
+.btn-info-dark {
+  background-color: #2e3b64 !important;
+  outline: #2e3b64 !important;
+  border: #2e3b64;
+}
+
+
+// for Manage Columns start
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 12px;
+  margin-bottom: 0;
+  background-color: white;
+  transition: background-color 0.2s ease;
+  width: 100%;
+  cursor: pointer;
+}
+
+.checkbox-container.unchecked:hover {
+  background-color: rgb(244, 249, 255) !important;
+}
+
+.checkbox-container.checked {
+  background-color: rgb(234, 244, 255);
+  color: #000;
+}
+
+.checkbox-container input {
+  cursor: pointer;
+}
+
+.checkbox-container label {
+  font-size: 14px;
+  color: #333;
+  flex-grow: 1;
+  margin: 0;
+  font-weight: 400;
+  padding: 4px 0;
+  letter-spacing: 0.6px;
+  cursor: pointer;
+}
+
+.customer-dropdown app-multi-select-dropdown {
+  width: 100%;
+}
+
+// for Manage Columns end
+
+.multi-select-dropdown {
+  position: absolute;
+  top: -52px;
+  right: 8px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.multi-select-dropdown .dropdown-month {
+  max-width: 200px;
+  min-width: 200px;
+}
+
+.multi-select-dropdown .dropdown-year {
+  max-width: 150px;
+  min-width: 150px;
+}
+
+.multi-select-dropdown .dropdown-employee {
+  max-height: 300px;
+}
+
+
+@media (max-width: 1200px) {
+
+  .multi-select-dropdown {
+    max-width: 305px;
+    right: 9px;
+  }
+
+  .multi-select-dropdown .dropdown-month {
+    max-width: 150px;
+    min-width: 150px;
+  }
+
+  .multi-select-dropdown .dropdown-year {
+    max-width: 150px;
+    min-width: 150px;
+  }
+
+  .multi-select-dropdown .dropdown-employee {
+    max-height: 250px;
+  }
+
+}

@@ -246,7 +246,7 @@ export class InvoiceListComponent implements OnInit, AfterViewInit {
     const dialogRef = this.dialog.open(DeleteModalComponent, {
       width: "400px",
       height: "175px",
-      disableClose: true,
+      disableClose: false,
       data: "Invoice",
     });
     dialogRef.afterClosed().subscribe((result) => {

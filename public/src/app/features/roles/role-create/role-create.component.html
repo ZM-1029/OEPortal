@@ -24,7 +24,7 @@
     <button type="button" mat-dialog-close (click)="cancel()" class="btn btn-light border rounded-pill">
       Cancel
     </button>
-    <button type="submit" (click)="createRole()" class="btn btn-info-dark rounded-pill">
+    <button  type="submit" (click)="createRole()" class="btn btn-info-dark rounded-pill" [disabled]="!roleForm.get('roleName')?.value?.trim()" >
       Save
     </button>
   </div>

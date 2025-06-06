@@ -78,7 +78,7 @@ export class InvoiceCreateComponent implements OnInit {
   createInvoice(rowData: any) {
     const employeeInvoices = rowData.map((row: any) => ({
       employeeId: row.employeeID,
-      salary: row.salary,
+      salaryAmount: row.salaryAmount,
       billedAmount: Number(row.billedAmount),
       currencyId: row.currencyId
     }));
