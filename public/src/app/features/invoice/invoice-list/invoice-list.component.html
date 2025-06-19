@@ -55,4 +55,11 @@
   } @loading (minimum 1000ms) {
   <app-loader></app-loader>
   }
+
+   @if (isAuditlogOpen) {
+  <app-side-drawer (sideDrawer)="handleSideDrawerLogs($event)" [isSideDrawerOpen]="isAuditlogOpen">
+    <app-audit-logs [formHeading]="HeadingName" [PageId]="3" [tableRowId]="tableRowId"></app-audit-logs>
+    <!-- why i take pageId y, because of (3	Invoice	Invoice record)-->
+  </app-side-drawer>
+  }
 </div>

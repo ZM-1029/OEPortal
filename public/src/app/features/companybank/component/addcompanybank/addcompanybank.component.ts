@@ -44,6 +44,7 @@ export class AddcompanybankComponent {
   companyForm!: FormGroup;
   heading: string = "Create"
   countries: { value: string, label: string }[] = []; // Mock data
+  currenciesList: { currencyId: string, name: string }[] = []; // Mock data
   @Input() Id: number = 0;
   @Input() isSideDrawerOpen: boolean = false;
 
@@ -58,6 +59,17 @@ export class AddcompanybankComponent {
           this.countries.push({
             value: country.id.toString(),  // Make sure the id is a string to bind with value
             label: country.name
+          });
+        });
+      }
+    })
+    this.companyservice.getCurrenciesForDropdown().subscribe({
+      next: (data: any) => {
+        this.currenciesList = [{ currencyId: '0', name: 'Select a Company' }];  // Add the default option
+        data.data.forEach((currenc: any) => {
+          this.currenciesList.push({
+            currencyId: currenc.currencyId.toString(),  // Make sure the id is a string to bind with value
+            name: currenc.name
           });
         });
       }
@@ -84,6 +96,7 @@ export class AddcompanybankComponent {
 
 
       companyId: ['0', Validators.required],
+      currenciesId: ['0', Validators.required],
       accountType: ['', [Validators.required]],
       ifscCode: ['', [Validators.required]],
       sortCode: ['',],

@@ -35,7 +35,7 @@
 }
 
 .checkbox-container.checked {
-  background-color: rgb(234, 244, 255); 
+  background-color: rgb(234, 244, 255);
   color: #000;
 }
 
@@ -112,30 +112,6 @@
 
 }
 
-//   .multi-select-dropdown {
-//     display: flex;
-//     position: absolute;
-//     top: -52px;
-//     right: 230px;
-//     width: 100%;
-//     max-width: 700px;
-//   }
-// }
-
-// @media (max-width: 1300px) {
-//   .multi-select-dropdown {
-//     display: flex;
-//     position: relative;
-//     flex-wrap: wrap;
-//     top: 0px;
-//     right: 0px;
-//     width: 100%;
-//     max-width: 700px;
-//   }
-
-//   .customer-efficiency-report  .customer-dropdown{
-//     padding-left: 0;
-//     margin: 10px 0;
-//   }
-
-// }
+.customer-efficiency-report .customer-dropdown {
+  width: 320px;
+}

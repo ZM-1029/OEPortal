@@ -1,0 +1,372 @@
+<div class="employee-form-container">
+  <div class="form-header d-flex justify-content-between p-2  form-actions">
+    <h2>{{title}}</h2>
+    <button mat-raised-button color="primary" class="btn submit-button" (click)="navigateBack()">
+      <mat-icon>arrow_back</mat-icon> Back
+    </button>
+  </div>
+
+  <div class="input-form-container">
+    <!-- Profile Card -->
+    <mat-card class="form-card mb-4">
+      <mat-card-content>
+        <div class="customer-profile p-3 d-flex flex-row align-items-center gap-3 rounded">
+          <div class="profile-image position-relative">
+            <img *ngIf="employeeImgUrl; else defaultImage" [src]="employeeImgUrl" alt="Employee Photo" class="rounded-circle" />
+            <ng-template #defaultImage>
+              <div class="default-avatar rounded-circle">{{this.employeeForm.get("FirstName")?.value?.trim().charAt(0)}}</div>
+            </ng-template>
+            <div class="overlay">
+              <label for="file-input" class="icon">
+                <i class="material-icons">photo_camera</i>
+              </label>
+              <i *ngIf="employeeImgUrl" class="material-icons delete-icon text-white" (click)="deleteImage()">delete</i>
+            </div>
+            <input #fileInput id="file-input" type="file" accept=".png, .jpg, .jpeg" (change)="uploadEmployeeimg($event)" hidden />
+          </div>
+          <div class="customer-info">
+            <h5 class="mb-0 fw-bold">
+              {{this.employeeForm.get("FirstName")?.value?.trim()}} {{ this.employeeForm.get("LastName")?.value?.trim()}}
+            </h5>
+            <p class="text-muted mb-1">{{this.employeeForm.get("EmailID")?.value?.trim()}}</p>
+            <div class="d-flex gap-2">
+              <input type="button" (click)="triggerCustomerFileInput()"
+                [value]="employeeImgUrl?'Update Photo':'Add Photo'" class="btn edit-btn btn-sm">
+              <input *ngIf="employeeImgUrl" type="button" class="btn edit-btn text-danger btn-sm" value="Remove"
+                (click)="deleteImage()">
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+    <form [formGroup]="employeeForm">
+
+      <!-- Basic Information Card -->
+      <mat-card class="form-card mb-4">
+        <mat-card-header>
+          <mat-card-title>Basic Information</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="row">
+            <div class="col-md-4 mb-3">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Employee ID </mat-label>
+                <input matInput formControlName="EmployeeID" placeholder="ZM-1902">
+                <mat-error>
+                  @if (employeeForm.controls["EmployeeID"].errors?.["required"]) {
+                  <span>Employee ID is required.</span>
+                  }
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-4 mb-3">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>First name </mat-label>
+                <input matInput formControlName="FirstName" placeholder="John">
+                <mat-error>
+                  @if (employeeForm.controls["FirstName"].errors?.["required"]) {
+                  <span>First Name is required.</span>
+                  } @else if (employeeForm.controls["FirstName"].errors?.["pattern"]) {
+                  <span>Only alphabetic characters are allowed.</span>
+                  }
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-4 mb-3">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Last name </mat-label>
+                <input matInput formControlName="LastName" placeholder="Doe">
+                <mat-error>
+                  @if (employeeForm.controls["LastName"].errors?.["maxlength"]) {
+                  <span>Maximum 50 characters allowed.</span>
+                  }
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4 mb-3">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Email address </mat-label>
+                <input matInput formControlName="EmailID" placeholder="john@zouma.ai">
+                <mat-error>
+                  @if (employeeForm.controls["EmailID"].errors?.["required"]) {
+                  <span>Email is required.</span>
+                  } @else if (employeeForm.controls["EmailID"].errors?.["email"]) {
+                  <span>Please enter a valid email address.</span>
+                  }
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-4 mb-3">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Mobile </mat-label>
+                <input matInput formControlName="Mobile">
+                <mat-error>
+                  @if (employeeForm.controls["Mobile"].errors?.["required"]) {
+                  <span>Mobile number is required.</span>
+                  } @else if (employeeForm.controls["Mobile"].errors?.["pattern"]) {
+                  <span>Please enter a valid 10-digit mobile number.</span>
+                  }
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-4 mb-3">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Work Phone</mat-label>
+                <input matInput formControlName="WorkPhone">
+              </mat-form-field>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Work Information Card -->
+      <mat-card class="form-card mb-4">
+        <mat-card-header>
+          <mat-card-title>Work Information</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="row">
+            <div class="col-md-4 mb-3">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Department</mat-label>
+                <mat-select formControlName="Department">
+                  <mat-option *ngFor="let dept of departmentList" [value]="dept">{{dept}}</mat-option>
+                </mat-select>
+                <mat-error>
+                  @if (employeeForm.controls["Department"].errors?.["required"]) {
+                  <span>Department is required.</span>
+                  }
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-4 mb-3">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Designation</mat-label>
+                <mat-select formControlName="Designation">
+                  <mat-option *ngFor="let desig of designationList" [value]="desig">{{desig}}</mat-option>
+                </mat-select>
+                <mat-error>
+                  @if (employeeForm.controls["Designation"].errors?.["required"]) {
+                  <span>Designation is required.</span>
+                  }
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-4 mb-3">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Role</mat-label>
+                <input matInput formControlName="Role">
+                <mat-error>
+                  @if (employeeForm.controls["Role"].errors?.["required"]) {
+                  <span>Role is required.</span>
+                  }
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4 mb-3">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Employee Type</mat-label>
+                <mat-select formControlName="EmployeeType">
+                  <mat-option *ngFor="let employeeType of employeeTypeList" [value]="employeeType">{{employeeType}}</mat-option>
+                </mat-select>
+                <mat-error>
+                  @if (employeeForm.controls["EmployeeType"].errors?.["required"]) {
+                  <span>Employee Type is required.</span>
+                  }
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-4 mb-3">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Date of Joining</mat-label>
+                <input matInput [matDatepicker]="dojPicker" formControlName="Dateofjoining">
+                <mat-datepicker-toggle matSuffix [for]="dojPicker"></mat-datepicker-toggle>
+                <mat-datepicker #dojPicker></mat-datepicker>
+                <mat-error>
+                  @if (employeeForm.controls["Dateofjoining"].errors?.["required"]) {
+                  <span>Date of Joining is required.</span>
+                  }
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-4 mb-3">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Other Email</mat-label>
+                <input matInput formControlName="OtherEmail">
+                <mat-error>
+                  @if (employeeForm.controls["OtherEmail"].errors?.["email"]) {
+                  <span>Please enter a valid email address.</span>
+                  }
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4 mb-3">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Experience (Month)</mat-label>
+                <input matInput type="number" formControlName="Experience">
+                <mat-error>
+                  @if (employeeForm.controls["Experience"].errors?.["min"]) {
+                  <span>Experience cannot be negative.</span>
+                  } @else if (employeeForm.controls["Experience"].errors?.["max"]) {
+                  <span>Maximum experience is 50 years.</span>
+                  }
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-4 mb-3">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Location</mat-label>
+                <mat-select formControlName="LocationName">
+                  <mat-option *ngFor="let loc of locationList" [value]="loc">{{loc}}</mat-option>
+                </mat-select>
+                <mat-error>
+                  @if (employeeForm.controls["LocationName"].errors?.["required"]) {
+                  <span>Location is required.</span>
+                  }
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-4 mb-3">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Status</mat-label>
+                <mat-select formControlName="Employeestatus">
+                  <mat-option *ngFor="let employeestatus of employeeStatusesList" [value]="employeestatus">{{employeestatus}}</mat-option>
+                </mat-select>
+                <mat-error>
+                  @if (employeeForm.controls["Employeestatus"].errors?.["required"]) {
+                  <span>Status is required.</span>
+                  }
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Personal Details Card -->
+      <mat-card class="form-card mb-4">
+        <mat-card-header>
+          <mat-card-title>Personal Details</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="row">
+            <div class="col-md-4 mb-3">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Date of Birth</mat-label>
+                <input matInput [matDatepicker]="dobPicker" formControlName="DateOfBirth">
+                <mat-datepicker-toggle matSuffix [for]="dobPicker"></mat-datepicker-toggle>
+                <mat-datepicker #dobPicker></mat-datepicker>
+                <mat-error>
+                  @if (employeeForm.controls["DateOfBirth"].errors?.["required"]) {
+                  <span>Date of Birth is required.</span>
+                  }
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-4 mb-3">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Age</mat-label>
+                <input matInput type="number" formControlName="Age">
+                <mat-error>
+                  @if (employeeForm.controls["Age"].errors?.["min"]) {
+                  <span>Minimum age is 18.</span>
+                  } @else if (employeeForm.controls["Age"].errors?.["max"]) {
+                  <span>Maximum age is 70.</span>
+                  }
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-4 mb-3 d-flex align-items-center">
+              <div class="gender-section">
+                <mat-label class="me-3">Gender</mat-label>
+                <mat-radio-group formControlName="Gender" class="d-flex">
+                  <mat-radio-button value="Male" class="me-2">Male</mat-radio-button>
+                  <mat-radio-button value="Female" class="me-2">Female</mat-radio-button>
+                  <mat-radio-button value="Other">Other</mat-radio-button>
+                </mat-radio-group>
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Additional Information Card -->
+      <mat-card class="form-card mb-4">
+        <mat-card-header>
+          <mat-card-title>Additional Information</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="row">
+            <div class="col-md-4 mb-3">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Date of Exit</mat-label>
+                <input matInput [matDatepicker]="exitPicker" formControlName="Dateofexit">
+                <mat-datepicker-toggle matSuffix [for]="exitPicker"></mat-datepicker-toggle>
+                <mat-datepicker #exitPicker></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div class="col-md-4 mb-3">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Delivery Centre</mat-label>
+                <mat-select formControlName="Delivery_centre">
+                  <mat-option *ngFor="let deliveryCenters of deliveryCentersList" [value]="deliveryCenters">{{deliveryCenters}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-md-4 mb-3">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Billable Type</mat-label>
+                <mat-select formControlName="Billable_Type">
+                  <mat-option *ngFor="let billableTypes of billableTypesList" [value]="billableTypes">{{billableTypes}}</mat-option>
+                  <!-- <mat-option value="Billable">Billable</mat-option>
+                  <mat-option value="Non-Billable">Non-Billable</mat-option> -->
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4 mb-3">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Terminal ID</mat-label>
+                <input matInput formControlName="Terminal_ID">
+              </mat-form-field>
+            </div>
+            <div class="col-md-4 mb-3">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Project Name</mat-label>
+                <input matInput formControlName="Project_Name">
+              </mat-form-field>
+            </div>
+            <div class="col-md-4 mb-3">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Customer Name</mat-label>
+                <input matInput formControlName="Customer_Name">
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4 mb-3">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Project ID</mat-label>
+                <input matInput formControlName="Project_ID">
+              </mat-form-field>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+    </form>
+    <!-- Submit Button -->
+    <div class="form-actions mt-4">
+      <button mat-raised-button color="primary" type="submit" (click)="createUpdateEmployee()" class="btn submit-button">
+        <mat-icon>add</mat-icon> {{title}}
+      </button>
+    </div>
+  </div>
+</div>

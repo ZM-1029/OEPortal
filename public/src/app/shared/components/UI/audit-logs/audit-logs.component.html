@@ -1,0 +1,31 @@
+<!-- audit-logs.component.html -->
+<div class="audit-logs-container">
+    <div class="border-bottom bg-light pb-2">
+        <h2 class="formHeading">{{formHeading}} Audit Logs</h2>
+    </div>
+    <!-- <h2>Audit Logs</h2> -->
+
+    <div *ngIf="isLoading" class="loading-spinner">
+        Loading logs...
+    </div>
+
+    <div class="log-item-container">
+        <div *ngIf="auditLogs.length === 0" class="no-logs">
+            No audit logs found.
+        </div>
+
+        <div *ngFor="let log of auditLogs" class="log-item m-3">
+            <div class="log-header">
+                <span class="log-action">{{ log.actionType }} </span>
+                <span class="log-timestamp">{{ log.timestamp | date:'medium' }}</span>
+            </div>
+            <div class="log-description">
+                {{ log.actionDescription }}
+            </div>
+            <div class="log-footer">
+                Performed by: {{ log.performedBy }} ({{ log.userEmail }})
+                <!-- <span class="log-timestamp">{{ log.timestamp | date:'medium' }}</span> -->
+            </div>
+        </div>
+    </div>
+</div>

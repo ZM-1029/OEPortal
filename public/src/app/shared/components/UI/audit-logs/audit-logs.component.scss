@@ -1,0 +1,77 @@
+/* audit-logs.component.scss */
+.audit-logs-container {
+    background-color: white;
+    border-radius: 16px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin: 1rem;
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 6rem);
+    overflow: hidden;
+
+    .bg-light {
+        padding: 10px 0;
+        border-radius: 16px 16px 0 0;
+        background-color: #f8f9fa !important;
+    }
+
+    .formHeading {
+        text-align: start;
+        font-size: 1.25rem;
+        padding: 10px 20px;
+        margin: 0;
+        color: #333;
+    }
+
+    h2 {
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    .loading-spinner,
+    .no-logs {
+        text-align: center;
+        padding: 20px;
+        color: #666;
+    }
+
+    .log-item-container {
+        // max-height: 600px;
+        max-height: calc(100vh - 13rem);
+        overflow-y: auto;
+    }
+
+    .log-item {
+        border: 1px solid #eee;
+        border-radius: 4px;
+        padding: 15px;
+        margin-bottom: 15px;
+        background-color: #f9f9f9;
+
+        .log-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-weight: bold;
+
+            .log-action {
+                color: #2c3e50;
+            }
+
+            .log-timestamp {
+                color: #7f8c8d;
+                font-size: 0.9em;
+            }
+        }
+
+        .log-description {
+            margin-bottom: 10px;
+            color: #34495e;
+        }
+
+        .log-footer {
+            font-size: 0.8em;
+            color: #7f8c8d;
+        }
+    }
+}

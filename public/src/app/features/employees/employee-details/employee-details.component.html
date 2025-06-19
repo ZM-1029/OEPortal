@@ -472,9 +472,10 @@
                           <label for="">Current Experience</label>
                         </div>
                         <div class="col-8">
-                          <span class="d-block">{{
+                          <!-- <span class="d-block">{{
                             employeeDetails.experience
-                            }}</span>
+                            }}</span> -->
+                            <span class="d-block">{{ getFormattedExperience(employeeDetails.experience||0) }}</span>
                         </div>
                       </div>
                     </div>
@@ -484,9 +485,10 @@
                           <label for="">Total Experience</label>
                         </div>
                         <div class="col-8">
-                          <span class="d-block">{{
+                          <span class="d-block">{{ getFormattedExperience(employeeDetails.totalExperience||0) }}</span>
+                          <!-- <span class="d-block">{{
                             employeeDetails.totalExperience
-                            }}</span>
+                            }}</span> -->
                         </div>
                       </div>
                     </div>

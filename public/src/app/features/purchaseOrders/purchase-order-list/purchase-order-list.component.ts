@@ -19,6 +19,7 @@ import { AllCommunityModule, GridApi, GridReadyEvent, ModuleRegistry } from "ag-
 import { PurcheseOrdereViewComponent } from "../purchese-ordere-view/purchese-ordere-view.component";
 import { rolePermissionListI } from "src/app/shared/types/roles.type";
 import { RolePermissionService } from "../../role-permissions/role-permission.service";
+import { AuditLogsComponent } from "src/app/shared/components/UI/audit-logs/audit-logs.component";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 @Component({
@@ -30,6 +31,7 @@ ModuleRegistry.registerModules([AllCommunityModule]);
     PageHeaderComponent,
     SideDrawerComponent,
     PurchaseOrderCreateComponent,
+    AuditLogsComponent
   ],
   templateUrl: "./purchase-order-list.component.html",
   styleUrl: "./purchase-order-list.component.scss",
@@ -43,12 +45,15 @@ export class PurchaseOrderListComponent implements OnInit {
   public currentPageNumber: number = 1;
   public currentPageSize: number = 15;
   public isSideDrawerOpen: boolean = false;
+  
   public paginationPageSize = this.currentPageSize;
   public paginationPageSizeSelector: number[] = [15, 25, 50, 100];
   formHeading: string = "";
   PurchaseOrderRowId!: number;
   HeadingName: string = "Purchase Order";
   rowData: any[] = [];
+  public isAuditlogOpen: boolean = false;
+  tableRowId:number=0;
   purchaseOrderAccess: rolePermissionListI = {
     id: 0,
     formId: 0,
@@ -201,11 +206,11 @@ export class PurchaseOrderListComponent implements OnInit {
             }
           }
         } else {
-          this.handleError("please try again leter");
+          this.handleError("please try again later");
         }
       },
       error: (err) => {
-        this.handleError("please try again leter");
+        this.handleError("please try again later");
       },
     });
   }
@@ -275,6 +280,13 @@ export class PurchaseOrderListComponent implements OnInit {
       this.isSideDrawerOpen = false;
     }
   }
+  handleSideDrawerLogs(event?: boolean) {
+    if (this.isAuditlogOpen) {
+      this.isAuditlogOpen=false;
+    }else{
+      this.isAuditlogOpen=true;
+    }
+  }
 
   updatePO(event: any): void {
     if (event.event.target.closest(".eye-icon")) {
@@ -295,6 +307,11 @@ export class PurchaseOrderListComponent implements OnInit {
     if (event.event.target.closest(".delete-icon")) {
       const PurchaseOrderRowId = event.event.target.closest(".delete-icon").getAttribute("data-id");
       this.openDeleteModal(Number(PurchaseOrderRowId));
+    }
+    if (event.event.target.closest(".activityLogs-icon")) {
+      const PurchaseOrderRowId = event.event.target.closest(".activityLogs-icon").getAttribute("data-id");
+      this.tableRowId=PurchaseOrderRowId;
+      this.isAuditlogOpen=true;
     }
   }
 
@@ -418,6 +435,11 @@ export class PurchaseOrderListComponent implements OnInit {
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
             <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
           </svg>
+        </span>
+        <span class="icon-container text-info activityLogs-icon" data-id="${params.data.id}" style="display: block; width: 20px; height: 20px;">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+         <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z" />
+         </svg>
         </span>
       </div>
     `;

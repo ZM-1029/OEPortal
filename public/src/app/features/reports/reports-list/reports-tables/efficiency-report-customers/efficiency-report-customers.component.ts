@@ -13,7 +13,7 @@ import { NgClass } from '@angular/common';
 ModuleRegistry.registerModules([AllCommunityModule]);
 @Component({
   selector: 'app-efficiency-report-customers',
-  imports: [AgGridAngular, SingleSelectDropdownComponent, MultiSelcetObjectDropdownComponent, MonthMultiSelectDropdownComponent,NgClass],
+  imports: [AgGridAngular, SingleSelectDropdownComponent, MultiSelcetObjectDropdownComponent, MonthMultiSelectDropdownComponent, NgClass],
   templateUrl: './efficiency-report-customers.component.html',
   styleUrl: './efficiency-report-customers.component.scss'
 })
@@ -177,28 +177,31 @@ export class EfficiencyReportCustomersComponent implements OnInit, AfterViewInit
 
 
   getEfficiencyReportsCustomer() {
-    this.reportsService.getEfficiencyReportsCustomer(this.customerId, this.selectedValueMonth, this.selectedValueYear).subscribe(
-      {
-        next: ((response) => {
-          if (response.success) {
-            this.reportsCustomersSummary = Object.entries(response.summary).map(([key, value]) => ({
-              key, value
-            }));
-            this.rowData = response.customerSummaries;
-            this._changeDetectorRef.detectChanges();
-          } else {
+    if (this.selectedValueYear && this.customerId && this.selectedValueMonth) {
+      this.reportsService.getEfficiencyReportsCustomer(this.customerId, this.selectedValueMonth, this.selectedValueYear).subscribe(
+        {
+          next: ((response) => {
+            if (response.success) {
+              this.reportsCustomersSummary = Object.entries(response.summary).map(([key, value]) => ({
+                key, value
+              }));
+              this.rowData = response.customerSummaries;
+              this._changeDetectorRef.detectChanges();
+            } else {
+              this.rowData = [];
+              this.showErrorOverlay("Data is not found")
+              this.handleError(response.message)
+            }
+          }),
+          error: ((err) => {
             this.rowData = [];
             this.showErrorOverlay("Data is not found")
-            this.handleError(response.message)
-          }
-        }),
-        error: ((err) => {
-          this.rowData = [];
-          this.showErrorOverlay("Data is not found")
-          this.handleError(err.error.message)
-        })
-      }
-    )
+            this.handleError(err.error.message)
+          })
+        }
+      )
+    }
+
   }
 
   gridOptions = {
@@ -224,7 +227,7 @@ export class EfficiencyReportCustomersComponent implements OnInit, AfterViewInit
   onGridReady(params: GridReadyEvent<any>) {
     this.gridApi = params.api;
     this.gridApi.hideOverlay();
-    this.getEfficiencyReportsCustomer();
+    // this.getEfficiencyReportsCustomer();
     if (this.rowData.length == 0) {
       setTimeout(() => {
         if (this.gridApi) {

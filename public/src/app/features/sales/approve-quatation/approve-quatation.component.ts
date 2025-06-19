@@ -42,7 +42,8 @@ import { LoaderComponent } from 'src/app/shared/components/UI/loader/loader.comp
     PdfViewerModule,
     MatCheckboxModule,
     NgClass,
-    MatCardModule, LoaderComponent
+    MatCardModule,
+   LoaderComponent,
   ],
   templateUrl: './approve-quatation.component.html',
   styleUrl: './approve-quatation.component.scss',

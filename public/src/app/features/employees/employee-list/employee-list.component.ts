@@ -18,13 +18,15 @@ import { FormsModule } from "@angular/forms";
 import { EmployeesService } from "../employees.service";
 import { LoaderComponent } from "../../../shared/components/UI/loader/loader.component";
 import { EmployeeSideDrawerComponent } from "../employee-side-drawer/employee-side-drawer.component";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { MatButtonModule } from "@angular/material/button";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { SuccessModalComponent } from "src/app/shared/components/UI/success-modal/success-modal.component";
 import { rolePermissionListI } from "src/app/shared/types/roles.type";
 import { RolePermissionService } from "../../role-permissions/role-permission.service";
 import { ManageColumnStateService } from "src/app/shared/services/manage-column-state.service";
+import { DeleteModalComponent } from "src/app/shared/components/UI/delete-modal/delete-modal.component";
+import { MatDialog } from "@angular/material/dialog";
 
 
 ModuleRegistry.registerModules([AllCommunityModule]);
@@ -79,6 +81,21 @@ export class EmployeeListComponent implements OnInit, OnChanges {
       minWidth: 100,
       pinned: "left",
       lockPinned: true,
+    },
+    {
+      headerName: "Actions",
+      field: "actions",
+      cellRenderer: (params: any) => this.renderActionIcons(params),
+      minWidth: 100,
+      maxWidth: 100,
+      cellClass: "hover-effect-cell",
+      pinned: "right",
+      lockPinned: true,
+      sortable: false,
+      filter: false,
+      cellStyle: () => {
+        return { border: "none", cursor: "pointer" };
+      },
     },
     {
       field: "employeeID",
@@ -177,7 +194,9 @@ export class EmployeeListComponent implements OnInit, OnChanges {
     private _employeeService: EmployeesService,
     private _changeDetectorRef: ChangeDetectorRef,
     private _router: Router,
+    private _activatedRoute: ActivatedRoute,
     private _successMessage: MatSnackBar,
+    private dialog: MatDialog,
     private rolePermissionService: RolePermissionService,
     private manageColumnStateService: ManageColumnStateService
   ) { }
@@ -244,12 +263,12 @@ export class EmployeeListComponent implements OnInit, OnChanges {
             }
           }
         } else {
-          this.handleError("please try again leter");
+          this.handleError("please try again later");
           console.error("error", response.message);
         }
       },
       error: (err) => {
-        this.handleError("please try again leter");
+        this.handleError("please try again later");
         console.error("error", err);
       },
     });
@@ -336,9 +355,14 @@ export class EmployeeListComponent implements OnInit, OnChanges {
     this.currentPageSize = pageSize;
   }
 
-  onRowClick(row: any) {
-    this.employeeId = row.data.employeeID;
-    this._employeeService.sendRowData(row.data);
+
+  onRowClick(event: any) {
+    const target = event.event?.target as HTMLElement;
+    if (target.closest('.edit-icon') || target.closest('.delete-icon')) {
+      return;
+    }
+    this.employeeId = event.data.employeeID;
+    this._employeeService.sendRowData(event.data);
     this.isSideDrawerOpen = true;
   }
 
@@ -350,12 +374,25 @@ export class EmployeeListComponent implements OnInit, OnChanges {
     }
   }
 
-
   navigateToDetails(empId: string) {
-    if (empId !== null) {
-      this._router.navigateByUrl("/admin/employee/" + empId);
+    if (empId) {
+      this._router.navigate([empId], { relativeTo: this._activatedRoute });
     }
   }
+
+  employeeAdd() {
+    this._router.navigate(['add'], { relativeTo: this._activatedRoute });
+  }
+
+  // navigateToDetails(empId: string) {
+  //   if (empId !== null) {
+  //     this._router.navigateByUrl("/admin/employee/" + empId);
+  //   }
+  // }
+
+  // employeeAdd() {
+  //   this._router.navigateByUrl("/admin/employee/add");
+  // }
 
   combineName(params: any): string {
     const firstName = params.data.firstName;
@@ -368,32 +405,7 @@ export class EmployeeListComponent implements OnInit, OnChanges {
     `;
   }
 
-  // for Manage Columns start
-  // allColumns = [...this.columnDefs];
-  // displayedColumns = [...this.columnDefs];
-
-  // // Toggle column selection
-  // toggleColumn(column: any) {
-  //   const columnIndex = this.displayedColumns.findIndex(
-  //     (col) => col.field === column.field,
-  //   );
-  //   if (columnIndex >= 0) {
-  //     this.displayedColumns.splice(columnIndex, 1);
-  //   } else {
-  //     const colToAdd = this.allColumns.find(
-  //       (col) => col.field === column.field,
-  //     );
-  //     if (colToAdd) {
-  //       this.displayedColumns.push(colToAdd);
-  //     }
-  //   }
-  //   this.columnDefs = [...this.displayedColumns];
-  // }
-
-  // isColumnDisplayed(column: any): boolean {
-  //   return this.displayedColumns.some((col) => col.field === column.field);
-  // }
-
+  
   preventClose(event: MouseEvent) {
     event.stopPropagation();
   }
@@ -408,4 +420,68 @@ export class EmployeeListComponent implements OnInit, OnChanges {
       horizontalPosition: "right",
     });
   }
+
+  // delete customer
+  updateCustomer(event: any): void {
+    if (event.event.target.closest(".edit-icon")) {
+      const selectedEmpId = event.event.target.closest(".edit-icon").getAttribute("data-id");
+      this._router.navigate(['edit', selectedEmpId], { relativeTo: this._activatedRoute });
+    }
+    if (event.event.target.closest(".delete-icon")) {
+      const selectedEmpId = event.event.target.closest(".delete-icon").getAttribute("data-id");
+
+      this.openDeleteModal(selectedEmpId);
+    }
+  }
+
+
+  openDeleteModal(empId: string): void {
+    const dialogRef = this.dialog.open(DeleteModalComponent, {
+      width: "400px",
+      height: "175px",
+      disableClose: false,
+      data: "Employee",
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result == true) {
+        console.log("Delete confirmed");
+        this.deleteRow(empId);
+      } else {
+        console.log("Delete action canceled");
+      }
+    });
+  }
+
+  deleteRow(empId: string) {
+    this._employeeService.deleteEmployeeById(empId).subscribe({
+      next: (response: any) => {
+        this.handleError(response.message);
+        this.getEmployeesList();
+      },
+      error: (err) => {
+        this.handleError(err.error.message || "Error deleting Employe:");
+        console.error("Error deleting row:", err);
+      },
+    });
+  }
+  // // delate Customer end
+
+
+  renderActionIcons(params: any): string {
+    return `
+      <div class="action-icons d-flex align-items-center justify-content-around">
+        <span class="icon-container text-primary edit-icon" data-id="${params.data.employeeID}" style="display: block; width: 20px; height: 20px;">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+          </svg>
+        </span>
+        <span class="icon-container text-danger delete-icon" data-id="${params.data.employeeID}" style="display: block; width: 20px; height: 20px;">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+          </svg>
+        </span>
+      </div>
+    `;
+  }
+
 }

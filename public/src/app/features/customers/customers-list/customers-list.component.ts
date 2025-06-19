@@ -192,11 +192,11 @@ export class CustomersListComponent implements OnInit, OnDestroy {
             }
           }
         } else {
-          this.handleError("please try again leter");
+          this.handleError("please try again later");
         }
       },
       error: (err) => {
-        this.handleError("please try again leter");
+        this.handleError("please try again later");
       },
     });
   }

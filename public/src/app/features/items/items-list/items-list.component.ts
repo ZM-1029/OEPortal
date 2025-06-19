@@ -196,11 +196,11 @@ export class ItemsListComponent {
             }
           }
         } else {
-          this.handleError("please try again leter");
+          this.handleError("please try again later");
         }
       },
       error: (err) => {
-        this.handleError("please try again leter");
+        this.handleError("please try again later");
       },
     });
   }

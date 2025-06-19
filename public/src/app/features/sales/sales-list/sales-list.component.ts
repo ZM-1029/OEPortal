@@ -8,7 +8,6 @@ import { SideDrawerComponent } from "../../../shared/components/UI/side-drawer/s
 import { Subject } from "rxjs";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { SuccessModalComponent } from "src/app/shared/components/UI/success-modal/success-modal.component";
-import { SaleCreateComponent } from '../sale-create/sale-create.component';
 import { SalesService } from '../sales.service';
 import { Quotation, QuotationListI } from "src/app/shared/types/sales.type";
 import moment from 'moment';
@@ -160,11 +159,11 @@ export class SalesListComponent {
             }
           }
         } else {
-          this.handleError("please try again leter");
+          this.handleError("please try again later");
         }
       },
       error: (err) => {
-        this.handleError("please try again leter");
+        this.handleError("please try again later");
       },
     });
   }
@@ -345,7 +344,6 @@ export class SalesListComponent {
     </div>
   `;
   }
-
 
   // renderActionIcons(params: any): string {
   //   const approveIcon = `<span class="icon-container text-success approve-icon" data-id="${params.data.id}" style="display: block; width: 20px; height: 20px; cursor: pointer;">

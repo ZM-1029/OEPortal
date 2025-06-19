@@ -24,7 +24,7 @@ export class EmployeesService {
   sendRowData(employeeDetails: employeeType) {
     this.rowDataSubject.next(employeeDetails);
   }
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getEmployeesList(pageNumber: number, pageSize: number) {
     return this.http.get<employeeListI>(
@@ -47,17 +47,17 @@ export class EmployeesService {
   // employeeAssetsGetById(employeeId: number | string) {
   //   const token = localStorage.getItem('api2Token');
   //   console.log("api2Token:", token); 
-  
+
   //   const headers = new HttpHeaders({
   //     Authorization: `bearer ${token}`
   //   });
-  
+
   //   return this.http.get<any>(
   //     `${environment.apiUrl2}api/AssetTransactionHistory/AssignedAssetListByEmployee/${employeeId}`,
   //     { headers }
   //   );
   // }
-  
+
 
   getEmployeeInvoiceById(employeeId: number | string) {
     return this.http.get<employeeInvoiceResponseI>(
@@ -81,7 +81,7 @@ export class EmployeesService {
     email: string,
     month: string | number,
     year: number | string,
-    project:Array<string>,
+    project: Array<string>,
   ) {
     return this.http.get<employeeTimesheetsI>(
       `${environment.apiUrl}api/EmployeeDashboard/GetTimesheet?emailId=${email}&month=${month}&year=${year}&project=${project}`,
@@ -94,7 +94,7 @@ export class EmployeesService {
     endDate: string,
     comment: string,
     istimesheetavailable: boolean,
-    projectName:string,
+    projectName: string,
   ) {
     return this.http.get(
       `${environment.apiUrl}api/EmployeeDashboard/DownloadEmployeeAttendance/${id}/${startDate}/${endDate}?Comment=${comment}&istimesheetavailable=${istimesheetavailable}&projectName=${projectName}`,
@@ -113,7 +113,7 @@ export class EmployeesService {
     endDate: string,
     comment: string,
     istimesheetavailable: boolean,
-    projectName:string
+    projectName: string
   ) {
     return this.http.get(
       `${environment.apiUrl}api/EmployeeDashboard/DownloadEmployeeAttendanceExcel/${id}/${startDate}/${endDate}?Comment=${comment}&istimesheetavailable=${istimesheetavailable}&project=${projectName}`,
@@ -131,6 +131,7 @@ export class EmployeesService {
       `${environment.apiUrl}api/Salary/GetEmployeeSalary?empId=${id}`,
     );
   }
+
   // GetNCHistoryLogs?empIds=ZI-001&startDate=02-01-2025&endDate=02-19-2025
   GetNCHistoryLogs(id: string, startDate: string, endDate: string) {
     return this.http.get<any>(
@@ -141,6 +142,62 @@ export class EmployeesService {
   GetDistinctProjects(id: string, startDate: any, endDate: any) {
     return this.http.get<any>(
       `${environment.apiUrl}api/EmployeeDashboard/GetDistinctProjects?employeeId=${id}&startDate=${startDate}&endDate=${endDate}`,
+    );
+  }
+
+  createEmployee(payload: FormData) {
+    return this.http.post<any>(`${environment.apiUrl}api/EmployeeDashboard/AddEmployee`, payload);
+  }
+
+  editEmployee(payload: FormData,empId:string) {
+    return this.http.put<any>(`${environment.apiUrl}api/EmployeeDashboard/EditEmployee/${empId}`, payload);
+  }
+
+  getLocation() {
+    return this.http.get<string[]>(
+      `${environment.apiUrl}api/EmployeeDashboard/GetLocation`,
+    );
+  }
+
+  getDepartments() {
+    return this.http.get<string[]>(
+      `${environment.apiUrl}api/EmployeeDashboard/GetDepartments`,
+    );
+  }
+
+  getDesignations() {
+    return this.http.get<string[]>(
+      `${environment.apiUrl}api/EmployeeDashboard/GetDesignations`,
+    );
+  }
+
+  getEmployeeStatuses() {
+    return this.http.get<string[]>(
+      `${environment.apiUrl}api/EmployeeDashboard/GetEmployeeStatuses`,
+    );
+  }
+
+  getEmployeeTypes() {
+    return this.http.get<string[]>(
+      `${environment.apiUrl}api/EmployeeDashboard/GetEmployeeTypes`,
+    );
+  }
+
+  getDeliveryCenters() {
+    return this.http.get<string[]>(
+      `${environment.apiUrl}api/EmployeeDashboard/GetDeliveryCenters`,
+    );
+  }
+
+  getBillableTypes() {
+    return this.http.get<string[]>(
+      `${environment.apiUrl}api/EmployeeDashboard/GetBillableTypes`,
+    );
+  }
+
+  deleteEmployeeById(empId: string) {
+    return this.http.delete(
+      `${environment.apiUrl}api/EmployeeDashboard/DeleteEmployeeManually?employeeId=${empId}`,
     );
   }
 }

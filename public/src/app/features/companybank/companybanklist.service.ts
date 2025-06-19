@@ -8,36 +8,34 @@ import { environment } from 'src/environments/environment';
 })
 export class CompanybanklistService {
 
-  apiurl:string="";
-     constructor(private _httpclient:HttpClient) {
-       this.apiurl=environment.apiUrl
-      }
-      
-     GetAllBankDetail():Observable<any>
-     {
-       return this._httpclient.get<any>(this.apiurl+"api/CompanyProfile/GetAllBankDeatils")
-     }
-     getAllCompany():Observable<any>
-     {
-       return this._httpclient.get<any>(this.apiurl+"api/CompanyProfile/GetAll")
-     }
-  
-     getCompanyBankId(id:any):Observable<any>
-     {
-       return this._httpclient.get<any>(this.apiurl+"api/CompanyProfile/GetBankDeatilById/"+id)
-     }
+  apiurl: string = "";
+  constructor(private _httpclient: HttpClient) {
+    this.apiurl = environment.apiUrl
+  }
 
-     checkIfprimarybankexists(id:any):Observable<any>
-     {
-       return this._httpclient.get<any>(this.apiurl+"api/CompanyProfile/check-primary-bank/"+id)
-     }
-  
-     addCompanyBank(data:any):Observable<any>
-     {
-       return this._httpclient.post<any>(this.apiurl+"api/CompanyProfile/AddBankDeatils",data)
-     }
-     updateCompanyBank(data:any):Observable<any>
-     {
-       return this._httpclient.put<any>(this.apiurl+"api/CompanyProfile/UpdateBankDeatils/"+data.id,data)
-     }
+  GetAllBankDetail(): Observable<any> {
+    return this._httpclient.get<any>(this.apiurl + "api/CompanyProfile/GetAllBankDeatils")
+  }
+  getAllCompany(): Observable<any> {
+    return this._httpclient.get<any>(this.apiurl + "api/CompanyProfile/GetAll")
+  }
+
+  getCompanyBankId(id: any): Observable<any> {
+    return this._httpclient.get<any>(this.apiurl + "api/CompanyProfile/GetBankDeatilById/" + id)
+  }
+
+  checkIfprimarybankexists(id: any): Observable<any> {
+    return this._httpclient.get<any>(this.apiurl + "api/CompanyProfile/check-primary-bank/" + id)
+  }
+
+  addCompanyBank(data: any): Observable<any> {
+    return this._httpclient.post<any>(this.apiurl + "api/CompanyProfile/AddBankDeatils", data)
+  }
+  updateCompanyBank(data: any): Observable<any> {
+    return this._httpclient.put<any>(this.apiurl + "api/CompanyProfile/UpdateBankDeatils/" + data.id, data)
+  }
+
+   getCurrenciesForDropdown(): Observable<any> {
+    return this._httpclient.get<any>(this.apiurl + "api/CompanyProfile/GetCurrenciesForDropdown")
+  }
 }

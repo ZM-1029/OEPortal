@@ -65,7 +65,7 @@ export class MarketingComponent implements OnInit {
         }
       },
       error: (err) => {
-        this.handleError("please try again leter");
+        this.handleError("please try again later");
       },
     });
   }

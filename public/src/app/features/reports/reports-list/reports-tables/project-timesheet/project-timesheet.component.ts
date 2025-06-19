@@ -194,6 +194,29 @@ export class ProjectTimesheetComponent implements OnChanges {
     )
   }
 
+
+  downloadExcel() {
+    this.reportsService.downloadTimesheetByDurationAndProject(this.startDate, this.endDate, this.selectedProjects)
+      .subscribe({
+        next: (blob: Blob) => {
+          const fileName = `Timesheet_${new Date().toISOString().slice(0, 10)}.xlsx`;
+          const downloadURL = window.URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = downloadURL;
+          link.download = fileName;
+          link.click();
+          window.URL.revokeObjectURL(downloadURL);
+          this._changeDetectorRef.detectChanges();
+        },
+        error: (err) => {
+          this.rowData = [];
+          this.showErrorOverlay("Data is not found");
+          this.handleError(err.error?.message || "Download failed");
+        }
+      });
+  }
+
+
   gridOptions = {
     noRowsOverlayComponentParams: {
       noRowsMessageFunc: () => "No data found for this employee.",
@@ -324,7 +347,7 @@ export class ProjectTimesheetComponent implements OnChanges {
       return d <= endDate;
     }
 
-    return true; 
+    return true;
   };
 
   getEndDate(event: MatDatepickerInputEvent<Date> | any) {

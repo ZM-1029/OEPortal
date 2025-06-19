@@ -136,9 +136,7 @@ export class CountrytaxesComponent {
 
 
   updateCountry(event: any): void {
-   
     const countryId = event.data.id;
-   
       this.isSideDrawerOpen=true;
       this.countryId = Number(countryId);
       

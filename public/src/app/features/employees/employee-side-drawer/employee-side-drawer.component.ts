@@ -18,14 +18,14 @@ export class EmployeeSideDrawerComponent implements OnInit, OnDestroy {
   isDrawerOpen = false;
   employeeRowData: any = null;
   employeeId!: string;
-  employeeImgUrl!: string;
+  employeeImgUrl: string='/assets/images/demo.jpg';
   customerRowData: any = null;
   isVisible = false;
   constructor(
     private _employeeService: EmployeesService,
     private _router: Router,
     private _changeDetetction: ChangeDetectorRef,
-  ) {}
+  ) { }
   private _unsubscribeAll$: Subject<any> = new Subject<any>();
 
   ngOnInit() {
@@ -40,13 +40,21 @@ export class EmployeeSideDrawerComponent implements OnInit, OnDestroy {
           this.isVisible = true;
           this.employeeRowData = data;
           this.employeeId = data.employeeID;
-          this._employeeService
-            .getImgById(this.employeeId)
-            .pipe(takeUntil(this._unsubscribeAll$))
-            .subscribe((img) => {
-              this.employeeImgUrl = img.imageUrl;
-              this._changeDetetction.detectChanges();
-            });
+          console.log(this.employeeRowData,"this.employeeRowData");
+          
+          if (!this.employeeRowData.ismanual) {
+            this._employeeService
+              .getImgById(this.employeeId)
+              .pipe(takeUntil(this._unsubscribeAll$))
+              .subscribe((img) => {
+                this.employeeImgUrl = img.imageUrl;
+                this._changeDetetction.detectChanges();
+              });
+          } else {
+            if(this.employeeRowData.photo){
+              this.employeeImgUrl = this.employeeRowData.photo;
+            }
+          }
           this.isDrawerOpen = true;
         } else {
           this.isVisible = false;

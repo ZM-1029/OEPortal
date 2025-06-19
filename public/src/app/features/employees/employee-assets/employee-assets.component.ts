@@ -38,13 +38,6 @@ export class EmployeeAssetsComponent implements OnInit, AfterViewInit {
       },
     },
     {
-      field: "assetId",
-      headerName: "Asset Id",
-      sortable: true,
-      filter: true,
-      minWidth: 100,
-    },
-    {
       field: "assetTag",
       headerName: "Asset Tag",
       sortable: true,

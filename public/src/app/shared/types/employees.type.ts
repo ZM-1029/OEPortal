@@ -81,10 +81,15 @@ export interface employeeType {
   cancelledCheque: string;
   workPhone: string;
   syncBy: string;
+  ismanual:boolean;
   employeeInvoices: [];
   salaries: [];
   delivery_centre: string;
   billable_Type: string;
+  terminal_ID:string;
+  project_Name:string;
+  customer_Name:string;
+  project_ID:string;
 }
 
 export interface attendanceTypeI {

@@ -284,11 +284,11 @@ export class AttendanceNonComplianceHistoryComponent implements OnInit, OnChange
             }
           }
         } else {
-          this.handleError("please try again leter");
+          this.handleError("please try again later");
         }
       },
       error: (err) => {
-        this.handleError("please try again leter");
+        this.handleError("please try again later");
       },
     });
   }

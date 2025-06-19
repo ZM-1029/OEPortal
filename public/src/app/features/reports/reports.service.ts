@@ -40,6 +40,18 @@ export class ReportsService {
     );
   }
 
+  // downloadTimesheetByDurationAndProject(startDate: any, endDate: any, projects: any) {
+  //   return this.http.get<projectTimesheetResponseI>(
+  //     `${environment.apiUrl}api/EmployeeDashboard/GetTimesheetByDurationAndProject?startDate=${startDate}&endDate=${endDate}&project=${projects}`,
+  //   );
+  // }
+  downloadTimesheetByDurationAndProject(startDate: any, endDate: any, projects: any) {
+  return this.http.get(`${environment.apiUrl}api/EmployeeDashboard/ExportTimesheetToExcel?startDate=${startDate}&endDate=${endDate}&project=${projects}`, {
+    responseType: 'blob'
+  });
+}
+
+
   getAllCustomer() {
     return this.http.get(
       `${environment.apiUrl}api/Customer/GetCustomerForPo`,

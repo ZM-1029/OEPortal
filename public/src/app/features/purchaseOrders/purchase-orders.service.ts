@@ -1,6 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import {
+  AuditlogResponseI,
   createPOI,
   purchaseOrdersResponseI,
   returnPOI,
@@ -33,6 +34,7 @@ export class PurchaseOrdersService {
       `${environment.apiUrl}api/PO/GetPosByCustomerId/${id}`,
     );
   }
+  
   getPurchaseOrderById(id: number) {
     return this.http.get<purchaseOrdersResponseI>(
       `${environment.apiUrl}api/PO/GetPoById/${id}`,
@@ -48,5 +50,12 @@ export class PurchaseOrdersService {
 
   deletePOById(id: number) {
     return this.http.delete(`${environment.apiUrl}api/PO/DeletePo/${id}`);
+  }
+
+  // auditEntityTypeId this id is static for this(4	PurchaseOrder	Purchase order record)
+  getAuditLogs(auditEntityTypeId: number,tableId:number) {
+    return this.http.get<AuditlogResponseI>(
+      `${environment.apiUrl}api/Salary/auditlog?auditEntityTypeId=${auditEntityTypeId}&entityId=${tableId}`,
+    );
   }
 }

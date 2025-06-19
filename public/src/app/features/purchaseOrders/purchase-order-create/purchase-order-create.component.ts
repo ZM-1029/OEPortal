@@ -192,9 +192,9 @@ export class PurchaseOrderCreateComponent implements OnInit, OnChanges {
     this._changeDetectorRef.detectChanges();
   }
 
- onCurrencyChange(event: any) {
+  onCurrencyChange(event: any) {
     const selectedCurrencyId = event.value;
-    this.purchaseOrderForm.patchValue({currencyId: selectedCurrencyId})
+    this.purchaseOrderForm.patchValue({ currencyId: selectedCurrencyId })
   }
 
   date = new FormControl(moment());
@@ -271,6 +271,10 @@ export class PurchaseOrderCreateComponent implements OnInit, OnChanges {
           if (response.success) {
             const purchaseOrderData: any = response.data;
 
+            if (this.autoTrigger.panelOpen) {
+              this.autoTrigger.closePanel();
+            }
+
             if (!this.purchaseOrderForm) {
               console.error("Form is not initialized yet!");
               return;
@@ -289,7 +293,7 @@ export class PurchaseOrderCreateComponent implements OnInit, OnChanges {
                 currencyId: purchaseOrderData.currencyId,
                 amount: purchaseOrderData.amount,
                 description: purchaseOrderData.description,
-              });
+              }, { emitEvent: false });
 
               // Set the formatted display value (for UI)
               this.formattedAmount = formattedAmount;

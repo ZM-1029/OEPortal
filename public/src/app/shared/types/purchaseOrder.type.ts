@@ -45,3 +45,20 @@ export interface PurchaseOrderSummeryData {
   remainingAmount: number
   transactions: any[]
 }
+
+
+export interface AuditlogResponseI {
+  success: boolean
+  data: AuditlogI[]
+}
+
+export interface AuditlogI {
+  id: number
+  entityId: string
+  entityType: string
+  actionType: string
+  performedBy: string
+  timestamp: string
+  actionDescription: string
+  userEmail: string
+}

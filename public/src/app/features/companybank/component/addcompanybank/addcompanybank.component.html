@@ -1,96 +1,111 @@
 <div class="account-details m-4">
-    
-    <div class="border-bottom bg-light pb-2">
-      <h2 class="formHeading">{{heading}} Account Details</h2>
-    </div>
-  
-    <div class="form-container d-flex ">
-      <form [formGroup]="companyForm" (ngSubmit)="submitForm()">
-        <div class="input-form-container pe-2">
-          <!-- Business Dropdown -->
-         
-  
-          <!-- Country Dropdown -->
-          <div class="form-group row">
-            <mat-label class="outer-mat-lable col-4 pt-2">Company</mat-label>
-            <mat-form-field appearance="outline" class="col-8">
-              <mat-select formControlName="companyId" (selectionChange)="checkCountry($event)">
-             
-                <mat-option *ngFor="let country of countries" [value]="country.value">
-                  {{ country.label }}
-                </mat-option>
-              </mat-select>
-              <div *ngIf="iscountryfail" style="color: red; font-size: 12px;">
-                Company is required.
-              </div>
-            </mat-form-field>
-          </div>
-  
-          <!-- Terms & Conditions -->
-          
-          <div class="form-group row">
-              <mat-label class="outer-mat-lable col-4 pt-2">Bank Name</mat-label>
-              <mat-form-field appearance="outline" class="col-8">
-                <input formControlName="bankName"  matInput placeholder="Enter Bank  Name" />
-                <mat-error *ngIf="companyForm.controls['bankName'].hasError('required')">
-                   Bank Name is required
-                </mat-error>
-              </mat-form-field>
-            </div>
-            <div class="form-group row">
-                <mat-label class="outer-mat-lable col-4 pt-2">Swift Code</mat-label>
-                <mat-form-field appearance="outline" class="col-8">
-                  <input formControlName="sortCode"  matInput placeholder="Enter Swift Code" />
-                  
-                </mat-form-field>
-              </div>
-              <div class="form-group row">
-          <mat-label class="outer-mat-lable col-4 pt-2">Swiss Code</mat-label>
+
+  <div class="border-bottom bg-light pb-2">
+    <h2 class="formHeading">{{heading}} Account Details</h2>
+  </div>
+
+  <div class="form-container d-flex ">
+    <form [formGroup]="companyForm" (ngSubmit)="submitForm()">
+      <div class="input-form-container pe-2">
+        <!-- Business Dropdown -->
+
+
+        <!-- Country Dropdown -->
+        <div class="form-group row">
+          <mat-label class="outer-mat-lable col-4 pt-2">Company</mat-label>
           <mat-form-field appearance="outline" class="col-8">
-            <input formControlName="swissCode"  matInput placeholder="Enter Swiss Code" />
-           
+            <mat-select formControlName="companyId" (selectionChange)="checkCountry($event)">
+
+              <mat-option *ngFor="let country of countries" [value]="country.value">
+                {{ country.label }}
+              </mat-option>
+            </mat-select>
+            <div *ngIf="iscountryfail" style="color: red; font-size: 12px;">
+              Company is required.
+            </div>
           </mat-form-field>
         </div>
         <div class="form-group row">
-            <mat-label class="outer-mat-lable col-4 pt-2">Account Type</mat-label>
-            <mat-form-field appearance="outline" class="col-8">
-              <input formControlName="accountType" matInput placeholder="Enter Account Type" />
-              <mat-error *ngIf="companyForm.controls['accountType'].hasError('required')">
-                Account Type is required
-              </mat-error>
-            </mat-form-field>
-          </div>
-          <div class="form-group row">
-            <mat-label class="outer-mat-lable col-4 pt-2">Account Number</mat-label>
-            <mat-form-field appearance="outline" class="col-8">
-              <input formControlName="accountNumber" appOnlyNumbers matInput placeholder="Enter Account Number " />
-              <mat-error *ngIf="companyForm.controls['accountNumber'].hasError('required')">
-                Account Number is required
-              </mat-error>
-            </mat-form-field>
-          </div>
-          <div class="form-group row">
-            <mat-label class="outer-mat-lable col-4 pt-2">IFSC Code</mat-label>
-            <mat-form-field appearance="outline" class="col-8">
-              <input formControlName="ifscCode"  matInput placeholder="Enter ifsc code" />
-              <mat-error *ngIf="companyForm.controls['ifscCode'].hasError('required')">
-                IFSC code  is required
-              </mat-error>
-            </mat-form-field>
-          </div>
-       
-          <div class="d-flex  ps-4">
-            <mat-label class="outer-mat-label">Is Primary</mat-label>
-            <mat-slide-toggle color="primary" formControlName="isPrimary" (change)="toggle($event)"></mat-slide-toggle>
-          </div>
+          <mat-label class="outer-mat-lable col-4 pt-2">Bank Name</mat-label>
+          <mat-form-field appearance="outline" class="col-8">
+            <input formControlName="bankName" matInput placeholder="Enter Bank  Name" />
+            <mat-error *ngIf="companyForm.controls['bankName'].hasError('required')">
+              Bank Name is required
+            </mat-error>
+          </mat-form-field>
         </div>
-  
-        <!-- Form Buttons -->
-        <div class="form-btn d-flex align-items-start justify-content-end p-4">
-          <button class="btn btn-secondary mx-2" (click)="reset()">Clear</button>
-          <button class="btn btn-info-dark text-white" type="submit">{{heading}}</button>
+        <div class="form-group row">
+          <mat-label class="outer-mat-lable col-4 pt-2">Account Type</mat-label>
+          <mat-form-field appearance="outline" class="col-8">
+            <input formControlName="accountType" matInput placeholder="Enter Account Type" />
+            <mat-error *ngIf="companyForm.controls['accountType'].hasError('required')">
+              Account Type is required
+            </mat-error>
+          </mat-form-field>
         </div>
-      </form>
-    </div>
+        <div class="form-group row">
+          <mat-label class="outer-mat-lable col-4 pt-2">Currencie Type</mat-label>
+          <mat-form-field appearance="outline" class="col-8">
+            <mat-select formControlName="currenciesId">
+
+              <mat-option *ngFor="let country of currenciesList" [value]="country.currencyId">
+                {{ country.name }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="companyForm.controls['currenciesId'].hasError('required')">
+              Currencie Name is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <!-- Terms & Conditions -->
+
+
+        <div class="form-group row">
+          <mat-label class="outer-mat-lable col-4 pt-2">Swift Code</mat-label>
+          <mat-form-field appearance="outline" class="col-8">
+            <input formControlName="sortCode" matInput placeholder="Enter Swift Code" />
+
+          </mat-form-field>
+        </div>
+        <div class="form-group row">
+          <mat-label class="outer-mat-lable col-4 pt-2">Swiss Code</mat-label>
+          <mat-form-field appearance="outline" class="col-8">
+            <input formControlName="swissCode" matInput placeholder="Enter Swiss Code" />
+
+          </mat-form-field>
+        </div>
+
+        <div class="form-group row">
+          <mat-label class="outer-mat-lable col-4 pt-2">Account Number</mat-label>
+          <mat-form-field appearance="outline" class="col-8">
+            <input formControlName="accountNumber" appOnlyNumbers matInput placeholder="Enter Account Number " />
+            <mat-error *ngIf="companyForm.controls['accountNumber'].hasError('required')">
+              Account Number is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="form-group row">
+          <mat-label class="outer-mat-lable col-4 pt-2">IFSC Code</mat-label>
+          <mat-form-field appearance="outline" class="col-8">
+            <input formControlName="ifscCode" matInput placeholder="Enter ifsc code" />
+            <mat-error *ngIf="companyForm.controls['ifscCode'].hasError('required')">
+              IFSC code is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="d-flex  ps-4">
+          <mat-label class="outer-mat-label">Is Primary</mat-label>
+          <mat-slide-toggle color="primary" formControlName="isPrimary" (change)="toggle($event)"></mat-slide-toggle>
+        </div>
+      </div>
+
+      <!-- Form Buttons -->
+      <div class="form-btn d-flex align-items-start justify-content-end p-4">
+        <button class="btn btn-secondary mx-2" (click)="reset()">Clear</button>
+        <button class="btn btn-info-dark text-white" type="submit">{{heading}}</button>
+      </div>
+    </form>
   </div>
-  
+</div>

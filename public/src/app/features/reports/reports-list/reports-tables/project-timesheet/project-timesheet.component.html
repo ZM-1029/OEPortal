@@ -1,28 +1,5 @@
-<!-- <p>project-timesheet works! {{startDate}} and {{endDate}} {{activeTable}}</p> -->
 <div class=" customer-efficiency-report ">
     <div class="multi-select-dropdown ">
-        <!-- <div class="dropdown-year  ps-3">
-            @if(yearDropdown.length!=0){
-                <app-single-select-dropdown [dropdownHeading]="'Select Year'" [defaultValue]="selectedValueYear"
-                [dataList]="yearDropdown" (selectedOutput)="selectedYear($event)">
-            </app-single-select-dropdown>
-            }
-        </div> -->
-        <!-- <div class="dropdown-month px-3">
-            @if(selectedValueMonth){
-                <app-month-multi-select-dropdown 
-              [dropdownHeading]="'Months'" 
-              [defaultValue]="selectedValueMonth"  
-              [dataList]="Month"
-              (selectedOutput)="selectedMonth($event)">
-            </app-month-multi-select-dropdown>
-            }
-          </div> -->
-        <!-- <div class="customer-dropdown ">
-            <app-multi-selcet-object-dropdown [dropdownHeading]="'Customer'" [defaultValue]="customerId"
-                [dataList]="allCustomers" (selectedOutput)="selectedCustomer($event)">
-            </app-multi-selcet-object-dropdown>
-        </div> -->
         <div class="customer-dropdown ">
             <app-multi-select-dropdown class="pb-3" (selectedOutput)="selectedProject($event)"
                 [dropdownHeading]="'Projects'" [defaultValue]="'0'"
@@ -46,6 +23,9 @@
         <button class="btn btn-info-dark text-white btn-wave dropdown-toggle" type="button" id="dropdownMenuButton1"
             data-bs-toggle="dropdown" aria-expanded="false">
             Manage Column
+        </button>
+        <button class="btn btn-info-dark text-white btn-wave ms-2" (click)="downloadExcel()">
+            Download
         </button>
 
         <ul class="dropdown-menu py-0" aria-labelledby="dropdownMenuButton1">

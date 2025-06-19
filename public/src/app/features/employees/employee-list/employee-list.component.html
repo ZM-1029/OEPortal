@@ -1,6 +1,9 @@
 <div class="main-content mt-2 p-2">
   <app-page-header [HeadingName]="HeadingName">
     <div pageHeaderBtn class="d-flex">
+        <button class="btn btn-info-dark btn-wave mx-2 text-white text-capitalize" (click)="employeeAdd()" routerLink="add">
+        <i class="fa-solid fa-plus me-2"></i>Create
+      </button>
       <div class="dropdown">
         <button class="btn btn-info-dark text-white btn-wave dropdown-toggle" type="button" id="dropdownMenuButton1"
           data-bs-toggle="dropdown" aria-expanded="false">
@@ -39,7 +42,7 @@
   <div class="d-flex align-items-center justify-content-center">
     <div class="container-fluid p-0">
       <ag-grid-angular #agGrid style="width: 100%; height: calc(100vh - 12rem)!important; padding-bottom: 10px"
-        class="ag-theme-alpine" [rowData]="rowData" [columnDefs]="columnDefs" (rowClicked)="onRowClick($event)"
+        class="ag-theme-alpine" [rowData]="rowData" [columnDefs]="columnDefs" (cellClicked)="updateCustomer($event)" (rowClicked)="onRowClick($event)"
         [defaultColDef]="defaultColDef" [animateRows]="true" [paginationPageSize]="15" [pagination]="true"
         [paginationPageSizeSelector]="paginationPageSizeSelector" (gridReady)="onGridReady($event)" 
         (paginationChanged)="onPaginationChanged($event)" [suppressDragLeaveHidesColumns]="true"></ag-grid-angular>

@@ -52,7 +52,7 @@ export class EmployeeDetailsComponent implements OnInit {
   originalString: string = "";
   maskedString = "";
   isMasked = true;
-  employeeDataForTimesheet: any ;
+  employeeDataForTimesheet: any;
   activeTab: string = "profile";
 
   constructor(
@@ -60,7 +60,7 @@ export class EmployeeDetailsComponent implements OnInit {
     private route: ActivatedRoute,
     private _changeDetetction: ChangeDetectorRef,
     private _router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.route.params.subscribe((params: any) => {
@@ -71,7 +71,7 @@ export class EmployeeDetailsComponent implements OnInit {
     this.setActiveTab(this.activeTab);
   }
 
- 
+
   setActiveTab(tabName: string) {
     this.activeTab = tabName;
     this._changeDetetction.detectChanges();
@@ -87,9 +87,9 @@ export class EmployeeDetailsComponent implements OnInit {
       .subscribe((result: employeeDetailsI) => {
         if (result.success) {
           this.employeeDetails = result.data;
-          const employeeDataForTimesheet={
-            employeeOfficalEmail:result.data.emailID,
-            employeeId:employeeId,
+          const employeeDataForTimesheet = {
+            employeeOfficalEmail: result.data.emailID,
+            employeeId: employeeId,
           }
           this.employeeDataForTimesheet = employeeDataForTimesheet;
           this.reportingTo = this.employeeDetails?.reportingTo;
@@ -99,15 +99,21 @@ export class EmployeeDetailsComponent implements OnInit {
           );
           this.getReportingMangerImage(reportingMangerId);
           this.sendEmployeeId_attendance(employeeId);
+          console.log(this.employeeDetails, "employeeDetails");
+
           this._changeDetetction.detectChanges();
-          this._employeeService
-            .getImgById(this.managerId)
-            .subscribe((img: any) => {
-              if (img.imageUrl) {
-                this.imgUrl = img.imageUrl;
-              }
-              this._changeDetetction.detectChanges();
-            });
+          if (!this.employeeDetails.ismanual) {
+            this._employeeService
+              .getImgById(this.managerId)
+              .subscribe((img: any) => {
+                if (img.imageUrl) {
+                  this.imgUrl = img.imageUrl;
+                }
+                this._changeDetetction.detectChanges();
+              });
+          } else {
+            this.imgUrl = this.employeeDetails.photo
+          }
         } else {
           console.log("No employee data returned from API.");
         }
@@ -123,8 +129,23 @@ export class EmployeeDetailsComponent implements OnInit {
       });
   }
 
-  backToEmployeListing(){
+  backToEmployeListing() {
     this._router.navigateByUrl("/admin/employee");
+  }
+
+  getFormattedExperience(totalMonths: any): string {
+    const years = Math.floor(totalMonths / 12);
+    const months = totalMonths % 12;
+
+    const yearText = years === 1 ? 'year' : 'years';
+    const monthText = months === 1 ? 'month' : 'months';
+
+    if (years === 0) {
+      return months === 0 ? '' : `${months} ${monthText}`;
+    } else if (months === 0) {
+      return `${years} ${yearText}`;
+    }
+    return `${years} ${yearText} ${months} ${monthText}`;
   }
 
   getReportingManagerId(reporting: string) {
@@ -137,6 +158,9 @@ export class EmployeeDetailsComponent implements OnInit {
       this.reportingId = toStringR.slice(startIndex, toStringR.length);
     } else if (toStringR.indexOf("ZCS-")) {
       let startIndex = toStringR.indexOf("ZCS-");
+      this.reportingId = toStringR.slice(startIndex, toStringR.length);
+    } else if (toStringR.indexOf("ZCS_")) {
+      let startIndex = toStringR.indexOf("ZCS_");
       this.reportingId = toStringR.slice(startIndex, toStringR.length);
     } else if (toStringR.indexOf("ZI-")) {
       let startIndex = toStringR.indexOf("ZI-");
