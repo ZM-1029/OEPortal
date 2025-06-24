@@ -20,7 +20,7 @@ import { BussinessService } from '../../bussiness.service';
 ModuleRegistry.registerModules([AllCommunityModule]);
 @Component({
   selector: 'app-bussiness-line',
-  standalone: true, 
+  standalone: true,
   imports: [
     CommonModule,
     AgGridAngular,
@@ -28,22 +28,22 @@ ModuleRegistry.registerModules([AllCommunityModule]);
     // AddBussinessComponent,
     // SideDrawerComponent,
     PageHeaderComponent,
-    
+
   ],
   templateUrl: './bussiness-line.component.html',
   styleUrl: './bussiness-line.component.scss'
 })
 export class BussinessLineComponent {
-  
+
 
   columnDefs: ColDef[] = [
-    { headerName: "S. No", valueGetter: "node.rowIndex + 1", pinned: "left",sortable: false, filter: false },
+    { headerName: "S. No", valueGetter: "node.rowIndex + 1", pinned: "left", sortable: false, filter: false },
     { field: 'name', headerName: 'Business', sortable: true, filter: true },
     { field: 'description', headerName: 'Description', sortable: true, filter: true },
     {
       headerName: 'Actions',
       cellRenderer: (params: any) => this.renderActionIcons(params),
-      onCellClicked: (params) => this.updateBussiness(params),cellStyle: () => {
+      onCellClicked: (params) => this.updateBussiness(params), cellStyle: () => {
         return { border: "none", cursor: "pointer" };
       },
     }
@@ -58,12 +58,12 @@ export class BussinessLineComponent {
   public bussinesid: number = 0;
 
   constructor(
-    private _route:Router,
+    private _route: Router,
     private _changeDetectorRef: ChangeDetectorRef,
     private dialog: MatDialog,
     private _snackBar: MatSnackBar,
-    private apiservice:BussinessService
-  ) {}
+    private apiservice: BussinessService
+  ) { }
 
 
 
@@ -90,14 +90,16 @@ export class BussinessLineComponent {
   }
 
   getbussiness() {
-  
-    this.apiservice.getService().subscribe({next:(data:any)=>{
-      this.rowData=data.data;
-      this._changeDetectorRef.detectChanges();
-    }})
 
-    
-     
+    this.apiservice.getService().subscribe({
+      next: (data: any) => {
+        this.rowData = data.data;
+        this._changeDetectorRef.detectChanges();
+      }
+    })
+
+
+
   }
   sideDrawer() {
     if (this.isSideDrawerOpen) {
@@ -118,15 +120,18 @@ export class BussinessLineComponent {
         <span class="icon-container text-primary edit-icon" data-id="${params.data.id}" style="display: block; width: 20px; height: 20px; cursor:pointer">
           <i style="cursor:pointer; font-size:1.2rem" class="fa-solid fa-eye"></i>
         </span>
-       
       </div>
     `;
   }
 
 
-  updateBussiness(event: any): void {   
+  updateBussiness(event: any): void {
+    if (event.event.target.closest(".edit-icon")) {
       this.bussinesid = Number(event.data.id);
       this._route.navigate(["/admin/business", this.bussinesid]);
+    }
+    // this.bussinesid = Number(event.data.id);
+    //   this._route.navigate(["/admin/business", this.bussinesid]);
   }
 
   openDeleteModal(bussinesid: number): void {

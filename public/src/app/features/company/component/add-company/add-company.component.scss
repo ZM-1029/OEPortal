@@ -372,7 +372,25 @@ input[type="text"]:required {
 
 
 
+html .mat-mdc-slide-toggle.mat-accent {
+    /* --mdc-switch-selected-focus-state-layer-color: #d81b60; */
+    /* --mdc-switch-selected-handle-color: #d81b60; */
+    /* --mdc-switch-selected-hover-state-layer-color: #d81b60; */
+    /* --mdc-switch-selected-pressed-state-layer-color
+#3949ab
+: #d81b60; */
+    /* --mdc-switch-selected-focus-handle-color: #880e4f; */
+    /* --mdc-switch-selected-hover-handle-color: #880e4f; */
+    /* --mdc-switch-selected-pressed-handle-color: #880e4f; */
+    --mdc-switch-selected-focus-track-color: #f06292;
+    /* --mdc-switch-selected-hover-track-color: #f06292; */
+    /* --mdc-switch-selected-pressed-track-color: #f06292; */
+    /* --mdc-switch-selected-track-color: #f06292; */
+}
 
+html .mat-accent {
+    --mdc-circular-progress-active-indicator-color: #ff4081;
+}
 
 
 

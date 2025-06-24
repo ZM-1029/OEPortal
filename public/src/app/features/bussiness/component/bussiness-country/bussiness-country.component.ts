@@ -21,12 +21,12 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 
 @Component({
   selector: 'app-bussiness-country',
-  imports: [ CommonModule,
-      AgGridAngular,
-      MatButtonModule,
-      AddBussinessComponent,
-      SideDrawerComponent,
-      PageHeaderComponent,],
+  imports: [CommonModule,
+    AgGridAngular,
+    MatButtonModule,
+    AddBussinessComponent,
+    SideDrawerComponent,
+    PageHeaderComponent,],
   templateUrl: './bussiness-country.component.html',
   styleUrl: './bussiness-country.component.scss'
 })
@@ -34,14 +34,15 @@ export class BussinessCountryComponent {
 
 
   columnDefs: ColDef[] = [
-    { headerName: "S. No", valueGetter: "node.rowIndex + 1", pinned: "left" ,sortable: false, filter: false},
+    { headerName: "S. No", valueGetter: "node.rowIndex + 1", pinned: "left", sortable: false, filter: false },
     { field: 'country', headerName: 'Country', sortable: true, filter: true },
-    { field: 'termCondition', headerName: 'Term & Condition', sortable: true, filter: true,
+    {
+      field: 'termCondition', headerName: 'Term & Condition', sortable: true, filter: true,
       cellRenderer: (params: any) => {
         return params.value ? `<span>${params.value}</span>` : '';
       }
-     },
-   
+    },
+
     {
       headerName: 'Actions',
       cellRenderer: (params: any) => this.renderActionIcons(params),
@@ -56,17 +57,17 @@ export class BussinessCountryComponent {
   private _unsubscribeAll$: Subject<any> = new Subject<any>();
   public isSideDrawerOpen: boolean = false;
   public bussinesid: number = 0;
-  public serviceid:number=0;
+  public serviceid: number = 0;
 
   constructor(
-    
+
     private _changeDetectorRef: ChangeDetectorRef,
     private dialog: MatDialog,
     private _snackBar: MatSnackBar,
-    private apiservie:BussinessService,
-    private activate:ActivatedRoute
+    private apiservie: BussinessService,
+    private activate: ActivatedRoute
   ) {
-    
+
   }
 
 
@@ -93,17 +94,19 @@ export class BussinessCountryComponent {
     this.activate.paramMap.subscribe(params => {
       this.serviceid = Number(params.get('id'));
       this.getbussiness(this.serviceid);
-      
+
     });
   }
 
-  getbussiness(business:any) {
-     this.apiservie.getServicebybussinessId(business).subscribe({next:(data:any)=>{
-      this.rowData=data.data
-     }})
-    this._changeDetectorRef.detectChanges(); 
+  getbussiness(business: any) {
+    this.apiservie.getServicebybussinessId(business).subscribe({
+      next: (data: any) => {
+        this.rowData = data.data
+      }
+    })
+    this._changeDetectorRef.detectChanges();
   }
-  
+
   sideDrawer() {
     if (this.isSideDrawerOpen) {
       this.isSideDrawerOpen = false;
@@ -132,10 +135,15 @@ export class BussinessCountryComponent {
 
 
   updateBussiness(event: any): void {
-    const bussinesid = event.data.id;
+    if (event.event.target.closest(".edit-icon")) {
+      const bussinesid = event.data.id;
       this.isSideDrawerOpen = true;
       this.bussinesid = Number(bussinesid);
-    
+    }
+    // const bussinesid = event.data.id;
+    //   this.isSideDrawerOpen = true;
+    //   this.bussinesid = Number(bussinesid);
+
   }
 
 

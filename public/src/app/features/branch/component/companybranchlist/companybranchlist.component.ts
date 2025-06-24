@@ -40,20 +40,22 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 })
 export class CompanybranchlistComponent {
   columnDefs: any = [
-    { headerName: "S. No", valueGetter: "node.rowIndex + 1", pinned: "left" ,sortable: false, filter: false },
-    { headerName: "Actions", field: "actions", cellRenderer: (params: any) => this.renderActionIcons(params), pinned: "right",cellStyle: () => {
-      return { border: "none", cursor: "pointer" };
-    }, },
+    { headerName: "S. No", valueGetter: "node.rowIndex + 1", pinned: "left", sortable: false, filter: false },
+    {
+      headerName: "Actions", field: "actions", cellRenderer: (params: any) => this.renderActionIcons(params), pinned: "right", cellStyle: () => {
+        return { border: "none", cursor: "pointer" };
+      },
+    },
     { field: "name", headerName: "Company Name", sortable: true, filter: true },
     { field: "phoneNumber", headerName: "Phone Number", sortable: true, filter: true },
     { field: "state", headerName: "State", sortable: true, filter: true },
     { field: "city", headerName: "City", sortable: true, filter: true },
     { field: "address", headerName: "Address", sortable: true, filter: true },
     { field: "gstno", headerName: "GST NO", sortable: true, filter: true },
-   
+
     { field: "pincode", headerName: "Pincode", sortable: true, filter: true },
-   
-   
+
+
   ];
 
   defaultColDef = { sortable: true, filter: true, resizable: true, flex: 1 };
@@ -64,16 +66,16 @@ export class CompanybranchlistComponent {
   public id: number = 0;
 
   constructor(
-    
+
     private _changeDetectorRef: ChangeDetectorRef,
     private dialog: MatDialog,
     private _snackBar: MatSnackBar,
-    private CompanyService:BranchService,
-   
-  ){
-      
-    }
-  
+    private CompanyService: BranchService,
+
+  ) {
+
+  }
+
 
 
 
@@ -100,12 +102,14 @@ export class CompanybranchlistComponent {
   }
 
   getCountryList() {
-    
-    this.CompanyService.GetAllBranches().subscribe({next:(data:any)=>{
-     this.rowData=data.data;
-     this._changeDetectorRef.detectChanges();
-    }})
-    
+
+    this.CompanyService.GetAllBranches().subscribe({
+      next: (data: any) => {
+        this.rowData = data.data;
+        this._changeDetectorRef.detectChanges();
+      }
+    })
+
   }
   sideDrawer() {
     if (this.isSideDrawerOpen) {
@@ -135,13 +139,16 @@ export class CompanybranchlistComponent {
 
 
   updateCompanyProfile(event: any): void {
-    const id = event.data.id;
-   
-    this.isSideDrawerOpen=true;
+    // const id = event.data.id;
+    // this.isSideDrawerOpen = true;
+    // this.id = Number(id);
+
+    if (event.event.target.closest(".edit-icon")) {
+      const id = event.data.id;
+      this.isSideDrawerOpen = true;
       this.id = Number(id);
-     
-      
-    
+    }
+
   }
 
   // openDeleteModal(id: number): void {

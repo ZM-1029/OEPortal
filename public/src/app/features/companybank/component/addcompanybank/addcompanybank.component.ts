@@ -8,7 +8,7 @@ import { BussinessService } from 'src/app/features/bussiness/bussiness.service';
 import { SuccessModalComponent } from 'src/app/shared/components/UI/success-modal/success-modal.component';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatSelectModule } from '@angular/material/select';
+import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatButtonModule } from '@angular/material/button';
@@ -33,7 +33,7 @@ import { MatDialog } from '@angular/material/dialog';
     MatButtonModule,
     MatIconModule,
     ReactiveFormsModule,
-    OnlyNumbersDirective,
+    // OnlyNumbersDirective,
 
   ],
   providers: [ConfirmationDialogService],
@@ -42,7 +42,8 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class AddcompanybankComponent {
   companyForm!: FormGroup;
-  heading: string = "Create"
+  heading: string = "Create";
+  formList: any[] = [];
   countries: { value: string, label: string }[] = []; // Mock data
   currenciesList: { currencyId: string, name: string }[] = []; // Mock data
   @Input() Id: number = 0;
@@ -54,7 +55,7 @@ export class AddcompanybankComponent {
     private _successMessage: MatSnackBar, private cdr: ChangeDetectorRef) {
     this.companyservice.getAllCompany().subscribe({
       next: (data: any) => {
-        this.countries = [{ value: '0', label: 'Select a Company' }];  // Add the default option
+        this.countries = [];  // Add the default option
         data.data.forEach((country: any) => {
           this.countries.push({
             value: country.id.toString(),  // Make sure the id is a string to bind with value
@@ -65,13 +66,16 @@ export class AddcompanybankComponent {
     })
     this.companyservice.getCurrenciesForDropdown().subscribe({
       next: (data: any) => {
-        this.currenciesList = [{ currencyId: '0', name: 'Select a Company' }];  // Add the default option
+        this.currenciesList = [];  // Add the default option
         data.data.forEach((currenc: any) => {
           this.currenciesList.push({
             currencyId: currenc.currencyId.toString(),  // Make sure the id is a string to bind with value
             name: currenc.name
           });
         });
+        if (this.Id > 0) {
+          this.patchValue();
+        }
       }
     })
   }
@@ -85,27 +89,20 @@ export class AddcompanybankComponent {
       horizontalPosition: "right",
     });
   }
+
   reset() {
     this.companyForm.reset()
-    this.companyForm.get('companyId')?.setValue('0');
+    this.companyForm.get('companyId')?.setValue('');
+    this.companyForm.get('currencyId')?.setValue('');
   }
+
   async ngOnInit() {
-
-
     this.companyForm = this.fb.group({
-
-
-      companyId: ['0', Validators.required],
-      currenciesId: ['0', Validators.required],
-      accountType: ['', [Validators.required]],
-      ifscCode: ['', [Validators.required]],
-      sortCode: ['',],
+      companyId: ['', Validators.required],
       bankName: ['', [Validators.required]],
-      accountNumber: ['', [Validators.required]],
-
-      swissCode: ['',],
+      accountType: ['', [Validators.required]],
+      currencyId: ['', Validators.required],
       isPrimary: ['false']
-
 
     });
     this.companyForm.get('isPrimary')?.setValue(0);
@@ -113,27 +110,105 @@ export class AddcompanybankComponent {
       this.heading = "Update"
       this.patchValue()
     }
-
-
   }
 
   patchValue() {
     this.companyservice.getCompanyBankId(this.Id).subscribe({
       next: (data: any) => {
+        const res = data.data;
+
+        // Patch static fields first
         this.companyForm.patchValue({
-          companyId: data.data.companyId,
-          accountType: data.data.accountType,
-          ifscCode: data.data.ifscCode,
-          sortCode: data.data.sortCode,
-          bankName: data.data.bankName,
-          accountNumber: data.data.accountNumber,
-          swissCode: data.data.swissCode,
-          isPrimary: data.data.isPrimary
-        })
-        this.companyForm.get('companyId')?.setValue(data.data.companyId.toString());
+          companyId: res.companyId.toString(),
+          currencyId: res.currencyId.toString(),
+          accountType: res.accountType,
+          bankName: res.bankName,
+          isPrimary: res.isPrimary
+        });
+
+        // First patch the currency to trigger dynamic fields
+        //  this.companyForm.get('companyId')?.setValue(data.data.companyId.toString());
+        this.companyForm.get('currencyId')?.setValue(res.currencyId.toString());
+
+        this.companyservice.getBankFeatures(res.currencyId).subscribe({
+          next: (response) => {
+            if (response.success) {
+              this.formList = response.features;
+
+              // Add dynamic controls
+              this.formList.forEach((field: any) => {
+                if (!this.companyForm.contains(field.name)) {
+                  this.companyForm.addControl(
+                    field.name,
+                    this.fb.control('', Validators.required)
+                  );
+                }
+              });
+
+              // Patch all dynamic field values from API
+              this.formList.forEach((field: any) => {
+                const value = res[field.name];
+                if (value !== undefined) {
+                  this.companyForm.get(field.name)?.setValue(value);
+                }
+              });
+
+              this.cdr.detectChanges();
+            }
+          }
+        });
+
+        // // Now trigger selectCurrencie to build dynamic form controls
+        // const mockEvent = { value: res.currencyId } as MatSelectChange;
+        // this.companyservice.getBankFeatures(res.currencyId).subscribe({
+        //   next: (response) => {
+        //     if (response.success) {
+        //       this.formList = response.features;
+
+        //       // Add dynamic controls
+        //       this.formList.forEach((field: any) => {
+        //         if (!this.companyForm.contains(field.name)) {
+        //           this.companyForm.addControl(
+        //             field.name,
+        //             this.fb.control('', Validators.required)
+        //           );
+        //         }
+        //       });
+
+        //       // // Patch dynamic field values
+        //       this.companyForm.patchValue({
+        //         ifscCode: res.ifscCode,
+        //         sortCode: res.sortCode,
+        //         accountNumber: res.accountNumber,
+        //         swissCode: res.swissCode
+        //       });
+
+        //       this.cdr.detectChanges();
+        //     }
+        //   }
+        // });
       }
-    })
+    });
   }
+
+
+  // patchValue() {
+  //   this.companyservice.getCompanyBankId(this.Id).subscribe({
+  //     next: (data: any) => {
+  //       this.companyForm.patchValue({
+  //         companyId: data.data.companyId,
+  //         accountType: data.data.accountType,
+  //         ifscCode: data.data.ifscCode,
+  //         sortCode: data.data.sortCode,
+  //         bankName: data.data.bankName,
+  //         accountNumber: data.data.accountNumber,
+  //         swissCode: data.data.swissCode,
+  //         isPrimary: data.data.isPrimary
+  //       })
+  //       this.companyForm.get('companyId')?.setValue(data.data.companyId.toString());
+  //     }
+  //   })
+  // }
 
   toggle(event: any) {
     if (this.Id > 0)
@@ -176,28 +251,59 @@ export class AddcompanybankComponent {
       this.iscountryfail = true;
     }
   }
+
+  selectCurrencie(event: MatSelectChange) {
+    this.companyservice.getBankFeatures(event.value).subscribe(
+      {
+        next: ((response) => {
+          if (response.success) {
+            this.formList = response.features;
+            // Dynamically add controls
+            this.formList.forEach((formField: any) => {
+              if (!this.companyForm.contains(formField.name)) {
+                this.companyForm.addControl(
+                  formField.name,
+                  this.fb.control('', Validators.required)
+                );
+              }
+            });
+            this.cdr.detectChanges();
+          } else {
+
+          }
+        }),
+        error: ((err) => {
+
+        })
+      }
+    )
+    console.log(event.value, "selectCurrencie");
+  }
+
   submitForm() {
     if (Number(this.companyForm.value.companyId) > 0) {
-      this.iscountryfail = false
+      this.iscountryfail = false;
+    } else {
+      this.iscountryfail = true;
+      this.cdr.detectChanges();
+      return;
+    }
 
-    }
-    else {
-      this.iscountryfail = true
-      this.cdr.detectChanges()
-      return
-    }
     if (this.companyForm.valid) {
-      const formData = {
+      // Start with base form data
+      const formData: any = {
         id: this.Id > 0 ? this.Id : 0,
         companyId: this.companyForm.value.companyId,
+        currencyId: this.companyForm.value.currencyId,
         accountType: this.companyForm.get("accountType")?.value,
-        ifscCode: this.companyForm.get("ifscCode")?.value,
-        sortCode: this.companyForm.get("sortCode")?.value,
         bankName: this.companyForm.get("bankName")?.value,
-        accountNumber: this.companyForm.get("accountNumber")?.value,
-        swissCode: this.companyForm.get("swissCode")?.value,
         isPrimary: this.companyForm.value.isPrimary == "0" ? false : true
       };
+
+      // Append dynamic fields from formList
+      this.formList?.forEach((field: any) => {
+        formData[field.name] = this.companyForm.get(field.name)?.value;
+      });
 
       const serviceCall = this.Id > 0
         ? this.companyservice.updateCompanyBank(formData)
@@ -209,10 +315,54 @@ export class AddcompanybankComponent {
             this.showSuccessMessage(data.message);
             this.formClose.emit(true);
           }
+        },
+        error: (err) => {
+          console.error('Submission error:', err);
         }
       });
     } else {
       this.companyForm.markAllAsTouched();
     }
   }
+
+
+  // submitForm() {
+  //   if (Number(this.companyForm.value.companyId) > 0) {
+  //     this.iscountryfail = false
+
+  //   }
+  //   else {
+  //     this.iscountryfail = true
+  //     this.cdr.detectChanges()
+  //     return
+  //   }
+  //   if (this.companyForm.valid) {
+  //     const formData = {
+  //       id: this.Id > 0 ? this.Id : 0,
+  //       companyId: this.companyForm.value.companyId,
+  //       accountType: this.companyForm.get("accountType")?.value,
+  //       ifscCode: this.companyForm.get("ifscCode")?.value,
+  //       sortCode: this.companyForm.get("sortCode")?.value,
+  //       bankName: this.companyForm.get("bankName")?.value,
+  //       accountNumber: this.companyForm.get("accountNumber")?.value,
+  //       swissCode: this.companyForm.get("swissCode")?.value,
+  //       isPrimary: this.companyForm.value.isPrimary == "0" ? false : true
+  //     };
+
+  //     const serviceCall = this.Id > 0
+  //       ? this.companyservice.updateCompanyBank(formData)
+  //       : this.companyservice.addCompanyBank(formData);
+
+  //     serviceCall.subscribe({
+  //       next: (data: any) => {
+  //         if (data.success) {
+  //           this.showSuccessMessage(data.message);
+  //           this.formClose.emit(true);
+  //         }
+  //       }
+  //     });
+  //   } else {
+  //     this.companyForm.markAllAsTouched();
+  //   }
+  // }
 }

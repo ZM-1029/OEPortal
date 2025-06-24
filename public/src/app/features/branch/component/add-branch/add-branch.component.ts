@@ -17,7 +17,6 @@ import { BranchService } from '../../branch.service';
 import { OnlyNumbersDirective } from 'src/app/shared/directive/only-numbers.directive';
 
 
-
 @Component({
   selector: 'app-add-branch',
   imports: [
@@ -35,44 +34,43 @@ import { OnlyNumbersDirective } from 'src/app/shared/directive/only-numbers.dire
   styleUrl: './add-branch.component.scss'
 })
 export class AddBranchComponent {
-companyForm!: FormGroup;
-  heading:string="Create"
+  companyForm!: FormGroup;
+  heading: string = "Create"
   countries: { value: string, label: string }[] = []; // Mock data
   @Input() Id: number = 0;
-  @Input() isSideDrawerOpen: boolean = false; 
- 
- @Output() formClose: EventEmitter<boolean> = new EventEmitter<boolean>();
-  constructor(private fb: FormBuilder,private companyservice:BranchService,private apiservice:BussinessService,private activate:ActivatedRoute,private _successMessage:MatSnackBar,private cdr:ChangeDetectorRef) {
-    this.companyservice.getAllCompany().subscribe({next:(data:any)=>{
-      this.countries = [{ value: '0', label: 'Select a Company' }];  // Add the default option
-      data.data.forEach((country:any) => {
-        this.countries.push({
-          value: country.id.toString(),  // Make sure the id is a string to bind with value
-          label: country.name
+  @Input() isSideDrawerOpen: boolean = false;
+
+  @Output() formClose: EventEmitter<boolean> = new EventEmitter<boolean>();
+  constructor(private fb: FormBuilder, private companyservice: BranchService, private apiservice: BussinessService, private activate: ActivatedRoute, private _successMessage: MatSnackBar, private cdr: ChangeDetectorRef) {
+    this.companyservice.getAllCompany().subscribe({
+      next: (data: any) => {
+        this.countries = [];  // Add the default option
+        data.data.forEach((country: any) => {
+          this.countries.push({
+            value: country.id.toString(),  // Make sure the id is a string to bind with value
+            label: country.name
+          });
         });
-      });
-    }})
+      }
+    })
   }
-  
- private showSuccessMessage(message: string) {
-      this._successMessage.openFromComponent(SuccessModalComponent, {
-        data: { message },
-        duration: 4000,
-        panelClass: ["custom-toast"],
-        verticalPosition: "top",
-        horizontalPosition: "right",
-      });
-    }
-    reset(){
-      this.companyForm.reset()
-      this.companyForm.get('companyId')?.setValue('0');
-    }
- async ngOnInit() {
-  
-   
+
+  private showSuccessMessage(message: string) {
+    this._successMessage.openFromComponent(SuccessModalComponent, {
+      data: { message },
+      duration: 4000,
+      panelClass: ["custom-toast"],
+      verticalPosition: "top",
+      horizontalPosition: "right",
+    });
+  }
+  reset() {
+    this.companyForm.reset()
+    this.companyForm.get('companyId')?.setValue('');
+  }
+  async ngOnInit() {
     this.companyForm = this.fb.group({
-     
-      companyId: ['0', Validators.required],
+      companyId: ['', Validators.required],
       State: ['', [Validators.required]],
       City: ['', [Validators.required]],
       phoneNumber: ['', [Validators.required]],
@@ -80,113 +78,109 @@ companyForm!: FormGroup;
       Address: ['', [Validators.required]],
       gstno: ['', [Validators.required]],
       pincode: ['', [Validators.required]],
-      IsActive:["1"]
-      
-   
+      IsActive: ["1"]
     });
-if(this.Id>0)
-{
-  this.heading="Update"
-  this.patchValue()
-}
-    
+    if (this.Id > 0) {
+      this.heading = "Update"
+      this.patchValue()
+    }
+
   }
- 
-  patchValue()
-  {
-    
-    this.companyservice.getCompanyBranchId(this.Id).subscribe({next:(data:any)=>{
-      this.companyForm.patchValue({
-        companyId:data.data.companyId,
-        name:data.data.name,
-        State:data.data.state,
-        City:data.data.city,
-        phoneNumber:data.data.phoneNumber,
-        Address:data.data.address,
-        gstno:data.data.gstno,
-        pincode:data.data.pincode,
-        IsActive:data.data.isActive
-      })
-      this.companyForm.get('companyId')?.setValue(data.data.companyId.toString());
-    }})
+
+  patchValue() {
+
+    this.companyservice.getCompanyBranchId(this.Id).subscribe({
+      next: (data: any) => {
+        this.companyForm.patchValue({
+          companyId: data.data.companyId,
+          name: data.data.name,
+          State: data.data.state,
+          City: data.data.city,
+          phoneNumber: data.data.phoneNumber,
+          Address: data.data.address,
+          gstno: data.data.gstno,
+          pincode: data.data.pincode,
+          IsActive: data.data.isActive
+        })
+        this.companyForm.get('companyId')?.setValue(data.data.companyId.toString());
+      }
+    })
   }
   closePopup() {
     this.formClose.emit();
   }
-  iscountryfail:boolean=false;
-  checkCountry(event:any)
-  {
-    if(Number(this.companyForm.value.companyId)>0)
-    {
-      this.iscountryfail=false
+  iscountryfail: boolean = false;
+  checkCountry(event: any) {
+    if (Number(this.companyForm.value.companyId) > 0) {
+      this.iscountryfail = false
 
     }
-    else{
-      this.iscountryfail=true
+    else {
+      this.iscountryfail = true
     }
   }
   submitForm() {
-    
-    if(Number(this.companyForm.value.companyId)>0)
-      {
-        this.iscountryfail=false
-  
-      }
-      else{
-        this.iscountryfail=true
-        this.cdr.detectChanges()
-        return
-      }
+
+    if (Number(this.companyForm.value.companyId) > 0) {
+      this.iscountryfail = false
+
+    }
+    else {
+      this.iscountryfail = true
+      this.cdr.detectChanges()
+      return
+    }
     if (this.companyForm.valid) {
       console.log('Form Data:', this.companyForm.value);
-      if(this.Id<=0)
-        {
-          
-           var request={
-              id: 0,
-              companyId: this.companyForm.value.companyId,
-              name: this.companyForm.get("name")?.value,
-              phoneNumber: this.companyForm.get("phoneNumber")?.value,
-              state: this.companyForm.get("State")?.value,
-              city: this.companyForm.get("City")?.value,
-              address: this.companyForm.get("Address")?.value ,
-              gstno: this.companyForm.get("gstno")?.value,
-              pincode: this.companyForm.get("pincode")?.value,
-              IsActive:this.companyForm.value.IsActive=="0"?false:true             
-           }
-           this.companyservice.addCompanyBranch(request).subscribe({next:(data:any)=>{
-               if(data.success)
-               {
-                this.showSuccessMessage(data.message)
-                this.formClose.emit(true)                
-               }
-           }})
+      if (this.Id <= 0) {
+
+        var request = {
+          id: 0,
+          companyId: this.companyForm.value.companyId,
+          name: this.companyForm.get("name")?.value,
+          phoneNumber: this.companyForm.get("phoneNumber")?.value,
+          state: this.companyForm.get("State")?.value,
+          city: this.companyForm.get("City")?.value,
+          address: this.companyForm.get("Address")?.value,
+          gstno: this.companyForm.get("gstno")?.value,
+          pincode: this.companyForm.get("pincode")?.value,
+          IsActive: this.companyForm.value.IsActive == "0" ? false : true
         }
-        else{
-          var request={  
-            id: this.Id,   
-            companyId: this.companyForm.value.companyId,
-            name: this.companyForm.get("name")?.value,
-            phoneNumber: this.companyForm.get("phoneNumber")?.value,
-            state: this.companyForm.get("State")?.value,
-            city: this.companyForm.get("City")?.value,
-            address: this.companyForm.get("Address")?.value,
-            gstno: this.companyForm.get("gstno")?.value,
-            pincode: this.companyForm.get("pincode")?.value ,
-            IsActive:this.companyForm.value.IsActive=="0"?false:true   
-          
-         }
-         this.companyservice.updateCompanyBranch(request).subscribe({next:(data:any)=>{
-             if(data.success)
-             {
+        this.companyservice.addCompanyBranch(request).subscribe({
+          next: (data: any) => {
+            if (data.success) {
               this.showSuccessMessage(data.message)
-              this.formClose.emit(true)        
-             }
-         }})
+              this.formClose.emit(true)
+            }
+          }
+        })
+      }
+      else {
+        var request = {
+          id: this.Id,
+          companyId: this.companyForm.value.companyId,
+          name: this.companyForm.get("name")?.value,
+          phoneNumber: this.companyForm.get("phoneNumber")?.value,
+          state: this.companyForm.get("State")?.value,
+          city: this.companyForm.get("City")?.value,
+          address: this.companyForm.get("Address")?.value,
+          gstno: this.companyForm.get("gstno")?.value,
+          pincode: this.companyForm.get("pincode")?.value,
+          IsActive: this.companyForm.value.IsActive == "0" ? false : true
+
         }
-       
+        this.companyservice.updateCompanyBranch(request).subscribe({
+          next: (data: any) => {
+            if (data.success) {
+              this.showSuccessMessage(data.message)
+              this.formClose.emit(true)
+            }
+          }
+        })
+      }
+
     } else {
-      this.companyForm.markAllAsTouched();      
+      this.companyForm.markAllAsTouched();
     }
   }
 }

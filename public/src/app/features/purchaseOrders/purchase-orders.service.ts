@@ -54,7 +54,7 @@ export class PurchaseOrdersService {
 
   // auditEntityTypeId this id is static for this(4	PurchaseOrder	Purchase order record)
   getAuditLogs(auditEntityTypeId: number,tableId:number) {
-    return this.http.get<AuditlogResponseI>(
+    return this.http.get<any>(
       `${environment.apiUrl}api/Salary/auditlog?auditEntityTypeId=${auditEntityTypeId}&entityId=${tableId}`,
     );
   }

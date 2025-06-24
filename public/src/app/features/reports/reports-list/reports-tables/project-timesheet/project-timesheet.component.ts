@@ -199,7 +199,7 @@ export class ProjectTimesheetComponent implements OnChanges {
     this.reportsService.downloadTimesheetByDurationAndProject(this.startDate, this.endDate, this.selectedProjects)
       .subscribe({
         next: (blob: Blob) => {
-          const fileName = `Timesheet_${new Date().toISOString().slice(0, 10)}.xlsx`;
+          const fileName = `Project Timesheet(${this.startDate},${this.endDate}).xlsx`;
           const downloadURL = window.URL.createObjectURL(blob);
           const link = document.createElement('a');
           link.href = downloadURL;

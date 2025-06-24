@@ -15,14 +15,17 @@
           <mat-label class="outer-mat-lable col-4 pt-2">Company</mat-label>
           <mat-form-field appearance="outline" class="col-8">
             <mat-select formControlName="companyId" (selectionChange)="checkCountry($event)">
-
-              <mat-option *ngFor="let country of countries" [value]="country.value">
+              <mat-option value="" disabled>Select a Company</mat-option>
+              <mat-option *ngFor="let country of countries" [value]="country.value" [disabled]="country.value === '0'">
                 {{ country.label }}
               </mat-option>
             </mat-select>
-            <div *ngIf="iscountryfail" style="color: red; font-size: 12px;">
+            <mat-error *ngIf="companyForm.controls['companyId'].hasError('required')">
               Company is required.
-            </div>
+            </mat-error>
+            <!-- <div *ngIf="iscountryfail" style="color: red; font-size: 12px;">
+              Company is required.
+            </div> -->
           </mat-form-field>
         </div>
         <div class="form-group row">
@@ -44,22 +47,41 @@
           </mat-form-field>
         </div>
         <div class="form-group row">
-          <mat-label class="outer-mat-lable col-4 pt-2">Currencie Type</mat-label>
+          <mat-label class="outer-mat-lable col-4 pt-2">Currency Type</mat-label>
           <mat-form-field appearance="outline" class="col-8">
-            <mat-select formControlName="currenciesId">
-
-              <mat-option *ngFor="let country of currenciesList" [value]="country.currencyId">
-                {{ country.name }}
+            <mat-select formControlName="currencyId" (selectionChange)="selectCurrencie($event)">
+               <mat-option value="" disabled>Select a Currency</mat-option>
+              <mat-option *ngFor="let currencies of currenciesList" [value]="currencies.currencyId">
+                {{ currencies.name }}
               </mat-option>
             </mat-select>
-            <mat-error *ngIf="companyForm.controls['currenciesId'].hasError('required')">
+            <mat-error *ngIf="companyForm.controls['currencyId'].hasError('required')">
               Currencie Name is required
             </mat-error>
           </mat-form-field>
         </div>
 
         <!-- Terms & Conditions -->
+        <div class="form-group row" *ngFor="let form of formList">
+          <mat-label class="outer-mat-lable col-4 pt-2">{{ form.label }}</mat-label>
+          <mat-form-field appearance="outline" class="col-8">
+            <input [formControlName]="form.name" matInput [placeholder]="'Enter ' + form.label" />
+            <mat-error *ngIf="companyForm.controls[form.name].hasError('required')">
+              {{ form.label }} is required
+            </mat-error>
+          </mat-form-field>
+        </div>
 
+        <!-- @for(form of formList; track form){
+           <div class="form-group row">
+             <mat-label class="outer-mat-lable col-4 pt-2">{{form.label}}</mat-label>
+             <mat-form-field appearance="outline" class="col-8">
+               <input formControlName="{{form.name}}" matInput placeholder="Enter {{form.label}}" />
+         
+             </mat-form-field>
+           </div>
+         } -->
+        <!-- 
 
         <div class="form-group row">
           <mat-label class="outer-mat-lable col-4 pt-2">Swift Code</mat-label>
@@ -93,7 +115,7 @@
               IFSC code is required
             </mat-error>
           </mat-form-field>
-        </div>
+        </div> -->
 
         <div class="d-flex  ps-4">
           <mat-label class="outer-mat-label">Is Primary</mat-label>

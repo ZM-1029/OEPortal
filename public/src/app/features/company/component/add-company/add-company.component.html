@@ -14,18 +14,22 @@
         <div class="form-group row ">
           <div class="col-4 text-end">
             <mat-label class="outer-mat-label  pt-2">Country</mat-label>
-          </div> 
+          </div>
           <div class="col-8 ">
             <mat-form-field appearance="outline" class="w-100 col-8">
               <mat-select formControlName="Country" (selectionChange)="checkCountry($event)">
-
+                <mat-option value="" disabled>Select a country</mat-option>
                 <mat-option *ngFor="let country of countries" [value]="country.value">
                   {{ country.label }}
                 </mat-option>
               </mat-select>
-              <div *ngIf="iscountryfail" style="color: red; font-size: 12px;">
+
+              <mat-error *ngIf="companyForm.controls['Country'].hasError('required')">
+              Country is required.
+            </mat-error>
+              <!-- <div *ngIf="iscountryfail" style="color: red; font-size: 12px;">
                 Country is required.
-              </div>
+              </div> -->
             </mat-form-field>
           </div>
         </div>
@@ -51,7 +55,7 @@
         </div>
         <div style="display: flex; align-items: center;" [style.display]="this.Id > 0 ? 'flex' : 'none'">
           <mat-label class="outer-mat-label col-4 p-2">Is Active</mat-label>
-          <mat-slide-toggle  formControlName="IsActive"></mat-slide-toggle>
+          <mat-slide-toggle color="primary" formControlName="IsActive"></mat-slide-toggle>
         </div>
       </div>
 

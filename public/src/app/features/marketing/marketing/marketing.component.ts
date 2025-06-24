@@ -34,8 +34,10 @@ export class MarketingComponent implements OnInit {
       edit: false
     };
   
-  constructor(private dialog: MatDialog,private router: Router, private route: ActivatedRoute, private marketingService: MarketingService,
-    private _successMessage: MatSnackBar, private changeDetectorRef: ChangeDetectorRef,private rolePermissionService:RolePermissionService
+  constructor(private dialog: MatDialog,private router: Router, private route: ActivatedRoute, 
+    private marketingService: MarketingService,
+    private _successMessage: MatSnackBar, private changeDetectorRef: ChangeDetectorRef,
+    private rolePermissionService:RolePermissionService
   ) { }
 
   ngOnInit(): void {
@@ -52,7 +54,6 @@ export class MarketingComponent implements OnInit {
               this.changeDetectorRef.detectChanges();
               if (this.marketingAccess.view) {
                 this.getMarketingList();
-                console.log(marketingAccess,"marketingAccess");
               } else {
                 // this.rowData = [];
                 // this.showErrorOverlay("You have not permission");

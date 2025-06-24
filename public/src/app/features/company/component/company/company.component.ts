@@ -26,24 +26,26 @@ import { AddCompanyComponent } from "../add-company/add-company.component";
 ModuleRegistry.registerModules([AllCommunityModule]);
 @Component({
   selector: 'app-company',
-  imports: [ AgGridAngular,
-      CommonModule,
-      AddCompanyComponent,
-      PageHeaderComponent,
-      SideDrawerComponent
-      ],
+  imports: [AgGridAngular,
+    CommonModule,
+    AddCompanyComponent,
+    PageHeaderComponent,
+    SideDrawerComponent
+  ],
   templateUrl: './company.component.html',
   styleUrl: './company.component.scss'
 })
 export class CompanyComponent {
-columnDefs: any = [
-    { headerName: "S. No", valueGetter: "node.rowIndex + 1", pinned: "left",sortable: false, filter: false },
-    { headerName: "Actions", field: "actions", cellRenderer: (params: any) => this.renderActionIcons(params), pinned: "right",cellStyle: () => {
-      return { border: "none", cursor: "pointer" };
-    }, },
+  columnDefs: any = [
+    { headerName: "S. No", valueGetter: "node.rowIndex + 1", pinned: "left", sortable: false, filter: false },
+    {
+      headerName: "Actions", field: "actions", cellRenderer: (params: any) => this.renderActionIcons(params), pinned: "right", cellStyle: () => {
+        return { border: "none", cursor: "pointer" };
+      },
+    },
     { field: "name", headerName: "Company Name", sortable: true, filter: true },
     { field: "headquater", headerName: "Head Quater", sortable: true, filter: true },
-   
+
   ];
 
   defaultColDef = { sortable: true, filter: true, resizable: true, flex: 1 };
@@ -54,16 +56,16 @@ columnDefs: any = [
   public id: number = 0;
 
   constructor(
-    
+
     private _changeDetectorRef: ChangeDetectorRef,
     private dialog: MatDialog,
     private _snackBar: MatSnackBar,
-    private CompanyService:CompanyService,
-   
-  ){
-      
-    }
-  
+    private CompanyService: CompanyService,
+
+  ) {
+
+  }
+
 
 
 
@@ -90,12 +92,14 @@ columnDefs: any = [
   }
 
   getCountryList() {
-    
-    this.CompanyService.getAllCompany().subscribe({next:(data:any)=>{
-     this.rowData=data.data;
-     this._changeDetectorRef.detectChanges();
-    }})
-    
+
+    this.CompanyService.getAllCompany().subscribe({
+      next: (data: any) => {
+        this.rowData = data.data;
+        this._changeDetectorRef.detectChanges();
+      }
+    })
+
   }
   sideDrawer() {
     if (this.isSideDrawerOpen) {
@@ -125,13 +129,14 @@ columnDefs: any = [
 
 
   updateCompanyProfile(event: any): void {
-    const id = event.data.id;
-   
-    this.isSideDrawerOpen=true;
+    // const id = event.data.id;
+    // this.isSideDrawerOpen=true;
+    //   this.id = Number(id);
+    if (event.event.target.closest(".edit-icon")) {
+      const id = event.data.id;
+      this.isSideDrawerOpen = true;
       this.id = Number(id);
-     
-      
-    
+    }
   }
 
   // openDeleteModal(id: number): void {

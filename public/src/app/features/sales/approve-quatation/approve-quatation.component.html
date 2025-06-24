@@ -200,15 +200,22 @@
                     </div>
                 </form>
             </div>
-            <button type="button" 
+            <button [ngClass]="isAuditlogOpen ? 'd-none' : ''" type="button" (click)="openAuditLogs()"
                 class="btn btn-sm fw-semibold text-info bg-info-subtle rounded-pill shadow-sm border-0 px-3 py-1 d-inline-flex align-items-center floating-btn position-fixed"
-                style="bottom: 20px; right: 20px; z-index: 1050;">
+                style="bottom: 90px; right: 20px; z-index: 1050;">
                 <mat-icon svgIcon="audit-Logs" class="me-1"></mat-icon> Audit Logs
             </button>
         </div>
 
     </div>
 </div>
+
+@if (isAuditlogOpen) {
+  <app-side-drawer (sideDrawer)="handleSideDrawerLogs($event)" [isSideDrawerOpen]="isAuditlogOpen">
+    <app-audit-logs [formHeading]="'Quatation'" [PageId]="2" [tableRowId]="tableRowId"></app-audit-logs>
+    <!-- why i take pageId y, because of (2 Quotation Quotation record-->
+</app-side-drawer>
+}
 
 <div *ngIf="isLoading" class="loading-overlay">
     <app-loader></app-loader>

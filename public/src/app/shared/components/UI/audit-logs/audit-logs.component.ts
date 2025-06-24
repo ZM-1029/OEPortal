@@ -1,4 +1,4 @@
-import { Component, Input, input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, input, OnInit } from '@angular/core';
 import { DatePipe, NgFor, NgIf } from '@angular/common';
 import { AuditlogI } from 'src/app/shared/types/purchaseOrder.type';
 import { PurchaseOrdersService } from 'src/app/features/purchaseOrders/purchase-orders.service';
@@ -13,10 +13,12 @@ export class AuditLogsComponent implements OnInit {
   @Input() formHeading: string = "";
   @Input() tableRowId: number=0;
   @Input() PageId: number=0;
-  auditLogs: AuditlogI[] = [];
+  auditLogs: any[] = [];
   isLoading = true;
 
-  constructor(private purchaseOrdersService: PurchaseOrdersService,) { }
+  constructor(private purchaseOrdersService: PurchaseOrdersService,
+    private changeDetectorRef:ChangeDetectorRef
+  ) { }
 
   ngOnInit(): void {
     this.loadAuditLogs(this.PageId,this.tableRowId);
@@ -27,6 +29,7 @@ export class AuditLogsComponent implements OnInit {
       (response) => {
         if (response.success) {
           this.auditLogs = response.data;
+          this.changeDetectorRef.detectChanges();
         }
         this.isLoading = false;
       },

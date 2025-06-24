@@ -26,8 +26,8 @@ export class MultiSelectDropdownComponent implements OnInit, OnChanges {
   constructor() { }
 
   ngOnInit() {
-    if(this.defaultValue=='0'){
-      this.allSelected=true;
+    if (this.defaultValue == '0') {
+      this.allSelected = true;
     }
   }
 
@@ -43,14 +43,14 @@ export class MultiSelectDropdownComponent implements OnInit, OnChanges {
           return { id: item.id, name: item.name };
         }
       });
-  
+
       // Add this after transforming the data
       if (this.defaultValue === '0') {
         this.allSelected = true;
-        this.toggleSelectAll(); 
+        this.toggleSelectAll();
       }
     }
-  
+
     // Also handle changes to defaultValue
     if (changes['defaultValue'] && changes['defaultValue'].currentValue === '0') {
       this.allSelected = true;
@@ -79,9 +79,7 @@ export class MultiSelectDropdownComponent implements OnInit, OnChanges {
     if (JSON.stringify(this.previousSelectedData) === JSON.stringify(this.selectedData)) {
       return;
     }
-
-      this.selectRef.searchTerm = '';// ✅ bypass TS check
-  
+    this.selectRef.searchTerm = '';// ✅ bypass TS check
 
     this.previousSelectedData = [...this.selectedData];
 

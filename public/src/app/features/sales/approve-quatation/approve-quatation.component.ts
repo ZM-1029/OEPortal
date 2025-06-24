@@ -18,6 +18,8 @@ import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { LoaderComponent } from 'src/app/shared/components/UI/loader/loader.component';
+import { SideDrawerComponent } from 'src/app/shared/components/UI/side-drawer/side-drawer.component';
+import { AuditLogsComponent } from 'src/app/shared/components/UI/audit-logs/audit-logs.component';
 
 // import * as pdfjsLib from 'pdfjs-dist/build/pdf';
 
@@ -43,7 +45,9 @@ import { LoaderComponent } from 'src/app/shared/components/UI/loader/loader.comp
     MatCheckboxModule,
     NgClass,
     MatCardModule,
-   LoaderComponent,
+    LoaderComponent,
+    SideDrawerComponent,
+    AuditLogsComponent
   ],
   templateUrl: './approve-quatation.component.html',
   styleUrl: './approve-quatation.component.scss',
@@ -70,6 +74,10 @@ export class ApproveQuatationComponent implements OnInit, OnDestroy {
   zoom: number = 0.7;
   fileUploadError: string = '';
   selectedFileName: string = '';
+
+  public isAuditlogOpen: boolean = false;
+  tableRowId: number = 0;
+
   private subscriptions = new Subscription();
   constructor(private sanitizer: DomSanitizer, private fb: FormBuilder, private _salesService: SalesService,
     private _successMessage: MatSnackBar, private cdr: ChangeDetectorRef, private _router: Router,
@@ -81,6 +89,7 @@ export class ApproveQuatationComponent implements OnInit, OnDestroy {
     this.activatedRoute.paramMap.subscribe(params => {
       const id = params.get('id');
       if (id) {
+        this.tableRowId=+id;
         this.Id = +id;
         this.isLoading = true;
         this.getQuotationById(this.Id);
@@ -457,6 +466,24 @@ export class ApproveQuatationComponent implements OnInit, OnDestroy {
   backTosaleListing() {
     this._router.navigateByUrl("/admin/sales-orders");
   }
+
+  // audit logs start
+  handleSideDrawerLogs(event?: boolean) {
+    if (this.isAuditlogOpen) {
+      this.isAuditlogOpen = false;
+    } else {
+      this.isAuditlogOpen = true;
+    }
+  }
+
+  openAuditLogs() {
+    if (this.isAuditlogOpen) {
+      this.isAuditlogOpen = false;
+    } else {
+      this.isAuditlogOpen = true;
+    }
+  }
+  // audit logs end
 
   ngOnDestroy(): void {
     if (this.pdfSrc) {

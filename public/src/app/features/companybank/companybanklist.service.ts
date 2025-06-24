@@ -35,7 +35,12 @@ export class CompanybanklistService {
     return this._httpclient.put<any>(this.apiurl + "api/CompanyProfile/UpdateBankDeatils/" + data.id, data)
   }
 
-   getCurrenciesForDropdown(): Observable<any> {
+  getCurrenciesForDropdown(): Observable<any> {
     return this._httpclient.get<any>(this.apiurl + "api/CompanyProfile/GetCurrenciesForDropdown")
   }
+
+  getBankFeatures(currencyId : any): Observable<any> {
+    return this._httpclient.get<any>(this.apiurl + "api/CompanyProfile/GetBankFeatures/" + currencyId )
+  }
+
 }

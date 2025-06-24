@@ -16,7 +16,8 @@
             @if (
             column.headerName == "S. No" ||
             column.field == "employeeID" ||
-            column.field == "firstName"
+            column.field == "firstName"  ||
+            column.field == "actions"
             ) {
             <div class="dropdown-item d-none checkbox-container">
               <input type="checkbox" (change)="toggleColumn(column)" [checked]="isColumnDisplayed(column)" disabled id="{{ column.field }}" />

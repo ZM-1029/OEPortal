@@ -130,7 +130,7 @@
               <div class="form-group row">
                 <mat-label class="outer-mat-lable col-4 pt-2">Sales Order Date</mat-label>
                 <mat-form-field appearance="outline" class="col-8">
-                  <input matInput [matDatepicker]="picker" [matDatepickerFilter]="salesOrderDateFilter" formControlName="salesOrderDate"
+                  <input matInput [matDatepicker]="picker"  formControlName="salesOrderDate"
                     placeholder="Enter Sales Order Date" />
                   <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                   <mat-datepicker #picker></mat-datepicker>

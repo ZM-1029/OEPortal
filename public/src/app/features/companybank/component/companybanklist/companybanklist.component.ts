@@ -30,25 +30,28 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 @Component({
   selector: 'app-companybanklist',
   imports: [
-     AgGridAngular,
-        CommonModule,
-        AddcompanybankComponent,
-        PageHeaderComponent,
-        SideDrawerComponent
+    AgGridAngular,
+    CommonModule,
+    AddcompanybankComponent,
+    PageHeaderComponent,
+    SideDrawerComponent
   ],
   templateUrl: './companybanklist.component.html',
   styleUrl: './companybanklist.component.scss'
 })
 export class CompanybanklistComponent {
- columnDefs: any = [
-    { headerName: "S. No", valueGetter: "node.rowIndex + 1", pinned: "left",sortable: false, filter: false },
+  columnDefs: any = [
+    { headerName: "S. No", valueGetter: "node.rowIndex + 1", pinned: "left", sortable: false, filter: false },
     { headerName: "Actions", field: "actions", cellRenderer: (params: any) => this.renderActionIcons(params), pinned: "right" },
+    { field: "companyName", headerName: "Company Name", sortable: true, filter: true },
     { field: "bankName", headerName: "Bank Name", sortable: true, filter: true },
-    { field: "accountNumber", headerName: "Account Number", sortable: true, filter: true },
-    { field: "ifscCode", headerName: "IFSC Code", sortable: true, filter: true },
     { field: "accountType", headerName: "Account Type", sortable: true, filter: true },
-    { field: "swissCode", headerName: "Swiss Code", sortable: true, filter: true },
-    { field: "sortCode", headerName: "Swift Code", sortable: true, filter: true },
+    { field: "currencyName", headerName: "Currency Name", sortable: true, filter: true },
+    // { field: "accountNumber", headerName: "Account Number", sortable: true, filter: true },
+    // { field: "name", headerName: "name", sortable: true, filter: true },
+    // { field: "ifscCode", headerName: "IFSC Code", sortable: true, filter: true },
+    // { field: "swissCode", headerName: "Swiss Code", sortable: true, filter: true },
+    // { field: "sortCode", headerName: "Swift Code", sortable: true, filter: true },
   ];
 
   defaultColDef = { sortable: true, filter: true, resizable: true, flex: 1 };
@@ -59,16 +62,16 @@ export class CompanybanklistComponent {
   public id: number = 0;
 
   constructor(
-    
+
     private _changeDetectorRef: ChangeDetectorRef,
     private dialog: MatDialog,
     private _snackBar: MatSnackBar,
-    private CompanyService:CompanybanklistService,
-   
-  ){
-      
-    }
-  
+    private CompanyService: CompanybanklistService,
+
+  ) {
+
+  }
+
 
 
 
@@ -95,12 +98,14 @@ export class CompanybanklistComponent {
   }
 
   getCountryList() {
-    
-    this.CompanyService.GetAllBankDetail().subscribe({next:(data:any)=>{
-     this.rowData=data.data;
-     this._changeDetectorRef.detectChanges();
-    }})
-    
+
+    this.CompanyService.GetAllBankDetail().subscribe({
+      next: (data: any) => {
+        this.rowData = data.data;
+        this._changeDetectorRef.detectChanges();
+      }
+    })
+
   }
   sideDrawer() {
     if (this.isSideDrawerOpen) {
@@ -130,13 +135,14 @@ export class CompanybanklistComponent {
 
 
   updateCompanyProfile(event: any): void {
-    const id = event.data.id;
-   
-    this.isSideDrawerOpen=true;
+    // const id = event.data.id;
+    // this.isSideDrawerOpen = true;
+    // this.id = Number(id);
+    if (event.event.target.closest(".edit-icon")) {
+      const id = event.data.id;
+      this.isSideDrawerOpen = true;
       this.id = Number(id);
-     
-      
-    
+    }
   }
 
   // openDeleteModal(id: number): void {

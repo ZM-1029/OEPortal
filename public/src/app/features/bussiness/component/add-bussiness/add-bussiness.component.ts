@@ -84,18 +84,15 @@ export class AddBussinessComponent implements AfterViewInit {
   }
   reset() {
     this.businessForm.reset()
-    this.businessForm.get('Country')?.setValue('0');
+    this.businessForm.get('Country')?.setValue('');
   }
   async ngOnInit() {
-
     this.activate.paramMap.subscribe(params => {
       this.serviceid = Number(params.get('id'));
-
-
     });
     this.businessForm = this.fb.group({
 
-      Country: ['0', Validators.required],
+      Country: ['', Validators.required],
       Terms: ['', [Validators.required, Validators.minLength(10)]],
 
     });
@@ -176,26 +173,21 @@ export class AddBussinessComponent implements AfterViewInit {
         })
       }
       else {
-        ;
         var request = {
-
           id: this.Id,
           serviceId: this.serviceid,
           countryId: this.businessForm.value.Country,
           termsAndConditions: this.businessForm.get("Terms")?.value
-
         }
         this.apiservice.UpdateCountryTermsCondition(request).subscribe({
           next: (data: any) => {
             if (data.success) {
               this.showSuccessMessage(data.message)
               this.formClose.emit(true)
-
             }
           }
         })
       }
-
     } else {
       this.businessForm.markAllAsTouched();
     }

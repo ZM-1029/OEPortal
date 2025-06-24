@@ -16,17 +16,19 @@
           <mat-label class="outer-mat-label col-2 px-1 pt-2">Country</mat-label>
           <mat-form-field appearance="outline" class="col-10">
             <mat-select formControlName="Country" (selectionChange)="checkCountry($event)">
-
-              <mat-option disabled selected value="">
+              <mat-option disabled  value="">
                 Select a country
               </mat-option>
               <mat-option *ngFor="let country of countries" [value]="country.value">
                 {{ country.label }}
               </mat-option>
             </mat-select>
-            <div *ngIf="iscountryfail" style="color: red; font-size: 12px;">
+            <mat-error *ngIf="businessForm.controls['Country'].hasError('required')">
               Country is required.
-            </div>
+            </mat-error>
+            <!-- <div *ngIf="iscountryfail" style="color: red; font-size: 12px;">
+              Country is required.
+            </div> -->
           </mat-form-field>
         </div>
 
