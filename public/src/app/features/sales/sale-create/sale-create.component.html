@@ -87,6 +87,24 @@
                 </mat-form-field>
               </div>
               <div class="form-group row">
+                <mat-label class="outer-mat-lable col-4 pt-2">Currency</mat-label>
+                <mat-form-field appearance="outline" class="col-8 py-0">
+                  <mat-select class="py-0" formControlName="currencyId" >
+                    <mat-option value="" disabled >Select a Currency</mat-option>
+                    @for (currency of CurrencyList; track currency) {
+                    <mat-option [value]="currency.currencyId">{{
+                      currency.name
+                      }}</mat-option>
+                    }
+                  </mat-select>
+                  <mat-error class="text-danger">
+                    @if (productForm.controls["currencyId"].errors?.["required"]) {
+                    <span>Currency is required.</span>
+                    }
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="form-group row">
                 <mat-label class="outer-mat-lable col-4 pt-2">Branch</mat-label>
                 <mat-form-field appearance="outline" class="col-8 py-0">
                   <mat-select class="py-0" formControlName="companyBranchId">
@@ -117,6 +135,8 @@
                   </mat-error>
                 </mat-form-field>
               </div>
+            </div>
+            <div class="salary-form2 mx-2">
               <div class="form-group row ">
                 <mat-label class="outer-mat-lable col-4 pt-2 ">Sales Person </mat-label>
                 <mat-form-field appearance="outline" class="col-8">
@@ -125,12 +145,10 @@
                   </mat-error>
                 </mat-form-field>
               </div>
-            </div>
-            <div class="salary-form2 mx-2">
               <div class="form-group row">
                 <mat-label class="outer-mat-lable col-4 pt-2">Sales Order Date</mat-label>
                 <mat-form-field appearance="outline" class="col-8">
-                  <input matInput [matDatepicker]="picker"  formControlName="salesOrderDate"
+                  <input matInput [matDatepicker]="picker" formControlName="salesOrderDate"
                     placeholder="Enter Sales Order Date" />
                   <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                   <mat-datepicker #picker></mat-datepicker>
@@ -139,10 +157,15 @@
               <div class="form-group row">
                 <mat-label class="outer-mat-lable col-4 pt-2">Expected Shipment Date</mat-label>
                 <mat-form-field appearance="outline" class="col-8">
-                  <input matInput [matDatepicker]="pickerShipment" [matDatepickerFilter]="expectedShipmentDateFilter" formControlName="expectedShipmentDate"
-                    placeholder="Enter Expected Shipment Date" />
+                  <input matInput [matDatepicker]="pickerShipment" [matDatepickerFilter]="expectedShipmentDateFilter"
+                    formControlName="expectedShipmentDate" placeholder="Enter Expected Shipment Date" />
                   <mat-datepicker-toggle matSuffix [for]="pickerShipment"></mat-datepicker-toggle>
                   <mat-datepicker #pickerShipment></mat-datepicker>
+                  <mat-error class="text-danger">
+                    @if (productForm.controls["expectedShipmentDate"].errors?.["required"]) {
+                    <span>Expected Shipment Date is required.</span>
+                    }
+                  </mat-error>
                 </mat-form-field>
               </div>
               <div class="form-group row">

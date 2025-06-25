@@ -239,9 +239,11 @@ export class AddcompanybankComponent {
       }
     }
   }
+
   closePopup() {
     this.formClose.emit();
   }
+  
   iscountryfail: boolean = false;
   checkCountry(event: any) {
     if (Number(this.companyForm.value.companyId) > 0) {

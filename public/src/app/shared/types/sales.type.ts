@@ -223,6 +223,7 @@ export interface QuotationDetails {
   id: number;
   quotationNumber: string;
   companyId: number;
+  currencyId: number;
   companyBranchId: number;
   salesOrderDate: string;
   expectedShippingDate: string;

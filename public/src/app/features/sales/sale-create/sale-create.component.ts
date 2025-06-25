@@ -18,6 +18,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from "@angular/router";
+import { CompanybanklistService } from "../../companybank/companybanklist.service";
 
 @Component({
   selector: 'app-sale-create',
@@ -58,6 +59,7 @@ export class SaleCreateComponent implements OnInit, OnChanges {
   QuotationNo: string = '';
   PaymentTerms: PaymentTerm[] = [];
   Countries: Country[] = [];
+  CurrencyList: any[] = [];
   Companies: Company[] = [];
   Branches: Branch[] = [];
   Products: Product[] = [];
@@ -76,6 +78,7 @@ export class SaleCreateComponent implements OnInit, OnChanges {
   constructor(
     private fb: FormBuilder,
     private _salesService: SalesService,
+    private _companybanklistService: CompanybanklistService,
     private _changeDetetction: ChangeDetectorRef,
     private _successMessage: MatSnackBar,
     private activatedRoute: ActivatedRoute,
@@ -87,10 +90,11 @@ export class SaleCreateComponent implements OnInit, OnChanges {
       quotationNumber: ['', Validators.required],
       customerId: ['', Validators.required],
       companyId: ['', Validators.required],
+      currencyId: ['', Validators.required],
       companyBranchId: ['', Validators.required],
       countryId: ['', Validators.required],
       salesOrderDate: [new Date()],
-      expectedShipmentDate: [''],
+      expectedShipmentDate: ['',Validators.required],
       paymentTermId: ['', Validators.required],
       deliveryMethod: [''],
       salesPerson: [''],
@@ -187,6 +191,7 @@ export class SaleCreateComponent implements OnInit, OnChanges {
           this.productForm.patchValue({
             customerId: quotationDetails.customerId,
             companyId: quotationDetails.companyId,
+            currencyId: quotationDetails.currencyId,
             companyBranchId: quotationDetails.companyBranchId,
             countryId: quotationDetails.countryId,
             quotationNumber: quotationDetails.quotationNumber,
@@ -271,6 +276,7 @@ export class SaleCreateComponent implements OnInit, OnChanges {
       customerId: formValues.customerId || 0,
       countryId: formValues.countryId || 0,
       companyId: formValues.companyId || 0,
+      currencyId: formValues.currencyId || 0,
       companyBranchId: formValues.companyBranchId || 0,
       quotationNumber: formValues.quotationNumber || "",
       // salesOrderDate: formValues.salesOrderDate ? formValues.salesOrderDate.toISOString() : new Date().toISOString(),
@@ -353,6 +359,7 @@ export class SaleCreateComponent implements OnInit, OnChanges {
       quotationNumber: '',
       customerId: '',
       companyId: '',
+      currencyId: '',
       companyBranchId: 0,
       countryId: '',
       salesOrderDate: new Date(),
@@ -417,6 +424,10 @@ export class SaleCreateComponent implements OnInit, OnChanges {
     });
     this._salesService.getProduct().subscribe((res) => {
       if (res.success) this.Products = res.data;
+    });
+    this._companybanklistService.getCurrenciesForDropdown().subscribe((res) => {
+      if (res.success) this.CurrencyList = res.data;
+      this._changeDetetction.detectChanges();
     });
   }
   selectedCustomerId: number = 0;
