@@ -127,7 +127,6 @@ export class SalaryCreateComponent implements OnInit, OnChanges {
     
   }
 
-
   date = new FormControl(moment());
 
   chosenYearHandler(normalizedYear: Moment) {

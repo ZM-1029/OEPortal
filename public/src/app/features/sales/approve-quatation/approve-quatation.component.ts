@@ -361,10 +361,11 @@ export class ApproveQuatationComponent implements OnInit, OnDestroy {
         this.cdr.detectChanges();
       },
       error: (error) => {
-        this._successMessage.open(error, 'Close', {
-          duration: 3000,
-          panelClass: ['error-toast'],
-        });
+        this._successMessage.open(error.error.message || 'Quotation could not be downloaded', 'Close', {
+            duration: 3000,
+            verticalPosition: "top",
+            horizontalPosition: "right",
+          });
         this.isLoading = false;
       },
     });

@@ -11,21 +11,37 @@
 
 
         <!-- Country Dropdown -->
-        <div class="form-group row">
+        <!-- <div class="form-group row">
           <mat-label class="outer-mat-lable col-4 pt-2">Company</mat-label>
           <mat-form-field appearance="outline" class="col-8">
             <mat-select formControlName="companyId" (selectionChange)="checkCountry($event)">
               <mat-option value="" disabled>Select a Company</mat-option>
-              <mat-option *ngFor="let country of countries" [value]="country.value" [disabled]="country.value === '0'">
+              <mat-option *ngFor="let country of companyList" [value]="country.value" [disabled]="country.value === '0'">
                 {{ country.label }}
               </mat-option>
             </mat-select>
             <mat-error *ngIf="companyForm.controls['companyId'].hasError('required')">
               Company is required.
             </mat-error>
-            <!-- <div *ngIf="iscountryfail" class="text-start ms-0 ps-0" style="color: red; font-size: 12px;">
-                Company is required.
-              </div> -->
+          </mat-form-field>
+        </div> -->
+
+        <div class="form-group row">
+          <mat-label class="outer-mat-lable col-4 pt-2">Select Company</mat-label>
+          <mat-form-field appearance="outline" class="col-8">
+            <input matInput #input [matAutocomplete]="auto" formControlName="companyId" (input)="filter()"
+              (click)="toggleAutocomplete()" />
+            <mat-icon matSuffix (click)="toggleAutocomplete()">arrow_drop_down</mat-icon>
+            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="checkCountry($event)" [displayWith]="displayCompanyLabel">
+              @for (company of filteredCompany; track company) {
+              <mat-option [value]="company.value">
+                {{ company.label }}
+              </mat-option>
+              }
+            </mat-autocomplete>
+            @if (companyForm.controls["companyId"].hasError("required")) {
+            <mat-error>Company Name is required</mat-error>
+            }
           </mat-form-field>
         </div>
 

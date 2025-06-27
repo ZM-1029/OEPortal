@@ -1,6 +1,6 @@
 
-import { ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, Output, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { BussinessService } from 'src/app/features/bussiness/bussiness.service';
@@ -15,6 +15,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BranchService } from '../../branch.service';
 import { OnlyNumbersDirective } from 'src/app/shared/directive/only-numbers.directive';
+import { MatAutocompleteTrigger, MatAutocompleteSelectedEvent, MatAutocompleteModule } from '@angular/material/autocomplete';
 
 
 @Component({
@@ -28,7 +29,9 @@ import { OnlyNumbersDirective } from 'src/app/shared/directive/only-numbers.dire
     MatButtonModule,
     MatIconModule,
     ReactiveFormsModule,
-    OnlyNumbersDirective
+    OnlyNumbersDirective,
+    FormsModule,
+    MatAutocompleteModule
   ],
   templateUrl: './add-branch.component.html',
   styleUrl: './add-branch.component.scss'
@@ -36,18 +39,26 @@ import { OnlyNumbersDirective } from 'src/app/shared/directive/only-numbers.dire
 export class AddBranchComponent {
   companyForm!: FormGroup;
   heading: string = "Create"
-  countries: { value: string, label: string }[] = []; // Mock data
+  companyList: { value: string, label: string }[] = []; // Mock data
   @Input() Id: number = 0;
   @Input() isSideDrawerOpen: boolean = false;
 
+  filteredCompany: any[] = [];
+  @ViewChild('input', { read: ElementRef }) input!: ElementRef<HTMLInputElement>;
+  @ViewChild(MatAutocompleteTrigger) autoTrigger!: MatAutocompleteTrigger;
+
   @Output() formClose: EventEmitter<boolean> = new EventEmitter<boolean>();
-  constructor(private fb: FormBuilder, private companyservice: BranchService, private apiservice: BussinessService, private activate: ActivatedRoute, private _successMessage: MatSnackBar, private cdr: ChangeDetectorRef) {
+  constructor(private fb: FormBuilder, private companyservice: BranchService,
+    private apiservice: BussinessService, private activate: ActivatedRoute,
+    private _changeDetectorRef: ChangeDetectorRef,
+    private _eref: ElementRef,
+    private _successMessage: MatSnackBar, private cdr: ChangeDetectorRef) {
     this.companyservice.getAllCompany().subscribe({
       next: (data: any) => {
-        this.countries = [];  // Add the default option
+        this.companyList = [];  // Add the default option
         data.data.forEach((country: any) => {
-          this.countries.push({
-            value: country.id.toString(),  // Make sure the id is a string to bind with value
+          this.companyList.push({
+            value: country.id.toString(),  
             label: country.name
           });
         });
@@ -120,7 +131,6 @@ export class AddBranchComponent {
     }
   }
   submitForm() {
-
     if (Number(this.companyForm.value.companyId) > 0) {
       this.iscountryfail = false
 
@@ -183,4 +193,60 @@ export class AddBranchComponent {
       this.companyForm.markAllAsTouched();
     }
   }
+
+
+  // dropdown auto select start
+  @HostListener('document:click', ['$event'])
+  handleClickOutside(event: Event): void {
+    if (!this._eref.nativeElement.contains(event.target)) {
+      if (this.autoTrigger.panelOpen) {
+        this.autoTrigger.closePanel();
+        // this._changeDetectorRef.detectChanges();
+      }
+    }
+  }
+
+  // Ensure dropdown opens when input is focused or user types
+  filter(): void {
+    const filterValue = this.input.nativeElement.value.toLowerCase();
+    this.filteredCompany = this.companyList.filter((customer) =>
+      customer.label.toLowerCase().includes(filterValue)
+    );
+
+    // Open the dropdown manually if there are filtered results
+    if (this.filteredCompany.length > 0 && !this.autoTrigger.panelOpen) {
+      this.autoTrigger.openPanel();
+    }
+  }
+
+
+  onSelectCustomer(event: MatAutocompleteSelectedEvent): void {
+    const selectedCustomer = this.companyList.find(
+      (customer) => customer.label === event.option.viewValue
+    );
+    if (selectedCustomer) {
+      // this.selectedCustomerId = selectedCustomer.id;
+      this.companyForm.patchValue({ customerId: selectedCustomer.value })
+    }
+  }
+
+  toggleAutocomplete(): void {
+    if (this.autoTrigger.panelOpen) {
+      this.autoTrigger.closePanel();
+    } else {
+      this.filteredCompany = [...this.companyList];
+      this.input.nativeElement.focus();
+      this.autoTrigger.openPanel();
+    }
+    this._changeDetectorRef.detectChanges();
+  }
+
+
+  displayCompanyLabel = (companyId: string): string => {
+    if (!companyId || !this.companyList) return '';
+    const match = this.companyList.find(c => c.value === companyId);
+    return match ? match.label : companyId;
+  }
+
+  // dropdown auto select end
 }

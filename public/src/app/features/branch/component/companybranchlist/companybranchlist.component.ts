@@ -98,7 +98,7 @@ export class CompanybranchlistComponent {
   }
 
   ngOnInit(): void {
-    this.getCountryList();
+    // this.getCountryList();
   }
 
   getCountryList() {

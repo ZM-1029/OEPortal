@@ -138,8 +138,8 @@
   </div>
 
 
-  <div class="col-12 col-md-12 mt-lg-0 mt-3 text-end">
-    <button [disabled]="roleId!==1" class="btn btn-info-dark" type="button" (click)="savePermission()">
+  <div [ngClass]="roleId!==1 ? 'd-none':''" class="col-12 col-md-12 mt-lg-0 mt-3 text-end">
+    <button [disabled]="isDisabled " class="btn btn-info-dark" type="button" (click)="savePermission()">
       Save
     </button>
   </div>

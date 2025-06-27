@@ -100,6 +100,7 @@ export class SalesService {
       params: { customerId: id.toString() }
     });
   }
+
   downloadPDF(quotationId: number): Observable<Blob> {
     return this.http.get(`${environment.apiUrl}api/Quotation/DownloadPdf?quotationId=${quotationId}`, { responseType: 'blob' });
   }

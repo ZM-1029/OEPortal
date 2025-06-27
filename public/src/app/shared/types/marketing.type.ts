@@ -26,3 +26,14 @@ export interface marketingListCheckBoxValueI {
   isView: boolean
   isDownload: boolean
 }
+
+
+export type MarketingPermitionResponseI = MarketingPermitionI[]
+
+export interface MarketingPermitionI {
+  id: number
+  roleId: number
+  marketingId: number
+  isView: boolean
+  isDownload: boolean
+}

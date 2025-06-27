@@ -98,7 +98,7 @@ export class EmployeeAddComponent implements OnInit {
       Department: ['', Validators.required],
       Employeestatus: ['Active', [Validators.required]],
       Role: ['', Validators.required],
-      Experience: ['', [Validators.min(0), Validators.max(50)]],
+      Experience: ['', [Validators.min(0), Validators.max(719)]],
       EmployeeType: ['', Validators.required],
       Dateofexit: [''],
       OtherEmail: ['', [Validators.email]],

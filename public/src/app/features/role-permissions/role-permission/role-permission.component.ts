@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatFormFieldControl, MatFormFieldModule } from '@angular/material/form-field';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
-import { AsyncPipe, NgFor, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass, NgFor, NgIf } from '@angular/common';
 import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { map, Observable, startWith } from 'rxjs';
 import { MatInputModule } from '@angular/material/input';
@@ -14,7 +14,6 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SuccessModalComponent } from 'src/app/shared/components/UI/success-modal/success-modal.component';
 import { RolePermissionService } from '../role-permission.service';
-import { Router } from '@angular/router';
 import { MarketingService } from '../../marketing/marketing.service';
 import { MarketingList, marketingListCheckBoxValueI } from 'src/app/shared/types/marketing.type';
 import { MatOptionModule } from '@angular/material/core';
@@ -54,7 +53,9 @@ interface RolePermissionResponse {
     MatAutocompleteModule,
     AsyncPipe,
     MatInputModule,
-    MatListModule, MatTabsModule, NgFor, NgIf, MatOptionModule,
+    MatListModule, MatTabsModule, 
+    NgClass,
+    NgFor, NgIf, MatOptionModule,
   ],
   templateUrl: './role-permission.component.html',
   styleUrl: './role-permission.component.scss',
@@ -76,6 +77,7 @@ export class RolePermissionComponent implements OnInit {
   selectedRole: number = 0;
   roleId: number = 0;
   isPDFDownloadOptionShow: boolean = false;
+  isDisabled: boolean = true;
   private permissions: RolePermission[] = [];
 
   constructor(private rolePermissionService: RolePermissionService,
@@ -140,7 +142,8 @@ export class RolePermissionComponent implements OnInit {
             edit: false,
             isDownload: false
           }));
-          this.permissions = response.data
+          this.permissions = response.data;
+          this.isDisabled=true;
           this._changeDetectorRef.detectChanges();
         }
       });
@@ -154,6 +157,7 @@ export class RolePermissionComponent implements OnInit {
             edit: !!item.edit,
             disabled: true
           }));
+          this.isDisabled=false;
           this._changeDetectorRef.detectChanges();
         }
       });
@@ -218,6 +222,7 @@ export class RolePermissionComponent implements OnInit {
               this.selectedRole = 0;
               this.roleControl.reset();
               this.roleControl.setValue('');
+              this.isDisabled=true;
               this._changeDetectorRef.detectChanges();
             } else {
               this.handleError(response.message)

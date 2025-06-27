@@ -8,12 +8,9 @@
         <div class="form-group row">
           <mat-label class="outer-mat-lable col-4 pt-2">Select Customer</mat-label>
           <mat-form-field appearance="outline" class="col-8">
-
             <input matInput #input [matAutocomplete]="auto" formControlName="customerName" (input)="filter()"
               (click)="toggleAutocomplete()" />
-
             <mat-icon matSuffix (click)="toggleAutocomplete()">arrow_drop_down</mat-icon>
-
             <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onSelectCustomer($event)">
               @for (customer of filteredCustomers; track customer) {
               <mat-option [value]="customer.customerName">

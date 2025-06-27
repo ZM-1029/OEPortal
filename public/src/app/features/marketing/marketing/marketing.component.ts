@@ -16,28 +16,29 @@ import { rolePermissionListI } from 'src/app/shared/types/roles.type';
 @Component({
   selector: 'app-marketing',
   imports: [
-    CommonModule, MatIconModule,CarouselModule,NgClass
+    CommonModule, MatIconModule, CarouselModule, NgClass
   ],
   templateUrl: './marketing.component.html',
   styleUrls: ['./marketing.component.scss'],
-  encapsulation: ViewEncapsulation.None 
+  encapsulation: ViewEncapsulation.None
 })
 export class MarketingComponent implements OnInit {
   marketingList: MarketingList[] = []
+  allMarketing: MarketingList[] = []
   logoUrl: any;
   marketingAccess: rolePermissionListI = {
-      id: 0,
-      formId: 0,
-      form: '',
-      view: false,
-      add: false,
-      edit: false
-    };
-  
-  constructor(private dialog: MatDialog,private router: Router, private route: ActivatedRoute, 
+    id: 0,
+    formId: 0,
+    form: '',
+    view: false,
+    add: false,
+    edit: false
+  };
+
+  constructor(private dialog: MatDialog, private router: Router, private route: ActivatedRoute,
     private marketingService: MarketingService,
     private _successMessage: MatSnackBar, private changeDetectorRef: ChangeDetectorRef,
-    private rolePermissionService:RolePermissionService
+    private rolePermissionService: RolePermissionService
   ) { }
 
   ngOnInit(): void {
@@ -54,6 +55,9 @@ export class MarketingComponent implements OnInit {
               this.changeDetectorRef.detectChanges();
               if (this.marketingAccess.view) {
                 this.getMarketingList();
+                setTimeout(() => {
+                  this.getMarketingPermissionByRoleId(Number(localStorage.getItem('role')));
+                }, 100)
               } else {
                 // this.rowData = [];
                 // this.showErrorOverlay("You have not permission");
@@ -71,6 +75,58 @@ export class MarketingComponent implements OnInit {
     });
   }
 
+  getMarketingPermissionByRoleId(RoleId: number) {
+    this.marketingService.getMarketingPermissionById(RoleId).subscribe({
+      next: (res) => {
+        if (Number(localStorage.getItem('role')) == 1) {
+          this.allMarketing = [...this.marketingList]; // clone the list
+        } else {
+          this.allMarketing = this.marketingList.filter((perm: any) =>
+            res.some((item: any) => perm.id === item.marketingId)
+          );
+        }
+        this.changeDetectorRef.detectChanges();
+        console.log(this.allMarketing, "allMarketing");
+      },
+      error: (error) => {
+        console.error("Error fetching marketing list");
+        this.handleError(error.error.message);
+      }
+    });
+  }
+
+
+  // getMarketingPermissionByRoleId(RoleId: number) {
+  //   this.marketingService.getMarketingPermissionById(RoleId).subscribe(
+  //     {
+  //       next: ((res) => {
+  //         // Filter marketing list where permission exists and isView is true
+  //         if (Number(localStorage.getItem('role')) == 1) {
+  //           this.allMarketing = this.marketingList;
+  //           this.changeDetectorRef.detectChanges();
+  //         } else {
+  //           res.filter((item: any) =>
+  //             this.marketingList.some(
+  //               (perm: any) => {
+  //                 if (perm.id === item.marketingId) {
+  //                   this.allMarketing.push(perm);
+  //                 }
+  //               }
+  //             )
+  //           );
+  //         }
+  //         console.log(this.allMarketing, "allMarketing");
+  //         this.changeDetectorRef.detectChanges();
+  //       }),
+  //       error: ((error) => {
+  //         console.error("Error fetching marketing list");
+  //         this.handleError(error.error.message);
+  //       })
+  //     }
+  //   );
+  // }
+
+
   addPdf() {
     this.openForm(0);
   }
@@ -78,7 +134,7 @@ export class MarketingComponent implements OnInit {
   viewPdf(id: number) {
     this.router.navigateByUrl("/admin/marketing/" + id);
   }
- 
+
   editCard(card: MarketingList) {
     this.openForm(card.id);
   }

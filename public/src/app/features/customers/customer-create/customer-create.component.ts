@@ -85,7 +85,6 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
       PrimaryContact: ["", [, Validators.pattern("^[a-z A-Z]*$")]],
       Email: ["", [Validators.required, Validators.email]],
 
-
       Logo: [""],
       LogoFile: [""],
       Country: ["", [Validators.pattern("^[a-zA-Z]*$")]],
@@ -290,7 +289,7 @@ export class CustomerCreateComponent implements OnInit, OnDestroy {
           postalCode: this.customerForm.get("shippingPin")?.value,
           state: this.customerForm.get("shippingState")?.value,
           city: this.customerForm.get("shippingCity")?.value,
-          address: this.customerForm.get("billingAttention")?.value,
+          address: this.customerForm.get("shippingAttention")?.value,
           isBillingAddress: false
         }
       ];

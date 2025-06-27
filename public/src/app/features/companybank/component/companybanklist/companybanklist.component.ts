@@ -39,7 +39,7 @@ ModuleRegistry.registerModules([AllCommunityModule]);
   templateUrl: './companybanklist.component.html',
   styleUrl: './companybanklist.component.scss'
 })
-export class CompanybanklistComponent {
+export class CompanybanklistComponent implements OnInit, OnDestroy {
   columnDefs: any = [
     { headerName: "S. No", valueGetter: "node.rowIndex + 1", pinned: "left", sortable: false, filter: false },
     { headerName: "Actions", field: "actions", cellRenderer: (params: any) => this.renderActionIcons(params), pinned: "right" },
@@ -71,10 +71,6 @@ export class CompanybanklistComponent {
   ) {
 
   }
-
-
-
-
   openAddCountryDrawer(): void {
     this.id = 0;  // Set ID to 0 for adding a new country
     this.isSideDrawerOpen = true;
@@ -94,19 +90,18 @@ export class CompanybanklistComponent {
   }
 
   ngOnInit(): void {
-    this.getCountryList();
+    // this.getCountryList();
   }
 
   getCountryList() {
-
     this.CompanyService.GetAllBankDetail().subscribe({
       next: (data: any) => {
         this.rowData = data.data;
         this._changeDetectorRef.detectChanges();
       }
     })
-
   }
+
   sideDrawer() {
     if (this.isSideDrawerOpen) {
       this.isSideDrawerOpen = false;

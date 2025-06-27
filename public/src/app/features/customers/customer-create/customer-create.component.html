@@ -13,7 +13,7 @@
             class="rounded-circle" />
           <!-- Default Image -->
           <ng-template #defaultImage>
-            <div class="default-avatar rounded-circle">{{customerName.charAt(0)}}</div>
+            <div class="default-avatar rounded-circle">{{this.customerForm.get("CustomerName")?.value?.trim().charAt(0)}}</div>
           </ng-template>
           <!-- Edit & Remove Overlay -->
           <div class="overlay">
@@ -29,11 +29,10 @@
         </div>
         <div class="customer-info">
           <h5 class="mb-0 fw-bold">
-            {{customerName}}
+            {{this.customerForm.get("CustomerName")?.value?.trim()}}
             <!-- <i [ngClass]="customerName=='' ? 'd-none':'d-inline'" class="material-icons text-primary small">verified</i> -->
           </h5>
-          <!-- <p class="text-muted mb-1">example&#64;gmail.com {{customerEmail}}</p> -->
-          <p class="text-muted mb-1 ">{{customerEmail}}</p>
+          <p class="text-muted mb-1 ">{{this.customerForm.get("Email")?.value?.trim()}}</p>
           <div class="d-flex gap-2">
             <input type="button" (click)="triggerCustomerFileInput()" [value]="customerLogoUrl?'Update Photo':'Add Photo'" placeholder="Add Photo"
               class="btn edit-btn btn-sm ">

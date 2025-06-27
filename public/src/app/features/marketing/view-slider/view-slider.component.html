@@ -51,8 +51,8 @@
       <!-- Header with Title and Download -->
       <div class="pdf-header pe-4  py-0 mt-5">
         <!-- <h3 class="pdf-title">Marketing</h3> -->
-        <div class="d-flex my-2 justify-content-between ">
-          <button class="download-btn" (click)="downloadPdf()">
+        <div  class="d-flex my-2 justify-content-between ">
+          <button [ngClass]="isDownload ? 'download-btn' : 'd-none'" class="download-btn" (click)="downloadPdf()">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
               <polyline points="7 10 12 15 17 10"></polyline>
@@ -68,10 +68,13 @@
               </svg>
               View Full Screen
             </button>
-            <button class="back-btn text-white ms-2 " (click)="back()">
+            <button [ngClass]="!isDownload ? 'd-none' : ''" class="back-btn text-white ms-2 " (click)="back()">
               <i class="bi bi-arrow-bar-left"></i> Back
             </button>
           </div>
+          <button [ngClass]="isDownload ? 'd-none' : ''" class="back-btn text-white ms-2 " (click)="back()">
+            <i class="bi bi-arrow-bar-left"></i> Back
+          </button>
         </div>
       </div>
       <!-- PDF Pages with Navigation -->

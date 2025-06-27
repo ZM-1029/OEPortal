@@ -247,7 +247,7 @@ export class PurchaseOrderCreateComponent implements OnInit, OnChanges {
     this.customerService.getCustomerList().subscribe((response) => {
       if (response.success) {
         this.allCustomers = response.customers;
-        this.filteredCustomers = [...this.allCustomers];
+        // this.filteredCustomers = [...this.allCustomers];
       }
     });
 

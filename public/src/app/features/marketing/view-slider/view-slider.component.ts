@@ -1,4 +1,4 @@
-import { CommonModule, NgIf } from '@angular/common';
+import { CommonModule, NgClass, NgIf } from '@angular/common';
 import { ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
@@ -14,33 +14,55 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-view-slider',
-  imports: [CommonModule, CarouselModule, PdfViewerModule,
-    FormsModule,  MatIconModule,NgIf,LoaderComponent],
+  imports: [CommonModule, CarouselModule, NgClass, PdfViewerModule,
+    FormsModule, MatIconModule, NgIf, LoaderComponent],
   templateUrl: './view-slider.component.html',
   styleUrl: './view-slider.component.scss',
-    encapsulation: ViewEncapsulation.None // ← change this
-  
+  encapsulation: ViewEncapsulation.None // ← change this
 })
-export class ViewSliderComponent implements OnInit,OnDestroy {
+
+export class ViewSliderComponent implements OnInit, OnDestroy {
   pdfSrc: string | undefined;
   loading: boolean = true;
   errorMessage: string | null = null;
   page: number = 1;
   totalPages: number = 0;
   zoom: number = 1.0;
-  id:number=0;
+  id: number = 0;
+  isDownload = true;
+  permitionList: any[] = [];
   constructor(
     private route: ActivatedRoute,
     private marketingService: MarketingService,
     private cdr: ChangeDetectorRef,
     private dialog: MatDialog,
     private _router: Router, private activatedRoute: ActivatedRoute,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.id = Number(this.route.snapshot.paramMap.get("id"));;
     this.loadPdf(this.id);
+    this.getMarketingPermissionByRoleId(Number(localStorage.getItem('role')));
   }
+
+  getMarketingPermissionByRoleId(RoleId: number) {
+    this.marketingService.getMarketingPermissionById(RoleId).subscribe({
+      next: (res) => {
+        if (Number(localStorage.getItem('role')) == 1) {
+          this.isDownload == true;
+        } else {
+          const matchedPermission = res.find((permission) => permission.marketingId === this.id);
+          this.isDownload = matchedPermission?.isDownload ?? false;
+          this.cdr.detectChanges();
+        }
+      },
+      error: () => {
+        console.error("Error fetching marketing permissions");
+        this.isDownload = false;
+      }
+    });
+  }
+
 
   ngOnDestroy(): void {
     if (this.pdfSrc) {
@@ -115,7 +137,7 @@ export class ViewSliderComponent implements OnInit,OnDestroy {
     });
   }
 
-  back(){
+  back() {
     this._router.navigateByUrl("/admin/marketing");
   }
 }

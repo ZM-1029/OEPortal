@@ -94,7 +94,7 @@ export class SaleCreateComponent implements OnInit, OnChanges {
       companyBranchId: ['', Validators.required],
       countryId: ['', Validators.required],
       salesOrderDate: [new Date()],
-      expectedShipmentDate: ['',Validators.required],
+      expectedShipmentDate: ['', Validators.required],
       paymentTermId: ['', Validators.required],
       deliveryMethod: [''],
       salesPerson: [''],
@@ -654,7 +654,7 @@ export class SaleCreateComponent implements OnInit, OnChanges {
   };
 
   ngOnDestroy(): void {
-    this.resetForm();
+    // this.resetForm();
     this._unsubscribeAll$.complete();
   }
 }

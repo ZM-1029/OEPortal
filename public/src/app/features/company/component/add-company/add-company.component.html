@@ -18,7 +18,7 @@
           <div class="col-8 ">
             <mat-form-field appearance="outline" class="w-100 col-8">
               <mat-select formControlName="Country" (selectionChange)="checkCountry($event)">
-                <mat-option value="" disabled>Select a country</mat-option>
+                <mat-option value="" disabled>Select a Country</mat-option>
                 <mat-option *ngFor="let country of countries" [value]="country.value">
                   {{ country.label }}
                 </mat-option>
