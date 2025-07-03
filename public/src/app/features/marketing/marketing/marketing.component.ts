@@ -80,6 +80,7 @@ export class MarketingComponent implements OnInit {
       next: (res) => {
         if (Number(localStorage.getItem('role')) == 1) {
           this.allMarketing = [...this.marketingList]; // clone the list
+          this.changeDetectorRef.detectChanges();
         } else {
           this.allMarketing = this.marketingList.filter((perm: any) =>
             res.some((item: any) => perm.id === item.marketingId)
@@ -144,6 +145,7 @@ export class MarketingComponent implements OnInit {
       next: (response) => {
         this.marketingList = response.data;
         this.logoUrl = response.data;
+        this.allMarketing = [...this.marketingList];
         this.changeDetectorRef.detectChanges();
       },
       error: (err) => {

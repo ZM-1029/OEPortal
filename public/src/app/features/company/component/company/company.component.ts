@@ -66,9 +66,6 @@ export class CompanyComponent {
 
   }
 
-
-
-
   openAddCountryDrawer(): void {
     this.id = 0;  // Set ID to 0 for adding a new country
     this.isSideDrawerOpen = true;
@@ -88,18 +85,16 @@ export class CompanyComponent {
   }
 
   ngOnInit(): void {
-    this.getCountryList();
+    // this.getCountryList();
   }
 
   getCountryList() {
-
     this.CompanyService.getAllCompany().subscribe({
       next: (data: any) => {
         this.rowData = data.data;
         this._changeDetectorRef.detectChanges();
       }
     })
-
   }
   sideDrawer() {
     if (this.isSideDrawerOpen) {

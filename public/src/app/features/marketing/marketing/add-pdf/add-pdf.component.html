@@ -1,6 +1,6 @@
 <div mat-dialog-content class="dialog-content px-3 py-2">
   <div class="d-flex">
-    <h3 class="fw-bold">{{headingPdf}} Pdf</h3>
+    <h3 class="fw-bold headingPdf">{{headingPdf}} Pdf</h3>
     <mat-icon class="text-danger float-end pb-2 ms-auto" (click)="cancel()" svgIcon="cross"></mat-icon>
   </div>
     <form [formGroup]="cardForm" (ngSubmit)="onSubmit()" class="w-100">
@@ -50,7 +50,7 @@
         <!-- <button  type="button" mat-button (click)="clearForm()" class="btn btn-light border rounded-pill me-2" [disabled]="isSubmitting">
           Clear
         </button> -->
-        <button   type="submit" class="btn btn-info-dark rounded-pill" [disabled]="isSubmitting || !cardForm.valid || pdfError || imageError">
+        <button   type="submit" class="btn btn-info-dark rounded-pill" [disabled]="isSubmitting ">
           <mat-spinner *ngIf="isSubmitting" diameter="20"></mat-spinner>
           <span *ngIf="!isSubmitting">{{headingPdf}}</span>
         </button>

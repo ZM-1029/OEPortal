@@ -312,7 +312,7 @@ export class SaleCreateComponent implements OnInit, OnChanges {
         next: (response: any) => {
           if (response.success) {
             this.showSuccessMessage(response.message);
-            this.resetForm();
+            // this.resetForm();
             this.formClose.emit(true);
             this._router.navigateByUrl("/admin/sales-orders");
           } else {
@@ -328,7 +328,7 @@ export class SaleCreateComponent implements OnInit, OnChanges {
         next: (response: any) => {
           if (response.success) {
             this.showSuccessMessage(response.message);
-            this.resetForm();
+            // this.resetForm();
             this.formClose.emit(true);
             this._router.navigateByUrl("/admin/sales-orders");
           } else {
@@ -452,9 +452,11 @@ export class SaleCreateComponent implements OnInit, OnChanges {
     this._salesService.getTaxByCountry(this.selectedCountryId).subscribe((res) => {
       if (res.success) this.Taxes = res.data;
     });
-    this._salesService.getCountryCurrency(this.selectedCountryId).subscribe((res) => {
-      if (res.success) this.countryCurrency = res.data;
-    });
+
+    // comment by shubham suggest by drishti ma'am
+    // this._salesService.getCountryCurrency(this.selectedCountryId).subscribe((res) => {
+    //   if (res.success) this.countryCurrency = res.data;
+    // });
 
     this.productForm.get('companyBranchId')?.reset();
 

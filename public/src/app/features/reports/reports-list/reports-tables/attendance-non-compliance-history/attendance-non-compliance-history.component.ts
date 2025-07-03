@@ -245,7 +245,7 @@ export class AttendanceNonComplianceHistoryComponent implements OnInit, OnChange
 
   ngOnChanges() {
     if (this.agGrid && this.attendanceRowData.length !== 0) {
-      // this.getPermissionToAccessPage(Number(localStorage.getItem('role')));
+      this.getPermissionToAccessPage(Number(localStorage.getItem('role')));
     } else {
       this.rowData = [];
       this.attendanceNcTypeCounts = {};

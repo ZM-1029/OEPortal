@@ -294,11 +294,11 @@ export class AddPdfComponent {
     }
 
     // Check file size (optional, e.g., max 5MB)
-    const maxSize = 5 * 1024 * 1024; // 5MB
-    if (file.size > maxSize) {
-      this.pdfError = "PDF size must be less than 5MB.";
-      return;
-    }
+    // const maxSize = 5 * 1024 * 1024; // 5MB
+    // if (file.size > maxSize) {
+    //   this.pdfError = "PDF size must be less than 5MB.";
+    //   return;
+    // }
 
     // If valid, proceed
     this.pdfFile = file;

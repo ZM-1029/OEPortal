@@ -1,57 +1,62 @@
 .dialog-content {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.headingPdf {
+  font-family: "Poppins";
+}
+
+img {
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.dialog-content {
+  background-color: #fff;
+  max-height: 80vh;
+  overflow-y: auto;
+
+  mat-form-field {
+    display: block;
   }
-  
-  img {
+
+  .preview-img {
+    width: 100px;
+    height: auto;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+  }
+
+  label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .form-control {
+    display: block;
+    width: 100%;
+    padding: 6px 12px;
+    font-size: 14px;
     border-radius: 4px;
     border: 1px solid #ccc;
   }
-  
-  .dialog-content {
-    background-color: #fff;
-    max-height: 80vh;
-    overflow-y: auto;
-  
-    mat-form-field {
-      display: block;
-    }
-  
-    .preview-img {
-      width: 100px;
-      height: auto;
-      border-radius: 4px;
-      border: 1px solid #ddd;
-    }
-  
-    label {
-      display: block;
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
-  
-    .form-control {
-      display: block;
-      width: 100%;
-      padding: 6px 12px;
-      font-size: 14px;
-      border-radius: 4px;
-      border: 1px solid #ccc;
-    }
-  
-    .btn {
-      min-width: 100px;
-    }
-  
-    .dialog-actions {
-      padding-top: 10px;
-    }
+
+  .btn {
+    min-width: 100px;
   }
-  
-  .mdc-dialog--open .mat-mdc-dialog-surface, .mdc-dialog--closing .mat-mdc-dialog-surface {
-    transform: none;
-    justify-content: center;
+
+  .dialog-actions {
+    padding-top: 10px;
+  }
+}
+
+.mdc-dialog--open .mat-mdc-dialog-surface,
+.mdc-dialog--closing .mat-mdc-dialog-surface {
+  transform: none;
+  justify-content: center;
 }
 
 .preview-img {
@@ -65,8 +70,10 @@
 
 .overlay-loader {
   position: absolute;
-  top: 0; left: 0;
-  right: 0; bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background: rgba(255, 255, 255, 0.7);
   display: flex;
   align-items: center;

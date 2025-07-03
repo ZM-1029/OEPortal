@@ -110,10 +110,10 @@ export class AddcompanybankComponent implements OnInit {
       bankName: ['', [Validators.required]],
       accountType: ['', [Validators.required]],
       currencyId: ['', Validators.required],
-      isPrimary: ['false']
+      isPrimary: [true]
 
     });
-    this.companyForm.get('isPrimary')?.setValue(0);
+    // this.companyForm.get('isPrimary')?.setValue(0);
     if (this.Id > 0) {
       this.heading = "Update"
       this.patchValue()

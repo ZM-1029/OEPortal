@@ -110,7 +110,6 @@ export class EfficiencyReportsComponent implements OnInit, OnChanges, AfterViewI
     this._changeDetectorRef.detectChanges();
   }
 
-
   getEmployeeProfitDetails() {
     this.reportsService.getEmployeeProfitDetail().subscribe(
       {

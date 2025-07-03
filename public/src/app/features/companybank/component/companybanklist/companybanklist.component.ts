@@ -41,12 +41,12 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 })
 export class CompanybanklistComponent implements OnInit, OnDestroy {
   columnDefs: any = [
-    { headerName: "S. No", valueGetter: "node.rowIndex + 1", pinned: "left", sortable: false, filter: false },
+    { headerName: "S. No", valueGetter: "node.rowIndex + 1", pinned: "left", sortable: false, filter: false,minWidth: 100,maxWidth: 100, },
     { headerName: "Actions", field: "actions", cellRenderer: (params: any) => this.renderActionIcons(params), pinned: "right" },
-    { field: "companyName", headerName: "Company Name", sortable: true, filter: true },
-    { field: "bankName", headerName: "Bank Name", sortable: true, filter: true },
-    { field: "accountType", headerName: "Account Type", sortable: true, filter: true },
-    { field: "currencyName", headerName: "Currency Name", sortable: true, filter: true },
+    { field: "companyName", headerName: "Company Name", sortable: true, filter: true,minWidth: 300, },
+    { field: "bankName", headerName: "Bank Name", sortable: true, filter: true,minWidth: 250, },
+    { field: "accountType", headerName: "Account Type", sortable: true, filter: true ,minWidth: 200, },
+    { field: "currencyName", headerName: "Currency Name", sortable: true, filter: true,minWidth: 200, },
     // { field: "accountNumber", headerName: "Account Number", sortable: true, filter: true },
     // { field: "name", headerName: "name", sortable: true, filter: true },
     // { field: "ifscCode", headerName: "IFSC Code", sortable: true, filter: true },

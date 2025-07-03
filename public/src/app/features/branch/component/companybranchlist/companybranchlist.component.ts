@@ -40,22 +40,21 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 })
 export class CompanybranchlistComponent {
   columnDefs: any = [
-    { headerName: "S. No", valueGetter: "node.rowIndex + 1", pinned: "left", sortable: false, filter: false },
+    { headerName: "S. No", valueGetter: "node.rowIndex + 1", pinned: "left", sortable: false, filter: false,maxWidth: 100,
+      minWidth: 100, },
     {
       headerName: "Actions", field: "actions", cellRenderer: (params: any) => this.renderActionIcons(params), pinned: "right", cellStyle: () => {
         return { border: "none", cursor: "pointer" };
       },
+      minWidth: 50,
     },
-    { field: "name", headerName: "Company Name", sortable: true, filter: true },
-    { field: "phoneNumber", headerName: "Phone Number", sortable: true, filter: true },
-    { field: "state", headerName: "State", sortable: true, filter: true },
-    { field: "city", headerName: "City", sortable: true, filter: true },
-    { field: "address", headerName: "Address", sortable: true, filter: true },
-    { field: "gstno", headerName: "GST NO", sortable: true, filter: true },
-
-    { field: "pincode", headerName: "Pincode", sortable: true, filter: true },
-
-
+    { field: "name", headerName: "Company Name", sortable: true, filter: true,minWidth: 200, },
+    { field: "phoneNumber", headerName: "Phone Number", sortable: true, filter: true ,minWidth: 200,},
+    { field: "state", headerName: "State", sortable: true, filter: true,minWidth: 250, },
+    { field: "city", headerName: "City", sortable: true, filter: true,minWidth: 200, },
+    { field: "address", headerName: "Address", sortable: true, filter: true ,minWidth: 350,},
+    { field: "gstno", headerName: "GST NO", sortable: true, filter: true ,minWidth: 200,},
+    { field: "pincode", headerName: "Pincode", sortable: true, filter: true,minWidth: 200, },
   ];
 
   defaultColDef = { sortable: true, filter: true, resizable: true, flex: 1 };

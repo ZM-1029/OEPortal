@@ -47,7 +47,6 @@
               "node_modules/bootstrap-icons/font/bootstrap-icons.css",
               "node_modules/ngx-owl-carousel-o/lib/styles/prebuilt-themes/owl.carousel.min.css",
               "node_modules/ngx-owl-carousel-o/lib/styles/prebuilt-themes/owl.theme.default.min.css"
-              
             ],
             "scripts": [
               "./node_modules/quill/dist/quill.core.js",
@@ -124,7 +123,9 @@
               "@angular/material/prebuilt-themes/azure-blue.css",
               "src/styles.scss"
             ],
-            "scripts": ["../node_modules/quill/dist/quill.core.js"]
+            "scripts": [
+              "../node_modules/quill/dist/quill.core.js"
+            ]
           }
         },
         "lint": {

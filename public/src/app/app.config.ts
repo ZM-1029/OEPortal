@@ -11,6 +11,7 @@ import {  MatIconRegistry } from '@angular/material/icon';
 import { authInterceptor } from "./core/interceptors/auth.interceptor";
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { CarouselModule } from 'ngx-owl-carousel-o';
+import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
@@ -19,6 +20,8 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptors([authInterceptor])),
     provideNgIconsConfig({}, withContentSecurityPolicy()),
     MatIconRegistry,
-    PdfViewerModule,CarouselModule
+    PdfViewerModule,
+    CarouselModule,
+    NgxExtendedPdfViewerModule
   ],
 };
