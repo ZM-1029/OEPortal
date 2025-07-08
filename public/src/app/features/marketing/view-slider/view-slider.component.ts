@@ -11,10 +11,12 @@ import { SalesService } from '../../sales/sales.service';
 import { MarketingService } from '../marketing.service';
 import { ViewPdfComponent } from '../view-pdf/view-pdf.component';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 
 @Component({
   selector: 'app-view-slider',
   imports: [CommonModule, CarouselModule, NgClass, PdfViewerModule,
+    NgxExtendedPdfViewerModule ,
     FormsModule, MatIconModule, NgIf, LoaderComponent],
   templateUrl: './view-slider.component.html',
   styleUrl: './view-slider.component.scss',
@@ -23,6 +25,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 export class ViewSliderComponent implements OnInit, OnDestroy {
   pdfSrc: string | undefined;
+  // pdfSrc: string | ArrayBuffer | Blob | Uint8Array | URL = '';
   loading: boolean = true;
   errorMessage: string | null = null;
   page: number = 1;
@@ -31,6 +34,8 @@ export class ViewSliderComponent implements OnInit, OnDestroy {
   id: number = 0;
   isDownload = true;
   permitionList: any[] = [];
+
+  
   constructor(
     private route: ActivatedRoute,
     private marketingService: MarketingService,
@@ -140,4 +145,34 @@ export class ViewSliderComponent implements OnInit, OnDestroy {
   back() {
     this._router.navigateByUrl("/admin/marketing");
   }
+
+  
+  // ... rest of your existing methods ...
+
+  //  onPdfLoad(pdf: any): void {
+  //   this.totalPages = pdf.pagesCount;
+  //   this.loading = false;
+  //   this.cdr.detectChanges();
+  // }
+
+  // downloadPdf(): void {
+  //   if (this.pdfSrc) {
+  //     const link = document.createElement('a');
+  //     link.href = this.pdfSrc as string;
+  //     link.download = 'Document.pdf';
+  //     link.click();
+  //   }
+  // }
+
+  // zoomIn(): void {
+  //   const currentZoom = parseInt(this.zoom);
+  //   if (currentZoom < 300) this.zoom = (currentZoom + 10) + '%';
+  // }
+
+  // zoomOut(): void {
+  //   const currentZoom = parseInt(this.zoom);
+  //   if (currentZoom > 30) this.zoom = (currentZoom - 10) + '%';
+  // }
+
+  // ... other methods remain the same ...
 }

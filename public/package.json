@@ -50,7 +50,7 @@
     "ng-select2-component": "^17.1.1",
     "ng2-pdf-viewer": "^10.4.0",
     "ng2-pdfjs-viewer": "^19.0.0",
-    "ngx-extended-pdf-viewer": "^23.1.1",
+    "ngx-extended-pdf-viewer": "^23.3.1",
     "ngx-file-drag-drop": "^11.0.0",
     "ngx-owl-carousel-o": "^19.0.2",
     "ngx-quill": "^27.0.1",

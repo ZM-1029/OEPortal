@@ -133,6 +133,13 @@ export const routes: Routes = [
           ),
       },
       {
+        path: "tailgate-reports",
+        loadComponent: () =>
+          import("./features/tailgate-reports/tailgate-reports.component").then(
+            (m) => m.TailgateReportsComponent,
+          ),
+      },
+      {
         path: "user",
         loadChildren: () =>
           import("./features/users/user.router").then(

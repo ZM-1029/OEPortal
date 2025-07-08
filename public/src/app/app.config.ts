@@ -22,6 +22,6 @@ export const appConfig: ApplicationConfig = {
     MatIconRegistry,
     PdfViewerModule,
     CarouselModule,
-    NgxExtendedPdfViewerModule
+    // NgxExtendedPdfViewerModule
   ],
 };

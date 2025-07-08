@@ -1,0 +1,110 @@
+<div class="purchase-order-form m-4">
+  <div class="border-bottom bg-light pb-2">
+    <h2 class="formHeading">{{ formHeading }} Tailgating Report</h2>
+  </div>
+  <div class="form-container d-flex justify-content-center">
+    <form [formGroup]="tailgateReportForm">
+      <div class="input-form-container ">
+        <div class="form-group row">
+          <mat-label class="outer-mat-lable col-4 pt-2">Select Employee</mat-label>
+          <mat-form-field appearance="outline" class="w-100">
+            <input #input type="text" placeholder="Select Employee" aria-label="Employee" matInput
+              formControlName="employeeId" [matAutocomplete]="employeeAuto" (click)="toggleAutocomplete()" />
+            <mat-icon matSuffix (click)="toggleAutocomplete()">arrow_drop_down</mat-icon>
+            <mat-autocomplete autoActiveFirstOption #employeeAuto="matAutocomplete" [displayWith]="displayEmployee"
+              (optionSelected)="onEmployeeSelected($event)">
+              <mat-option *ngFor="let option of filteredEmployees | async" [value]="option">
+                {{ option.employeeID }} - {{ option.firstName }} {{ option.lastName }}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="tailgateReportForm.get('employeeId')?.hasError('required')">
+              Please select employee
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div *ngIf="employeeDetails" class="border p-3 mb-3 rounded bg-white shadow-sm ms-2">
+          <div class="d-flex align-items-start border-bottom mb-3 pb-2">
+            <img [src]="imgUrl || employeeDetails.photo" alt="Employee Photo"
+              style="width: 72px; height: 72px; object-fit: cover; border-radius: 50%; border: 2px solid #e0e0e0; margin-right: 16px;" />
+
+            <div class="flex-grow-1">
+              <h5 class="mb-1 fw-bold d-flex align-items-center">
+                {{ employeeDetails.firstName }} {{ employeeDetails.lastName }}
+                <span class="badge ms-2" [ngClass]="{
+              'bg-success': employeeDetails.employeestatus === 'Active',
+              'bg-danger': employeeDetails.employeestatus !== 'Active'
+               }">
+                  {{ employeeDetails.employeestatus }}
+                </span>
+              </h5>
+              <p class="text-muted mb-3">{{ employeeDetails.designation }}</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6 mb-2">
+              <strong>Department:</strong>
+              <div class="text-break">{{ employeeDetails.department }}</div>
+            </div>
+            <div class="col-sm-6 mb-2">
+              <strong>Reporting To:</strong>
+              <div class="text-break">{{ employeeDetails.reportingTo }}</div>
+            </div>
+            <div class="col-sm-6 mb-2">
+              <strong>Email:</strong>
+              <div class="text-break">{{ employeeDetails.emailID }}</div>
+            </div>
+            <div class="col-sm-6 mb-2">
+              <strong>Mobile:</strong>
+              <div class="text-break">{{ employeeDetails.mobile }}</div>
+            </div>
+            <div class="col-sm-6 mb-2">
+              <strong>Location:</strong>
+              <div class="text-break">{{ employeeDetails.workLocation }}</div>
+            </div>
+            <div class="col-sm-6 mb-2">
+              <strong>Employee Type:</strong>
+              <div class="text-break">{{ employeeDetails.employeeType }}</div>
+            </div>
+            <div class="col-sm-6 mb-2">
+              <strong>Delivery Centre:</strong>
+              <div class="text-break">{{ employeeDetails.delivery_centre }}</div>
+            </div>
+            <div class="col-sm-6 mb-2">
+              <strong>Role:</strong>
+              <div class="text-break">{{ employeeDetails.role }}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <mat-label class="outer-mat-lable col-4 pt-2">Date</mat-label>
+          <mat-form-field appearance="outline" class="col-8">
+            <input matInput [matDatepicker]="dp" placeholder="Select Date" formControlName="ncDate" />
+            <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+            <mat-datepicker #dp></mat-datepicker>
+            <mat-error *ngIf="tailgateReportForm.get('ncDate')?.hasError('required')">
+              NC Date is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-group row">
+          <mat-label class="outer-mat-lable col-4 ">Description</mat-label>
+          <mat-form-field appearance="outline" class="col-8 description">
+            <textarea class="description-textarea" formControlName="description" matInput cdkTextareaAutosize
+              #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"></textarea>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="form-btn d-flex align-items-start justify-content-end p-4">
+        <button class="btn btn-secondary mx-2" type="button" (click)="resetForm()">
+          Clear
+        </button>
+        <button class="btn btn-info-dark text-white" (click)="createUpdate()">
+          {{ formHeading }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

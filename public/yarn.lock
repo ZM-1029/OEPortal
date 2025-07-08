@@ -5391,10 +5391,10 @@ ng2-pdfjs-viewer@^19.0.0:
   dependencies:
     tslib "^2.3.0"
 
-ngx-extended-pdf-viewer@^23.1.1:
-  version "23.1.1"
-  resolved "https://registry.npmjs.org/ngx-extended-pdf-viewer/-/ngx-extended-pdf-viewer-23.1.1.tgz"
-  integrity sha512-a9tKq7CaDdekxT0Zf3W+RJ8nnAaMYU687DTjHhH+ivYLjCKD4U9CqZttmvbje3jIgxHS/BpuApe+0EZa59/qiA==
+ngx-extended-pdf-viewer@^23.3.1:
+  version "23.3.1"
+  resolved "https://registry.npmjs.org/ngx-extended-pdf-viewer/-/ngx-extended-pdf-viewer-23.3.1.tgz"
+  integrity sha512-8OEWaVMh+GA/JzXQvxt5IhjwFLFDJ5cy5nyTIayPSQ2GCKacFGusLFSOLiv3mHw245Zdvxri4ered2W+uDydsQ==
   dependencies:
     tslib "^2.3.0"
 
@@ -7661,6 +7661,7 @@ zone.js@~0.15.0:
     moment "^2.30.1"
     ng-select2-component "^17.1.1"
     ng2-pdf-viewer "^10.4.0"
+    ng2-pdfjs-viewer "^19.0.0"
     ngx-extended-pdf-viewer "^23.1.1"
     ngx-file-drag-drop "^11.0.0"
     ngx-owl-carousel-o "^19.0.2"

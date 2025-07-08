@@ -89,12 +89,13 @@ export class AttendanceNonComplianceHistoryComponent implements OnInit, OnChange
     },
     {
       field: "shiftDateFormatted",
-      headerName: " Date",
+      headerName: "Date",
       sortable: true,
       filter: true,
       pinned: "left",
       lockPinned: true,
-      minWidth: 120,
+      minWidth: 125,
+      maxWidth: 125,
       cellStyle: () => {
         return { border: "none" };
       },
