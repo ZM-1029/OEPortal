@@ -10,7 +10,13 @@
           <mat-form-field appearance="outline" class="col-8">
             <input matInput #input [matAutocomplete]="auto" formControlName="customerName" (input)="filter()"
               (click)="toggleAutocomplete()" />
-            <mat-icon matSuffix (click)="toggleAutocomplete()">arrow_drop_down</mat-icon>
+            <span matSuffix class="d-flex pe-2">
+              <mat-icon>arrow_drop_down</mat-icon>
+              @if(salaryForm.get('customerName')?.value){
+              <mat-icon class="text-danger fs-6 pt-1"
+                (click)="this.salaryForm.get('customerName')?.setValue('')">close</mat-icon>
+              }
+            </span>
             <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onSelectCustomer($event)">
               @for (customer of filteredCustomers; track customer) {
               <mat-option [value]="customer.customerName">

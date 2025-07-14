@@ -22,6 +22,7 @@
   outline: #2e3b64 !important;
   border: #2e3b64;
   color: white;
+  height: 35px;
   transition: background-color 0.3s ease;
 
   &:hover {
@@ -33,7 +34,7 @@
   position: relative;
 }
 
-.dropdown-menu{
+.dropdown-menu {
   border: 1px solid #ccc;
   max-height: 265px;
   max-width: 220px;
@@ -58,7 +59,7 @@
 }
 
 .checkbox-container.checked {
-  background-color: rgb(234, 244, 255); 
+  background-color: rgb(234, 244, 255);
   color: #000;
 }
 
@@ -78,3 +79,98 @@
 }
 
 // for Manage Columns end
+
+.emplooye-dropdown {
+  max-width: 300px;
+  width: 300px;
+}
+
+.matDatepicker-container {
+  display: flex;
+  gap: 15px;
+}
+
+.mat-form-field {
+  width: 40%;
+}
+
+.emplooye-dropdown {
+  max-width: 300px;
+  width: 300px;
+}
+
+
+@media (max-width: 1224px) {
+  .matDatepicker-container {
+    display: flex;
+    gap: 15px;
+  }
+
+  .emplooye-dropdown {
+    max-width: 200px;
+    width: 200px;
+  }
+
+  .matDatepicker-container {
+    display: flex;
+    gap: 15px;
+  }
+
+  mat-form-field {
+    width: 150px;
+  }
+
+  .mat-form-field {
+    width: 30px;
+  }
+}
+
+@media (max-width: 1330px) {
+  .matDatepicker-container {
+    display: flex;
+    gap: 15px;
+  }
+
+  .emplooye-dropdown {
+    max-width: 300px;
+    width: 300px;
+  }
+
+  .matDatepicker-container {
+    display: flex;
+    gap: 15px;
+  }
+
+  mat-form-field {
+    width: 190px;
+  }
+
+  .mat-form-field {
+    width: 30px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .matDatepicker-container {
+    display: flex;
+    gap: 15px;
+  }
+
+  .emplooye-dropdown {
+    max-width: 200px;
+    width: 200px;
+  }
+
+  .matDatepicker-container {
+    display: flex;
+    gap: 15px;
+  }
+
+  mat-form-field {
+    width: 100px;
+  }
+
+  .mat-form-field {
+    width: 30px;
+  }
+}

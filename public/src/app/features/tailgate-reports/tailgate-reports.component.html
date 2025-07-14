@@ -1,45 +1,74 @@
 <div class="main-content mt-2 p-2">
   <app-page-header [HeadingName]="HeadingName">
-    <div class="d-flex" pageHeaderBtn>
-      @if(this.tailgatingReportsAccess.add){
-      <button class="btn btn-info-dark btn-wave mx-2 text-white text-capitalize" (click)="addSalary($event)">
-        <i class="fa-solid fa-plus me-2"></i>Create
-      </button>
-      }
-      <div class="dropdown ms-2">
-        <button class="btn btn-info-dark text-white btn-wave dropdown-toggle" type="button" id="dropdownMenuButton1"
-          data-bs-toggle="dropdown" aria-expanded="false">
-          Manage Column
-        </button>
+    <div class="d-flex justify-content-end" pageHeaderBtn>
+      @if(this.tailgatingReportsAccess.view){
+      <div class="date-range-picker d-flex justify-content-end">
+        <div class="matDatepicker-container d-flex gap-3">
+          <mat-form-field appearance="outline" class=" ">
+            <mat-label>Start Date</mat-label>
+            <input matInput [matDatepicker]="startPicker" [matDatepickerFilter]="startDateFilter"
+              placeholder="Select start date" (dateChange)="getStartDate($event)" [value]="startDate">
+            <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
+            <mat-datepicker #startPicker></mat-datepicker>
+          </mat-form-field>
 
-        <ul class="dropdown-menu py-0" aria-labelledby="dropdownMenuButton1">
-          @for (column of allColumns; track column) {
-          <li>
-            @if (
-            column.headerName == "Actions" ||
-            column.field == "delete" ||
-            column.field == "customerName" ||
-            column.headerName == "S. No"
-            ) {
-            <!-- Hidden fixed columns -->
-            <div class="dropdown-item d-none checkbox-container">
-              <input type="checkbox" [checked]="isColumnDisplayed(column)" disabled id="{{ column.field }}" />
-              <label for="{{ column.field }}">{{ column.headerName }}</label>
-            </div>
-            } @else {
-            <!-- Togglable columns -->
-            <div class="dropdown-item checkbox-container pt-1 px-3" [ngClass]="{
+          <mat-form-field appearance="outline" class="">
+            <mat-label>End Date</mat-label>
+            <input matInput [matDatepicker]="endPicker" [matDatepickerFilter]="dateFilter" placeholder="Select end date"
+              (dateChange)="getEndDate($event)" [value]="endDate">
+            <mat-datepicker-toggle matIconSuffix [for]="endPicker"></mat-datepicker-toggle>
+            <mat-datepicker #endPicker></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class="emplooye-dropdown ms-2">
+          <app-multi-select-dropdown [dropdownHeading]="'Employee'" [defaultValue]="'0'" [dataList]="allEmployees"
+            (selectedOutput)="getReporsByEmployeeId($event)">
+          </app-multi-select-dropdown>
+        </div>
+      </div>
+      }
+
+      <div class="d-flex">
+        @if(this.tailgatingReportsAccess.add){
+        <button class="btn btn-info-dark btn-wave mx-2 text-white text-capitalize" (click)="addSalary($event)">
+          <i class="fa-solid fa-plus me-2"></i>Create
+        </button>
+        }
+        <div class="dropdown ">
+          <button class="btn btn-info-dark text-white btn-wave dropdown-toggle" type="button" id="dropdownMenuButton1"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            Manage Column
+          </button>
+
+          <ul class="dropdown-menu py-0" aria-labelledby="dropdownMenuButton1">
+            @for (column of allColumns; track column) {
+            <li>
+              @if (
+              column.headerName == "Actions" ||
+              column.field == "delete" ||
+              column.field == "customerName" ||
+              column.headerName == "S. No"
+              ) {
+              <!-- Hidden fixed columns -->
+              <div class="dropdown-item d-none checkbox-container">
+                <input type="checkbox" [checked]="isColumnDisplayed(column)" disabled id="{{ column.field }}" />
+                <label for="{{ column.field }}">{{ column.headerName }}</label>
+              </div>
+              } @else {
+              <!-- Togglable columns -->
+              <div class="dropdown-item checkbox-container pt-1 px-3" [ngClass]="{
                 'checked': isColumnDisplayed(column),
                 'unchecked': !isColumnDisplayed(column)
               }" (click)="preventClose($event)">
-              <input type="checkbox" [checked]="isColumnDisplayed(column)" (change)="toggleColumn(column)"
-                id="{{ column.field }}" />
-              <label for="{{ column.field }}">{{ column.headerName }}</label>
-            </div>
+                <input type="checkbox" [checked]="isColumnDisplayed(column)" (change)="toggleColumn(column)"
+                  id="{{ column.field }}" />
+                <label for="{{ column.field }}">{{ column.headerName }}</label>
+              </div>
+              }
+            </li>
             }
-          </li>
-          }
-        </ul>
+          </ul>
+        </div>
       </div>
     </div>
   </app-page-header>
@@ -50,7 +79,7 @@
         class="ag-theme-alpine" [rowData]="rowData" [columnDefs]="columnDefs" [defaultColDef]="defaultColDef"
         [animateRows]="true" [paginationPageSize]="15" [pagination]="true" [suppressDragLeaveHidesColumns]="true"
         [paginationPageSizeSelector]="paginationPageSizeSelector" (paginationChanged)="onPaginationChanged($event)"
-        (gridReady)="onGridReady($event)" ></ag-grid-angular>
+        (gridReady)="onGridReady($event)"></ag-grid-angular>
       <div class="table-footer position-relative"></div>
     </div>
   </div>
@@ -64,5 +93,5 @@
       [formHeading]="formHeading" [isSideDrawerOpen]="isSideDrawerOpen"></app-tailgate-reports-create>
   </app-side-drawer>
   }
- 
+
 </div>

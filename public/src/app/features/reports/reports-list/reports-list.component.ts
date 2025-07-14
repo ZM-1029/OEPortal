@@ -5,7 +5,7 @@ import { ncTypeCountsI, nonComplianceHistoryI, nonComplianceI } from "src/app/sh
 import { FormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";
 import { MatDatepickerInputEvent, MatDatepickerModule } from "@angular/material/datepicker";
-import { MatFormFieldControl, MatFormFieldModule } from "@angular/material/form-field";
+import { MatFormFieldModule } from "@angular/material/form-field";
 import { PageHeaderComponent } from "src/app/shared/components/UI/page-header/page-header.component";
 import { provideNativeDateAdapter } from "@angular/material/core";
 import { EmployeesService } from "../../employees/employees.service";
@@ -36,7 +36,8 @@ import { ProjectTimesheetComponent } from "./reports-tables/project-timesheet/pr
     AttendanceNonComplianceHistoryComponent,
     EfficiencyReportEmployeesComponent,
     EfficiencyReportCustomersComponent,
-    NgClass, MultiSelectDropdownComponent, SingleSelectDropdownComponent,
+    NgClass, MultiSelectDropdownComponent,
+    SingleSelectDropdownComponent,
     ProjectTimesheetComponent
   ],
   templateUrl: "./reports-list.component.html",

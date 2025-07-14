@@ -6,13 +6,13 @@ import { NgSelectModule, NgOptionTemplateDirective, NgSelectComponent } from '@n
 @Component({
   selector: 'app-multi-selcet-object-dropdown',
   imports: [CommonModule, NgSelectModule,
-      NgOptionTemplateDirective,
-      NgSelectComponent, FormsModule],
+    NgOptionTemplateDirective,
+    NgSelectComponent, FormsModule],
   templateUrl: './multi-selcet-object-dropdown.component.html',
   styleUrl: './multi-selcet-object-dropdown.component.scss'
 })
 export class MultiSelcetObjectDropdownComponent implements OnInit, OnChanges {
- @Input() dataList: any = [];
+  @Input() dataList: any = [];
   @Input() dropdownHeading: string = '';
   @Input() defaultValue: any;
   @Output() selectedOutput: EventEmitter<any> = new EventEmitter<any>();
@@ -29,14 +29,13 @@ export class MultiSelcetObjectDropdownComponent implements OnInit, OnChanges {
     // Initialize with default value if provided
     if (this.defaultValue === '0') {
       this.allSelected = true;
-      // Don't set selectedData here - wait for dataList to be available
     } else if (this.defaultValue) {
-      this.selectedData = Array.isArray(this.defaultValue) ? 
-        [...this.defaultValue] : 
+      this.selectedData = Array.isArray(this.defaultValue) ?
+        [...this.defaultValue] :
         [this.defaultValue];
     }
   }
-  
+
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['dataList']) {
       this.dataList = changes['dataList'].currentValue;
@@ -49,21 +48,21 @@ export class MultiSelcetObjectDropdownComponent implements OnInit, OnChanges {
           return { id: item.id, name: item.name };
         }
       });
-  
+
       // Handle default value after data is loaded
       if (this.defaultValue === '0' && this.transformedDataList.length > 0) {
         this.allSelected = true;
         this.toggleSelectAll();
       } else if (this.defaultValue && this.transformedDataList.length > 0) {
         // Ensure default values exist in the data
-        const defaultIds = Array.isArray(this.defaultValue) ? 
-          this.defaultValue : 
+        const defaultIds = Array.isArray(this.defaultValue) ?
+          this.defaultValue :
           [this.defaultValue];
-        
+
         this.selectedData = this.transformedDataList
           .filter(item => defaultIds.includes(item.id))
           .map(item => item.id);
-        
+
         this.updateAllSelected();
       }
     }
@@ -89,41 +88,41 @@ export class MultiSelcetObjectDropdownComponent implements OnInit, OnChanges {
       return;
     }
 
-    this.selectRefObj.searchTerm = '';// ✅ bypass TS check
+    this.selectRefObj.searchTerm = '';
 
     this.previousSelectedData = [...this.selectedData];
     this.allSelected = this.selectedData.length === this.transformedDataList.length;
-  
+
     if (this.allSelected) {
       this.selectedOutput.emit(0);
-    } else if (this.selectedData.length !== 0) {  
-      this.selectedOutput.emit(this.selectedData); // ✅ Emit IDs directly
+    } else if (this.selectedData.length !== 0) {
+      this.selectedOutput.emit(this.selectedData);
     } else {
-      this.selectedOutput.emit(1);
+      this.selectedOutput.emit(0);
     }
   }
 
   // Add this method to your component class
-getSelectedItemsDisplay(): string {
-  if (!this.selectedData || this.selectedData.length === 0) {
-    return `Select ${this.dropdownHeading}`;
-  }
+  getSelectedItemsDisplay(): string {
+    if (!this.selectedData || this.selectedData.length === 0) {
+      return `Select ${this.dropdownHeading}`;
+    }
 
-  if (this.allSelected || this.selectedData.length === this.transformedDataList.length) {
-    return `All ${this.dropdownHeading} selected`;
-  }
+    if (this.allSelected || this.selectedData.length === this.transformedDataList.length) {
+      return `All ${this.dropdownHeading} selected`;
+    }
 
-  if (this.selectedData.length === 1) {
-    const selectedItem = this.transformedDataList.find(item => item.id === this.selectedData[0]);
-    return selectedItem ? selectedItem.name : '';
-  }
+    if (this.selectedData.length === 1) {
+      const selectedItem = this.transformedDataList.find(item => item.id === this.selectedData[0]);
+      return selectedItem ? selectedItem.name : '';
+    }
 
-  // Get the first selected item's name
-  const firstSelected = this.transformedDataList.find(item => item.id === this.selectedData[0]);
-  const firstName = firstSelected ? firstSelected.name : '';
-  
-  return `${firstName} + ${this.selectedData.length - 1}`;
-}
+    // Get the first selected item's name
+    const firstSelected = this.transformedDataList.find(item => item.id === this.selectedData[0]);
+    const firstName = firstSelected ? firstSelected.name : '';
+
+    return `${firstName} + ${this.selectedData.length - 1}`;
+  }
 
 }
 

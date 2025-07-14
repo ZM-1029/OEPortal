@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -18,6 +18,12 @@ import { PurcheseOrdereViewComponent } from '../purchaseOrders/purchese-ordere-v
 import { RolePermissionService } from '../role-permissions/role-permission.service';
 import { TailgateReportsCreateComponent } from './tailgate-reports-create/tailgate-reports-create.component';
 import { TailgateReportsService } from './tailgate-reports.service';
+import { MatDatepickerInputEvent, MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { provideNativeDateAdapter } from '@angular/material/core';
+import { MultiSelectDropdownComponent } from 'src/app/shared/components/UI/multi-select-dropdown/multi-select-dropdown.component';
+import { employeesDropdownI } from 'src/app/shared/types/reports.type';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 @Component({
@@ -27,9 +33,16 @@ ModuleRegistry.registerModules([AllCommunityModule]);
     LoaderComponent,
     PageHeaderComponent,
     SideDrawerComponent,
-    TailgateReportsCreateComponent],
+    TailgateReportsCreateComponent,
+    MatFormFieldModule,
+    MatInputModule,
+    MatDatepickerModule,
+    MatFormFieldModule,
+    MultiSelectDropdownComponent
+  ],
   templateUrl: './tailgate-reports.component.html',
-  styleUrl: './tailgate-reports.component.scss'
+  styleUrl: './tailgate-reports.component.scss',
+  providers: [provideNativeDateAdapter(), DatePipe],
 })
 export class TailgateReportsComponent implements OnInit {
   private gridApi!: GridApi<any>;
@@ -46,9 +59,15 @@ export class TailgateReportsComponent implements OnInit {
   formHeading: string = "";
   PurchaseOrderRowId!: number;
   HeadingName: string = "Tailgating Reports";
-  rowData: any[] = [];
+  rowData: employeesDropdownI[] = [];
   public isAuditlogOpen: boolean = false;
   tableRowId: number = 0;
+
+  startDate: string = "";
+  endDate: string = "";
+  allEmployees: any[] = [];
+  employeeId: any = 0;
+
   tailgatingReportsAccess: rolePermissionListI = {
     id: 0,
     formId: 0,
@@ -78,7 +97,8 @@ export class TailgateReportsComponent implements OnInit {
       headerName: "Employee Id",
       sortable: true,
       filter: true,
-      minWidth: 200,
+      minWidth: 170,
+      maxWidth: 200,
     },
     {
       field: "employeeName",
@@ -87,36 +107,28 @@ export class TailgateReportsComponent implements OnInit {
       filter: true,
       minWidth: 200,
     },
-    // {
-    //   field: "ncDate",
-    //   headerName: "NC Date",
-    //   // cellRenderer: (params: any) => this.extractMonth(params),
-    //   sortable: true,
-    //   filter: true,
-    //   minWidth: 100,
-    // },
     {
       field: "ncDate",
-      headerName: "Date",
+      headerName: "Date & Time",
       sortable: true,
       filter: true,
-      minWidth: 120,
+      minWidth: 220,
+      maxWidth: 250,
       valueFormatter: (params: any) => {
         if (!params.value) return '';
         const date = new Date(params.value);
+
         const day = date.getDate().toString().padStart(2, '0');
         const month = date.toLocaleString('default', { month: 'short' });
         const year = date.getFullYear();
-        return `${day}-${month}-${year}`;
-      }
-    },
 
-    {
-      field: "reportingManager",
-      headerName: "Reporting Manager",
-      sortable: true,
-      filter: true,
-      minWidth: 200,
+        let hours = date.getHours();
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+        hours = hours % 12 || 12;
+
+        return `${day}-${month}-${year} & ${hours}:${minutes} ${ampm}`;
+      }
     },
     {
       field: "description",
@@ -124,6 +136,13 @@ export class TailgateReportsComponent implements OnInit {
       sortable: true,
       filter: true,
       minWidth: 240,
+    },
+    {
+      field: "reportingManager",
+      headerName: "Reporting Manager",
+      sortable: true,
+      filter: true,
+      minWidth: 200,
     },
   ];
   defaultColDef = {
@@ -169,7 +188,9 @@ export class TailgateReportsComponent implements OnInit {
             if (tailgatingReportsAccess.form === "Tailgating Reports") {
               this.tailgatingReportsAccess = tailgatingReportsAccess;
               if (this.tailgatingReportsAccess.view) {
-                this.getTailgateReport();
+                // this.getTailgateReport(this.employeeId,this.startDate,this.endDate);
+                this.setDefaultDates();
+                this.GetEmployeesForDropdown();
               } else {
                 this.rowData = [];
                 this.showErrorOverlay("You have not permission");
@@ -192,8 +213,8 @@ export class TailgateReportsComponent implements OnInit {
     });
   }
 
-  getTailgateReport() {
-    this.tailgateReportsService.GetTailgatingNCList()
+  getTailgateReport(empIds: any, startDate: string, endDate: string) {
+    this.tailgateReportsService.GetTailgatingNCList(empIds, startDate, endDate)
       .subscribe(
         {
           next: ((result: any) => {
@@ -238,7 +259,7 @@ export class TailgateReportsComponent implements OnInit {
   // Form Close
   close(event: boolean) {
     if (event) {
-      this.getTailgateReport();
+      this.getTailgateReport(this.employeeId, this.startDate, this.endDate);
       this.handleSideDrawer();
       this.PurchaseOrderRowId = 0;
       this._changeDetectorRef.detectChanges();
@@ -327,6 +348,95 @@ export class TailgateReportsComponent implements OnInit {
     event.stopPropagation();
   }
   // for Manage Columns end
+
+  //  multi-select-dropdown start
+  getReporsByEmployeeId(event: any) {
+    if (event == 1) {
+      this.employeeId = '0';
+      this.getTailgateReport(this.employeeId, this.startDate, this.endDate);
+    } else {
+      this.employeeId = event
+      this.getTailgateReport(this.employeeId, this.startDate, this.endDate);
+    }
+  }
+
+  GetEmployeesForDropdown() {
+    this.tailgateReportsService.GetActiveEmployeesForDropdown().subscribe({
+      next: (response) => {
+        this.allEmployees = response.data.map((obj: employeesDropdownI) => ({
+          id: obj.employeeID,
+          name: `(${obj.employeeID}) - ${obj.firstName} ${obj.lastName}`,
+        }));
+        this._changeDetectorRef.detectChanges();
+      },
+      error: (err) => {
+        console.error("Error fetching employees:", err);
+      }
+    });
+  }
+  //  multi-select-dropdown end
+
+  // date piker start
+  setDefaultDates() {
+    const today = new Date();
+    const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+    const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+    this.startDate = this.formatDate(firstDay);
+    this.endDate = this.formatDate(lastDay);
+    this.getTailgateReport(this.employeeId, this.startDate, this.endDate);
+  }
+
+  getStartDate(event: MatDatepickerInputEvent<Date> | any) {
+    if (event.value) {
+      this.startDate = this.formatDate(event.value);
+      this.checkAndFetchAttendance();
+    }
+  }
+
+  checkAndFetchAttendance() {
+    if (this.startDate && this.endDate) {
+      this.getTailgateReport(this.employeeId, this.startDate, this.endDate);
+    }
+  }
+
+  formatDate(date: Date): string {
+    return date.getFullYear() + "-" + (date.getMonth() + 1).toString().padStart(2, "0") + "-" + date.getDate().toString().padStart(2, "0");
+  }
+
+  dateFilter = (d: Date | null): boolean => {
+    if (!this.startDate) return true;
+    return d! >= new Date(this.startDate);
+  };
+
+  startDateFilter = (d: Date | null): boolean => {
+    if (!d) return false;
+    // Disable future dates (optional)
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    if (d > today) return false;
+    // If endDate is selected, disable dates after it
+    if (this.endDate) {
+      const endDate = new Date(this.endDate);
+      endDate.setHours(0, 0, 0, 0);
+      return d <= endDate;
+    }
+
+    return true; // Allow selection if no endDate is set
+  };
+
+  getEndDate(event: MatDatepickerInputEvent<Date> | any) {
+    if (event.value) {
+      const selectedEndDate = event.value;
+      if (selectedEndDate < new Date(this.startDate)) {
+        return;
+      }
+      this.endDate = this.formatDate(selectedEndDate);
+      this.checkAndFetchAttendance();
+    }
+  }
+
+
+  // date piker end
 
   //  Function to show success messages
   private showSuccessMessage(message: string) {

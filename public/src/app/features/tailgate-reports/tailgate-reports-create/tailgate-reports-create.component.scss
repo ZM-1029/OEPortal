@@ -374,3 +374,21 @@ mat-form-field textarea[matInput] {
     }
   }
 }
+
+.date-field {
+  width: 130px; /* You can adjust as needed */
+}
+
+.time-field {
+  width: 100px;
+}
+
+.gap-2 {
+  gap: 0.5rem;
+}
+.form-form-group-datepicker mat-form-field{
+   flex: 0 0 60%;
+    max-width: 60%;
+    width: 100%;
+}
+

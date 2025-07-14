@@ -33,7 +33,8 @@ import { PurchaseOrderSummeryI } from 'src/app/shared/types/purchaseOrder.type';
     FormsModule,
     MatAutocompleteModule,
     ReactiveFormsModule,
-    MatCheckboxModule, PurchaseOrderComponent, NgClass],
+    MatCheckboxModule,
+    PurchaseOrderComponent, NgClass],
   templateUrl: './invoice-form.component.html',
   styleUrl: './invoice-form.component.scss',
   providers: [

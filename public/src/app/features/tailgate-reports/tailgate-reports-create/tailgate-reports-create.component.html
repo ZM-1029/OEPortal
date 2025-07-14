@@ -10,7 +10,11 @@
           <mat-form-field appearance="outline" class="w-100">
             <input #input type="text" placeholder="Select Employee" aria-label="Employee" matInput
               formControlName="employeeId" [matAutocomplete]="employeeAuto" (click)="toggleAutocomplete()" />
-            <mat-icon matSuffix (click)="toggleAutocomplete()">arrow_drop_down</mat-icon>
+            <span matSuffix class="d-flex pe-2">
+              <mat-icon (click)="toggleAutocomplete()">arrow_drop_down</mat-icon>
+              <mat-icon class="text-danger fs-6 pt-1" *ngIf="tailgateReportForm.get('employeeId')?.value"
+                (click)="this.tailgateReportForm.get('employeeId')?.setValue('')">close</mat-icon>
+            </span>
             <mat-autocomplete autoActiveFirstOption #employeeAuto="matAutocomplete" [displayWith]="displayEmployee"
               (optionSelected)="onEmployeeSelected($event)">
               <mat-option *ngFor="let option of filteredEmployees | async" [value]="option">
@@ -76,16 +80,28 @@
           </div>
         </div>
 
-        <div class="form-group row">
-          <mat-label class="outer-mat-lable col-4 pt-2">Date</mat-label>
-          <mat-form-field appearance="outline" class="col-8">
-            <input matInput [matDatepicker]="dp" placeholder="Select Date" formControlName="ncDate" />
-            <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
-            <mat-datepicker #dp></mat-datepicker>
-            <mat-error *ngIf="tailgateReportForm.get('ncDate')?.hasError('required')">
-              NC Date is required
-            </mat-error>
-          </mat-form-field>
+        <div class="form-group-datepicker row">
+          <mat-label class="outer-mat-lable col-4 pt-2">Date & Time</mat-label>
+          <div class="col-8 d-flex align-items-center gap-2">
+
+            <!-- Date Picker with reduced width -->
+            <mat-form-field appearance="outline" class="date-field">
+              <input matInput [matDatepicker]="dp" placeholder="MM/DD/YYYY" formControlName="ncDate" />
+              <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+              <mat-datepicker #dp></mat-datepicker>
+              <mat-error *ngIf="tailgateReportForm.get('ncDate')?.hasError('required')">
+                Date is required
+              </mat-error>
+            </mat-form-field>
+
+            <!-- Time Input Field -->
+            <mat-form-field appearance="outline" class="time-field">
+              <input matInput type="time" formControlName="ncTime" />
+              <mat-error *ngIf="tailgateReportForm.get('ncTime')?.hasError('required')">
+                Time is required
+              </mat-error>
+            </mat-form-field>
+          </div>
         </div>
 
         <div class="form-group row">
@@ -93,6 +109,13 @@
           <mat-form-field appearance="outline" class="col-8 description">
             <textarea class="description-textarea" formControlName="description" matInput cdkTextareaAutosize
               #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"></textarea>
+            <mat-hint align="end">
+              {{ tailgateReportForm.get('description')?.value?.length || 0 }}/500
+            </mat-hint>
+            <!-- Error for max characters -->
+            <mat-error *ngIf="tailgateReportForm.get('description')?.hasError('maxlength')">
+              Maximum 500 characters allowed
+            </mat-error>
           </mat-form-field>
         </div>
       </div>
@@ -101,7 +124,7 @@
         <button class="btn btn-secondary mx-2" type="button" (click)="resetForm()">
           Clear
         </button>
-        <button class="btn btn-info-dark text-white" (click)="createUpdate()">
+        <button class="btn btn-info-dark text-white" (click)="createUpdate()" [disabled]="isSubmitting || tailgateReportForm.invalid">
           {{ formHeading }}
         </button>
       </div>

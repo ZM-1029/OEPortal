@@ -32,9 +32,6 @@ import { employeesDropdownI, EmployeesForDropdownI } from 'src/app/shared/types/
 import { map, Observable, startWith } from 'rxjs';
 import { TailgateReportsService } from '../tailgate-reports.service';
 import { employeeDetailsI, employeeType } from 'src/app/shared/types/employees.type';
-import moment from 'moment';
-
-
 
 @Component({
   selector: 'app-tailgate-reports-create',
@@ -49,7 +46,7 @@ import moment from 'moment';
     CommonModule, FormsModule,
     MatAutocompleteModule,
     MatIconModule,
-    NgFor, NgIf
+    NgFor, NgIf,
   ],
   templateUrl: './tailgate-reports-create.component.html',
   styleUrl: './tailgate-reports-create.component.scss',
@@ -86,8 +83,7 @@ export class TailgateReportsCreateComponent implements OnInit, OnChanges {
   isMasked = true;
   employeeDataForTimesheet: any;
   activeTab: string = "profile";
-
-  // 
+  isSubmitting: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -139,23 +135,10 @@ export class TailgateReportsCreateComponent implements OnInit, OnChanges {
   }
 
 
-  // toggleAutocomplete(): void {
-  //   if (this.autoTrigger.panelOpen) {
-  //     this.autoTrigger.closePanel();
-  //   } else {
-  //     this.filteredCustomers = [...this.allCustomers];
-  //     this.input.nativeElement.focus();
-  //     this.autoTrigger.openPanel();
-  //   }
-  //   this._changeDetectorRef.detectChanges();
-  // }
-
   toggleAutocomplete(): void {
     const employeeControl = this.tailgateReportForm.get('employeeId');
-
-    // Trigger filter manually by setting an empty string if the field is untouched
     if (employeeControl && !employeeControl.value) {
-      employeeControl.setValue(''); // this will trigger valueChanges and filtering
+      employeeControl.setValue('');
     }
     // Force open panel
     if (this.autoTrigger.panelOpen) {
@@ -163,10 +146,8 @@ export class TailgateReportsCreateComponent implements OnInit, OnChanges {
     } else {
       this.autoTrigger.openPanel();
     }
-
     this._changeDetectorRef.detectChanges();
   }
-
 
   onCurrencyChange(event: any) {
     const selectedCurrencyId = event.value;
@@ -202,11 +183,16 @@ export class TailgateReportsCreateComponent implements OnInit, OnChanges {
     }
   }
 
+
   private initializeForm(): void {
+    const now = new Date();
+    const currentTime = now.toTimeString().slice(0, 5);
+
     this.tailgateReportForm = this.fb.group({
       employeeId: ['', Validators.required],
-      ncDate: [new Date(), Validators.required],
-      description: [""],
+      ncDate: [now, Validators.required],
+      ncTime: [currentTime, Validators.required],
+      description: ['', [Validators.maxLength(500)]],
     });
   }
 
@@ -222,32 +208,52 @@ export class TailgateReportsCreateComponent implements OnInit, OnChanges {
       this.tailgateReportForm.markAllAsTouched();
       return;
     }
+    this.isSubmitting = true;
     const formValue = this.tailgateReportForm.value;
+
+    const datePart = new Date(formValue.ncDate);
+    const [hourStr, minuteStr] = formValue.ncTime.split(':');
+    const hours = parseInt(hourStr, 10);
+    const minutes = parseInt(minuteStr, 10);
+
+    const localDateTime = new Date(
+      datePart.getFullYear(),
+      datePart.getMonth(),
+      datePart.getDate(),
+      hours,
+      minutes,
+      0,
+      0
+    );
+
+    const localISOString = `${localDateTime.getFullYear()}-${(localDateTime.getMonth() + 1).toString().padStart(2, '0')}-${localDateTime.getDate().toString().padStart(2, '0')}T${localDateTime.getHours().toString().padStart(2, '0')}:${localDateTime.getMinutes().toString().padStart(2, '0')}:00`;
+
     const payload = {
       id: 0,
-      employeeId: formValue.employeeId?.employeeID || formValue.employeeId, 
+      employeeId: formValue.employeeId?.employeeID || formValue.employeeId,
       description: formValue.description || '',
-      ncDate: formValue.ncDate ? moment(formValue.ncDate).format('YYYY-MM-DD') : null
-
+      ncDate: localISOString
     };
 
-    console.log('🚀 Payload:', payload);
-    this.tailgateReportsService.CreateTailgatingNc(payload).subscribe(
-      {
-        next: ((response: any) => {
-          if (response.success) {
-            this.showSuccessMessage(response.message);
-            this.formClose.emit(true);
-          } else {
-            this.handleError(response.message);
-          }
-        }),
-        error: ((err) => {
-          this.handleError(err.error.message);
-        })
+    console.log("Payload ", payload);
+    this.tailgateReportsService.CreateTailgatingNc(payload).subscribe({
+      next: (response: any) => {
+        if (response.success) {
+          this.showSuccessMessage(response.message);
+          this.formClose.emit(true);
+          this.isSubmitting = false;
+        } else {
+          this.handleError(response.message);
+          this.isSubmitting = false;
+        }
+      },
+      error: (err) => {
+        this.handleError(err.error.message);
+        this.isSubmitting = false;
       }
-    )
+    });
   }
+
 
   employeeGetById(employeeId: string) {
     this._employeeService
@@ -285,9 +291,7 @@ export class TailgateReportsCreateComponent implements OnInit, OnChanges {
 
   onEmployeeSelected(event: MatAutocompleteSelectedEvent): void {
     const selectedEmployee = event.option.value;
-    // You can now perform your task here
     console.log('Employee selected:', selectedEmployee);
-
     this.employeeGetById(selectedEmployee.employeeID);
   }
 
@@ -337,7 +341,7 @@ export class TailgateReportsCreateComponent implements OnInit, OnChanges {
 
 
   GetEmployeesForDropdown() {
-    this.reportsService.GetEmployeesForDropdown().subscribe({
+    this.tailgateReportsService.GetActiveEmployeesForDropdown().subscribe({
       next: (response: any) => {
         this.allEmployees = response.data.map((obj: any) => ({
           id: obj.id,

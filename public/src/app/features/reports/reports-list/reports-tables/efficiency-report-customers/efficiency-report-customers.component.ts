@@ -26,7 +26,7 @@ export class EfficiencyReportCustomersComponent implements OnInit, AfterViewInit
   public paginationPageSizeSelector: number[] = [15, 25, 50, 100];
   getDateForm!: FormGroup;
   private gridApi!: GridApi<any>;
-  customerId: string = '';
+  customerId: string = '0';
   selectedValueMonth: any;
   selectedValueYear: any = '2025';
   dropdownHeading: string = "Month";
@@ -149,9 +149,15 @@ export class EfficiencyReportCustomersComponent implements OnInit, AfterViewInit
   }
 
   selectedCustomer(event: any) {
-    this.customerId = event
-    this.getEfficiencyReportsCustomer();
-    this._changeDetectorRef.detectChanges();
+    if(event=='0'){
+      this.customerId = '0'
+      this.getEfficiencyReportsCustomer();
+      this._changeDetectorRef.detectChanges();
+    }else{
+      this.customerId = event
+      this.getEfficiencyReportsCustomer();
+      this._changeDetectorRef.detectChanges();
+    }
   }
 
   selectedMonth(event: any) {

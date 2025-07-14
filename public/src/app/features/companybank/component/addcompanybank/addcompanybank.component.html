@@ -31,7 +31,13 @@
           <mat-form-field appearance="outline" class="col-8">
             <input matInput #input [matAutocomplete]="auto" formControlName="companyId" (input)="filter()"
               (click)="toggleAutocomplete()" />
-            <mat-icon matSuffix (click)="toggleAutocomplete()">arrow_drop_down</mat-icon>
+            <span matSuffix class="d-flex pe-2">
+              <mat-icon (click)="toggleAutocomplete()">arrow_drop_down</mat-icon>
+              @if(companyForm.get('companyId')?.value){
+                <mat-icon class="text-danger fs-6 pt-1" 
+                  (click)="this.companyForm.get('companyId')?.setValue('')">close</mat-icon>
+              }
+            </span>
             <mat-autocomplete #auto="matAutocomplete" (optionSelected)="checkCountry($event)" [displayWith]="displayCompanyLabel">
               @for (company of filteredCompany; track company) {
               <mat-option [value]="company.value">
@@ -142,7 +148,7 @@
       <!-- Form Buttons -->
       <div class="form-btn d-flex align-items-start justify-content-end p-4">
         <button class="btn btn-secondary mx-2" (click)="reset()">Clear</button>
-        <button class="btn btn-info-dark text-white" type="submit">{{heading}}</button>
+        <button class="btn btn-info-dark text-white" type="submit" >{{heading}}</button>
       </div>
     </form>
   </div>

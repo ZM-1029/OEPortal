@@ -62,8 +62,7 @@
         </mat-checkbox>
       </div>
 
-
-      <div class="row mb-2 my-2" *ngFor="let list of marketingList; trackBy: trackByMenu">
+      <div [ngClass]="isMarketingView? '' :'d-none'" class="row mb-2 my-2" *ngFor="let list of marketingList; trackBy: trackByMenu">
         <div class="col-md-3 fw-bold">{{ list.heading }}</div>
 
         <div class="col-md-3 ps-3">
@@ -80,7 +79,6 @@
           </mat-checkbox>
         </div>
       </div>
-
       }@else{
       <div class="col-md-3">{{ menu.form }}</div>
 

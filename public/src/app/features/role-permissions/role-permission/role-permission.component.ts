@@ -53,14 +53,13 @@ interface RolePermissionResponse {
     MatAutocompleteModule,
     AsyncPipe,
     MatInputModule,
-    MatListModule, MatTabsModule, 
+    MatListModule, MatTabsModule,
     NgClass,
     NgFor, NgIf, MatOptionModule,
   ],
   templateUrl: './role-permission.component.html',
   styleUrl: './role-permission.component.scss',
   encapsulation: ViewEncapsulation.None,
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RolePermissionComponent implements OnInit {
   // Searchable Dropdown - Start
@@ -78,6 +77,7 @@ export class RolePermissionComponent implements OnInit {
   roleId: number = 0;
   isPDFDownloadOptionShow: boolean = false;
   isDisabled: boolean = true;
+  isMarketingView: boolean = false;
   private permissions: RolePermission[] = [];
 
   constructor(private rolePermissionService: RolePermissionService,
@@ -143,7 +143,7 @@ export class RolePermissionComponent implements OnInit {
             isDownload: false
           }));
           this.permissions = response.data;
-          this.isDisabled=true;
+          this.isDisabled = true;
           this._changeDetectorRef.detectChanges();
         }
       });
@@ -157,7 +157,28 @@ export class RolePermissionComponent implements OnInit {
             edit: !!item.edit,
             disabled: true
           }));
-          this.isDisabled=false;
+
+          const marketingItem = this.menuData.find(
+            (item: any) => (item.form || '').toLowerCase().trim() === 'marketing'
+          );
+          this.isMarketingView = !!marketingItem?.view;
+          this.isDisabled = false;
+          this._changeDetectorRef.detectChanges();
+        } else {
+          this.menuData = response.data.map((item: any) => ({
+            ...item,
+            view: false,
+            add: false,
+            edit: false,
+            isDownload: false
+          }));
+          this.permissions = response.data;
+          // this._changeDetectorRef.detectChanges();
+          this.marketingListCheckBoxValue = this.marketingListCheckBoxValue.map(item => ({
+            ...item,
+            isView: false,
+            isDownload: false
+          }));
           this._changeDetectorRef.detectChanges();
         }
       });
@@ -183,7 +204,7 @@ export class RolePermissionComponent implements OnInit {
         isView: item.isView,
         isDownload: item.isDownload
       }));
-
+    console.log(marketingPayload, "marketingPayload");
 
     this.rolePermissionService.changePermission(marketingPayload).subscribe({
       next: (response: any) => {
@@ -222,7 +243,7 @@ export class RolePermissionComponent implements OnInit {
               this.selectedRole = 0;
               this.roleControl.reset();
               this.roleControl.setValue('');
-              this.isDisabled=true;
+              this.isDisabled = true;
               this._changeDetectorRef.detectChanges();
             } else {
               this.handleError(response.message)
@@ -268,14 +289,18 @@ export class RolePermissionComponent implements OnInit {
     if (menu.form == 'Marketing') {
       // this.isPDFDownloadOptionShow=true;
       if (menu.view) {
+        this.isMarketingView = true;
         this.getMarketingList();
         this.GetPermissionsByRoleIdForMarketing(this.selectedRole);
+      } else {
+        this.isMarketingView = false;
       }
     } else {
       // this.isPDFDownloadOptionShow=false;
     }
     console.log(`${permissionType} permission changed for ${menu.form}:`, menu[permissionType]);
   }
+
 
   getMarketingValue(marketingId: any, valueName: 'isView' | 'isDownload'): boolean {
     const item = this.marketingListCheckBoxValue.find(
@@ -284,6 +309,8 @@ export class RolePermissionComponent implements OnInit {
     const value = !!item?.[valueName];
     return value;
   }
+
+
   onCheckboxChangeMarketing(event: MatCheckboxChange, marketingId: number, permissionType: 'isView' | 'isDownload') {
     if (!marketingId) return;
 
